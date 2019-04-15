@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Model {
-    class Card{
+    class Card {
         private int manaCost;
         protected String name;
         private Cell cell;
@@ -24,8 +24,7 @@ public class Model {
             return manaCost;
         }
 
-        public void setManaCost(int manaCost)
-        {
+        public void setManaCost(int manaCost) {
             this.manaCost = manaCost;
         }
 
@@ -61,7 +60,7 @@ public class Model {
             this.match = match;
         }
 
-        public String getName(){
+        public String getName() {
             return name;
         }
 
@@ -82,8 +81,10 @@ public class Model {
             player.getHand().deleteCastedCard(this);
             // deleteCastedCard bayad public beshe
             // mana ro bayad oun player ei ke cast card mikone azash kam she, ke hamoun ja codesh ro mizanim
-        }}
-    class MovableCard extends Card{
+        }
+    }
+
+    class MovableCard extends Card {
         protected int health;
         protected boolean isAlive = false;
         protected Cell cardCell;
@@ -124,7 +125,7 @@ public class Model {
                 printMessage("Out of attack range");
                 return false;
             }
-            if(this.team.compareTo(cell.getMoveableCard().team) == 0){
+            if (this.team.compareTo(cell.getMoveableCard().team) == 0) {
                 printMessage("Game doesn't have friendly fire");
                 return false;
             }
@@ -132,7 +133,7 @@ public class Model {
         }
 
         private void counterAttack(MovableCard opponent) {
-            if(isCounterAttackValid(opponent.cardCell)){
+            if (isCounterAttackValid(opponent.cardCell)) {
                 //do attack
                 manageCasualties();
             }
@@ -144,8 +145,7 @@ public class Model {
                     printMessage("Stunned. Can't move");
                     return false;
                 }
-            }
-            else
+            } else
                 return false;
             return true;
         }
@@ -242,7 +242,7 @@ public class Model {
         }
 
         //setters}
-    class Hero extends MovableCard{
+        class Hero extends MovableCard {
 
             private Spell heroSpell;
             private int spellCost;
@@ -275,27 +275,30 @@ public class Model {
             }
 
             // getter}
-    }
-    class Minion extends MovableCard{
-        private Impact summonImpact;
-        private Impact dyingWishImpact;
-
-        @Override
-
-        protected void manageCasualties() {
-            if(this.health <= 0){
-                this.isAlive = false;
-                //do dyingWish
-            }
         }
 
-        public void castCard(Cell cell) {
-            this.cardCell = cell;
-            this.isAlive = true;
-            // do summonImpact
-        }}
+        class Minion extends MovableCard {
+            private Impact summonImpact;
+            private Impact dyingWishImpact;
+
+            @Override
+
+            protected void manageCasualties() {
+                if (this.health <= 0) {
+                    this.isAlive = false;
+                    //do dyingWish
+                }
+            }
+
+            public void castCard(Cell cell) {
+                this.cardCell = cell;
+                this.isAlive = true;
+                // do summonImpact
+            }
+        }
     }
-    class Spell extends Card{
+
+    class Spell extends Card {
         private String name;
         //private int AreaTargetSquare;
         private Impact primaryimpact = super.getImpact();
@@ -321,8 +324,11 @@ public class Model {
                 secondaryImpact.doImpact();
         }
     }
-    class Impact{}
-    class Player{
+
+    class Impact {
+    }
+
+    class Player {
         private String userName;
         private String password;
         private long money;
@@ -399,7 +405,8 @@ public class Model {
                     this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getY());
         }
     }
-    class Item{
+
+    class Item {
         private String name;
         private String description;
 
@@ -415,7 +422,8 @@ public class Model {
             return name;
         }
     }
-    class InfluentialItem extends Item{
+
+    class InfluentialItem extends Item {
         private Impact impact;
         private String itemID;
 
@@ -435,7 +443,8 @@ public class Model {
             this.itemID = itemID;
         }
     }
-    class Flag extends Item{
+
+    class Flag extends Item {
         Cell cell;
         Match match;
 
@@ -452,7 +461,8 @@ public class Model {
             this.cell = cell;
         }
     }
-    class CollectibleItem extends InfluentialItem{
+
+    class CollectibleItem extends InfluentialItem {
         private Cell cell;
         private Match match;
 
@@ -468,7 +478,8 @@ public class Model {
             this.match = match;
         }
     }
-    class UsableItem extends InfluentialItem{
+
+    class UsableItem extends InfluentialItem {
         private int cost;
         private Deck deck;
         private Match match;
@@ -493,7 +504,8 @@ public class Model {
             return match;
         }
     }
-    class Collection{
+
+    class Collection {
         private ArrayList<Item> items;
         private ArrayList<Card> cards;
         private ArrayList<Deck> decks = new ArrayList<Deck>();
@@ -508,41 +520,42 @@ public class Model {
             decks.add(deck);
         }
 
-        public void deleteDeck(String deckName){
+        public void deleteDeck(String deckName) {
             //if deck found
             //remove deck
             // return
             printMessage("Deck not found");
         }
 
-        public void showDeck(Deck deck){
+        public void showDeck(Deck deck) {
             //show deck probably in presenter
         }
 
-        public boolean validateDeck(Deck deck){
-            if(deck.getCards().size() != 20)
+        public boolean validateDeck(Deck deck) {
+            if (deck.getCards().size() != 20)
                 return false;
             int heroCounter = 0;
-            for (Card card: deck.getCards())
-                if(card instanceof Hero)
-                    heroCounter ++;
+            for (Card card : deck.getCards())
+                if (card instanceof Hero)
+                    heroCounter++;
             return heroCounter == 1;
         }
 
-        public void add(String id, Deck deck){
+        public void add(String id, Deck deck) {
             //find card and item and hero by id
         }
-        public void remove(String id){
+
+        public void remove(String id) {
             //remove and in dastana
         }
 
         //search
-        public int search(String name){
+        public int search(String name) {
             Item item = findItemByName(name);
-            if(item != null)
+            if (item != null)
                 return items.indexOf(item);
             Card card = findCardByName(name);
-            if(card != null)
+            if (card != null)
                 return cards.indexOf(card);
             printMessage("Card/Item not found");
             return -1;
@@ -566,8 +579,7 @@ public class Model {
         //search
 
 
-
-        private void printMessage(String message){
+        private void printMessage(String message) {
             System.out.println(message);
         }
 
@@ -587,7 +599,8 @@ public class Model {
 
         //getters
     }
-    class Shop{
+
+    class Shop {
 
         private ArrayList<Card> shopCards;
         private ArrayList<Item> shopItems;
@@ -608,18 +621,18 @@ public class Model {
 
         // search
 
-        public String  search(String name){
+        public String search(String name) {
             Item item = findItemByName(name);
-            if(item!= null)
+            if (item != null)
                 return item.getId();
             Card card = findCardByName(name);
-            if(card != null)
+            if (card != null)
                 return card.getId();
             printMessage("Card/Item not found");
             return "-1";
         }
 
-        public ArrayList<String > searchCollection(String name){
+        public ArrayList<String> searchCollection(String name) {
             //search collection
             return new ArrayList<>();
         }
@@ -636,7 +649,7 @@ public class Model {
             if (!isBuyValid(player, item, card))
                 return;
             int cost;
-            if(item != null)
+            if (item != null)
                 cost = item.getCost();
             else
                 cost = card.getCost();
@@ -665,15 +678,15 @@ public class Model {
 
         // sell
 
-        public void sell(Player player,String name ){
+        public void sell(Player player, String name) {
             Item item = player.getPlayerCollection().findItemByName(name);
             Card card = player.getPlayerCollection().findCardByName(name);
-            if(item == null && card == null){
+            if (item == null && card == null) {
                 printMessage("Item/Card not found");
                 return;
             }
             printMessage("Sell was successFull");
-            if(item != null){
+            if (item != null) {
                 player.setMoney(player.getMoney() + item.getCost());
                 // remove from player collection
                 return;
@@ -683,7 +696,6 @@ public class Model {
         }
 
         // sell
-
 
 
         private Item findItemByName(String itemName) {
@@ -706,10 +718,22 @@ public class Model {
             System.out.println(message);
         }
     }
-    class Deck{}
-    class Hand{}
-    class Match{}
-    class Coordination{}
-    class Cell{}
-    class Table{}
+
+    class Deck {
+    }
+
+    class Hand {
+    }
+
+    class Match {
+    }
+
+    class Coordination {
+    }
+
+    class Cell {
+    }
+
+    class Table {
+    }
 }
