@@ -1,8 +1,9 @@
 import java.util.ArrayList;
 
 public class Model {
-    class Card {
+    class Card{
         private int manaCost;
+        protected String name;
         private Cell cell;
         private Impact impact;
         private int cost;
@@ -23,7 +24,8 @@ public class Model {
             return manaCost;
         }
 
-        public void setManaCost(int manaCost) {
+        public void setManaCost(int manaCost)
+        {
             this.manaCost = manaCost;
         }
 
@@ -59,6 +61,10 @@ public class Model {
             this.match = match;
         }
 
+        public String getName(){
+            return name;
+        }
+
         boolean isManaSufficient(int playerMana) {
             if (playerMana >= manaCost)
                 return true;
@@ -76,10 +82,8 @@ public class Model {
             player.getHand().deleteCastedCard(this);
             // deleteCastedCard bayad public beshe
             // mana ro bayad oun player ei ke cast card mikone azash kam she, ke hamoun ja codesh ro mizanim
-        }
-    }
-
-    class MovableCard extends Card {
+        }}
+    class MovableCard extends Card{
         protected int health;
         protected boolean isAlive = false;
         protected Cell cardCell;
@@ -120,15 +124,15 @@ public class Model {
                 printMessage("Out of attack range");
                 return false;
             }
-            if (this.team.compareTo(cell.getMoveableCard().team) == 0) {
+            if(this.team.compareTo(cell.getMoveableCard().team) == 0){
                 printMessage("Game doesn't have friendly fire");
                 return false;
             }
             return true;
         }
 
-        private void counterAttack(MoveableCard opponent) {
-            if (isCounterAttackValid(opponent.cardCell)) {
+        private void counterAttack(MovableCard opponent) {
+            if(isCounterAttackValid(opponent.cardCell)){
                 //do attack
                 manageCasualties();
             }
@@ -140,7 +144,8 @@ public class Model {
                     printMessage("Stunned. Can't move");
                     return false;
                 }
-            } else
+            }
+            else
                 return false;
             return true;
         }
@@ -183,7 +188,7 @@ public class Model {
             Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
             Cell cell = Cell.findCellByCoord(coordination);
             if (cell != null)
-                return cell.getMoveableCard().team.compareTo(this.team) != 0;
+                return cell.getMovableCard().team.compareTo(this.team) != 0;
             return false;
         }
         //move
@@ -236,16 +241,61 @@ public class Model {
             this.cardCell = cardCell;
         }
 
-        //setters
-    }
+        //setters}
+    class Hero extends MovableCard{
 
-    class Hero extends MovableCard {
-    }
+            private Spell heroSpell;
+            private int spellCost;
+            private int spellCoolDown;
 
-    class Minion extends MovableCard {
-    }
+            public Hero(String name, int health, Impact damage, Spell heroSpell, int spellCost, int spellCoolDown) {
+                this.heroSpell = heroSpell;
+                this.spellCost = spellCost;
+                this.spellCoolDown = spellCoolDown;
+                this.health = health;
+                this.name = name;
+                this.damage = damage;
+            }
 
-    class Spell extends Card {
+            public void castSpell(Cell cell) {
+                // check should be in spell class
+                // if check
+                // cast spell
+                // put the impact of spell in all targets impacts applied to this one
+            }
+
+            // getter
+
+            public int getSpellcost() {
+                return spellCost;
+            }
+
+            public int getSpellCoolDown() {
+                return spellCoolDown;
+            }
+
+            // getter}
+    }
+    class Minion extends MovableCard{
+        private Impact summonImpact;
+        private Impact dyingWishImpact;
+
+        @Override
+
+        protected void manageCasualties() {
+            if(this.health <= 0){
+                this.isAlive = false;
+                //do dyingWish
+            }
+        }
+
+        public void castCard(Cell cell) {
+            this.cardCell = cell;
+            this.isAlive = true;
+            // do summonImpact
+        }}
+    }
+    class Spell extends Card{
         private String name;
         //private int AreaTargetSquare;
         private Impact primaryimpact = super.getImpact();
@@ -271,11 +321,8 @@ public class Model {
                 secondaryImpact.doImpact();
         }
     }
-
-    class Impact {
-    }
-
-    class Player {
+    class Impact{}
+    class Player{
         private String userName;
         private String password;
         private long money;
@@ -352,8 +399,7 @@ public class Model {
                     this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getY());
         }
     }
-
-    class Item {
+    class Item{
         private String name;
         private String description;
 
@@ -369,8 +415,7 @@ public class Model {
             return name;
         }
     }
-
-    class InfluentialItem extends Item {
+    class InfluentialItem extends Item{
         private Impact impact;
         private String itemID;
 
@@ -390,8 +435,7 @@ public class Model {
             this.itemID = itemID;
         }
     }
-
-    class Flag extends Item {
+    class Flag extends Item{
         Cell cell;
         Match match;
 
@@ -408,8 +452,7 @@ public class Model {
             this.cell = cell;
         }
     }
-
-    class CollectibleItem extends InfluentialItem {
+    class CollectibleItem extends InfluentialItem{
         private Cell cell;
         private Match match;
 
@@ -425,8 +468,7 @@ public class Model {
             this.match = match;
         }
     }
-
-    class UsableItem extends InfluentialItem {
+    class UsableItem extends InfluentialItem{
         private int cost;
         private Deck deck;
         private Match match;
@@ -451,50 +493,223 @@ public class Model {
             return match;
         }
     }
+    class Collection{
+        private ArrayList<Item> items;
+        private ArrayList<Card> cards;
+        private ArrayList<Deck> decks = new ArrayList<Deck>();
+        private Deck selectedDeck;
 
-    class Collection {
-    }
-
-    class Shop {
-    }
-
-    class Deck {
-    }
-
-    class Hand {
-    }
-
-    class Match {
-    }
-
-    class Coordination {
-        private int x;
-        private int y;
-
-        public int getX() {
-            return x;
+        public void selectDeck(String name) {
+            //if deck was in the decks
+            //set select deck
         }
 
-        public int getY() {
-            return y;
+        public void addDeck(Deck deck) {
+            decks.add(deck);
         }
 
-        public void setX(int x) {
-            this.x = x;
+        public void deleteDeck(String deckName){
+            //if deck found
+            //remove deck
+            // return
+            printMessage("Deck not found");
         }
 
-        public void setY(int y) {
-            this.y = y;
+        public void showDeck(Deck deck){
+            //show deck probably in presenter
+        }
+
+        public boolean validateDeck(Deck deck){
+            if(deck.getCards().size() != 20)
+                return false;
+            int heroCounter = 0;
+            for (Card card: deck.getCards())
+                if(card instanceof Hero)
+                    heroCounter ++;
+            return heroCounter == 1;
+        }
+
+        public void add(String id, Deck deck){
+            //find card and item and hero by id
+        }
+        public void remove(String id){
+            //remove and in dastana
+        }
+
+        //search
+        public int search(String name){
+            Item item = findItemByName(name);
+            if(item != null)
+                return items.indexOf(item);
+            Card card = findCardByName(name);
+            if(card != null)
+                return cards.indexOf(card);
+            printMessage("Card/Item not found");
+            return -1;
+        }
+
+        public Item findItemByName(String itemName) {
+            for (Item item : items) {
+                if (item.getName().compareTo(itemName) == 0)
+                    return item;
+            }
+            return null;
+        }
+
+        public Card findCardByName(String cardName) {
+            for (Card card : cards) {
+                if (card.getName().compareTo(cardName) == 0)
+                    return card;
+            }
+            return null;
+        }
+        //search
+
+
+
+        private void printMessage(String message){
+            System.out.println(message);
+        }
+
+        //getters
+
+        public ArrayList<Item> getItems() {
+            return items;
+        }
+
+        public ArrayList<Card> getCards() {
+            return cards;
+        }
+
+        public ArrayList<Deck> getDecks() {
+            return decks;
+        }
+
+        //getters
+    }
+    class Shop{
+
+        private ArrayList<Card> shopCards;
+        private ArrayList<Item> shopItems;
+
+        {
+            shopCards = new ArrayList<Card>();
+            shopItems = new ArrayList<Item>();
+        }
+
+        public static Shop initShop() {
+            Shop shop = new Shop();
+            // create Items from file
+            // add items to shop
+            // create cards from file
+            // add cards to shop
+            return shop;
+        }
+
+        // search
+
+        public String  search(String name){
+            Item item = findItemByName(name);
+            if(item!= null)
+                return item.getId();
+            Card card = findCardByName(name);
+            if(card != null)
+                return card.getId();
+            printMessage("Card/Item not found");
+            return "-1";
+        }
+
+        public ArrayList<String > searchCollection(String name){
+            //search collection
+            return new ArrayList<>();
+        }
+
+        // search
+
+        // show Collection must come in show collection
+
+        //buy
+
+        public void buy(Player player, String name) {
+            Item item = findItemByName(name);
+            Card card = findCardByName(name);
+            if (!isBuyValid(player, item, card))
+                return;
+            int cost;
+            if(item != null)
+                cost = item.getCost();
+            else
+                cost = card.getCost();
+            player.setMoney(player.getMoney() - cost);
+            printMessage("Buying was successful");
+            // add to player collection
+        }
+
+        private boolean isBuyValid(Player player, Item item, Card card) {
+            if (item == null && card == null) {
+                printMessage("Card/Item is out of stock");
+                return false;
+            }
+            if ((item != null && item.getCost() > player.getMoney()) || (card != null && card.getCost() > player.getMoney())) {
+                printMessage("Not enough drake");
+                return false;
+            }
+            if (item != null && player.getPlayerCollection().getItems().size() == 3) {
+                printMessage("Maximum items are in the Collection");
+                return false;
+            }
+            return true;
+        }
+
+        //buy
+
+        // sell
+
+        public void sell(Player player,String name ){
+            Item item = player.getPlayerCollection().findItemByName(name);
+            Card card = player.getPlayerCollection().findCardByName(name);
+            if(item == null && card == null){
+                printMessage("Item/Card not found");
+                return;
+            }
+            printMessage("Sell was successFull");
+            if(item != null){
+                player.setMoney(player.getMoney() + item.getCost());
+                // remove from player collection
+                return;
+            }
+            player.setMoney(player.getMoney() + card.getCost());
+            // remove from player cards
+        }
+
+        // sell
+
+
+
+        private Item findItemByName(String itemName) {
+            for (Item item : shopItems) {
+                if (item.getName().compareTo(itemName) == 0)
+                    return item;
+            }
+            return null;
+        }
+
+        private Card findCardByName(String cardName) {
+            for (Card card : shopCards) {
+                if (card.getName().compareTo(cardName) == 0)
+                    return card;
+            }
+            return null;
+        }
+
+        private void printMessage(String message) {
+            System.out.println(message);
         }
     }
-    class Cell {
-
-    }
-
-    class Table {
-
-    }
+    class Deck{}
+    class Hand{}
+    class Match{}
+    class Coordination{}
+    class Cell{}
+    class Table{}
 }
-
-
-
