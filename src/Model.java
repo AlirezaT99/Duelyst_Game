@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 
 public class Model {
-    class Card{private int manaCost;
+    class Card {
+        private int manaCost;
         private Cell cell;
         private Impact impact;
         private int cost;
@@ -22,8 +23,7 @@ public class Model {
             return manaCost;
         }
 
-        public void setManaCost(int manaCost)
-        {
+        public void setManaCost(int manaCost) {
             this.manaCost = manaCost;
         }
 
@@ -76,8 +76,10 @@ public class Model {
             player.getHand().deleteCastedCard(this);
             // deleteCastedCard bayad public beshe
             // mana ro bayad oun player ei ke cast card mikone azash kam she, ke hamoun ja codesh ro mizanim
-        }}
-    class MovableCard extends Card{
+        }
+    }
+
+    class MovableCard extends Card {
         protected int health;
         protected boolean isAlive = false;
         protected Cell cardCell;
@@ -118,7 +120,7 @@ public class Model {
                 printMessage("Out of attack range");
                 return false;
             }
-            if(this.team.compareTo(cell.getMoveableCard().team) == 0){
+            if (this.team.compareTo(cell.getMoveableCard().team) == 0) {
                 printMessage("Game doesn't have friendly fire");
                 return false;
             }
@@ -126,7 +128,7 @@ public class Model {
         }
 
         private void counterAttack(MoveableCard opponent) {
-            if(isCounterAttackValid(opponent.cardCell)){
+            if (isCounterAttackValid(opponent.cardCell)) {
                 //do attack
                 manageCasualties();
             }
@@ -138,8 +140,7 @@ public class Model {
                     printMessage("Stunned. Can't move");
                     return false;
                 }
-            }
-            else
+            } else
                 return false;
             return true;
         }
@@ -235,23 +236,265 @@ public class Model {
             this.cardCell = cardCell;
         }
 
-        //setters}
-    class Hero extends MovableCard{}
-    class Minion extends MovableCard{}
-    class Spell extends Card{}
-    class Impact{}
-    class Player{}
-    class Item{}
-    class InfluentialItem extends Item{}
-    class Flag extends Item{}
-    class CollectibleItem extends InfluentialItem{}
-    class UsableItem extends InfluentialItem{}
-    class Collection{}
-    class Shop{}
-    class Deck{}
-    class Hand{}
-    class Match{}
-    class Coordination{}
-    class Cell{}
-    class Table{}
+        //setters
+    }
+
+    class Hero extends MovableCard {
+    }
+
+    class Minion extends MovableCard {
+    }
+
+    class Spell extends Card {
+        private String name;
+        //private int AreaTargetSquare;
+        private Impact primaryimpact = super.getImpact();
+        private Impact secondaryImpact;
+
+        public Impact getPrimaryimpact() {
+            return primaryimpact;
+        }
+
+        public boolean isCastingValid(Cell cell, Impact impact) {
+//        if(everyWhere)
+//            return true;
+//        if(singletarget)
+//        {
+//            if(primaryimpact.e)
+//        }
+        }
+
+        public void castCard(Cell cell) {
+            if (isCastingValid(cell, primaryimpact))
+                primaryimpact.doImpact();
+            if (secondaryImpact != null && isCastingValid(cell, secondaryImpact))
+                secondaryImpact.doImpact();
+        }
+    }
+
+    class Impact {
+    }
+
+    class Player {
+        private String userName;
+        private String password;
+        private long money;
+        private Collection collection;
+        private ArrayList<Player> friends;
+        private Hand hand;
+        private int mana;
+        private Match match;
+        private boolean isAI;
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public long getMoney() {
+            return money;
+        }
+
+        public Collection getCollection() {
+            return collection;
+        }
+
+        public ArrayList<Player> getFriends() {
+            return friends;
+        }
+
+        public Hand getHand() {
+            return hand;
+        }
+
+        public int getMana() {
+            return mana;
+        }
+
+        public Match getMatch() {
+            return match;
+        }
+
+        public boolean isAI() {
+            return isAI;
+        }
+
+        public boolean isHasLoggedIn() {
+            return hasLoggedIn;
+        }
+
+        private boolean hasLoggedIn;
+
+        public void login() {
+            hasLoggedIn = true;
+        }
+
+        private void logout() {
+            hasLoggedIn = false;
+            //todo go to LoginMenu
+        }
+
+        public void endTurn() {
+            match.switchTurn();
+        }
+
+        public void addToHand(Card card) {
+            this.hand.fillEmptyPlace(this.collection.getSelectedDeck().getLastCard());
+            // todo : fillEmptyPlace ro bayad public konim
+        }
+
+        public void playAI(Match match) {
+            this.hand.selectCard(0).castCard(
+                    this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getX(),
+                    this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getY());
+        }
+    }
+
+    class Item {
+        private String name;
+        private String description;
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    class InfluentialItem extends Item {
+        private Impact impact;
+        private String itemID;
+
+        public Impact getImpact() {
+            return impact;
+        }
+
+        public void setImpact(Impact impact) {
+            this.impact = impact;
+        }
+
+        public String getItemID() {
+            return itemID;
+        }
+
+        public void setItemID(String itemID) {
+            this.itemID = itemID;
+        }
+    }
+
+    class Flag extends Item {
+        Cell cell;
+        Match match;
+
+        public Cell getCell() {
+            return cell;
+        }
+
+        public Match getMatch() {
+            return match;
+        }
+
+        public Flag(Match match, Cell cell) {
+            this.match = match;
+            this.cell = cell;
+        }
+    }
+
+    class CollectibleItem extends InfluentialItem {
+        private Cell cell;
+        private Match match;
+
+        public Cell getCell() {
+            return cell;
+        }
+
+        public Match getMatch() {
+            return match;
+        }
+
+        public void setMatch(Match match) {
+            this.match = match;
+        }
+    }
+
+    class UsableItem extends InfluentialItem {
+        private int cost;
+        private Deck deck;
+        private Match match;
+
+        public void setDeck(Deck deck) {
+            this.deck = deck;
+        }
+
+        public void setMatch(Match match) {
+            this.match = match;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public Deck getDeck() {
+            return deck;
+        }
+
+        public Match getMatch() {
+            return match;
+        }
+    }
+
+    class Collection {
+    }
+
+    class Shop {
+    }
+
+    class Deck {
+    }
+
+    class Hand {
+    }
+
+    class Match {
+    }
+
+    class Coordination {
+        private int x;
+        private int y;
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
+    }
+    class Cell {
+
+    }
+
+    class Table {
+
+    }
 }
+
+
+
