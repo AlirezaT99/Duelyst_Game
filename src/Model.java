@@ -697,7 +697,6 @@ public class Model {
 
         // sell
 
-
         private Item findItemByName(String itemName) {
             for (Item item : shopItems) {
                 if (item.getName().compareTo(itemName) == 0)
@@ -720,20 +719,160 @@ public class Model {
     }
 
     class Deck {
+        private ArrayList<Card> cards;
+        private Hero hero;
+        private int maxCardNumber;
+        private Item item;
+
+        {
+            cards = new ArrayList<>();
+        }
+
+        public ArrayList<Card> getCards() {
+            return cards;
+        }
+
+        public Card getLastCard() {
+            return new Card();
+        }
     }
 
     class Hand {
+        private ArrayList<Card> cards;
+        private Card selectedCard;
+
+        {
+            cards = new ArrayList<>();
+        }
+
+        ArrayList<Card> getCards() {
+            return cards;
+        }
+
+        public void fillEmptyPlace(Card card) {
+
+        }
+
+        private boolean isThereEmptyPlace(Card card) {
+            return false; // <---
+        }
+
+        private void deleteCastedCard() {
+
+        }
+
+        public void switchCard(Card card) {
+
+        }
+
+        private boolean didSwitchInCurrentTurn() {
+            return false; // <---
+        }
+
+        public Card selectCard(int index) {
+            return new Card();
+        }
+
+        public void castCard() {
+
+        }
     }
 
+    enum GameMode {HeroesFight, CaptureTheFlag, CaptureMostFlags}
+
     class Match {
+        private boolean singleMode;
+        private GameMode gameMode;
+        private Table table;
+        private Player player1;
+        private Player player2;
+        private ArrayList<Card> graveYardPlayer1;
+        private ArrayList<Card> graveYardPlayer2;
+        private int turn = 0;
+
+        {
+            graveYardPlayer1 = new ArrayList<>();
+            graveYardPlayer2 = new ArrayList<>();
+        }
+
+        public Player currentTurnPlayer() {
+            if (turn == 0)
+                return player1;
+            return player2;
+        }
+
+        public Table getTable() {
+            return table;
+        }
+
+        public void switchTurn() {
+            turn ^= 1;
+        }
+
+        public void moveToGraveYard(Card card, Player player) {
+            if (player.getUserName().equals(player1.getUserName())) {
+                graveYardPlayer1.add(card);
+                //
+            }
+            else {
+                graveYardPlayer2.add(card);
+                //
+            }
+        }
+
+        public void play(Player player) {
+            //
+        }
     }
 
     class Coordination {
+        private int x;
+        private int y;
+
+        public int getX() {
+            return x;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
     }
 
     class Cell {
+        private Coordination coordination;
+        private Card card;
+        private Item item;
+
+        public Coordination getCoordination() {
+            return coordination;
+        }
+
+        public Card getCard() {
+            return card;
+        }
+
+        public Item getItem() {
+            return item;
+        }
     }
 
     class Table {
+        private Cell[][] cells;
+
+        {
+            cells = new Cell[5][9];
+        }
+
+        public Cell getCellByCoordination(Coordination coordination) {
+            return new Cell(); // <---
+        }
     }
 }
