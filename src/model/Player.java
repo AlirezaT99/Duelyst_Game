@@ -15,16 +15,9 @@ class Player {
 
 
 
-
-    public Collection getCollection() {
-        return collection;
-    }
-
     public ArrayList<Player> getFriends() {
         return friends;
     }
-
-
 
 
     public boolean isAI() {
@@ -66,21 +59,31 @@ class Player {
     public int getMana() {
         return mana;
     }
+
     public Hand getHand() {
         return hand;
     }
+
     public Match getMatch() {
         return match;
     }
+
     public String getUserName() {
         return userName;
     }
+
     public String getPassword() {
         return password;
     }
+
     public long getMoney() {
         return money;
     }
+
+    public Collection getCollection() {
+        return collection;
+    }
+
 
     //getters
 
@@ -90,7 +93,10 @@ class Player {
         this.mana = mana;
     }
 
+    public void setMoney(long money) {
+        this.money = money;
+    }
 
-    //setters
+//setters
 
 }

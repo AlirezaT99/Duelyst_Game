@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 class Deck {
     private ArrayList<Card> cards;
-    private Hero hero;
+    private MovableCard.Hero hero;
     private int maxCardNumber;
     private Item item;
 
