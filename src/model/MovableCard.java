@@ -15,7 +15,6 @@ class MovableCard extends Card {
     private int maxAttackRange;
     private boolean isMelee;
     private boolean isHybrid;
-    private boolean isStunned = false;
     private Match match;
 
     public void castCard(Cell cell) {
@@ -152,9 +151,6 @@ class MovableCard extends Card {
         return health;
     }
 
-    public Impact getDamage() {
-        return damage;
-    }
 
     public int getMoveRange() {
         return moveRange;
@@ -190,7 +186,7 @@ class MovableCard extends Card {
         private int spellCost;
         private int spellCoolDown;
 
-        public Hero(String name, int health, Impact damage, Spell heroSpell, int spellCost, int spellCoolDown) {
+        public Hero(String name, int health,int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
             this.heroSpell = heroSpell;
             this.spellCost = spellCost;
             this.spellCoolDown = spellCoolDown;

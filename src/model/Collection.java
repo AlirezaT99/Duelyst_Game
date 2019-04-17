@@ -33,7 +33,7 @@ class Collection {
             return false;
         int heroCounter = 0;
         for (Card card : deck.getCards())
-            if (card instanceof Hero)
+            if (card instanceof MovableCard.Hero)
                 heroCounter++;
         return heroCounter == 1;
     }
@@ -92,6 +92,10 @@ class Collection {
 
     public ArrayList<Deck> getDecks() {
         return decks;
+    }
+
+    public Deck getSelectedDeck() {
+        return selectedDeck;
     }
 
     //getters

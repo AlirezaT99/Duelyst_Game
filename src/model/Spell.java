@@ -17,6 +17,7 @@ class Spell extends Card {
 //        {
 //            if(primaryimpact.e)
 //        }
+        return true;
     }
 
     public void castCard(Cell cell) {

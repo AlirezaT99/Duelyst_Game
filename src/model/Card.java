@@ -10,53 +10,6 @@ class Card {
     protected Player player;
     private String cardID;
 
-    public String getCardID() {
-        return cardID;
-    }
-
-    public void setCardID(String cardID) {
-        this.cardID = cardID;
-    }
-
-    public int getManaCost() {
-        return manaCost;
-    }
-
-    public void setManaCost(int manaCost) {
-        this.manaCost = manaCost;
-    }
-
-    public Coordination getCoordination() {
-        return cell.getCellCoordination();
-    }
-
-    public void setCoordination(Coordination coordination) {
-        this.cell.setCellCoordination(coordination);
-    }
-
-    public Impact getImpact() {
-        return impact;
-    }
-
-    public void setImpact(Impact impact) {
-        this.impact = impact;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public Match getMatch() {
-        return match;
-    }
-
-    public void setMatch(Match match) {
-        this.match = match;
-    }
 
     public String getName() {
         return name;
@@ -73,5 +26,64 @@ class Card {
         return true;
     }
 
+    void castCard(int x, int y ){
+
+    }
+
+    //getters
+    public int getCost() {
+        return cost;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public Impact getImpact() {
+        return impact;
+    }
+
+    public Coordination getCoordination() {
+        return cell.getCellCoordination();
+    }
+
+    public int getManaCost() {
+        return manaCost;
+    }
+
+    public String getCardID() {
+        return cardID;
+    }
+    //getters
+
+    //setters
+        public void setCardID(String cardID) {
+        this.cardID = cardID;
+    }
+
+
+    public void setManaCost(int manaCost) {
+        this.manaCost = manaCost;
+    }
+
+
+    public void setCoordination(Coordination coordination) {
+        this.cell.setCellCoordination(coordination);
+    }
+
+
+    public void setImpact(Impact impact) {
+        this.impact = impact;
+    }
+
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+    //setters
 
 }

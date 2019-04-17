@@ -1,16 +1,20 @@
 package model;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 
 class Impact {
     private String name;
-    private ArrayList<MovableCard> impactArea;
+    private ArrayList<Cell> impactArea;
+    private boolean isPositive;
     private boolean isvalidOnHero;
     private boolean isvalidOnMinion;
     private boolean isvalidOnAllies;
     private boolean isvalidOnEnemies;
     private boolean isBuff;
     private boolean isMana;
+    private boolean isHealthChange;
+    private boolean isDamageChange;
     private boolean isPassive;
     private int turnsActive;
     private int impactQuantity;
@@ -26,17 +30,23 @@ class Impact {
     }
 
     public void doImpact(){
-
+        if(isMana)
+            manaChange();
+        if(isHealthChange)
+            healthChange();
     }
 
+
     private void manaChange(){
-        for (MovableCard movableCard : impactArea)
-            movableCard.player.
+        for (Cell cell: impactArea) {
+            Player player = cell.getMovableCard().player;
+            player.setMana(player.getMana() + impactQuantity);
+        }
     }
 
     private void healthChange(){
-        for (MovableCard movableCard: impactArea)
-            movableCard.health += impactQuantity;
+        for (Cell cell: impactArea)
+            cell.getMovableCard().health += impactQuantity;
     }
 
     //getters
@@ -71,6 +81,14 @@ class Impact {
 
     public int getTurnsActive() {
         return turnsActive;
+    }
+
+    public int getImpactQuantity() {
+        return impactQuantity;
+    }
+
+    public ArrayList<Cell> getImpactArea() {
+        return impactArea;
     }
 
     //getters

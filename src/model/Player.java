@@ -57,8 +57,8 @@ class Player {
 
     public void playAI(Match match) {
         this.hand.selectCard(0).castCard(
-                this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getX(),
-                this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getY());
+                this.hand.selectCard(0).getImpact().getImpactArea().get(0).getCellCoordination().getX(),
+                this.hand.selectCard(0).getImpact().getImpactArea().get(0).getCellCoordination().getY());
     }
 
 
