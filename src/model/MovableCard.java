@@ -6,7 +6,7 @@ class MovableCard extends Card {
     protected int health;
     protected boolean isAlive = false;
     protected Cell cardCell;
-    protected Impact damage;
+    protected int damage;
     private ArrayList<Impact> impactsAppliedToThisOne;
     private int moveRange;
     private boolean didMoveInThisTurn;
@@ -29,6 +29,8 @@ class MovableCard extends Card {
     public void attack(Cell cell) {
         if (isAttackValid(cell)) {
             // do attack
+
+            //do attack
             didAttackInThisTurn = true;
             cell.getMovableCard().counterAttack(this);
             manageCasualties();
