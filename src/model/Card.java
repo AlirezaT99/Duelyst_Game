@@ -7,8 +7,7 @@ class Card {
     private Impact impact;
     private int cost;
     private Match match;
-    private Player player;
-    protected String team;
+    protected Player player;
     private String cardID;
 
     public String getCardID() {

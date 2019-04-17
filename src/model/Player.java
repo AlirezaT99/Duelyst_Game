@@ -10,20 +10,11 @@ class Player {
     private ArrayList<Player> friends;
     private Hand hand;
     private int mana;
-    private Match match;
+    Match match;
     private boolean isAI;
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public long getMoney() {
-        return money;
-    }
 
     public Collection getCollection() {
         return collection;
@@ -33,17 +24,8 @@ class Player {
         return friends;
     }
 
-    public Hand getHand() {
-        return hand;
-    }
 
-    public int getMana() {
-        return mana;
-    }
 
-    public Match getMatch() {
-        return match;
-    }
 
     public boolean isAI() {
         return isAI;
@@ -78,4 +60,37 @@ class Player {
                 this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getX(),
                 this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getY());
     }
+
+
+    //getters
+    public int getMana() {
+        return mana;
+    }
+    public Hand getHand() {
+        return hand;
+    }
+    public Match getMatch() {
+        return match;
+    }
+    public String getUserName() {
+        return userName;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public long getMoney() {
+        return money;
+    }
+
+    //getters
+
+    //setters
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+
+    //setters
+
 }

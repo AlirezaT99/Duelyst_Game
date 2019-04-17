@@ -7,7 +7,7 @@ class Table {
         cells = new Cell[5][9];
     }
 
-    public Cell getCellByCoordination(Coordination coordination) {
+    public Cell findCellByCoordination(Coordination coordination) {
         return new Cell(); // <---
     }
 }

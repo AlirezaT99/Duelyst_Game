@@ -37,10 +37,14 @@ class MovableCard extends Card {
 
     private boolean isAttackValid(Cell cell) {
         counterAttackAndNormalAttackSameParameters(cell);
-        if (isStunned) {
-            printMessage("Stunned. Can't move");
-            return false;
-        }
+        if(isHybrid)
+            return true;
+        for (Impact impact: impactsAppliedToThisOne)
+            if(impact.isStunBuff()){
+                printMessage("Stunned. Can't Attack");
+                return false;
+            }
+
         return true;
     }
 
@@ -50,7 +54,7 @@ class MovableCard extends Card {
             printMessage("Out of attack range");
             return false;
         }
-        if (this.team.compareTo(cell.getMovableCard().team) == 0) {
+        if (this.player.equals(cell.getMovableCard().player)) {
             printMessage("Game doesn't have friendly fire");
             return false;
         }
@@ -66,10 +70,14 @@ class MovableCard extends Card {
 
     private boolean isCounterAttackValid(Cell cell) {
         if (counterAttackAndNormalAttackSameParameters(cell)) {
-            if (isStunned && !isHybrid) {
-                printMessage("Stunned. Can't move");
-                return false;
-            }
+            if(isHybrid)
+                return true;
+            for (Impact impact: impactsAppliedToThisOne)
+                if(impact.isDisarmBuff()){
+                    printMessage("Disarmed. Can't CounterAttack");
+                    return false;
+                }
+
         } else
             return false;
         return true;
@@ -102,6 +110,13 @@ class MovableCard extends Card {
             printMessage("Enemy in the way");
             return false;
         }
+        for (Impact impact:impactsAppliedToThisOne   ) {
+            if(impact.isStunBuff())
+            {
+                printMessage("Stunned. Can't Move");
+                return false;
+            }
+        }
         return true;
     }
 
@@ -111,9 +126,9 @@ class MovableCard extends Card {
         int destinationX = destination.getCellCoordination().getX();
         int destinationY = destination.getCellCoordination().getY();
         Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
-        Cell cell = Match.table.findCellByCoordination(coordination);
+        Cell cell = player.match.table.findCellByCoordination(coordination);
         if (cell != null)
-            return cell.getMovableCard().team.compareTo(this.team) != 0;
+            return !cell.getMovableCard().player.equals(this.player);
         return false;
     }
     //move
