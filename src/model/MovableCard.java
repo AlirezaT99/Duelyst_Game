@@ -8,14 +8,16 @@ class MovableCard extends Card {
     protected Cell cardCell;
     protected int damage;
     private ArrayList<Impact> impactsAppliedToThisOne;
-    private int moveRange;
     private boolean didMoveInThisTurn;
     private boolean didAttackInThisTurn;
+    private int moveRange;
     private int minAttackRange;
     private int maxAttackRange;
     private boolean isMelee;
     private boolean isHybrid;
     private Match match;
+     int nonePassiveHealthChange = 0 ;
+     int nonePassiveDamageChange = 0 ;
 
     public void castCard(Cell cell) {
         cell.setMovableCard(this);
@@ -25,7 +27,7 @@ class MovableCard extends Card {
         // mana ro bayad oun player ei ke cast card mikone azash kam she, ke hamoun ja codesh ro mizanim
     }
     //attack & counterAttack
-    public void attack(Cell cell) {
+     public void attack(Cell cell) {
         if (isAttackValid(cell)) {
             // do attack
 
@@ -86,7 +88,7 @@ class MovableCard extends Card {
     //attack & counterAttack
 
     protected void manageCasualties() {
-        if (this.health <= 0)
+        if (this.health + nonePassiveHealthChange <= 0)
             this.isAlive = false;
     }
 
@@ -138,11 +140,12 @@ class MovableCard extends Card {
         return Math.abs(cell1.getCellCoordination().getX() - cell2.getCellCoordination().getX()) + Math.abs(cell1.getCellCoordination().getY() - cell2.getCellCoordination().getY());
     }
 
-    private void printMessage(String errorMessage) {
-        System.out.println(errorMessage);
+    private void printMessage(String message) {
+        System.out.println(message);
     }
 
     //getters
+
     public String getName() {
         return name;
     }
@@ -150,7 +153,6 @@ class MovableCard extends Card {
     public int getHealth() {
         return health;
     }
-
 
     public int getMoveRange() {
         return moveRange;
@@ -171,15 +173,17 @@ class MovableCard extends Card {
     public boolean isHybrid() {
         return isHybrid;
     }
+
     //getters
 
     //setters
+
 
     public void setCardCell(Cell cardCell) {
         this.cardCell = cardCell;
     }
 
-    //setters}
+    //setters
     class Hero extends MovableCard {
 
         private Spell heroSpell;
@@ -202,7 +206,7 @@ class MovableCard extends Card {
             // put the impact of spell in all targets impacts applied to this one
         }
 
-        // getter
+        // getters
 
         public int getSpellcost() {
             return spellCost;
@@ -212,7 +216,7 @@ class MovableCard extends Card {
             return spellCoolDown;
         }
 
-        // getter}
+        // getters
     }
 
     class Minion extends MovableCard {

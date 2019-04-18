@@ -6,24 +6,35 @@ import java.util.ArrayList;
 class Impact {
     private String name;
     private ArrayList<Cell> impactArea;
+    //type finder booleans
     private boolean isPositive;
-    private boolean isvalidOnHero;
+    private boolean isBuff;
+
+    //type finder booleans
+
+    //target finder booleans
+        private boolean isvalidOnHero;
     private boolean isvalidOnMinion;
     private boolean isvalidOnAllies;
     private boolean isvalidOnEnemies;
-    private boolean isBuff;
+    //target finder booleans
+
+    //type specifier booleans
     private boolean isMana;
     private boolean isHealthChange;
     private boolean isDamageChange;
-    private boolean isPassive;
-    private int turnsActive;
-    private int impactQuantity;
     private boolean isHolyBuff;
     private boolean isPowerBuff;
     private boolean isPoisonBuff;
     private boolean isWeaknessBuff;
     private boolean isStunBuff;
     private boolean isDisarmBuff;
+    //type specifier booleans
+
+    private boolean isPassive;
+    private int turnsActive;
+    private int impactQuantity;
+
 
     public void setImpactArea(Card card, Match match, Cell targetCell){
 
@@ -46,7 +57,7 @@ class Impact {
 
     private void healthChange(){
         for (Cell cell: impactArea)
-            cell.getMovableCard().health += impactQuantity;
+            cell.getMovableCard().nonePassiveHealthChange += impactQuantity;
     }
 
     //getters
