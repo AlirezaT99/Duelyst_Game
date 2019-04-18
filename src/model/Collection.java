@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 class Collection {
-    private ArrayList<Item> items;
+    private ArrayList<UsableItem> items;
     private ArrayList<Card> cards;
     private ArrayList<Deck> decks = new ArrayList<Deck>();
     private Deck selectedDeck;
@@ -33,7 +33,7 @@ class Collection {
             return false;
         int heroCounter = 0;
         for (Card card : deck.getCards())
-            if (card instanceof Hero)
+            if (card instanceof MovableCard.Hero)
                 heroCounter++;
         return heroCounter == 1;
     }
@@ -58,10 +58,11 @@ class Collection {
         return -1;
     }
 
-    public Item findItemByName(String itemName) {
-        for (Item item : items) {
+    public UsableItem findItemByName(String itemName) {
+        for (UsableItem item : items) {
             if (item.getName().compareTo(itemName) == 0)
                 return item;
+
         }
         return null;
     }
@@ -82,7 +83,7 @@ class Collection {
 
     //getters
 
-    public ArrayList<Item> getItems() {
+    public ArrayList<UsableItem> getItems() {
         return items;
     }
 
@@ -92,6 +93,10 @@ class Collection {
 
     public ArrayList<Deck> getDecks() {
         return decks;
+    }
+
+    public Deck getSelectedDeck() {
+        return selectedDeck;
     }
 
     //getters

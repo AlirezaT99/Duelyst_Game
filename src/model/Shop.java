@@ -5,11 +5,11 @@ import java.util.ArrayList;
 class Shop {
 
     private ArrayList<Card> shopCards;
-    private ArrayList<Item> shopItems;
+    private ArrayList<UsableItem> shopItems;
 
     {
         shopCards = new ArrayList<Card>();
-        shopItems = new ArrayList<Item>();
+        shopItems = new ArrayList<UsableItem>();
     }
 
     public static Shop initShop() {
@@ -29,7 +29,7 @@ class Shop {
             return item.getId();
         Card card = findCardByName(name);
         if (card != null)
-            return card.getId();
+            return card.getCardID();
         printMessage("Card/Item not found");
         return "-1";
     }
@@ -46,7 +46,7 @@ class Shop {
     //buy
 
     public void buy(Player player, String name) {
-        Item item = findItemByName(name);
+        UsableItem item = findItemByName(name);
         Card card = findCardByName(name);
         if (!isBuyValid(player, item, card))
             return;
@@ -60,7 +60,7 @@ class Shop {
         // add to player collection
     }
 
-    private boolean isBuyValid(Player player, Item item, Card card) {
+    private boolean isBuyValid(Player player, UsableItem item, Card card) {
         if (item == null && card == null) {
             printMessage("Card/Item is out of stock");
             return false;
@@ -69,7 +69,7 @@ class Shop {
             printMessage("Not enough drake");
             return false;
         }
-        if (item != null && player.getPlayerCollection().getItems().size() == 3) {
+        if (item != null && player.getCollection().getItems().size() == 3) {
             printMessage("Maximum items are in the Collection");
             return false;
         }
@@ -81,8 +81,8 @@ class Shop {
     // sell
 
     public void sell(Player player, String name) {
-        Item item = player.getPlayerCollection().findItemByName(name);
-        Card card = player.getPlayerCollection().findCardByName(name);
+        UsableItem item = player.getCollection().findItemByName(name);
+        Card card = player.getCollection().findCardByName(name);
         if (item == null && card == null) {
             printMessage("Item/Card not found");
             return;
@@ -99,8 +99,8 @@ class Shop {
 
     // sell
 
-    private Item findItemByName(String itemName) {
-        for (Item item : shopItems) {
+    private UsableItem findItemByName(String itemName) {
+        for (UsableItem item : shopItems) {
             if (item.getName().compareTo(itemName) == 0)
                 return item;
         }

@@ -3,47 +3,15 @@ package model;
 import java.util.ArrayList;
 
 class Player {
-    private String userName;
-    private String password;
+
+    private Deck deck; // playing deck
+    private Collection collection; // playing collection
     private long money;
-    private Collection collection;
-    private ArrayList<Player> friends;
     private Hand hand;
     private int mana;
-    private Match match;
+    Match match;
     private boolean isAI;
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public long getMoney() {
-        return money;
-    }
-
-    public Collection getCollection() {
-        return collection;
-    }
-
-    public ArrayList<Player> getFriends() {
-        return friends;
-    }
-
-    public Hand getHand() {
-        return hand;
-    }
-
-    public int getMana() {
-        return mana;
-    }
-
-    public Match getMatch() {
-        return match;
-    }
 
     public boolean isAI() {
         return isAI;
@@ -68,14 +36,47 @@ class Player {
         match.switchTurn();
     }
 
-    public void addToHand(Card card) {
-        this.hand.fillEmptyPlace(this.collection.getSelectedDeck().getLastCard());
-        // todo : fillEmptyPlace ro bayad public konim
+    public void fillHand() {
+        this.hand.fillEmptyPlace(deck);
+        //
     }
 
     public void playAI(Match match) {
         this.hand.selectCard(0).castCard(
-                this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getX(),
-                this.hand.selectCard(0).getImpact().getImpactArea().get(0).coordination.getY());
+                this.hand.selectCard(0).getImpact().getImpactArea().get(0).getCellCoordination().getX(),
+                this.hand.selectCard(0).getImpact().getImpactArea().get(0).getCellCoordination().getY());
     }
+
+
+    //getters
+    public int getMana() {
+        return mana;
+    }
+
+    public Hand getHand() {
+        return hand;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+   public long getMoney(){
+        return money;
+   }
+   public Collection getCollection(){
+        return this.collection;
+   }
+    //getters
+
+    //setters
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+    public void setMoney(long money){
+        this.money = money;
+    }
+//setters
+
 }

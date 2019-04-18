@@ -14,8 +14,8 @@ class Hand {
         return cards;
     }
 
-    public void fillEmptyPlace(Card card) {
-
+    public void fillEmptyPlace(Deck deck) {
+        //todo
     }
 
     private boolean isThereEmptyPlace(Card card) {

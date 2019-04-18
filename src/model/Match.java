@@ -7,7 +7,7 @@ enum GameMode {HeroesFight, CaptureTheFlag, CaptureMostFlags}
 class Match {
     private boolean singleMode;
     private model.GameMode gameMode;
-    private Table table;
+    Table table;
     private Player player1;
     private Player player2;
     private ArrayList<Card> graveYardPlayer1;
@@ -29,6 +29,8 @@ class Match {
     public Table getTable() {
         return table;
     }
+
+
 
     public void switchTurn() {
         turn ^= 1;

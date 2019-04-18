@@ -1,94 +1,126 @@
 package model;
 
-import org.json.*;
-import com.google.*;
-
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 
-public class Impact {
+class Impact {
     private String name;
     private ArrayList<Cell> impactArea;
-    private boolean validEveryWhere;
-    private boolean validOnEnemy;
-    private boolean validOnTeammate;
-    private boolean validOnHeroes;
-    private boolean validOnMinions;
-    private boolean isPassive;
-    private int turnsActive;
+    //type finder booleans
+    private boolean isPositive;
+    private boolean isBuff;
+
+    //type finder booleans
+
+    //target finder booleans
+        private boolean isvalidOnHero;
+    private boolean isvalidOnMinion;
+    private boolean isvalidOnAllies;
+    private boolean isvalidOnEnemies;
+    //target finder booleans
+
+    //type specifier booleans
+    private boolean isMana;
+    private boolean isHealthChange;
+    private boolean isDamageChange;
     private boolean isHolyBuff;
     private boolean isPowerBuff;
     private boolean isPoisonBuff;
     private boolean isWeaknessBuff;
     private boolean isStunBuff;
     private boolean isDisarmBuff;
-    //setters
-    public Impact(boolean isValidOnEnemy){
-        this.validOnEnemy = isValidOnEnemy;
-    }
-    public void setName(String name) {
-        this.name = name;
+    //type specifier booleans
+
+    private boolean isPassive;
+    private int turnsActive;
+    private int turnsToBeActivated;
+    private int impactQuantity;
+
+
+    public void setImpactArea(Card card, Match match, Cell targetCell){
+
     }
 
-    public void setValidEveryWhere(boolean validEveryWhere) {
-        this.validEveryWhere = validEveryWhere;
-    }
-
-    public void setValidOnEnemy(boolean validOnEnemy) {
-        this.validOnEnemy = validOnEnemy;
-    }
-
-    public void setValidOnTeammate(boolean validOnTeammate) {
-        this.validOnTeammate = validOnTeammate;
-    }
-
-    public void setValidOnHeroes(boolean validOnHeroes) {
-        this.validOnHeroes = validOnHeroes;
-    }
-
-    public void setValidOnMinions(boolean validOnMinions) {
-        this.validOnMinions = validOnMinions;
-    }
-
-    public void setPassive(boolean passive) {
-        isPassive = passive;
-    }
-
-    public void setTurnsActive(int turnsActive) {
-        this.turnsActive = turnsActive;
-    }
-
-    public void setHolyBuff(boolean holyBuff) {
-        isHolyBuff = holyBuff;
-    }
-
-    public void setPowerBuff(boolean powerBuff) {
-        isPowerBuff = powerBuff;
-    }
-
-    public void setPoisonBuff(boolean poisonBuff) {
-        isPoisonBuff = poisonBuff;
-    }
-
-    public void setWeaknessBuff(boolean weaknessBuff) {
-        isWeaknessBuff = weaknessBuff;
-    }
-
-    public void setStunBuff(boolean stunBuff) {
-        isStunBuff = stunBuff;
-    }
-
-    public void setDisarmBuff(boolean disarmBuff) {
-        isDisarmBuff = disarmBuff;
-    }
-
-    public void setImpactArea(Match match) {
-        if (validEveryWhere) {
-            for (int i = 0; i < 9; i++)
-                for (int j = 0; j < 5; j++)
-                    impactArea.add(match.getTable().getCellByCoordination(new Coordination(i, j)));
-            return;
+    public void doImpact(){
+        if(turnsToBeActivated == 0) {
+            if (isMana)
+                manaChange();
+            if (isHealthChange)
+                healthChange();
+            if(isDamageChange)
+                damagaeChange();
         }
-
     }
+
+
+    private void manaChange(){
+        for (Cell cell: impactArea) {
+            Player player = cell.getMovableCard().player;
+            player.setMana(player.getMana() + impactQuantity);
+        }
+    }
+
+    private void healthChange(){
+        for (Cell cell: impactArea)
+            cell.getMovableCard().nonePassiveHealthChange += impactQuantity;
+    }
+
+    private void damagaeChange(){
+        for(Cell cell : impactArea)
+            cell.getMovableCard().nonePassiveDamageChange += impactQuantity;
+    }
+
+
+    void goThroughTime(){
+        turnsActive -= 1;
+        turnsToBeActivated -= 1;
+    }
+
+    //getters
+
+    public boolean isStunBuff() {
+        return isStunBuff;
+    }
+
+    public boolean isDisarmBuff() {
+        return isDisarmBuff;
+    }
+
+    public boolean isIsvalidOnHero() {
+        return isvalidOnHero;
+    }
+
+    public boolean isIsvalidOnMinion() {
+        return isvalidOnMinion;
+    }
+
+    public boolean isIsvalidOnAllies() {
+        return isvalidOnAllies;
+    }
+
+    public boolean isIsvalidOnEnemies() {
+        return isvalidOnEnemies;
+    }
+
+    public boolean isPassive() {
+        return isPassive;
+    }
+
+    public int getTurnsActive() {
+        return turnsActive;
+    }
+
+    public int getImpactQuantity() {
+        return impactQuantity;
+    }
+
+    public ArrayList<Cell> getImpactArea() {
+        return impactArea;
+    }
+
+    public boolean isPoisonBuff() {
+        return isPoisonBuff;
+    }
+//getters
 
 }

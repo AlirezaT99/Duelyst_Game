@@ -6,18 +6,18 @@ class MovableCard extends Card {
     protected int health;
     protected boolean isAlive = false;
     protected Cell cardCell;
-    protected Impact damage;
+    protected int damage;
     private ArrayList<Impact> impactsAppliedToThisOne;
-    private int moveRange;
     private boolean didMoveInThisTurn;
     private boolean didAttackInThisTurn;
+    private int moveRange;
     private int minAttackRange;
     private int maxAttackRange;
     private boolean isMelee;
     private boolean isHybrid;
-    private boolean isStunned = false;
-    private boolean isDisarmed = false;
     private Match match;
+     int nonePassiveHealthChange = 0 ;
+     int nonePassiveDamageChange = 0 ;
 
     public void castCard(Cell cell) {
         cell.setMovableCard(this);
@@ -26,11 +26,12 @@ class MovableCard extends Card {
         // deleteCastedCard bayad public beshe
         // mana ro bayad oun player ei ke cast card mikone azash kam she, ke hamoun ja codesh ro mizanim
     }
-
     //attack & counterAttack
-    public void attack(Cell cell) {
+     public void attack(Cell cell) {
         if (isAttackValid(cell)) {
             // do attack
+
+            //do attack
             didAttackInThisTurn = true;
             cell.getMovableCard().counterAttack(this);
             manageCasualties();
@@ -39,10 +40,14 @@ class MovableCard extends Card {
 
     private boolean isAttackValid(Cell cell) {
         counterAttackAndNormalAttackSameParameters(cell);
-        if (isStunned) {
-            printMessage("Stunned. Can't move");
-            return false;
-        }
+        if(isHybrid)
+            return true;
+        for (Impact impact: impactsAppliedToThisOne)
+            if(impact.isStunBuff()){
+                printMessage("Stunned. Can't Attack");
+                return false;
+            }
+
         return true;
     }
 
@@ -52,7 +57,7 @@ class MovableCard extends Card {
             printMessage("Out of attack range");
             return false;
         }
-        if (this.team.compareTo(cell.getMovableCard().team) == 0) {
+        if (this.player.equals(cell.getMovableCard().player)) {
             printMessage("Game doesn't have friendly fire");
             return false;
         }
@@ -68,18 +73,29 @@ class MovableCard extends Card {
 
     private boolean isCounterAttackValid(Cell cell) {
         if (counterAttackAndNormalAttackSameParameters(cell)) {
-            if (isStunned && !isHybrid) {
-                printMessage("Stunned. Can't move");
-                return false;
-            }
+            if(isHybrid)
+                return true;
+            for (Impact impact: impactsAppliedToThisOne)
+                if(impact.isDisarmBuff()){
+                    printMessage("Disarmed. Can't CounterAttack");
+                    return false;
+                }
+
         } else
             return false;
         return true;
     }
     //attack & counterAttack
 
+    public void goThroughTime(){
+        for (Impact impact: impactsAppliedToThisOne) {
+            impact.doImpact();
+            impact.goThroughTime();
+        }
+    }
+
     protected void manageCasualties() {
-        if (this.health <= 0)
+        if (this.health + nonePassiveHealthChange <= 0)
             this.isAlive = false;
     }
 
@@ -104,6 +120,13 @@ class MovableCard extends Card {
             printMessage("Enemy in the way");
             return false;
         }
+        for (Impact impact:impactsAppliedToThisOne   ) {
+            if(impact.isStunBuff())
+            {
+                printMessage("Stunned. Can't Move");
+                return false;
+            }
+        }
         return true;
     }
 
@@ -113,9 +136,9 @@ class MovableCard extends Card {
         int destinationX = destination.getCellCoordination().getX();
         int destinationY = destination.getCellCoordination().getY();
         Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
-        Cell cell = Match.getTable().findCellByCoordination(coordination);
+        Cell cell = player.match.table.getCellByCoordination(coordination);
         if (cell != null)
-            return cell.getMovableCard().team.compareTo(this.team) != 0;
+            return !cell.getMovableCard().player.equals(this.player);
         return false;
     }
     //move
@@ -124,21 +147,18 @@ class MovableCard extends Card {
         return Math.abs(cell1.getCellCoordination().getX() - cell2.getCellCoordination().getX()) + Math.abs(cell1.getCellCoordination().getY() - cell2.getCellCoordination().getY());
     }
 
-    private void printMessage(String errorMessage) {
-        System.out.println(errorMessage);
+    private void printMessage(String message) {
+        System.out.println(message);
     }
 
     //getters
+
     public String getName() {
         return name;
     }
 
     public int getHealth() {
         return health;
-    }
-
-    public Impact getDamage() {
-        return damage;
     }
 
     public int getMoveRange() {
@@ -160,12 +180,69 @@ class MovableCard extends Card {
     public boolean isHybrid() {
         return isHybrid;
     }
+
     //getters
 
     //setters
 
+
     public void setCardCell(Cell cardCell) {
         this.cardCell = cardCell;
     }
-}
 
+    //setters
+    class Hero extends MovableCard {
+
+        private Spell heroSpell;
+        private int spellCost;
+        private int spellCoolDown;
+
+        public Hero(String name, int health,int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
+            this.heroSpell = heroSpell;
+            this.spellCost = spellCost;
+            this.spellCoolDown = spellCoolDown;
+            this.health = health;
+            this.name = name;
+            this.damage = damage;
+        }
+
+        public void castSpell(Cell cell) {
+            // check should be in spell class
+            // if check
+            // cast spell
+            // put the impact of spell in all targets impacts applied to this one
+        }
+
+        // getters
+
+        public int getSpellcost() {
+            return spellCost;
+        }
+
+        public int getSpellCoolDown() {
+            return spellCoolDown;
+        }
+
+        // getters
+    }
+
+    class Minion extends MovableCard {
+        private Impact summonImpact;
+        private Impact dyingWishImpact;
+
+        @Override
+
+        protected void manageCasualties() {
+            if (this.health <= 0) {
+                this.isAlive = false;
+                //do dyingWish
+            }
+        }
+
+        public void castCard(Cell cell) {
+            this.cardCell = cell;
+            this.isAlive = true;
+            // do summonImpact
+        }
+    }
+}
