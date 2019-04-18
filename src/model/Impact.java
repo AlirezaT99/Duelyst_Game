@@ -33,6 +33,7 @@ class Impact {
 
     private boolean isPassive;
     private int turnsActive;
+    private int turnsToBeActivated;
     private int impactQuantity;
 
 
@@ -41,10 +42,14 @@ class Impact {
     }
 
     public void doImpact(){
-        if(isMana)
-            manaChange();
-        if(isHealthChange)
-            healthChange();
+        if(turnsToBeActivated == 0) {
+            if (isMana)
+                manaChange();
+            if (isHealthChange)
+                healthChange();
+            if(isDamageChange)
+                damagaeChange();
+        }
     }
 
 
@@ -58,6 +63,17 @@ class Impact {
     private void healthChange(){
         for (Cell cell: impactArea)
             cell.getMovableCard().nonePassiveHealthChange += impactQuantity;
+    }
+
+    private void damagaeChange(){
+        for(Cell cell : impactArea)
+            cell.getMovableCard().nonePassiveDamageChange += impactQuantity;
+    }
+
+
+    void goThroughTime(){
+        turnsActive -= 1;
+        turnsToBeActivated -= 1;
     }
 
     //getters
@@ -102,6 +118,9 @@ class Impact {
         return impactArea;
     }
 
-    //getters
+    public boolean isPoisonBuff() {
+        return isPoisonBuff;
+    }
+//getters
 
 }

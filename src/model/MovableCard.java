@@ -87,6 +87,13 @@ class MovableCard extends Card {
     }
     //attack & counterAttack
 
+    public void goThroughTime(){
+        for (Impact impact: impactsAppliedToThisOne) {
+            impact.doImpact();
+            impact.goThroughTime();
+        }
+    }
+
     protected void manageCasualties() {
         if (this.health + nonePassiveHealthChange <= 0)
             this.isAlive = false;
