@@ -3,21 +3,14 @@ package model;
 import java.util.ArrayList;
 
 class Player {
-    private String userName;
-    private String password;
-    private long money;
-    private Collection collection;
-    private ArrayList<Player> friends;
+
+    private Deck deck; // playing deck
+    private Collection collection; // playing collection
+
     private Hand hand;
     private int mana;
     Match match;
     private boolean isAI;
-
-
-
-    public ArrayList<Player> getFriends() {
-        return friends;
-    }
 
 
     public boolean isAI() {
@@ -43,8 +36,8 @@ class Player {
         match.switchTurn();
     }
 
-    public void addToHand(Card card) {
-        this.hand.fillEmptyPlace(this.collection.getSelectedDeck().getLastCard());
+    public void fillHand() {
+        this.hand.fillEmptyPlaces(deck);
         // todo : fillEmptyPlace ro bayad public konim
     }
 
@@ -68,33 +61,12 @@ class Player {
         return match;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public long getMoney() {
-        return money;
-    }
-
-    public Collection getCollection() {
-        return collection;
-    }
-
-
     //getters
 
     //setters
 
     public void setMana(int mana) {
         this.mana = mana;
-    }
-
-    public void setMoney(long money) {
-        this.money = money;
     }
 
 //setters
