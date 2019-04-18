@@ -3,10 +3,10 @@ package model;
 import java.util.ArrayList;
 
 class Player {
-
+    private Account account;
     private Deck deck; // playing deck
     private Collection collection; // playing collection
-
+    private long money;
     private Hand hand;
     private int mana;
     Match match;
@@ -37,8 +37,8 @@ class Player {
     }
 
     public void fillHand() {
-        this.hand.fillEmptyPlaces(deck);
-        // todo : fillEmptyPlace ro bayad public konim
+        this.hand.fillEmptyPlace(deck);
+        //
     }
 
     public void playAI(Match match) {
@@ -61,6 +61,15 @@ class Player {
         return match;
     }
 
+   public long getMoney(){
+        return money;
+   }
+   public Collection getCollection(){
+        return this.collection;
+   }
+   public String getUserName(){
+        return this.account.getUserName();
+   }
     //getters
 
     //setters
@@ -68,7 +77,9 @@ class Player {
     public void setMana(int mana) {
         this.mana = mana;
     }
-
+    public void setMoney(long money){
+        this.money = money;
+    }
 //setters
 
 }

@@ -14,6 +14,7 @@ class Match {
     private ArrayList<Card> graveYardPlayer2;
     private int turn = 0;
 
+
     {
         graveYardPlayer1 = new ArrayList<>();
         graveYardPlayer2 = new ArrayList<>();
