@@ -86,7 +86,8 @@ class MovableCard extends Card {
     }
     //attack & counterAttack
 
-    public void goThroughTime(){
+    public void goThroughTime()
+    {
         for (Impact impact: impactsAppliedToThisOne) {
             impact.doImpact();
             impact.goThroughTime();
