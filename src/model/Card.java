@@ -1,16 +1,14 @@
 package model;
 
 class Card {
-    private int manaCost;
+    protected int manaCost;
     protected String name;
     private Cell cell;
     private Impact impact;
-    private int cost;
+    protected int cost;
     private Match match;
     protected Player player;
     private String cardID;
-
-
     public String getName() {
         return name;
     }

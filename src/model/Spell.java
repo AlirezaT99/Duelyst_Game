@@ -1,8 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+
 class Spell extends Card {
-    private String name;
-    //private int AreaTargetSquare;
+    private int areaTargetSquare;
     private Impact primaryimpact = super.getImpact();
     private Impact secondaryImpact;
 
@@ -26,4 +27,27 @@ class Spell extends Card {
         if (secondaryImpact != null && isCastingValid(cell, secondaryImpact))
             secondaryImpact.doImpact();
     }
+    //getters
+
+    //getters
+
+    //setters
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setAreaTargetSquare(int areaTargetSquare) {
+        this.areaTargetSquare = areaTargetSquare;
+    }
+    public void setManaCost(int manaCost){
+        this.manaCost = manaCost;
+    }
+    public void setCost(int cost){
+        this.cost = cost;
+    }
+    public void setPrimaryimpact(Impact primaryimpact){
+        this.primaryimpact = primaryimpact;
+    }
+
+    //setters
 }

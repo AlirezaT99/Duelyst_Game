@@ -121,6 +121,91 @@ class Impact {
     public boolean isPoisonBuff() {
         return isPoisonBuff;
     }
-//getters
+    //getters
+    //setters
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setImpactArea(ArrayList<Cell> impactArea) {
+        this.impactArea = impactArea;
+    }
+
+    public void setPositive(boolean positive) {
+        isPositive = positive;
+    }
+
+    public void setBuff(boolean buff) {
+        isBuff = buff;
+    }
+
+    public void setIsvalidOnHero(boolean isvalidOnHero) {
+        this.isvalidOnHero = isvalidOnHero;
+    }
+
+    public void setIsvalidOnMinion(boolean isvalidOnMinion) {
+        this.isvalidOnMinion = isvalidOnMinion;
+    }
+
+    public void setIsvalidOnAllies(boolean isvalidOnAllies) {
+        this.isvalidOnAllies = isvalidOnAllies;
+    }
+
+    public void setIsvalidOnEnemies(boolean isvalidOnEnemies) {
+        this.isvalidOnEnemies = isvalidOnEnemies;
+    }
+
+    public void setMana(boolean mana) {
+        isMana = mana;
+    }
+
+    public void setHealthChange(boolean healthChange) {
+        isHealthChange = healthChange;
+    }
+
+    public void setDamageChange(boolean damageChange) {
+        isDamageChange = damageChange;
+    }
+
+    public void setHolyBuff(boolean holyBuff) {
+        isHolyBuff = holyBuff;
+    }
+
+    public void setPowerBuff(boolean powerBuff) {
+        isPowerBuff = powerBuff;
+    }
+
+    public void setPoisonBuff(boolean poisonBuff) {
+        isPoisonBuff = poisonBuff;
+    }
+
+    public void setWeaknessBuff(boolean weaknessBuff) {
+        isWeaknessBuff = weaknessBuff;
+    }
+
+    public void setStunBuff(boolean stunBuff) {
+        isStunBuff = stunBuff;
+    }
+
+    public void setDisarmBuff(boolean disarmBuff) {
+        isDisarmBuff = disarmBuff;
+    }
+
+    public void setPassive(boolean passive) {
+        isPassive = passive;
+    }
+
+    public void setTurnsActive(int turnsActive) {
+        this.turnsActive = turnsActive;
+    }
+
+    public void setTurnsToBeActivated(int turnsToBeActivated) {
+        this.turnsToBeActivated = turnsToBeActivated;
+    }
+
+    public void setImpactQuantity(int impactQuantity) {
+        this.impactQuantity = impactQuantity;
+    }
 }

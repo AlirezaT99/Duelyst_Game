@@ -15,7 +15,6 @@ class MovableCard extends Card {
     private int maxAttackRange;
     private boolean isMelee;
     private boolean isHybrid;
-    private Match match;
      int nonePassiveHealthChange = 0 ;
      int nonePassiveDamageChange = 0 ;
 
