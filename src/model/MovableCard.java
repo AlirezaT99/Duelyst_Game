@@ -16,6 +16,7 @@ class MovableCard extends Card {
     private boolean isMelee;
     private boolean isHybrid;
     private boolean isStunned = false;
+    private boolean isDisarmed = false;
     private Match match;
 
     public void castCard(Cell cell) {
@@ -25,6 +26,7 @@ class MovableCard extends Card {
         // deleteCastedCard bayad public beshe
         // mana ro bayad oun player ei ke cast card mikone azash kam she, ke hamoun ja codesh ro mizanim
     }
+
     //attack & counterAttack
     public void attack(Cell cell) {
         if (isAttackValid(cell)) {
@@ -111,7 +113,7 @@ class MovableCard extends Card {
         int destinationX = destination.getCellCoordination().getX();
         int destinationY = destination.getCellCoordination().getY();
         Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
-        Cell cell = Match.table.findCellByCoordination(coordination);
+        Cell cell = Match.getTable().findCellByCoordination(coordination);
         if (cell != null)
             return cell.getMovableCard().team.compareTo(this.team) != 0;
         return false;
@@ -165,60 +167,5 @@ class MovableCard extends Card {
     public void setCardCell(Cell cardCell) {
         this.cardCell = cardCell;
     }
-
-    //setters}
-    class Hero extends MovableCard {
-
-        private Spell heroSpell;
-        private int spellCost;
-        private int spellCoolDown;
-
-        public Hero(String name, int health, Impact damage, Spell heroSpell, int spellCost, int spellCoolDown) {
-            this.heroSpell = heroSpell;
-            this.spellCost = spellCost;
-            this.spellCoolDown = spellCoolDown;
-            this.health = health;
-            this.name = name;
-            this.damage = damage;
-        }
-
-        public void castSpell(Cell cell) {
-            // check should be in spell class
-            // if check
-            // cast spell
-            // put the impact of spell in all targets impacts applied to this one
-        }
-
-        // getter
-
-        public int getSpellcost() {
-            return spellCost;
-        }
-
-        public int getSpellCoolDown() {
-            return spellCoolDown;
-        }
-
-        // getter}
-    }
-
-    class Minion extends MovableCard {
-        private Impact summonImpact;
-        private Impact dyingWishImpact;
-
-        @Override
-
-        protected void manageCasualties() {
-            if (this.health <= 0) {
-                this.isAlive = false;
-                //do dyingWish
-            }
-        }
-
-        public void castCard(Cell cell) {
-            this.cardCell = cell;
-            this.isAlive = true;
-            // do summonImpact
-        }
-    }
 }
+

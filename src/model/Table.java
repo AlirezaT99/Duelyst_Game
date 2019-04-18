@@ -8,6 +8,6 @@ class Table {
     }
 
     public Cell getCellByCoordination(Coordination coordination) {
-        return new Cell(); // <---
+        return cells[coordination.getX()][coordination.getY()];
     }
 }
