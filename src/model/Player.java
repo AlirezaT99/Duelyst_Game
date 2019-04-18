@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 class Player {
-
+    private Account account;
     private Deck deck; // playing deck
     private Collection collection; // playing collection
     private long money;
@@ -66,6 +66,9 @@ class Player {
    }
    public Collection getCollection(){
         return this.collection;
+   }
+   public String getUserName(){
+        return this.account.getUserName();
    }
     //getters
 
