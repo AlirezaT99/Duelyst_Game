@@ -82,6 +82,8 @@ class Card {
     public void setMatch(Match match) {
         this.match = match;
     }
+
+    public void setName(String name){ this.name = name; }
     //setters
 
 }

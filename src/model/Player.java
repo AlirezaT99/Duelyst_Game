@@ -37,7 +37,7 @@ class Player {
     }
 
     public void fillHand() {
-        this.hand.fillEmptyPlace(deck);
+       // this.hand.fillEmptyPlace(deck);
         //
     }
 

@@ -4,12 +4,8 @@ import java.util.ArrayList;
 
 class Spell extends Card {
     private int areaTargetSquare;
-    private Impact primaryimpact = super.getImpact();
+    private Impact primaryImpact = super.getImpact();
     private Impact secondaryImpact;
-
-    public Impact getPrimaryimpact() {
-        return primaryimpact;
-    }
 
     public boolean isCastingValid(Cell cell, Impact impact) {
 //        if(everyWhere)
@@ -22,13 +18,16 @@ class Spell extends Card {
     }
 
     public void castCard(Cell cell) {
-        if (isCastingValid(cell, primaryimpact))
-            primaryimpact.doImpact();
+        if (isCastingValid(cell, primaryImpact))
+            primaryImpact.doImpact();
         if (secondaryImpact != null && isCastingValid(cell, secondaryImpact))
             secondaryImpact.doImpact();
     }
     //getters
-
+    public Impact getPrimaryimpact() {
+        return primaryImpact;
+    }
+    public Impact getSecondaryImpact() { return secondaryImpact; }
     //getters
 
     //setters
@@ -46,8 +45,11 @@ class Spell extends Card {
         this.cost = cost;
     }
     public void setPrimaryimpact(Impact primaryimpact){
-        this.primaryimpact = primaryimpact;
+        this.primaryImpact = primaryimpact;
     }
 
+    public void setSecondaryImpact(Impact secondaryImpact) {
+        this.secondaryImpact = secondaryImpact;
+    }
     //setters
 }

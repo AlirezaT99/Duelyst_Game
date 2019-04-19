@@ -39,6 +39,9 @@ public class Account {
         return friends;
     }
 
+    public String getUserName() {
+        return userName;
+    }
     //getters
 
 
