@@ -15,7 +15,6 @@ class MovableCard extends Card {
     private int maxAttackRange;
     private boolean isMelee;
     private boolean isHybrid;
-    //private Player player;
      int nonPassiveHealthChange = 0 ;
      int nonPassiveDamageChange = 0 ;
 
@@ -24,14 +23,14 @@ class MovableCard extends Card {
         cell.setMovableCard(this);
         this.cardCell = cell;
         player.getHand().deleteCastedCard(this);
-        // deleteCastedCard bayad public beshe
-        // mana ro bayad oun player ei ke cast card mikone azash kam she, ke hamoun ja codesh ro mizanim
+        player.setMana(player.getMana() - this.manaCost);
     }
     //attack & counterAttack
      public void attack(Cell cell) {
         if (isAttackValid(cell)) {
             // do attack
-
+            MovableCard opponent = cell.getMovableCard();
+            opponent.takeDamage(this.damage);
             //do attack
             didAttackInThisTurn = true;
             cell.getMovableCard().counterAttack(this);
@@ -65,9 +64,9 @@ class MovableCard extends Card {
         return true;
     }
 
-    private void counterAttack(MovableCard opponent) {
+    protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent.cardCell)) {
-            //do attack
+            opponent.takeDamage(this.damage);
             manageCasualties();
         }
     }
@@ -102,10 +101,10 @@ class MovableCard extends Card {
     }
 
     //move
-    public void move(Cell cell) {
-        if (isMoveValid(cell)) {
+    public void move(Cell destination) {
+        if (isMoveValid(destination)) {
             didMoveInThisTurn = true;
-            this.cardCell = cell;
+            this.cardCell = destination;
         }
     }
 
@@ -151,6 +150,10 @@ class MovableCard extends Card {
 
     private void printMessage(String message) {
         System.out.println(message);
+    }
+
+    private void takeDamage(int damage){
+        this.health -= damage;
     }
 
     //getters
@@ -209,12 +212,12 @@ class MovableCard extends Card {
         }
 
         public void castSpell(Cell cell) {
+            heroSpell.castCard(this.getMatch(),cell);
             // check should be in spell class
             // if check
             // cast spell
             // put the impact of spell in all targets impacts applied to this one
         }
-
         // getters
 
         public int getSpellcost() {
@@ -231,12 +234,15 @@ class MovableCard extends Card {
     class Minion extends MovableCard {
         private Impact summonImpact;
         private Impact dyingWishImpact;
+        private Impact onDefendImpact;
+        private Impact onAttackImpact;
 
         @Override
 
         protected void manageCasualties() {
             if (this.health <= 0) {
                 this.isAlive = false;
+                dyingWishImpact.doImpact();
                 //do dyingWish
             }
         }
@@ -244,7 +250,24 @@ class MovableCard extends Card {
         public void castCard(Cell cell) {
             this.cardCell = cell;
             this.isAlive = true;
+            summonImpact.doImpact();
             // do summonImpact
+        }
+
+        @Override
+
+        public void attack(Cell cell){
+            if(MovableCard.this.isAttackValid(cell)){
+                super.attack(cell);
+                onAttackImpact.doImpact();
+            }
+        }
+
+        @Override
+
+        protected void counterAttack(MovableCard opponent){
+            super.counterAttack(opponent);
+            onDefendImpact.doImpact();
         }
     }
 }
