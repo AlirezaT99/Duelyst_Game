@@ -34,9 +34,8 @@ class Shop {
         return "-1";
     }
 
-    public ArrayList<String> searchCollection(String name) {
-        //search collection
-        return new ArrayList<>();
+    public int searchCollection(String name, Account buyingAccount) {
+          return  buyingAccount.getCollection().search(name);
     }
 
     // search
@@ -45,31 +44,30 @@ class Shop {
 
     //buy
 
-    public void buy(Player player, String name) {
+    public void buy(Account account, String name) {
         UsableItem item = findItemByName(name);
         Card card = findCardByName(name);
-        if (!isBuyValid(player, item, card))
+        if (!isBuyValid(account, item, card))
             return;
         int cost;
         if (item != null)
             cost = item.getCost();
         else
             cost = card.getCost();
-        player.setMoney(player.getMoney() - cost);
+        account.buy(cost,item,card);
         printMessage("Buying was successful");
-        // add to player collection
     }
 
-    private boolean isBuyValid(Player player, UsableItem item, Card card) {
+    private boolean isBuyValid(Account account, UsableItem item, Card card) {
         if (item == null && card == null) {
             printMessage("Card/Item is out of stock");
             return false;
         }
-        if ((item != null && item.getCost() > player.getMoney()) || (card != null && card.getCost() > player.getMoney())) {
+        if ((item != null && item.getCost() > account.getMoney()) || (card != null && card.getCost() > account.getMoney())) {
             printMessage("Not enough drake");
             return false;
         }
-        if (item != null && player.getCollection().getItems().size() == 3) {
+        if (item != null && account.getCollection().getItems().size() == 3) {
             printMessage("Maximum items are in the Collection");
             return false;
         }
@@ -80,21 +78,21 @@ class Shop {
 
     // sell
 
-    public void sell(Player player, String name) {
-        UsableItem item = player.getCollection().findItemByName(name);
-        Card card = player.getCollection().findCardByName(name);
+    public void sell(Account account, String name) {
+        UsableItem item = account.getCollection().findItemByName(name);
+        Card card = account.getCollection().findCardByName(name);
+        int cost = 0;
         if (item == null && card == null) {
             printMessage("Item/Card not found");
             return;
         }
         printMessage("Sell was successFull");
         if (item != null) {
-            player.setMoney(player.getMoney() + item.getCost());
-            // remove from player collection
-            return;
+             cost = item.getCost();
         }
-        player.setMoney(player.getMoney() + card.getCost());
-        // remove from player cards
+        else
+            cost = card.getCost();
+        account.sell(cost,item,card);
     }
 
     // sell

@@ -5,12 +5,11 @@ import java.util.ArrayList;
 class Collection {
     private ArrayList<UsableItem> items;
     private ArrayList<Card> cards;
-    private ArrayList<Deck> decks = new ArrayList<Deck>();
+    private ArrayList<Deck> decks = new ArrayList<>();
     private Deck selectedDeck;
 
     public void selectDeck(String name) {
-        //if deck was in the decks
-        //set select deck
+        //hash map
     }
 
     public void addDeck(Deck deck) {
@@ -26,6 +25,8 @@ class Collection {
 
     public void showDeck(Deck deck) {
         //show deck probably in presenter
+        // and int the view
+        //it must not be here
     }
 
     public boolean validateDeck(Deck deck) {
@@ -40,10 +41,11 @@ class Collection {
 
     public void add(String id, Deck deck) {
         //find card and item and hero by id
+        //it must be written in presenter and an instance should be held in presenter and the changes should be applied in the copy instance
     }
 
     public void remove(String id) {
-        //remove and in dastana
+        //same as add
     }
 
     //search

@@ -25,6 +25,22 @@ public class Account {
         accounts = new ArrayList<>();
     }
 
+    public void buy(int cost,UsableItem item, Card card ){
+        money -= cost;
+        if(item != null)
+            collection.getItems().add(item);
+        if(card != null)
+            collection.getCards().add(card);
+    }
+
+    public void sell(int cost, UsableItem item, Card card){
+        money += cost;
+        if(item != null)
+            collection.getItems().remove(item);
+        if(card != null)
+            collection.getCards().remove(card);
+    }
+
     //getters
 
     public long getMoney() {
