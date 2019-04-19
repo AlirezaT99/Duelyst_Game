@@ -15,8 +15,10 @@ class MovableCard extends Card {
     private int maxAttackRange;
     private boolean isMelee;
     private boolean isHybrid;
-     int nonePassiveHealthChange = 0 ;
-     int nonePassiveDamageChange = 0 ;
+    //private Player player;
+     int nonPassiveHealthChange = 0 ;
+     int nonPassiveDamageChange = 0 ;
+
 
     public void castCard(Cell cell) {
         cell.setMovableCard(this);
@@ -95,7 +97,7 @@ class MovableCard extends Card {
     }
 
     protected void manageCasualties() {
-        if (this.health + nonePassiveHealthChange <= 0)
+        if (this.health + nonPassiveHealthChange <= 0)
             this.isAlive = false;
     }
 
@@ -136,7 +138,7 @@ class MovableCard extends Card {
         int destinationX = destination.getCellCoordination().getX();
         int destinationY = destination.getCellCoordination().getY();
         Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
-        Cell cell = player.match.table.getCellByCoordination(coordination);
+        Cell cell = player.match.table.getCellByCoordination(coordination.getX(),coordination.getY());
         if (cell != null)
             return !cell.getMovableCard().player.equals(this.player);
         return false;

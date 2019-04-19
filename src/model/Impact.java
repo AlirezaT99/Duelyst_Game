@@ -1,6 +1,5 @@
 package model;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 
 class Impact {
@@ -48,7 +47,7 @@ class Impact {
             if (isHealthChange)
                 healthChange();
             if(isDamageChange)
-                damagaeChange();
+                damageChange();
         }
     }
 
@@ -62,14 +61,13 @@ class Impact {
 
     private void healthChange(){
         for (Cell cell: impactArea)
-            cell.getMovableCard().nonePassiveHealthChange += impactQuantity;
+            cell.getMovableCard().nonPassiveHealthChange += impactQuantity;
     }
 
-    private void damagaeChange(){
+    private void damageChange(){
         for(Cell cell : impactArea)
-            cell.getMovableCard().nonePassiveDamageChange += impactQuantity;
+            cell.getMovableCard().nonPassiveDamageChange += impactQuantity;
     }
-
 
     void goThroughTime(){
         turnsActive -= 1;
