@@ -46,8 +46,8 @@ public class Main {
 //            impact.setImpactQuantity(1);
 //            gson.toJson(impact, isr);
 // }
-        /////entehaye mesal.
-        ////baraye neveshtane spell.
+//        ///entehaye mesal.
+//        //baraye neveshtane spell.
 //        try(FileOutputStream fos = new FileOutputStream(fileName1);
 //            OutputStreamWriter isr = new OutputStreamWriter(fos,
 //                    StandardCharsets.UTF_8)){

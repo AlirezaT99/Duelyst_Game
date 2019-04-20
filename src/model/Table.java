@@ -36,7 +36,7 @@ class Table {
             adjacentCells.add(this.getCellByCoordination(cell.getCellCoordination().getX()-1,
                     cell.getCellCoordination().getY()+1));
         if( cell.getCellCoordination().getY()<9)
-            adjacentCells.add(this.getCellByCoordination(cell.getCellCoordination().getX()1,
+            adjacentCells.add(this.getCellByCoordination(cell.getCellCoordination().getX(),
                     cell.getCellCoordination().getY()+1));
         if(cell.getCellCoordination().getX()<4 && cell.getCellCoordination().getY()<9)
             adjacentCells.add(this.getCellByCoordination(cell.getCellCoordination().getX()+1,

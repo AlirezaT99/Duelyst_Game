@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-class Player {
+public class Player {
     private Account account;
     private Deck deck; // playing deck
     private Collection collection; // playing collection
@@ -80,6 +80,7 @@ class Player {
     public void setMoney(long money){
         this.money = money;
     }
+    public void setAccount(Account account){ this.account = account;}
 //setters
 
 }

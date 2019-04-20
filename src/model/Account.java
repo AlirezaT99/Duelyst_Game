@@ -2,7 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
-public class Account {
+public class Account implements Comparable<Account>
+{
     private static ArrayList<Account> accounts;
     private String userName;
     private String password;
@@ -10,16 +11,18 @@ public class Account {
     private Collection collection;
     private ArrayList<model.Account> friends;
     private int nonesense;
-
+    private int numberOfWins;
     public Account(String userName, String password) {
         this.userName = userName;
         this.password = password;
         this.money = 15000;
         this.friends = new ArrayList<>();
+        this.numberOfWins = 0;
     }
-
-
-
+    @Override
+    public int compareTo(Account account){
+        return this.numberOfWins - account.numberOfWins;
+    }
 
     static {
         accounts = new ArrayList<>();
@@ -58,7 +61,23 @@ public class Account {
     public String getUserName() {
         return userName;
     }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public int getNumberOfWins() {
+        return numberOfWins;
+    }
+
     //getters
+    //setters
+    public void setMoney(long money) {
+        this.money = money;
+    }
 
-
+    public void setNumberOfWins(int numberOfWins) {
+        this.numberOfWins = numberOfWins;
+    }
+    //setters
 }
