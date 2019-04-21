@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 
 class MovableCard extends Card {
@@ -15,8 +16,9 @@ class MovableCard extends Card {
     private int maxAttackRange;
     private boolean isMelee;
     private boolean isHybrid;
-     int nonPassiveHealthChange = 0 ;
-     int nonPassiveDamageChange = 0 ;
+    private boolean isComboAttacker;
+    int nonPassiveHealthChange = 0;
+    int nonPassiveDamageChange = 0;
 
 
     public void castCard(Cell cell) {
@@ -25,25 +27,26 @@ class MovableCard extends Card {
         player.getHand().deleteCastedCard(this);
         player.setMana(player.getMana() - this.manaCost);
     }
+
     //attack & counterAttack
-     public void attack(Cell cell) {
+    public void attack(Cell cell) {
         if (isAttackValid(cell)) {
             // do attack
             MovableCard opponent = cell.getMovableCard();
             opponent.takeDamage(this.damage);
-            //do attack
             didAttackInThisTurn = true;
+            //do attack
             cell.getMovableCard().counterAttack(this);
             manageCasualties();
         }
     }
 
-    private boolean isAttackValid(Cell cell) {
+    boolean isAttackValid(Cell cell) {
         counterAttackAndNormalAttackSameParameters(cell);
-        if(isHybrid)
+        if (isHybrid)
             return true;
-        for (Impact impact: impactsAppliedToThisOne)
-            if(impact.isStunBuff()){
+        for (Impact impact : impactsAppliedToThisOne)
+            if (impact.isStunBuff()) {
                 printMessage("Stunned. Can't Attack");
                 return false;
             }
@@ -73,10 +76,10 @@ class MovableCard extends Card {
 
     private boolean isCounterAttackValid(Cell cell) {
         if (counterAttackAndNormalAttackSameParameters(cell)) {
-            if(isHybrid)
+            if (isHybrid)
                 return true;
-            for (Impact impact: impactsAppliedToThisOne)
-                if(impact.isDisarmBuff()){
+            for (Impact impact : impactsAppliedToThisOne)
+                if (impact.isDisarmBuff()) {
                     printMessage("Disarmed. Can't CounterAttack");
                     return false;
                 }
@@ -87,9 +90,8 @@ class MovableCard extends Card {
     }
     //attack & counterAttack
 
-    public void goThroughTime()
-    {
-        for (Impact impact: impactsAppliedToThisOne) {
+    public void goThroughTime() {
+        for (Impact impact : impactsAppliedToThisOne) {
             impact.doImpact();
             impact.goThroughTime();
         }
@@ -121,9 +123,8 @@ class MovableCard extends Card {
             printMessage("Enemy in the way");
             return false;
         }
-        for (Impact impact:impactsAppliedToThisOne   ) {
-            if(impact.isStunBuff())
-            {
+        for (Impact impact : impactsAppliedToThisOne) {
+            if (impact.isStunBuff()) {
                 printMessage("Stunned. Can't Move");
                 return false;
             }
@@ -137,7 +138,7 @@ class MovableCard extends Card {
         int destinationX = destination.getCellCoordination().getX();
         int destinationY = destination.getCellCoordination().getY();
         Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
-        Cell cell = player.match.table.getCellByCoordination(coordination.getX(),coordination.getY());
+        Cell cell = player.match.table.getCellByCoordination(coordination.getX(), coordination.getY());
         if (cell != null)
             return !cell.getMovableCard().player.equals(this.player);
         return false;
@@ -152,7 +153,7 @@ class MovableCard extends Card {
         System.out.println(message);
     }
 
-    private void takeDamage(int damage){
+    private void takeDamage(int damage) {
         this.health -= damage;
     }
 
@@ -202,7 +203,7 @@ class MovableCard extends Card {
         private int spellCost;
         private int spellCoolDown;
 
-        public Hero(String name, int health,int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
+        public Hero(String name, int health, int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
             this.heroSpell = heroSpell;
             this.spellCost = spellCost;
             this.spellCoolDown = spellCoolDown;
@@ -212,7 +213,7 @@ class MovableCard extends Card {
         }
 
         public void castSpell(Cell cell) {
-            heroSpell.castCard(this.getMatch(),cell);
+            heroSpell.castCard(this.getMatch(), cell);
             // check should be in spell class
             // if check
             // cast spell
@@ -236,7 +237,7 @@ class MovableCard extends Card {
         private Impact dyingWishImpact;
         private Impact onDefendImpact;
         private Impact onAttackImpact;
-
+        private Impact onComboImpact;
         @Override
 
         protected void manageCasualties() {
@@ -256,16 +257,29 @@ class MovableCard extends Card {
 
         @Override
 
-        public void attack(Cell cell){
-            if(MovableCard.this.isAttackValid(cell)){
+        public void attack(Cell cell) {
+            if (MovableCard.this.isAttackValid(cell)) {
                 super.attack(cell);
                 onAttackImpact.doImpact();
             }
         }
 
+        public void comboAttack(Cell cell, ArrayList<Minion> minions) {
+            minions.get(0).onComboImpact.doImpact();
+            super.attack(cell);
+            for (int i = 1; i < minions.size(); i++) {
+                MovableCard movableCard = minions.get(i);
+                if(movableCard.isAttackValid(cell)){
+                    MovableCard opponent = cell.getMovableCard();
+                    opponent.takeDamage(this.damage);
+                    didAttackInThisTurn = true;
+                }
+            }
+        }
+
         @Override
 
-        protected void counterAttack(MovableCard opponent){
+        protected void counterAttack(MovableCard opponent) {
             super.counterAttack(opponent);
             onDefendImpact.doImpact();
         }

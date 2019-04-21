@@ -45,7 +45,7 @@ public class Player {
 
 
 
-    Hero findPlayerHero(){
+    MovableCard.Hero findPlayerHero(){
         for (Card card: collection.getCards()) {
             if(card instanceof MovableCard.Hero)
                 return (MovableCard.Hero) card;
