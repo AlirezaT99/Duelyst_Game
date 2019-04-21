@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Player {
     private Account account;
     private Deck deck; // playing deck
@@ -47,7 +45,7 @@ public class Player {
 
 
 
-    MovableCard.Hero findPlayerHero(){
+    Hero findPlayerHero(){
         for (Card card: collection.getCards()) {
             if(card instanceof MovableCard.Hero)
                 return (MovableCard.Hero) card;

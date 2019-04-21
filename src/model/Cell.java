@@ -18,6 +18,8 @@ class Cell {
         this.movableCard = movableCard;
     }
 
+
+
     public Item getItem() {
         return item;
     }
