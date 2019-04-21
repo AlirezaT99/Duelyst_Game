@@ -2,7 +2,6 @@ package view;
 
 import model.Account;
 import model.Player;
-import com.google.gson.*;
 
 import java.nio.file.*;
 import java.io.*;

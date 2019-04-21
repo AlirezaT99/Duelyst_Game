@@ -5,120 +5,85 @@ import java.util.ArrayList;
 class Impact {
     private String name;
     private ArrayList<Cell> impactArea;
-    //type finder booleans
-    private boolean isPositive;
-    private boolean isBuff;
 
-    //type finder booleans
-
-    //target finder booleans
-        private boolean isvalidOnHero;
-    private boolean isvalidOnMinion;
-    private boolean isvalidOnAllies;
-    private boolean isvalidOnEnemies;
-    //target finder booleans
-
-    //type specifier booleans
-    private boolean isMana;
-    private boolean isHealthChange;
-    private boolean isDamageChange;
-    private boolean isHolyBuff;
-    private boolean isPowerBuff;
-    private boolean isPoisonBuff;
-    private boolean isWeaknessBuff;
-    private boolean isStunBuff;
-    private boolean isDisarmBuff;
-    //type specifier booleans
-
-    private boolean isPassive;
-    private int turnsActive;
-    private int turnsToBeActivated;
-    private int impactQuantity;
+    private String targetTypeId = ""; //(0,1)"ValidOnAll"|(0,1)"SelectedCellImportance"|(0,1)"ValidOnAWholeTeam"|
+    // (0-2)"onWhichTeam"|(0-2)"targetSoldierType"|(0-n)"targetFactionType"|(2,3)"SquareLength"
+    private String impactTypeId = "";//0.(0,1)isPositive|1.(0,1)isBuff|2.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
+    // 3.(0-4)QuantityChange{mana,health,damage}|
+    //4.(0,n)"impactQuantity"|5.(0,2)disImpactKDispel|6.(0,2)PassivePermanent|7.(0,n)turnsToBeActivated |8.(0,n)turnsActive
 
 
-    public void setImpactArea(Card card, Match match, Cell targetCell){
+    public void setImpactArea(Card card, Match match, Cell targetCell) {
+      String id = targetsId();
+      if(id.charAt(1) == '0'){
+          if(id.charAt(2) == '1'){
 
+          }
+          else
+              impactArea.add(card.player.findPlayerHero().cardCell);
+      }
+      else {
+
+      }
     }
 
-    public void doImpact(){
-        if(turnsToBeActivated == 0) {
-            if (isMana)
+    public void doImpact() {
+        String id = impactTypeId;
+        if (id.charAt(6) == '0') {
+            if (id.charAt(3) == '1')
                 manaChange();
-            if (isHealthChange)
+            if (id.charAt(3) == '2')
                 healthChange();
-            if(isDamageChange)
+            if (id.charAt(3) == '3')
                 damageChange();
         }
     }
 
 
-    private void manaChange(){
-        for (Cell cell: impactArea) {
+    private void manaChange() {
+        int impactQuantity = Integer.parseInt(impactTypeId.substring(4,5));
+        for (Cell cell : impactArea) {
             Player player = cell.getMovableCard().player;
             player.setMana(player.getMana() + impactQuantity);
         }
     }
 
-    private void healthChange(){
-        for (Cell cell: impactArea)
+    private void healthChange() {
+        int impactQuantity = Integer.parseInt(impactTypeId.substring(4,5));
+        for (Cell cell : impactArea)
             cell.getMovableCard().nonPassiveHealthChange += impactQuantity;
     }
 
-    private void damageChange(){
-        for(Cell cell : impactArea)
+    private void damageChange() {
+        int impactQuantity = Integer.parseInt(impactTypeId.substring(4,5));
+        for (Cell cell : impactArea)
             cell.getMovableCard().nonPassiveDamageChange += impactQuantity;
     }
 
-    void goThroughTime(){
-        turnsActive -= 1;
-        turnsToBeActivated -= 1;
+    void goThroughTime() {
+        String s = impactTypeId.substring(0,7);
+        char c1 = impactTypeId.charAt(7);
+        char c2 = impactTypeId.charAt(8);
+        c1++;
+        c2++;
+        impactTypeId = s + c1+ c2;
     }
 
     //getters
 
-    public boolean isStunBuff() {
-        return isStunBuff;
+     boolean isStunBuff() {
+        return impactTypeId.charAt(2) == '5';
     }
 
-    public boolean isDisarmBuff() {
-        return isDisarmBuff;
+    boolean isDisarmBuff() {
+        return impactTypeId.charAt(2) == '6';
     }
 
-    public boolean isIsvalidOnHero() {
-        return isvalidOnHero;
+
+    boolean isPoisonBuff() {
+        return impactTypeId.charAt(2) == '3';
     }
 
-    public boolean isIsvalidOnMinion() {
-        return isvalidOnMinion;
-    }
-
-    public boolean isIsvalidOnAllies() {
-        return isvalidOnAllies;
-    }
-
-    public boolean isIsvalidOnEnemies() {
-        return isvalidOnEnemies;
-    }
-
-    public boolean isPassive() {
-        return isPassive;
-    }
-
-    public int getTurnsActive() {
-        return turnsActive;
-    }
-
-    public int getImpactQuantity() {
-        return impactQuantity;
-    }
-
-    public ArrayList<Cell> getImpactArea() {
-        return impactArea;
-    }
-
-    public boolean isPoisonBuff() {
-        return isPoisonBuff;
-    }
     //getters
     //setters
 
@@ -126,84 +91,5 @@ class Impact {
     public void setName(String name) {
         this.name = name;
     }
-
-    public void setImpactArea(ArrayList<Cell> impactArea) {
-        this.impactArea = impactArea;
-    }
-
-    public void setPositive(boolean positive) {
-        isPositive = positive;
-    }
-
-    public void setBuff(boolean buff) {
-        isBuff = buff;
-    }
-
-    public void setIsvalidOnHero(boolean isvalidOnHero) {
-        this.isvalidOnHero = isvalidOnHero;
-    }
-
-    public void setIsvalidOnMinion(boolean isvalidOnMinion) {
-        this.isvalidOnMinion = isvalidOnMinion;
-    }
-
-    public void setIsvalidOnAllies(boolean isvalidOnAllies) {
-        this.isvalidOnAllies = isvalidOnAllies;
-    }
-
-    public void setIsvalidOnEnemies(boolean isvalidOnEnemies) {
-        this.isvalidOnEnemies = isvalidOnEnemies;
-    }
-
-    public void setMana(boolean mana) {
-        isMana = mana;
-    }
-
-    public void setHealthChange(boolean healthChange) {
-        isHealthChange = healthChange;
-    }
-
-    public void setDamageChange(boolean damageChange) {
-        isDamageChange = damageChange;
-    }
-
-    public void setHolyBuff(boolean holyBuff) {
-        isHolyBuff = holyBuff;
-    }
-
-    public void setPowerBuff(boolean powerBuff) {
-        isPowerBuff = powerBuff;
-    }
-
-    public void setPoisonBuff(boolean poisonBuff) {
-        isPoisonBuff = poisonBuff;
-    }
-
-    public void setWeaknessBuff(boolean weaknessBuff) {
-        isWeaknessBuff = weaknessBuff;
-    }
-
-    public void setStunBuff(boolean stunBuff) {
-        isStunBuff = stunBuff;
-    }
-
-    public void setDisarmBuff(boolean disarmBuff) {
-        isDisarmBuff = disarmBuff;
-    }
-
-    public void setPassive(boolean passive) {
-        isPassive = passive;
-    }
-
-    public void setTurnsActive(int turnsActive) {
-        this.turnsActive = turnsActive;
-    }
-
-    public void setTurnsToBeActivated(int turnsToBeActivated) {
-        this.turnsToBeActivated = turnsToBeActivated;
-    }
-
-    public void setImpactQuantity(int impactQuantity) {
-        this.impactQuantity = impactQuantity;
-    }
+    //setters
 }

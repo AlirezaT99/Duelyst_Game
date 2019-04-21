@@ -42,11 +42,18 @@ public class Player {
     }
 
     public void playAI(Match match) {
-        this.hand.selectCard(0).castCard(
-                this.hand.selectCard(0).getImpact().getImpactArea().get(0).getCellCoordination().getX(),
-                this.hand.selectCard(0).getImpact().getImpactArea().get(0).getCellCoordination().getY());
+
     }
 
+
+
+    MovableCard.Hero findPlayerHero(){
+        for (Card card: collection.getCards()) {
+            if(card instanceof MovableCard.Hero)
+                return (MovableCard.Hero) card;
+        }
+        return null;
+    }
 
     //getters
     public int getMana() {

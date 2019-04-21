@@ -1,10 +1,8 @@
 package model;
 
-import com.sun.media.jfxmedia.control.MediaPlayerOverlay;
-
-import java.util.ArrayList;
 
 class Spell extends Card {
+    private Impact impact;
     private int[] areaTargetSquare = new int[2];
     private Impact primaryImpact = super.getImpact();
     private Impact secondaryImpact;

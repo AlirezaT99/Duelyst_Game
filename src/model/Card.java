@@ -4,7 +4,6 @@ class Card {
     protected int manaCost;
     protected String name;
     private Cell cell;
-    private Impact impact;
     protected int cost;
     private Match match;
     protected Player player;
@@ -37,9 +36,6 @@ class Card {
         return match;
     }
 
-    public Impact getImpact() {
-        return impact;
-    }
 
     public Coordination getCoordination() {
         return cell.getCellCoordination();
@@ -70,11 +66,6 @@ class Card {
     }
 
 
-    public void setImpact(Impact impact) {
-        this.impact = impact;
-    }
-
-
     public void setCost(int cost) {
         this.cost = cost;
     }
@@ -84,6 +75,8 @@ class Card {
     }
 
     public void setName(String name){ this.name = name; }
+
+
     //setters
 
 }
