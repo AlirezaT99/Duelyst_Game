@@ -26,6 +26,12 @@ class Match {
         return player2;
     }
 
+    public Player notCurrentTurnPlayer(){
+        if(turn == 0)
+            return player2;
+        return player1;
+    }
+
     public Table getTable() {
         return table;
     }

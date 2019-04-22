@@ -5,7 +5,7 @@ import java.util.ArrayList;
 class Impact {
     private String name;
     private ArrayList<Cell> impactArea;
-
+    private ArrayList<Cell> temporaryImpactArea;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
     // 3.(0-2)"onWhichTeam"|4.(0-2)"targetSoldierType"|5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(1,0)
     //8.nearHeroHostileMinion(1,0)
@@ -18,6 +18,7 @@ class Impact {
     //set ImpactArea
 
     public void setImpactArea(Player friendlyPlayer, Player opponentPlayer, Match match, Cell targetCell) {
+        impactArea.clear();
         if (targetTypeId.charAt(0) == '1') {
             oneTeam(match.table, opponentPlayer);
             oneTeam(match.table, friendlyPlayer);
@@ -103,7 +104,7 @@ class Impact {
                 impactArea.add(cell);
     }
 
-    private void oneHostileMinionBesideHero(Cell cell, Hero hero, Table table) {
+    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero, Table table) {
         int heroX = hero.cardCell.getCellCoordination().getX();
         int herorY = hero.cardCell.getCellCoordination().getY();
         int chosenX = cell.getCellCoordination().getX();
@@ -173,6 +174,9 @@ class Impact {
         return impactTypeId.charAt(2) == '3';
     }
 
+    public ArrayList<Cell> getImpactArea() {
+        return impactArea;
+    }
     //getters
     //setters
 

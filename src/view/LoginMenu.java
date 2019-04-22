@@ -2,7 +2,7 @@ package view;
 
 import model.Account;
 import model.Player;
-
+import com.google.gson.*;
 import java.nio.file.*;
 import java.io.*;
 import java.io.FileOutputStream;
@@ -15,29 +15,27 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class LoginMenu {
-    private static ArrayList<Pattern> commandPatterns;
-    private static ArrayList<Account> users;
-    private static boolean inLoginMenu;
+    private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
+    private static ArrayList<Account> users = new ArrayList<>();
     private static Account currentAccount;
     private static Player player;
-    private static boolean isInLoginMenu;
+    private static boolean isInLoginMenu = true;
     private static String commandParts[];
 
     static {
-        commandPatterns.add(Pattern.compile("create account [^\\s\\\\]"));
-        commandPatterns.add(Pattern.compile("login [^\\s\\\\]"));
+        commandPatterns.add(Pattern.compile("create account [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("login [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("show leaderboard"));
         commandPatterns.add(Pattern.compile("save"));
         commandPatterns.add(Pattern.compile("logout"));
         commandPatterns.add(Pattern.compile("help"));
-
     }
 
     interface DoCommand {
         void doIt() throws IOException;
     }
 
-    public static void loginMenu() throws IOException {
+    public static void main(String[] args) throws IOException {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
@@ -94,7 +92,7 @@ public class LoginMenu {
 
     private static int findPatternIndex(String command) {
         for (int i = 0; i < commandPatterns.size(); i++) {
-            if (command.equals(commandPatterns.get(i).pattern()))
+            if (command.matches(commandPatterns.get(i).pattern()))
                 return i;
         }
         return -1;
@@ -116,6 +114,7 @@ public class LoginMenu {
     }
 
     private static void createAccount(String userName) throws IOException {
+        readUsers();
         for (int i = 0; i < users.size(); i++)
             if (users.get(i).getUserName().equals(userName)) {
                 System.out.println("an account with this username already exists");
@@ -144,7 +143,7 @@ public class LoginMenu {
                 String passWord = scanner.nextLine();
                 if (users.get(i).getPassword().equals(passWord)) {
                     currentAccount = users.get(i);
-                    inLoginMenu = false;
+                    isInLoginMenu = false;
                     Player currentPlayer = new Player();
                     currentPlayer.setAccount(currentAccount);
                     player = currentPlayer;
