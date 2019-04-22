@@ -21,7 +21,8 @@ class Hand {
     }
 
     private boolean isThereEmptyPlace(Card card) {
-        return false; // <---
+        //todo
+        return false;
     }
 
     void deleteCastedCard(Card card) {
@@ -33,7 +34,8 @@ class Hand {
     }
 
     private boolean didSwitchInCurrentTurn() {
-        return false; // <---
+        //todo
+        return false;
     }
 
     public Card selectCard(int index) {
@@ -43,6 +45,5 @@ class Hand {
     public void castCard() {
 
     }
-
 
 }

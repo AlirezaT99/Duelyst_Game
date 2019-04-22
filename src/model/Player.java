@@ -15,7 +15,7 @@ public class Player {
         return isAI;
     }
 
-    public boolean isHasLoggedIn() {
+    public boolean hasLoggedIn() {
         return hasLoggedIn;
     }
 
@@ -91,6 +91,6 @@ public class Player {
     public void setAccount(Account account) {
         this.account = account;
     }
-//setters
+    //setters
 
 }

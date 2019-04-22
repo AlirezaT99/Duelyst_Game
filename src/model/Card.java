@@ -37,7 +37,6 @@ class Card {
         return match;
     }
 
-
     public Coordination getCoordination() {
         return cell.getCellCoordination();
     }
@@ -56,16 +55,13 @@ class Card {
         this.cardID = cardID;
     }
 
-
     public void setManaCost(int manaCost) {
         this.manaCost = manaCost;
     }
 
-
     public void setCoordination(Coordination coordination) {
         this.cell.setCellCoordination(coordination);
     }
-
 
     public void setCost(int cost) {
         this.cost = cost;
@@ -78,7 +74,6 @@ class Card {
     public void setName(String name) {
         this.name = name;
     }
-
 
     //setters
 

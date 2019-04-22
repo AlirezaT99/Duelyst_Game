@@ -47,7 +47,7 @@ class Impact {
                 oneColumnFromOneTeam(targetCell, opponentPlayer, match.table);
             }
         } else if (targetTypeId.charAt(8) == '1')
-            oneHostileMinioBesideHero(targetCell, friendlyPlayer.findPlayerHero(), match.table);
+            oneHostileMinionBesideHero(targetCell, friendlyPlayer.findPlayerHero(), match.table);
         else if (targetTypeId.charAt(4) == '2')
             oneSoldierFromOneTeam(targetCell, friendlyPlayer);
         else if (targetTypeId.charAt(4) == '1')
@@ -103,7 +103,7 @@ class Impact {
                 impactArea.add(cell);
     }
 
-    private void oneHostileMinioBesideHero(Cell cell, Hero hero, Table table) {
+    private void oneHostileMinionBesideHero(Cell cell, Hero hero, Table table) {
         int heroX = hero.cardCell.getCellCoordination().getX();
         int herorY = hero.cardCell.getCellCoordination().getY();
         int chosenX = cell.getCellCoordination().getX();
@@ -169,14 +169,12 @@ class Impact {
         return impactTypeId.charAt(2) == '6';
     }
 
-
     boolean isPoisonBuff() {
         return impactTypeId.charAt(2) == '3';
     }
 
     //getters
     //setters
-
 
     public void setName(String name) {
         this.name = name;

@@ -239,7 +239,6 @@ class MovableCard extends Card {
         private Impact onComboImpact;
 
         @Override
-
         protected void manageCasualties() {
             if (this.health <= 0) {
                 this.isAlive = false;
@@ -256,7 +255,6 @@ class MovableCard extends Card {
         }
 
         @Override
-
         public void attack(Cell cell) {
             if (MovableCard.this.isAttackValid(cell)) {
                 super.attack(cell);
@@ -278,7 +276,6 @@ class MovableCard extends Card {
         }
 
         @Override
-
         protected void counterAttack(MovableCard opponent) {
             super.counterAttack(opponent);
             onDefendImpact.doImpact();

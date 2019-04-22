@@ -1,6 +1,5 @@
 package model;
 
-
 class Spell extends Card {
     private Impact impact;
     private int[] areaTargetSquare = new int[2];
@@ -20,22 +19,22 @@ class Spell extends Card {
             return false;
         }
 
-        if (impact.isIsvalidOnEnemies()) {
+        if (impact.isValidOnEnemies()) {
             if (this.areaTargetSquare[0] == 1 && this.areaTargetSquare[1] == 1 &&
                     cell.getMovableCard() != null && !cell.getMovableCard().player.equals(match.currentTurnPlayer())
-                    && impact.isIsvalidOnMinion() && impact.isIsvalidOnHero() && !impact.isIsvalidOnAllies()) // Total Disarm, Fireball, Shock --> "یک نیروی دشمن"
+                    && impact.isValidOnMinion() && impact.isValidOnHero() && !impact.isValidOnAllies()) // Total Disarm, Fireball, Shock --> "یک نیروی دشمن"
                 return true;
-            if (impact.isIsvalidOnHero() && !impact.isIsvalidOnMinion() && !impact.isIsvalidOnAllies()) // Lightning Bolt
+            if (impact.isValidOnHero() && !impact.isValidOnMinion() && !impact.isValidOnAllies()) // Lightning Bolt
                 return true;
-            if (!impact.isIsvalidOnHero() && impact.isIsvalidOnMinion() && !impact.isIsvalidOnAllies()
+            if (!impact.isValidOnHero() && impact.isValidOnMinion() && !impact.isValidOnAllies()
                     && cell.getMovableCard().getClass().toString() == "Minion") // Weakening
                 return true;
-            if (areaTargetSquare[1] > 3 && impact.isIsvalidOnHero() && impact.isIsvalidOnMinion()) //All Disarm, All Poison
+            if (areaTargetSquare[1] > 3 && impact.isValidOnHero() && impact.isValidOnMinion()) //All Disarm, All Poison
                 return true;
             if (areaTargetSquare[0] == 1 && this.areaTargetSquare[1] == 1 &&
-                    impact.isIsvalidOnAllies() && cell.getMovableCard() != null) // Dispel
+                    impact.isValidOnAllies() && cell.getMovableCard() != null) // Dispel
                 return true;
-            if (!impact.isIsvalidOnAllies() && areaTargetSquare[0] == 5 && areaTargetSquare[1] == 1) { // All Attack
+            if (!impact.isValidOnAllies() && areaTargetSquare[0] == 5 && areaTargetSquare[1] == 1) { // All Attack
                 for (int i = 0; i < 5; i++) {
                     if (match.table.getCellByCoordination(i, cell.getCellCoordination().getY()).getMovableCard() != null
                             && !match.table.getCellByCoordination(i, cell.getCellCoordination().getY()).getMovableCard().player
@@ -43,7 +42,7 @@ class Spell extends Card {
                         return true;
                 }
             }
-            if (!impact.isIsvalidOnHero() && impact.isIsvalidOnMinion() && !impact.isIsvalidOnAllies()
+            if (!impact.isValidOnHero() && impact.isValidOnMinion() && !impact.isValidOnAllies()
                     && cell.getMovableCard().getClass().toString().equals("Hero")
                     && cell.getMovableCard().player.equals(match.currentTurnPlayer())) { // Kings Gaurd
                 //
@@ -54,17 +53,17 @@ class Spell extends Card {
                 }
             }
         }
-        if (impact.isIsvalidOnAllies()) {
+        if (impact.isValidOnAllies()) {
             if (this.areaTargetSquare[0] == 1 && this.areaTargetSquare[1] == 1 && cell.getMovableCard() != null &&
                     !cell.getMovableCard().player.equals(match.currentTurnPlayer())
-                    && impact.isIsvalidOnMinion() && impact.isIsvalidOnHero()) // Empower, Madness, Power Up, Health with Profit --> "یک نیروی خودی"
+                    && impact.isValidOnMinion() && impact.isValidOnHero()) // Empower, Madness, Power Up, Health with Profit --> "یک نیروی خودی"
                 return false;
-            if (impact.isIsvalidOnHero() && !impact.isIsvalidOnMinion() && !impact.isIsvalidOnEnemies()) // God Strength
+            if (impact.isValidOnHero() && !impact.isValidOnMinion() && !impact.isValidOnEnemies()) // God Strength
                 return true;
-            if (!impact.isIsvalidOnHero() && impact.isIsvalidOnMinion() && !impact.isIsvalidOnEnemies() &&
+            if (!impact.isValidOnHero() && impact.isValidOnMinion() && !impact.isValidOnEnemies() &&
                     cell.getMovableCard().getClass().toString() == "Minion") // Sacrifice
                 return true;
-            if (areaTargetSquare[1] > 3 && impact.isIsvalidOnHero() && impact.isIsvalidOnMinion()) //All Power,
+            if (areaTargetSquare[1] > 3 && impact.isValidOnHero() && impact.isValidOnMinion()) //All Power,
                 return true;
         }
         return false;
@@ -105,8 +104,8 @@ class Spell extends Card {
         this.cost = cost;
     }
 
-    public void setPrimaryimpact(Impact primaryimpact) {
-        this.primaryImpact = primaryimpact;
+    public void setPrimaryImpact(Impact primaryImpact) {
+        this.primaryImpact = primaryImpact;
     }
 
     public void setSecondaryImpact(Impact secondaryImpact) {

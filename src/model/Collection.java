@@ -62,7 +62,7 @@ class Collection {
 
     public UsableItem findItemByName(String itemName) {
         for (UsableItem item : items) {
-            if (item.getName().compareTo(itemName) == 0)
+            if (item.getName().equals(itemName))
                 return item;
 
         }
@@ -71,7 +71,7 @@ class Collection {
 
     public Card findCardByName(String cardName) {
         for (Card card : cards) {
-            if (card.getName().compareTo(cardName) == 0)
+            if (card.getName().equals(cardName))
                 return card;
         }
         return null;
