@@ -1,8 +1,10 @@
 package presenter;
+
 import view.LoginMenu;
 import model.Account;
 import model.Player;
 import com.google.gson.*;
+
 import java.nio.file.*;
 import java.io.*;
 import java.io.FileOutputStream;
@@ -69,7 +71,7 @@ public class LoginMenuProcess {
             new DoCommand() {
                 @Override
                 public void doIt() throws IOException {
-                    help();
+                    LoginMenu.help();
                 }
             }
     };
@@ -83,38 +85,40 @@ public class LoginMenuProcess {
     }
 
     private static void readUsers() throws IOException {
-        File folder = new File("src/model/accounts");
-        File[] listOfFiles = folder.listFiles();
-        Gson gson = new Gson();
-        for (File file : listOfFiles) {
-            if (file.isFile()) {
-                Path path = new File(file.getPath()).toPath();
-                Reader reader = Files.newBufferedReader(path,
-                        StandardCharsets.UTF_8);
-                Account account = gson.fromJson(reader, Account.class);
-                users.add(account);
-            }
-        }
+//        File folder = new File("src/model/accounts");
+//        File[] listOfFiles = folder.listFiles();
+//        Gson gson = new Gson();
+//        for (File file : listOfFiles) {
+//            if (file.isFile()) {
+//                Path path = new File(file.getPath()).toPath();
+//                Reader reader = Files.newBufferedReader(path,
+//                        StandardCharsets.UTF_8);
+//                Account account = gson.fromJson(reader, Account.class);
+//                users.add(account);
+//            }
+//        }
+        users.addAll(Account.getAccounts());
     }
 
     private static void createAccount(String userName) throws IOException {
         readUsers();
-        for (int i = 0; i < users.size(); i++)
-            if (users.get(i).getUserName().equals(userName)) {
-               LoginMenu.showMessage("an account with this username already exists");
+        for (Account user : users)
+            if (user.getUserName().equals(userName)) {
+                LoginMenu.showMessage("an account with this username already exists");
                 return;
             }
-       LoginMenu.showMessage("Enter password:");
+        LoginMenu.showMessage("Enter password:");
         String passWord = LoginMenu.scan();
         Account account = new Account(userName, passWord);
-        users.add(account);
-        String fileName = "src/model/accounts/" + userName + ".json";
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
-            Gson gson = new Gson();
-            gson.toJson(account, isr);
-        }
+        Account.addAccount(account);
+//        users.add(account);
+//        String fileName = "src/model/accounts/" + userName + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            Gson gson = new Gson();
+//            gson.toJson(account, isr);
+//        }
     }
 
     private static void login(String userName) throws IOException {
@@ -168,14 +172,6 @@ public class LoginMenuProcess {
     private static void logout(Account account) {
         if (currentAccount.equals(account))
             currentAccount = null;
-    }
-
-    private static void help() {
-        LoginMenu.showMessage("create account [user name]");
-        LoginMenu.showMessage("login [user name]");
-        LoginMenu.showMessage("show leaderboard");
-        LoginMenu.showMessage("save");
-        LoginMenu.showMessage("logout");
     }
 }
 

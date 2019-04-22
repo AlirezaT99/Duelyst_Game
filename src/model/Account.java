@@ -45,6 +45,10 @@ public class Account implements Comparable<Account> {
             collection.getCards().remove(card);
     }
 
+    public static void addAccount(Account account) {
+        accounts.add(account);
+    }
+
     //getters
 
     public long getMoney() {
@@ -71,7 +75,12 @@ public class Account implements Comparable<Account> {
         return numberOfWins;
     }
 
+    public static ArrayList<Account> getAccounts() {
+        return accounts;
+    }
+
     //getters
+
     //setters
     public void setMoney(long money) {
         this.money = money;
