@@ -35,7 +35,7 @@ public class Player {
     }
 
     public void fillHand() {
-       // this.hand.fillEmptyPlace(deck);
+        // this.hand.fillEmptyPlace(deck);
         //
     }
 
@@ -44,10 +44,9 @@ public class Player {
     }
 
 
-
-    MovableCard.Hero findPlayerHero(){
-        for (Card card: collection.getCards()) {
-            if(card instanceof MovableCard.Hero)
+    MovableCard.Hero findPlayerHero() {
+        for (Card card : collection.getCards()) {
+            if (card instanceof MovableCard.Hero)
                 return (MovableCard.Hero) card;
         }
         return null;
@@ -66,15 +65,17 @@ public class Player {
         return match;
     }
 
-   public long getMoney(){
+    public long getMoney() {
         return money;
-   }
-   public Collection getCollection(){
+    }
+
+    public Collection getCollection() {
         return this.collection;
-   }
-   public String getUserName(){
+    }
+
+    public String getUserName() {
         return this.account.getUserName();
-   }
+    }
     //getters
 
     //setters
@@ -82,10 +83,14 @@ public class Player {
     public void setMana(int mana) {
         this.mana = mana;
     }
-    public void setMoney(long money){
+
+    public void setMoney(long money) {
         this.money = money;
     }
-    public void setAccount(Account account){ this.account = account;}
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 //setters
 
 }

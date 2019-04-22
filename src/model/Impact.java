@@ -48,10 +48,10 @@ class Impact {
             }
         } else if (targetTypeId.charAt(8) == '1')
             oneHostileMinioBesideHero(targetCell, friendlyPlayer.findPlayerHero(), match.table);
-            else if(targetTypeId.charAt(4) == '2')
-                oneSoldierFromOneTeam(targetCell,friendlyPlayer);
-            else if(targetTypeId.charAt(4) == '1')
-                oneMinionFromOneTeam(targetCell,friendlyPlayer);
+        else if (targetTypeId.charAt(4) == '2')
+            oneSoldierFromOneTeam(targetCell, friendlyPlayer);
+        else if (targetTypeId.charAt(4) == '1')
+            oneMinionFromOneTeam(targetCell, friendlyPlayer);
 
     }
 

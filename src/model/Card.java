@@ -8,6 +8,7 @@ class Card {
     private Match match;
     protected Player player;
     private String cardID;
+
     public String getName() {
         return name;
     }
@@ -23,7 +24,7 @@ class Card {
         return true;
     }
 
-    void castCard(int x, int y ){
+    void castCard(int x, int y) {
 
     }
 
@@ -51,7 +52,7 @@ class Card {
     //getters
 
     //setters
-        public void setCardID(String cardID) {
+    public void setCardID(String cardID) {
         this.cardID = cardID;
     }
 
@@ -74,7 +75,9 @@ class Card {
         this.match = match;
     }
 
-    public void setName(String name){ this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
     //setters

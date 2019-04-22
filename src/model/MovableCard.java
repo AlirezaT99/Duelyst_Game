@@ -1,6 +1,5 @@
 package model;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 
 class MovableCard extends Card {
@@ -221,7 +220,7 @@ class MovableCard extends Card {
         }
         // getters
 
-        public int getSpellcost() {
+        public int getSpellCost() {
             return spellCost;
         }
 
@@ -238,6 +237,7 @@ class MovableCard extends Card {
         private Impact onDefendImpact;
         private Impact onAttackImpact;
         private Impact onComboImpact;
+
         @Override
 
         protected void manageCasualties() {
@@ -269,7 +269,7 @@ class MovableCard extends Card {
             super.attack(cell);
             for (int i = 1; i < minions.size(); i++) {
                 MovableCard movableCard = minions.get(i);
-                if(movableCard.isAttackValid(cell)){
+                if (movableCard.isAttackValid(cell)) {
                     MovableCard opponent = cell.getMovableCard();
                     opponent.takeDamage(this.damage);
                     didAttackInThisTurn = true;

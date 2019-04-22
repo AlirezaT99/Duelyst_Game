@@ -14,10 +14,10 @@ class Hand {
         return cards;
     }
 
-     void fillEmptyPlaces(Deck deck) {
+    void fillEmptyPlaces(Deck deck) {
         for (int i = 0; i < 5; i++)
-            if(this.cards.get(i) == null)
-                this.cards.add(i,deck.getLastCard());
+            if (this.cards.get(i) == null)
+                this.cards.add(i, deck.getLastCard());
     }
 
     private boolean isThereEmptyPlace(Card card) {
@@ -43,7 +43,6 @@ class Hand {
     public void castCard() {
 
     }
-
 
 
 }

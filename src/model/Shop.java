@@ -35,7 +35,7 @@ class Shop {
     }
 
     public int searchCollection(String name, Account buyingAccount) {
-          return  buyingAccount.getCollection().search(name);
+        return buyingAccount.getCollection().search(name);
     }
 
     // search
@@ -54,7 +54,7 @@ class Shop {
             cost = item.getCost();
         else
             cost = card.getCost();
-        account.buy(cost,item,card);
+        account.buy(cost, item, card);
         printMessage("Buying was successful");
     }
 
@@ -88,11 +88,10 @@ class Shop {
         }
         printMessage("Sell was successFull");
         if (item != null) {
-             cost = item.getCost();
-        }
-        else
+            cost = item.getCost();
+        } else
             cost = card.getCost();
-        account.sell(cost,item,card);
+        account.sell(cost, item, card);
     }
 
     // sell

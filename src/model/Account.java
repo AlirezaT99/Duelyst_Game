@@ -2,8 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Account implements Comparable<Account>
-{
+public class Account implements Comparable<Account> {
     private static ArrayList<Account> accounts;
     private String userName;
     private String password;
@@ -12,6 +11,7 @@ public class Account implements Comparable<Account>
     private ArrayList<model.Account> friends;
     private int nonesense;
     private int numberOfWins;
+
     public Account(String userName, String password) {
         this.userName = userName;
         this.password = password;
@@ -19,8 +19,9 @@ public class Account implements Comparable<Account>
         this.friends = new ArrayList<>();
         this.numberOfWins = 0;
     }
+
     @Override
-    public int compareTo(Account account){
+    public int compareTo(Account account) {
         return this.numberOfWins - account.numberOfWins;
     }
 
@@ -28,19 +29,19 @@ public class Account implements Comparable<Account>
         accounts = new ArrayList<>();
     }
 
-    public void buy(int cost,UsableItem item, Card card ){
+    public void buy(int cost, UsableItem item, Card card) {
         money -= cost;
-        if(item != null)
+        if (item != null)
             collection.getItems().add(item);
-        if(card != null)
+        if (card != null)
             collection.getCards().add(card);
     }
 
-    public void sell(int cost, UsableItem item, Card card){
+    public void sell(int cost, UsableItem item, Card card) {
         money += cost;
-        if(item != null)
+        if (item != null)
             collection.getItems().remove(item);
-        if(card != null)
+        if (card != null)
             collection.getCards().remove(card);
     }
 
@@ -62,7 +63,7 @@ public class Account implements Comparable<Account>
         return userName;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 

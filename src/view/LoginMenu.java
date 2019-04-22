@@ -17,11 +17,12 @@ import java.util.regex.Pattern;
 public class LoginMenu {
     private static ArrayList<Pattern> commandPatterns;
     private static ArrayList<Account> users;
-    private  static boolean inLoginMenu;
+    private static boolean inLoginMenu;
     private static Account currentAccount;
     private static Player player;
     private static boolean isInLoginMenu;
     private static String commandParts[];
+
     static {
         commandPatterns.add(Pattern.compile("create account [^\\s\\\\]"));
         commandPatterns.add(Pattern.compile("login [^\\s\\\\]"));
@@ -35,26 +36,25 @@ public class LoginMenu {
     interface DoCommand {
         void doIt() throws IOException;
     }
-    public static void loginMenu() throws IOException{
-        while(true){
-        Scanner scanner = new Scanner(System.in);
-        String command = scanner.nextLine();
-        commandParts = command.split("[ ]");
-        if(!isInLoginMenu)
-            break;
-        int commandType = findPatternIndex(command);
-        if(commandType == -1)
-        {
-            System.out.println("invalid input");
-            continue;
-        }
-        else
-            DoCommands[commandType].doIt();
+
+    public static void loginMenu() throws IOException {
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            String command = scanner.nextLine();
+            commandParts = command.split("[ ]");
+            if (!isInLoginMenu)
+                break;
+            int commandType = findPatternIndex(command);
+            if (commandType == -1) {
+                System.out.println("invalid input");
+                continue;
+            } else
+                DoCommands[commandType].doIt();
         }
     }
 
     static DoCommand[] DoCommands = new DoCommand[]{
-            new DoCommand(){
+            new DoCommand() {
                 @Override
                 public void doIt() throws IOException {
                     createAccount(commandParts[2]);
@@ -62,7 +62,7 @@ public class LoginMenu {
             },
             new DoCommand() {
                 @Override
-                public void doIt()throws IOException{
+                public void doIt() throws IOException {
                     login(commandParts[1]);
                 }
             },
@@ -91,6 +91,7 @@ public class LoginMenu {
                 }
             }
     };
+
     private static int findPatternIndex(String command) {
         for (int i = 0; i < commandPatterns.size(); i++) {
             if (command.equals(commandPatterns.get(i).pattern()))
@@ -161,15 +162,16 @@ public class LoginMenu {
         readUsers();
         sortUsers();
         for (int i = 0; i < users.size(); i++) {
-            System.out.println((i+1)+"-"+"UserName : "+ users.get(i).getUserName()+"-"+"Wins : "+
+            System.out.println((i + 1) + "-" + "UserName : " + users.get(i).getUserName() + "-" + "Wins : " +
                     users.get(i).getNumberOfWins());
         }
     }
+
     private static void sortUsers() {
         Collections.sort(users);
     }
 
-    private static void save(Player player) throws IOException{
+    private static void save(Player player) throws IOException {
         currentAccount.setMoney(player.getMoney());
         // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
         String fileName = "src/model/accounts/" + player.getUserName() + ".json";
@@ -181,12 +183,12 @@ public class LoginMenu {
         }
     }
 
-    private static void logout(Account account){
-        if(currentAccount.equals(account))
+    private static void logout(Account account) {
+        if (currentAccount.equals(account))
             currentAccount = null;
     }
 
-    private static void help(){
+    private static void help() {
         System.out.println("create account [user name]");
         System.out.println("login [user name]");
         System.out.println("show leaderboard");

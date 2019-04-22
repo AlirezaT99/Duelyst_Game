@@ -31,7 +31,6 @@ class Match {
     }
 
 
-
     public void switchTurn() {
         turn ^= 1;
     }

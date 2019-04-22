@@ -36,21 +36,20 @@ class Spell extends Card {
                     impact.isIsvalidOnAllies() && cell.getMovableCard() != null) // Dispel
                 return true;
             if (!impact.isIsvalidOnAllies() && areaTargetSquare[0] == 5 && areaTargetSquare[1] == 1) { // All Attack
-                for(int i = 0; i < 5; i ++)
-                {
-                    if(match.table.getCellByCoordination(i,cell.getCellCoordination().getY()).getMovableCard()!=null
-                    && !match.table.getCellByCoordination(i,cell.getCellCoordination().getY()).getMovableCard().player
-                    .equals(match.currentTurnPlayer()))
+                for (int i = 0; i < 5; i++) {
+                    if (match.table.getCellByCoordination(i, cell.getCellCoordination().getY()).getMovableCard() != null
+                            && !match.table.getCellByCoordination(i, cell.getCellCoordination().getY()).getMovableCard().player
+                            .equals(match.currentTurnPlayer()))
                         return true;
                 }
             }
-            if(!impact.isIsvalidOnHero() && impact.isIsvalidOnMinion() && !impact.isIsvalidOnAllies()
-            && cell.getMovableCard().getClass().toString().equals("Hero")
-            && cell.getMovableCard().player.equals(match.currentTurnPlayer())){ // Kings Gaurd
+            if (!impact.isIsvalidOnHero() && impact.isIsvalidOnMinion() && !impact.isIsvalidOnAllies()
+                    && cell.getMovableCard().getClass().toString().equals("Hero")
+                    && cell.getMovableCard().player.equals(match.currentTurnPlayer())) { // Kings Gaurd
                 //
                 for (Cell adjacentCell : match.table.adjacentCells(cell)) {
-                    if(adjacentCell.getMovableCard()!=null
-                    && adjacentCell.getMovableCard().getClass().toString().equals("Minion"))
+                    if (adjacentCell.getMovableCard() != null
+                            && adjacentCell.getMovableCard().getClass().toString().equals("Minion"))
                         return true;
                 }
             }

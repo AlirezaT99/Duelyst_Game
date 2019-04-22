@@ -19,7 +19,8 @@ class Coordination {
     public void setY(int y) {
         this.y = y;
     }
-    public Coordination(int x, int y){
+
+    public Coordination(int x, int y) {
         this.x = x;
         this.y = y;
     }

@@ -8,7 +8,10 @@ class Cell {
     public Coordination getCellCoordination() {
         return coordination;
     }
-    public void setCellCoordination(Coordination coordination){ this.coordination = coordination;}
+
+    public void setCellCoordination(Coordination coordination) {
+        this.coordination = coordination;
+    }
 
     public MovableCard getMovableCard() {
         return movableCard;
@@ -17,7 +20,6 @@ class Cell {
     public void setMovableCard(MovableCard movableCard) {
         this.movableCard = movableCard;
     }
-
 
 
     public Item getItem() {
