@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class Shop {
 
@@ -8,8 +9,8 @@ class Shop {
     private ArrayList<UsableItem> shopItems;
 
     {
-        shopCards = new ArrayList<Card>();
-        shopItems = new ArrayList<UsableItem>();
+        shopCards = new ArrayList<>();
+        shopItems = new ArrayList<>();
     }
 
     public static Shop initShop() {
@@ -81,12 +82,12 @@ class Shop {
     public void sell(Account account, String name) {
         UsableItem item = account.getCollection().findItemByName(name);
         Card card = account.getCollection().findCardByName(name);
-        int cost = 0;
+        int cost;
         if (item == null && card == null) {
             printMessage("Item/Card not found");
             return;
         }
-        printMessage("Sell was successFull");
+        printMessage("Sell was successful");
         if (item != null) {
             cost = item.getCost();
         } else
@@ -98,7 +99,7 @@ class Shop {
 
     private UsableItem findItemByName(String itemName) {
         for (UsableItem item : shopItems) {
-            if (item.getName().compareTo(itemName) == 0)
+            if (item.getName().equals(itemName))
                 return item;
         }
         return null;
@@ -106,7 +107,7 @@ class Shop {
 
     private Card findCardByName(String cardName) {
         for (Card card : shopCards) {
-            if (card.getName().compareTo(cardName) == 0)
+            if (card.getName().equals(cardName))
                 return card;
         }
         return null;

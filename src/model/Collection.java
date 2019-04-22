@@ -1,15 +1,24 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class Collection {
     private ArrayList<UsableItem> items;
     private ArrayList<Card> cards;
-    private ArrayList<Deck> decks = new ArrayList<>();
+    private ArrayList<Deck> decks;
+    private HashMap<String, Deck> deckHashMap;
     private Deck selectedDeck;
 
+    {
+        items = new ArrayList<>();
+        cards = new ArrayList<>();
+        decks = new ArrayList<>();
+        deckHashMap = new HashMap<>();
+    }
+
     public void selectDeck(String name) {
-        //hash map
+        selectedDeck = deckHashMap.get(name);
     }
 
     public void addDeck(Deck deck) {
@@ -17,16 +26,18 @@ class Collection {
     }
 
     public void deleteDeck(String deckName) {
-        //if deck found
-        //remove deck
-        // return
-        printMessage("Deck not found");
+        if (deckHashMap.containsKey(deckName)) {
+            decks.remove(deckHashMap.get(deckName));
+            deckHashMap.remove(deckName);
+        }
+        else
+            printMessage("Deck not found"); // must be moved to view
     }
 
     public void showDeck(Deck deck) {
         //show deck probably in presenter
         // and int the view
-        //it must not be here
+        // it must not be here
     }
 
     public boolean validateDeck(Deck deck) {
@@ -78,13 +89,7 @@ class Collection {
     }
     //search
 
-
-    private void printMessage(String message) {
-        System.out.println(message);
-    }
-
     //getters
-
     public ArrayList<UsableItem> getItems() {
         return items;
     }
@@ -100,6 +105,9 @@ class Collection {
     public Deck getSelectedDeck() {
         return selectedDeck;
     }
-
     //getters
+
+    private void printMessage(String message) {
+        System.out.println(message);
+    }
 }

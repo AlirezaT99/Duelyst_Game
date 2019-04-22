@@ -2,14 +2,13 @@ package model;
 
 import java.util.ArrayList;
 
-public class Account implements Comparable<Account> {
+public class Account {
     private static ArrayList<Account> accounts;
     private String userName;
     private String password;
     private long money;
     private Collection collection;
     private ArrayList<model.Account> friends;
-    private int nonesense;
     private int numberOfWins;
 
     public Account(String userName, String password) {
@@ -18,11 +17,6 @@ public class Account implements Comparable<Account> {
         this.money = 15000;
         this.friends = new ArrayList<>();
         this.numberOfWins = 0;
-    }
-
-    @Override
-    public int compareTo(Account account) {
-        return this.numberOfWins - account.numberOfWins;
     }
 
     static {
@@ -50,7 +44,6 @@ public class Account implements Comparable<Account> {
     }
 
     //getters
-
     public long getMoney() {
         return money;
     }
@@ -75,19 +68,12 @@ public class Account implements Comparable<Account> {
         return numberOfWins;
     }
 
-    public static ArrayList<Account> getAccounts() {
-        return accounts;
-    }
-
+    public static ArrayList<Account> getAccounts() { return accounts; }
     //getters
 
     //setters
     public void setMoney(long money) {
         this.money = money;
-    }
-
-    public void setNumberOfWins(int numberOfWins) {
-        this.numberOfWins = numberOfWins;
     }
     //setters
 }

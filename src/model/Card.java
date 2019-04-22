@@ -48,7 +48,6 @@ class Card {
     public String getCardID() {
         return cardID;
     }
-
     //getters
 
     //setters

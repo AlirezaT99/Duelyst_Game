@@ -6,7 +6,7 @@ class Deck {
     private String name;
     private ArrayList<Card> cards;
     private MovableCard.Hero hero;
-    private int maxCardNumber;
+    private final int MAX_CARD_NUMBER = 20;
     private Item item;
 
     {
@@ -14,7 +14,6 @@ class Deck {
     }
 
     //getters
-
     public ArrayList<Card> getCards() {
         return cards;
     }
@@ -27,6 +26,5 @@ class Deck {
     public String getName() {
         return name;
     }
-
     //getters
 }
