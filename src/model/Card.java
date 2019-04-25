@@ -8,6 +8,7 @@ class Card {
     private Match match;
     protected Player player;
     private String cardID;
+    private String description;
 
     public String getName() {
         return name;
@@ -73,6 +74,10 @@ class Card {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     //setters

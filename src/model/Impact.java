@@ -8,13 +8,14 @@ class Impact {
     private ArrayList<Cell> temporaryImpactArea;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
     // 3.(0-2)"onWhichTeam"{friendly, hostile, both}|4.(0-2)"targetSoldierType"{hero,minion,both}|
-    // 5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(1,0)
+    // 5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(0,1)
     //8.nearHeroHostileMinion(1,0)
     private String impactTypeId = ""; //0.(0,1)isPositive|1.(0,1)isBuff|2.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
-    // 3.(0-4)QuantityChange{mana,health,damage}|
+    // 3.(0-3)QuantityChange{mana,health,damage}|
     //4.(0,n)"impactQuantity"|5.(0-5){disImpact(friendly/hostile),Dispel(friendly/hostile)|6.(0,2)PassivePermanent|
     // 7.(0,n)turnsToBeActivated |8.(0,n)turnsActive
-    //9.(0,1)fromWhichTeamAssigned
+    //**** //9.(0,1)fromWhichTeamAssigned{player1, player 2} ****
+
 
     //set ImpactArea
 
@@ -49,7 +50,7 @@ class Impact {
                 oneColumnFromOneTeam(targetCell, opponentPlayer, match.table);
             }
         } else if (targetTypeId.charAt(8) == '1')
-            oneHostileMinionBesideHero(targetCell, friendlyPlayer.findPlayerHero(), match.table);
+            oneHostileMinionBesideHero(targetCell, friendlyPlayer.findPlayerHero());
         else if (targetTypeId.charAt(4) == '2')
             oneSoldierFromOneTeam(targetCell, friendlyPlayer);
         else if (targetTypeId.charAt(4) == '1')
@@ -105,15 +106,9 @@ class Impact {
                 impactArea.add(cell);
     }
 
-    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero, Table table) {
-        int heroX = hero.cardCell.getCellCoordination().getX();
-        int herorY = hero.cardCell.getCellCoordination().getY();
-        int chosenX = cell.getCellCoordination().getX();
-        int chosenY = cell.getCellCoordination().getY();
-        if (Math.abs(heroX - chosenX) == 1 && Math.abs(herorY - chosenY) == 1) {
-            if (cell.getMovableCard().player.getUserName().compareTo(hero.player.getUserName()) != 0)
-                impactArea.add(cell);
-        }
+    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero) {
+        if(hero.cardCell.isTheseCellsAdjacent(cell))
+            impactArea.add(cell);
     }
 
     //set ImpactArea
