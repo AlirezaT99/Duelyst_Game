@@ -1,20 +1,14 @@
 package presenter;
 
-import view.LoginMenu;
+import com.google.gson.Gson;
 import model.Account;
-import model.Player;
-import com.google.gson.*;
 
-import java.nio.file.*;
-import java.io.*;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-import java.util.regex.Pattern;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class MainProcess {
 

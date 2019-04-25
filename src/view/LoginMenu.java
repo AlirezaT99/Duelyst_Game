@@ -8,13 +8,12 @@ import java.util.Scanner;
 
 public class LoginMenu {
     private static boolean isInLoginMenu = true;
-    private static String commandParts[];
 
-    public static void main(String[] args) throws IOException {
+    static void run() throws IOException {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
-            commandParts = command.split("[ ]");
+            String[] commandParts = command.split("[ ]");
             LoginMenuProcess.commandParts = commandParts;
             if (!isInLoginMenu)
                 break;
@@ -22,8 +21,7 @@ public class LoginMenu {
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                switch (presenter.LoginMenuProcess.DoCommands[commandType].doIt())
-                {
+                switch (presenter.LoginMenuProcess.DoCommands[commandType].doIt()) {
                     case 1:
                         LoginMenu.showMessage("an account with this username already exists");
                         break;
@@ -36,13 +34,10 @@ public class LoginMenu {
                     case 0:
                         break;
                 }
-
-            // it should return an int in order to handle the messages
         }
     }
 
     public static String scan() {
-        // there's supposed to be only one scanner defined in the code
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
