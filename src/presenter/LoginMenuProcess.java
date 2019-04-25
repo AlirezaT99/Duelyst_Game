@@ -3,10 +3,9 @@ package presenter;
 import view.LoginMenu;
 import model.Account;
 import model.Player;
+
 import com.google.gson.*;
 
-import java.nio.file.*;
-import java.io.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -20,7 +19,7 @@ public class LoginMenuProcess {
     private static Account currentAccount;
     private static Player player;
     private static boolean isInLoginMenu = true;
-    public static String commandParts[];
+    public static String[] commandParts;
 
     static {
         commandPatterns.add(Pattern.compile("create account [a-zA-Z0-9._]+"));
@@ -38,7 +37,7 @@ public class LoginMenuProcess {
     public static DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
-                public  int doIt() throws IOException {
+                public int doIt() throws IOException {
                     return createAccount(commandParts[2]);
                 }
             },
@@ -63,7 +62,7 @@ public class LoginMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return  logout(currentAccount);
+                    return logout(currentAccount);
                 }
             },
             new DoCommand() {
@@ -76,8 +75,8 @@ public class LoginMenuProcess {
 
     public static int findPatternIndex(String command, String[] commandParts) {
         for (int i = 0; i < commandPatterns.size(); i++) {
-            if(commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
-            && commandParts[1].toLowerCase().equals("account"))
+            if (commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
+                    && commandParts[1].toLowerCase().equals("account"))
                 return 0;
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
@@ -104,10 +103,8 @@ public class LoginMenuProcess {
     private static int createAccount(String userName) throws IOException {
         readUsers();
         for (Account user : users)
-            if (user.getUserName().equals(userName)) {
-                 //message id : 1
-                return 1;
-            }
+            if (user.getUserName().equals(userName))
+                return 1; //message id : 1
         LoginMenu.showMessage("Enter password:");
         String passWord = LoginMenu.scan();
         Account account = new Account(userName, passWord);
@@ -125,35 +122,31 @@ public class LoginMenuProcess {
 
     private static int login(String userName) throws IOException {
         readUsers();
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserName().equals(userName)) {
-                Scanner scanner = new Scanner(System.in);
+        for (Account user : users) {
+            if (user.getUserName().equals(userName)) {
                 LoginMenu.showMessage("Enter your password:");
                 String passWord = LoginMenu.scan();
-                if (users.get(i).getPassword().equals(passWord)) {
-                    currentAccount = users.get(i);
-                    view.LoginMenu.setIsInLoginMenu(false);
+                if (user.getPassword().equals(passWord)) {
+                    currentAccount = user;
+                    LoginMenu.setIsInLoginMenu(false);
                     Player currentPlayer = new Player();
                     currentPlayer.setAccount(currentAccount);
                     player = currentPlayer;
                     //todo : login, pass onto main menu
                     return 0;
                 } else
-                    // message id : 2
-                return 2;
+                    return 2; // message id : 2
             }
         }
- //message id :3
-        return 3;
+        return 3; //message id :3
     }
 
     private static int showLeaderBoard() throws IOException {
         readUsers();
         sortUsers();
-        for (int i = 0; i < users.size(); i++) {
-            LoginMenu.showMessage((i + 1) + "-" + "UserName : " + users.get(i).getUserName() + "-" + "Wins : " +
+        for (int i = 0; i < users.size(); i++)
+            LoginMenu.showMessage((i + 1) + "-UserName : " + users.get(i).getUserName() + "-Wins : " +
                     users.get(i).getNumberOfWins());
-        }
         return 0;
     }
 
@@ -180,4 +173,3 @@ public class LoginMenuProcess {
         return 0;
     }
 }
-
