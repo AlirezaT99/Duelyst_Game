@@ -1,6 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+
 class Spell extends Card {
+    private ArrayList spells = new ArrayList();
     private Impact impact;
     private int[] areaTargetSquare = new int[2];
     private Impact primaryImpact;

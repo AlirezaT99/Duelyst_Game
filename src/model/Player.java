@@ -76,6 +76,11 @@ public class Player {
     public String getUserName() {
         return this.account.getUserName();
     }
+
+    public Account getAccount() {
+        return account;
+    }
+
     //getters
 
     //setters

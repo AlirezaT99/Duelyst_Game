@@ -2,7 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
-public class Account {
+public class Account implements Comparable<Account>{
+    private  ArrayList <MatchHistory> matchHistories = new ArrayList();
     private static ArrayList<Account> accounts;
     private String userName;
     private String password;
@@ -42,7 +43,9 @@ public class Account {
     public static void addAccount(Account account) {
         accounts.add(account);
     }
-
+    public int compareTo(Account account){
+        return this.numberOfWins - account.numberOfWins;
+    }
     //getters
     public long getMoney() {
         return money;
@@ -69,6 +72,11 @@ public class Account {
     }
 
     public static ArrayList<Account> getAccounts() { return accounts; }
+
+    public  ArrayList<MatchHistory> getMatchHistory() {
+        return matchHistories;
+    }
+
     //getters
 
     //setters

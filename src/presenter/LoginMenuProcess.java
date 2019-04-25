@@ -34,51 +34,54 @@ public class LoginMenuProcess {
     }
 
     public interface DoCommand {
-        void doIt() throws IOException;
+        int doIt() throws IOException;
     }
 
     public static DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    createAccount(commandParts[2]);
+                public  int doIt() throws IOException {
+                    return createAccount(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    login(commandParts[1]);
+                public int doIt() throws IOException {
+                    return login(commandParts[1]);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    showLeaderBoard();
+                public int doIt() throws IOException {
+                    return showLeaderBoard();
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    save(player);
+                public int doIt() throws IOException {
+                    return save(player);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    logout(currentAccount);
+                public int doIt() throws IOException {
+                    return  logout(currentAccount);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    LoginMenu.help();
+                public int doIt() throws IOException {
+                    return LoginMenu.help();
                 }
             }
     };
 
-    public static int findPatternIndex(String command) {
+    public static int findPatternIndex(String command, String[] commandParts) {
         for (int i = 0; i < commandPatterns.size(); i++) {
-            if (command.matches(commandPatterns.get(i).pattern()))
+            if(commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
+            && commandParts[1].toLowerCase().equals("account"))
+                return 0;
+            if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
         }
         return -1;
@@ -100,17 +103,18 @@ public class LoginMenuProcess {
         users.addAll(Account.getAccounts());
     }
 
-    private static void createAccount(String userName) throws IOException {
+    private static int createAccount(String userName) throws IOException {
         readUsers();
         for (Account user : users)
             if (user.getUserName().equals(userName)) {
-                LoginMenu.showMessage("an account with this username already exists");
-                return;
+                 //message id : 1
+                return 1;
             }
         LoginMenu.showMessage("Enter password:");
         String passWord = LoginMenu.scan();
         Account account = new Account(userName, passWord);
         Account.addAccount(account);
+        return 0;
 //        users.add(account);
 //        String fileName = "src/model/accounts/" + userName + ".json";
 //        try (FileOutputStream fos = new FileOutputStream(fileName);
@@ -121,7 +125,7 @@ public class LoginMenuProcess {
 //        }
     }
 
-    private static void login(String userName) throws IOException {
+    private static int login(String userName) throws IOException {
         readUsers();
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUserName().equals(userName)) {
@@ -135,29 +139,31 @@ public class LoginMenuProcess {
                     currentPlayer.setAccount(currentAccount);
                     player = currentPlayer;
                     //todo : login, pass onto main menu
+                    return 0;
                 } else
-                    LoginMenu.showMessage("incorrect password");
-                return;
+                    LoginMenu.showMessage("incorrect password"); // message id : 2
+                return 2;
             }
         }
-        LoginMenu.showMessage("no account with this username found");
-        return;
+        LoginMenu.showMessage("no account with this username found"); //message id :3
+        return 3;
     }
 
-    private static void showLeaderBoard() throws IOException {
+    private static int showLeaderBoard() throws IOException {
         readUsers();
         sortUsers();
         for (int i = 0; i < users.size(); i++) {
             LoginMenu.showMessage((i + 1) + "-" + "UserName : " + users.get(i).getUserName() + "-" + "Wins : " +
                     users.get(i).getNumberOfWins());
         }
+        return 0;
     }
 
     private static void sortUsers() {
         Collections.sort(users);
     }
 
-    private static void save(Player player) throws IOException {
+    private static int save(Player player) throws IOException {
         currentAccount.setMoney(player.getMoney());
         // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
         String fileName = "src/model/accounts/" + player.getUserName() + ".json";
@@ -167,11 +173,13 @@ public class LoginMenuProcess {
             Gson gson = new Gson();
             gson.toJson(currentAccount, isr);
         }
+        return 0;
     }
 
-    private static void logout(Account account) {
+    private static int logout(Account account) {
         if (currentAccount.equals(account))
             currentAccount = null;
+        return 0;
     }
 }
 

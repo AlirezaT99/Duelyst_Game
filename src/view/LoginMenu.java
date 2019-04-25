@@ -18,11 +18,25 @@ public class LoginMenu {
             LoginMenuProcess.commandParts = commandParts;
             if (!isInLoginMenu)
                 break;
-            int commandType = presenter.LoginMenuProcess.findPatternIndex(command);
+            int commandType = presenter.LoginMenuProcess.findPatternIndex(command, commandParts);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                presenter.LoginMenuProcess.DoCommands[commandType].doIt();
+                switch (presenter.LoginMenuProcess.DoCommands[commandType].doIt())
+                {
+                    case 1:
+                        LoginMenu.showMessage("an account with this username already exists");
+                        break;
+                    case 2:
+                        LoginMenu.showMessage("incorrect password");
+                        break;
+                    case 3:
+                        LoginMenu.showMessage("no account with this username found");
+                        break;
+                    case 0:
+                        break;
+                }
+
             // it should return an int in order to handle the messages
         }
     }
@@ -39,12 +53,13 @@ public class LoginMenu {
     }
     //setters
 
-    public static void help() {
+    public static int help() {
         showMessage("create account [user name]");
         showMessage("login [user name]");
         showMessage("show leaderBoard");
         showMessage("save");
         showMessage("logout");
+        return 0;
     }
 
     public static void showMessage(String message) {
