@@ -11,10 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class LoginMenuProcess {
@@ -41,7 +38,7 @@ public class LoginMenuProcess {
     public static DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
-                public  int doIt() throws IOException {
+                public int doIt() throws IOException {
                     return createAccount(commandParts[2]);
                 }
             },
@@ -66,7 +63,7 @@ public class LoginMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return  logout(currentAccount);
+                    return logout(currentAccount);
                 }
             },
             new DoCommand() {
@@ -79,8 +76,8 @@ public class LoginMenuProcess {
 
     public static int findPatternIndex(String command, String[] commandParts) {
         for (int i = 0; i < commandPatterns.size(); i++) {
-            if(commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
-            && commandParts[1].toLowerCase().equals("account"))
+            if (commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
+                    && commandParts[1].toLowerCase().equals("account"))
                 return 0;
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
@@ -108,7 +105,7 @@ public class LoginMenuProcess {
         readUsers();
         for (Account user : users)
             if (user.getUserName().equals(userName)) {
-                 //message id : 1
+                //message id : 1
                 return 1;
             }
         LoginMenu.showMessage("Enter password:");
@@ -161,8 +158,7 @@ public class LoginMenuProcess {
     }
 
     private static void sortUsers() {
-        List<Account> accounts = new Account(users);
-        Collections.sort(users);
+        users.sort(Comparator.comparing(Account::getNumberOfWins));
     }
 
     private static int save(Player player) throws IOException {
