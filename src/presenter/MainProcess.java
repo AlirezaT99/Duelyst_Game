@@ -20,8 +20,7 @@ public class MainProcess {
         for (File file : listOfFiles) {
             if (file.isFile()) {
                 Path path = new File(file.getPath()).toPath();
-                Reader reader = Files.newBufferedReader(path,
-                        StandardCharsets.UTF_8);
+                Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
                 Account account = gson.fromJson(reader, Account.class);
                 Account.getAccounts().add(account);
             }

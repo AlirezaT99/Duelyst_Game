@@ -18,7 +18,6 @@ public class LoginMenuProcess {
     private static ArrayList<Account> users = new ArrayList<>();
     private static Account currentAccount;
     private static Player player;
-    private static boolean isInLoginMenu = true;
     public static String[] commandParts;
 
     static {
@@ -85,18 +84,7 @@ public class LoginMenuProcess {
     }
 
     private static void readUsers() throws IOException {
-//        File folder = new File("src/model/accounts");
-//        File[] listOfFiles = folder.listFiles();
-//        Gson gson = new Gson();
-//        for (File file : listOfFiles) {
-//            if (file.isFile()) {
-//                Path path = new File(file.getPath()).toPath();
-//                Reader reader = Files.newBufferedReader(path,
-//                        StandardCharsets.UTF_8);
-//                Account account = gson.fromJson(reader, Account.class);
-//                users.add(account);
-//            }
-//        }
+        users.clear();
         users.addAll(Account.getAccounts());
     }
 
@@ -145,13 +133,13 @@ public class LoginMenuProcess {
         readUsers();
         sortUsers();
         for (int i = 0; i < users.size(); i++)
-            LoginMenu.showMessage((i + 1) + "-UserName : " + users.get(i).getUserName() + "-Wins : " +
+            LoginMenu.showMessage((i + 1) + "-UserName : " + users.get(i).getUserName() + " -Wins : " +
                     users.get(i).getNumberOfWins());
         return 0;
     }
 
     private static void sortUsers() {
-        users.sort(Comparator.comparing(Account::getNumberOfWins));
+        users.sort(Comparator.comparing(Account::getNumberOfWins).reversed()); // reversed ??
     }
 
     private static int save(Player player) throws IOException {

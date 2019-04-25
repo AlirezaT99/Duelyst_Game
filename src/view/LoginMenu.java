@@ -5,7 +5,6 @@ import presenter.LoginMenuProcess;
 import java.io.IOException;
 import java.util.Scanner;
 
-
 public class LoginMenu {
     private static boolean isInLoginMenu = true;
 
@@ -21,19 +20,7 @@ public class LoginMenu {
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                switch (presenter.LoginMenuProcess.DoCommands[commandType].doIt()) {
-                    case 1:
-                        LoginMenu.showMessage("an account with this username already exists");
-                        break;
-                    case 2:
-                        LoginMenu.showMessage("incorrect password");
-                        break;
-                    case 3:
-                        LoginMenu.showMessage("no account with this username found");
-                        break;
-                    case 0:
-                        break;
-                }
+                handleErrors(presenter.LoginMenuProcess.DoCommands[commandType].doIt());
         }
     }
 
@@ -41,6 +28,20 @@ public class LoginMenu {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
+
+    private static void handleErrors(int messageID) {
+        switch (messageID) {
+                case 1:
+                    LoginMenu.showMessage("an account with this username already exists");
+                    break;
+                case 2:
+                    LoginMenu.showMessage("incorrect password");
+                    break;
+                case 3:
+                    LoginMenu.showMessage("no account with this username found");
+                    break;
+            }
+        }
 
     //setters
     public static void setIsInLoginMenu(boolean isInLoginMenu) {

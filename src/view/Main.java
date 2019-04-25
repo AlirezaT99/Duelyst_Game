@@ -1,7 +1,5 @@
 package view;
 
-import presenter.MainProcess;
-
 import java.io.IOException;
 
 public class Main {
