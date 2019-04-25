@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class Collection {
+public class Collection {
     private ArrayList<UsableItem> items;
     private ArrayList<Card> cards;
     private ArrayList<Deck> decks;
@@ -105,6 +105,11 @@ class Collection {
     public Deck getSelectedDeck() {
         return selectedDeck;
     }
+
+    public HashMap<String, Deck> getDeckHashMap() {
+        return deckHashMap;
+    }
+
     //getters
 
     private void printMessage(String message) {

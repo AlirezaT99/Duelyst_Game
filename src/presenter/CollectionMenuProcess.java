@@ -1,5 +1,6 @@
 package presenter;
 
+import model.Deck;
 import view.CollectionMenu;
 import model.Account;
 import model.Player;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class CollectionMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
-    private static Account currentAccount;
+    private static Account account;
     private static Player player;
     public static String[] commandParts;
 
@@ -74,7 +75,7 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return showDeck(commandParts[2]);
+                    return search(commandParts[1]);
                 }
             },
             new DoCommand() {
@@ -86,25 +87,26 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return show();
+                    return showDeck(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return search(commandParts[1]);
+                    return show();
+                }
+            },
+
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return save();
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
                     return CollectionMenu.help();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return save();
                 }
             },
             new DoCommand() {
@@ -124,6 +126,7 @@ public class CollectionMenuProcess {
     }
 
     private static int exit() {
+        // todo: go to mainMenu
         return 0;
     }
 
@@ -131,42 +134,59 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int createDeck(String commandPart) {
+    private static int createDeck(String deckName) {
+        if (account.getCollection().getDeckHashMap().containsKey(deckName))
+            return 1;
+        Deck deck = new Deck(deckName);
+        account.getCollection().getDeckHashMap().put(deckName, deck);
+        account.getCollection().getDecks().add(deck); // gotta choose one to remove (HMap or Arrls)
         return 0;
     }
 
-    private static int deleteDeck(String commandPart) {
+    private static int deleteDeck(String deckName) {
+        if (!account.getCollection().getDeckHashMap().containsKey(deckName))
+            return 9;
+        account.getCollection().getDecks().remove(account.getCollection().getDeckHashMap().get(deckName));
+        account.getCollection().getDeckHashMap().remove(deckName);
         return 0;
     }
 
-    private static int addToDeck(String commandPart, String commandPart1) {
+    private static int addToDeck(String idStr, String deckName) {
         return 0;
     }
 
-    private static int removeFromDeck(String commandPart, String commandPart1) {
+    private static int removeFromDeck(String idStr, String deckName) {
         return 0;
     }
 
-    private static int validateDeck(String commandPart) {
+    private static int validateDeck(String deckName) {
         return 0;
     }
 
-    private static int selectDeck(String commandPart) {
+    private static int selectDeck(String deckName) {
         return 0;
     }
 
-    private static int showDeck(String commandPart) {
+    private static int showDeck(String deckName) {
         return 0;
     }
 
-    private static int search(String commandPart) {
+    private static int search(String name) {
         return 0;
     }
 
-    public static int findPatternIndex(String command, String[] commandParts) {
+    public static int findPatternIndex(String command) {
         for (int i = 0; i < commandPatterns.size(); i++)
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
         return -1;
     }
+
+    //setters
+
+    public static void setAccount(Account account) {
+        CollectionMenuProcess.account = account;
+    }
+
+    //setters
 }

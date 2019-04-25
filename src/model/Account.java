@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Account {
-    private  ArrayList <MatchHistory> matchHistories = new ArrayList();
+    private ArrayList <MatchHistory> matchHistories = new ArrayList<>();
     private static ArrayList<Account> accounts;
     private String userName;
     private String password;

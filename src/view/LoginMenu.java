@@ -21,6 +21,7 @@ public class LoginMenu {
                 System.out.println("invalid input");
             else
                 handleErrors(presenter.LoginMenuProcess.DoCommands[commandType].doIt());
+            scanner.close(); // ?
         }
     }
 

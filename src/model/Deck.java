@@ -1,16 +1,27 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-class Deck {
+public class Deck {
     private String name;
     private ArrayList<Card> cards;
+    private HashMap<String, Card> cardsHashMap;
     private MovableCard.Hero hero;
-    private final int MAX_CARD_NUMBER = 20;
+    public final int MAX_CARD_NUMBER = 20;
     private Item item;
 
     {
         cards = new ArrayList<>();
+        cardsHashMap = new HashMap<>();
+    }
+
+    public Deck(String name) {
+        this.name = name;
+    }
+
+    public static void createDeck(String deckName) {
+        Deck deck = new Deck(deckName);
     }
 
     //getters

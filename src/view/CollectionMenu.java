@@ -1,5 +1,6 @@
 package view;
 
+import model.Account;
 import presenter.CollectionMenuProcess;
 
 import java.io.IOException;
@@ -8,19 +9,20 @@ import java.util.Scanner;
 public class CollectionMenu {
     private static boolean isInCollectionMenu = true;
 
-    static void run() throws IOException {
+    static void run(Account account) throws IOException {
+        CollectionMenuProcess.setAccount(account);
         while (true) {
             Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
-            String[] commandParts = command.split("[ ]");
-            CollectionMenuProcess.commandParts = commandParts;
+            CollectionMenuProcess.commandParts = command.split("[ ]");
             if (!isInCollectionMenu)
                 break;
-            int commandType = presenter.CollectionMenuProcess.findPatternIndex(command, commandParts);
+            int commandType = presenter.CollectionMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
                 handleErrors(presenter.CollectionMenuProcess.DoCommands[commandType].doIt());
+            scanner.close(); // ?
         }
     }
 
