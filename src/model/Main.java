@@ -16,38 +16,20 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) throws IOException {
         // address haye local
-//        String fileName = "src/model/spells/totaldisarm/primaryImpact.json";
-//        String fileName1 = "src/model/spells/totaldisarm/spell.json";
-        // address haye local
-        ///// mesal baraye tabdil be file e JSON
-//        try (FileOutputStream fos = new FileOutputStream(fileName);
-//             OutputStreamWriter isr = new OutputStreamWriter(fos,
-//                     StandardCharsets.UTF_8)) {
-//            Gson gson = new Gson();
-//            Impact impact = new Impact();
-//            impact.setName("TotalDisarm");
-//            impact.setPositive(false);
-//            impact.setIsvalidOnHero(true);
-//            impact.setIsvalidOnMinion(true);
-//            impact.setIsvalidOnAllies(false);
-//            impact.setIsvalidOnEnemies(true);
-//            impact.setMana(false);
-//            impact.setHealthChange(false);
-//            impact.setDamageChange(false);
-//            impact.setHolyBuff(false);
-//            impact.setPowerBuff(false);
-//            impact.setPoisonBuff(false);
-//            impact.setWeaknessBuff(false);
-//            impact.setStunBuff(false);
-//            impact.setDisarmBuff(true);
-//            impact.setPassive(true);
-//            impact.setTurnsActive(0);
-//            impact.setTurnsToBeActivated(1000);
-//            impact.setImpactQuantity(1);
-//            gson.toJson(impact, isr);
-// }
-//        ///entehaye mesal.
-//        //baraye neveshtane spell.
+        String fileName = "src/model/spells/totaldisarm/primaryImpact.json";
+        String fileName1 = "src/model/spells/totaldisarm/spell.json";
+        /// mesal baraye tabdil be file e JSON
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+             OutputStreamWriter isr = new OutputStreamWriter(fos,
+                     StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
+            Impact impact = new Impact();
+            impact.setName("TotalDisarm");
+            //impact.setImpactTypeId();
+            gson.toJson(impact, isr);
+ }
+        ///entehaye mesal.
+        //baraye neveshtane spell.
 //        try(FileOutputStream fos = new FileOutputStream(fileName1);
 //            OutputStreamWriter isr = new OutputStreamWriter(fos,
 //                    StandardCharsets.UTF_8)){

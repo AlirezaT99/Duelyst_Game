@@ -130,7 +130,6 @@ public class LoginMenuProcess {
         readUsers();
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUserName().equals(userName)) {
-                Scanner scanner = new Scanner(System.in);
                 LoginMenu.showMessage("Enter your password:");
                 String passWord = LoginMenu.scan();
                 if (users.get(i).getPassword().equals(passWord)) {
@@ -142,11 +141,11 @@ public class LoginMenuProcess {
                     //todo : login, pass onto main menu
                     return 0;
                 } else
-                    LoginMenu.showMessage("incorrect password"); // message id : 2
+                    //message id : 2
                 return 2;
             }
         }
-        LoginMenu.showMessage("no account with this username found"); //message id :3
+ //message id :3
         return 3;
     }
 
@@ -161,8 +160,8 @@ public class LoginMenuProcess {
     }
 
     private static void sortUsers() {
-        List<Account> accounts = new Account(users);
-        Collections.sort(users);
+        List<Account> accounts = users;
+        Collections.sort(accounts);
     }
 
     private static int save(Player player) throws IOException {

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 class Impact {
     private String name;
-    private ArrayList<Cell> impactArea;
+    private ArrayList<Cell> impactArea = new ArrayList<>();
     private ArrayList<Cell> temporaryImpactArea;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
     // 3.(0-2)"onWhichTeam"{friendly, hostile, both}|4.(0-2)"targetSoldierType"{hero,minion,both}|
     // 5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(1,0)
     //8.nearHeroHostileMinion(1,0)
-    private String impactTypeId = "";//0.(0,1)isPositive|1.(0,1)isBuff|2.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
+    private String impactTypeId = ""; //0.(0,1)isPositive|1.(0,1)isBuff|2.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
     // 3.(0-4)QuantityChange{mana,health,damage}|
     //4.(0,n)"impactQuantity"|5.(0-5){disImpact(friendly/hostile),Dispel(friendly/hostile)|6.(0,2)PassivePermanent|
     // 7.(0,n)turnsToBeActivated |8.(0,n)turnsActive
@@ -185,9 +185,16 @@ class Impact {
 
     //getters
     //setters
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setTargetTypeId(String targetTypeId) {
+        this.targetTypeId = targetTypeId;
+    }
+
+    public void setImpactTypeId(String impactTypeId) {
+        this.impactTypeId = impactTypeId;
     }
     //setters
 }
