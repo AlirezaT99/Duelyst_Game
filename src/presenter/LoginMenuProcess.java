@@ -11,10 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class LoginMenuProcess {
@@ -130,6 +127,7 @@ public class LoginMenuProcess {
         readUsers();
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUserName().equals(userName)) {
+                Scanner scanner = new Scanner(System.in);
                 LoginMenu.showMessage("Enter your password:");
                 String passWord = LoginMenu.scan();
                 if (users.get(i).getPassword().equals(passWord)) {
@@ -141,7 +139,7 @@ public class LoginMenuProcess {
                     //todo : login, pass onto main menu
                     return 0;
                 } else
-                    //message id : 2
+                    // message id : 2
                 return 2;
             }
         }
@@ -160,8 +158,7 @@ public class LoginMenuProcess {
     }
 
     private static void sortUsers() {
-        List<Account> accounts = users;
-        Collections.sort(accounts);
+        users.sort(Comparator.comparing(Account::getNumberOfWins));
     }
 
     private static int save(Player player) throws IOException {
