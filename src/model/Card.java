@@ -19,7 +19,7 @@ class Card {
         return false;
     }
 
-    boolean isCoordinationValid() {
+    public boolean isCoordinationValid() {
         //todo
         return true;
     }

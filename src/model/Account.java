@@ -24,6 +24,7 @@ public class Account implements Comparable<Account>{
         accounts = new ArrayList<>();
     }
 
+
     public void buy(int cost, UsableItem item, Card card) {
         money -= cost;
         if (item != null)

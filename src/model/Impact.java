@@ -7,7 +7,8 @@ class Impact {
     private ArrayList<Cell> impactArea;
     private ArrayList<Cell> temporaryImpactArea;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
-    // 3.(0-2)"onWhichTeam"|4.(0-2)"targetSoldierType"|5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(1,0)
+    // 3.(0-2)"onWhichTeam"{friendly, hostile, both}|4.(0-2)"targetSoldierType"{hero,minion,both}|
+    // 5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(1,0)
     //8.nearHeroHostileMinion(1,0)
     private String impactTypeId = "";//0.(0,1)isPositive|1.(0,1)isBuff|2.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
     // 3.(0-4)QuantityChange{mana,health,damage}|
@@ -177,6 +178,11 @@ class Impact {
     public ArrayList<Cell> getImpactArea() {
         return impactArea;
     }
+
+    public String getTargetTypeId() {
+        return targetTypeId;
+    }
+
     //getters
     //setters
 
