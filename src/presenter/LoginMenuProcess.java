@@ -13,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -154,6 +155,7 @@ public class LoginMenuProcess {
     }
 
     private static void sortUsers() {
+        List<Account> accounts = new Account(users);
         Collections.sort(users);
     }
 

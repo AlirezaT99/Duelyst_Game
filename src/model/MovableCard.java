@@ -20,12 +20,20 @@ class MovableCard extends Card {
     int nonPassiveDamageChange = 0;
 
 
+    //card casting
+
     public void castCard(Cell cell) {
         cell.setMovableCard(this);
         this.cardCell = cell;
         player.getHand().deleteCastedCard(this);
         player.setMana(player.getMana() - this.manaCost);
     }
+
+    public boolean isCoordinationValid(Cell cell){
+        return cell.getMovableCard() == null;
+    }
+
+    //card casting
 
     //attack & counterAttack
     public void attack(Cell cell) {
@@ -87,6 +95,7 @@ class MovableCard extends Card {
             return false;
         return true;
     }
+
     //attack & counterAttack
 
     public void goThroughTime() {
@@ -212,7 +221,7 @@ class MovableCard extends Card {
         }
 
         public void castSpell(Cell cell) {
-            heroSpell.castCard(this.getMatch(), cell);
+//            heroSpell.castCard(this.getMatch(), cell);
             // check should be in spell class
             // if check
             // cast spell
