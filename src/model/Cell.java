@@ -1,9 +1,17 @@
 package model;
 
+import java.util.ArrayList;
+
 class Cell {
+
     private Coordination coordination;
     private MovableCard movableCard;
-    private Item item;
+    private CollectibleItem item;
+    private ArrayList<Cell> adjacentCells;
+
+    {
+        adjacentCells = new ArrayList<>();
+    }
 
     public Coordination getCellCoordination() {
         return coordination;
@@ -33,12 +41,19 @@ class Cell {
         return x + y <= 2 && (x == 0 || y == 0 || (x == 1 && y == 1));
     }
 
-    public Item getItem() {
+    public CollectibleItem getItem() {
         return item;
     }
 
-//        public Cell findCellByCoordination(Coordination coordination){
-//
-//        }
+    void addCellToAdjacentCells(Cell cell){
+        this.adjacentCells.add(cell);
+    }
 
+    //getters
+
+    public ArrayList<Cell> getAdjacentCells() {
+        return adjacentCells;
+    }
+
+    //getters
 }

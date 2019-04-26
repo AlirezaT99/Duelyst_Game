@@ -198,6 +198,10 @@ public class MovableCard extends Card {
 
     public boolean isRanged(){ return  isRanged;}
 
+    public ArrayList<Impact> getImpactsAppliedToThisOne() {
+        return impactsAppliedToThisOne;
+    }
+
     //getters
 
     //setters
