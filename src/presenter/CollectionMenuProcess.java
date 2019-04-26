@@ -129,7 +129,8 @@ public class CollectionMenuProcess {
         // todo: go to mainMenu
         return 0;
     }
-
+    private int search(String name){return 0;}
+    private int showAllDecks(){return 0;}
     private int createDeck(String deckName) {
         if (account.getCollection().getDeckHashMap().containsKey(deckName))
             return 1;

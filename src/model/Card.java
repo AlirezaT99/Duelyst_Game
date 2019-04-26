@@ -1,10 +1,10 @@
 package model;
 
-class Card {
+public class Card {
     protected int manaCost;
     protected String name;
     private Cell cell;
-    protected int cost;
+    private int cost;
     private Match match;
     protected Player player;
     private String cardID;
@@ -31,7 +31,7 @@ class Card {
         return name;
     }
     public int getCost() {
-        return cost;
+        return this.cost;
     }
 
     public Match getMatch() {

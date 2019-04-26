@@ -5,6 +5,7 @@ import model.Player;
 import view.CollectionMenu;
 import view.LoginMenu;
 import view.MainMenu;
+import view.ShopMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,14 +76,20 @@ public class MainMenuProcess {
             },
     };
 
-    private  int enterCollection(Account account){
+    private  int enterCollection(Account account) throws IOException{
         mainMenu.setIsInMainMenu(false);
         CollectionMenu collectionMenu = new CollectionMenu(currentAccount);
         collectionMenu.setIsInCollectionMenu(true);
+        collectionMenu.run();
         return 0;
     }
 
-    private int enterShop(Account account){
+    private int enterShop(Account account) throws IOException{
+        mainMenu.setIsInMainMenu(false);
+        ShopMenu shopMenu = new ShopMenu(currentAccount);
+        shopMenu.setIsInShopMenu(true);
+        shopMenu.getShopMenuProcess().setMainMenu(mainMenu);
+        shopMenu.run();
         return 0;
     }
     private int enterBattle(){

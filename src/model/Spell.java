@@ -2,10 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
-class Spell extends Card {
+public class Spell extends Card {
     private ArrayList spells = new ArrayList();
     private Impact impact;
-    private int[] areaTargetSquare = new int[2];
     private Impact primaryImpact;
     private Impact secondaryImpact;
 
@@ -67,10 +66,6 @@ class Spell extends Card {
     //setters
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setAreaTargetSquare(int[] areaTargetSquare) {
-        this.areaTargetSquare = areaTargetSquare;
     }
 
     public void setManaCost(int manaCost) {
