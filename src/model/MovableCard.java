@@ -23,14 +23,14 @@ public class MovableCard extends Card {
 
     //card casting
 
-    public void castCard(Match match,Cell cell,Player castingPlayer ){
+    public void castCard(Match match, Cell cell, Player castingPlayer) {
         cell.setMovableCard(this);
         this.cardCell = cell;
         player.getHand().deleteCastedCard(this);
         player.setMana(player.getMana() - this.manaCost);
     }
 
-    public boolean isCoordinationValid(Cell cell){
+    public boolean isCoordinationValid(Cell cell) {
         return cell.getMovableCard() == null;
     }
 
@@ -196,23 +196,22 @@ public class MovableCard extends Card {
         return isHybrid;
     }
 
-    public boolean isRanged(){ return  isRanged;}
+    public boolean isRanged() {
+        return isRanged;
+    }
 
     public ArrayList<Impact> getImpactsAppliedToThisOne() {
         return impactsAppliedToThisOne;
     }
-
     //getters
 
     //setters
-
-
     public void setCardCell(Cell cardCell) {
         this.cardCell = cardCell;
     }
-
     //setters
-    class Hero extends MovableCard {
+
+    public class Hero extends MovableCard {
 
         private Spell heroSpell;
         private int spellCost;
@@ -226,17 +225,12 @@ public class MovableCard extends Card {
             this.name = name;
             this.damage = damage;
         }
+
         @Override
-        public String toString(){
-            String classType = new String();
-            if(this.isMelee())
-                classType = "Melee";
-            if(this.isHybrid())
-                classType = "Hybrid";
-            if(this.isRanged())
-                classType = "Ranged";
-            return ("Name : "+this.name+" - AP : "+this.damage+" - HP : "+this.health+" - Class : "+classType+
-                    " - Special power : "+ this.description);
+        public String toString() {
+            String classType = getClassType(this);
+            return ("Name : " + this.name + " - AP : " + this.damage + " - HP : " + this.health + " - Class : " + classType +
+                    " - Special power : " + this.description);
         }
 
         public void castSpell(Cell cell) {
@@ -259,7 +253,7 @@ public class MovableCard extends Card {
         // getters
     }
 
-    class Minion extends MovableCard {
+    public class Minion extends MovableCard {
         private Impact summonImpact;
         private Impact dyingWishImpact;
         private Impact onDefendImpact;
@@ -302,21 +296,27 @@ public class MovableCard extends Card {
                 }
             }
         }
-        public String toString(){
-            String classType ="";
-            if(this.isMelee())
-                classType = "Melee";
-            if(this.isHybrid())
-                classType = "Hybrid";
-            if(this.isRanged())
-                classType = "Ranged";
-            return ("Type : Minion - Name : "+this.name+ " - Class : "+classType+" - AP : "+this.damage+
-                    " HP : "+ this.health + " - MP :"+this.manaCost+ " Speacial power : "+ this.description);
+
+        public String toString() {
+            String classType = getClassType(this);
+            return ("Type : Minion - Name : " + this.name + " - Class : " + classType + " - AP : " + this.damage +
+                    " HP : " + this.health + " - MP :" + this.manaCost + " Speacial power : " + this.description);
         }
+
         @Override
         protected void counterAttack(MovableCard opponent) {
             super.counterAttack(opponent);
             onDefendImpact.doImpact();
         }
+    }
+
+    String getClassType(MovableCard movableCard) {
+        if (movableCard.isMelee)
+            return "Melee";
+        if (movableCard.isHybrid)
+            return "Hybrid";
+        if (movableCard.isRanged)
+            return "Ranged";
+        return null;
     }
 }

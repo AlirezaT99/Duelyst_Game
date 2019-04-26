@@ -1,9 +1,8 @@
 package presenter;
 
-import model.Deck;
+import model.*;
 import view.CollectionMenu;
-import model.Account;
-import model.Player;
+import view.MainMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +13,8 @@ public class CollectionMenuProcess {
     private Account account;
     private Player player;
     public static String[] commandParts;
+    private MainMenu mainMenu;
+    private CollectionMenu collectionMenu;
 
     static {
         commandPatterns.add(Pattern.compile("create deck [a-zA-Z0-9._]+"));
@@ -125,12 +126,18 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int exit() {
-        // todo: go to mainMenu
+    private int exit() throws IOException {
+        mainMenu.setIsInMainMenu(true);
+        mainMenu.setHasRun(false);
+        collectionMenu.setIsInCollectionMenu(false);
+        mainMenu.run(); // ?
         return 0;
     }
-    private int search(String name){return 0;}
-    private int showAllDecks(){return 0;}
+
+    private int search(String name) {
+        return 0;
+    }
+
     private int createDeck(String deckName) {
         if (account.getCollection().getDeckHashMap().containsKey(deckName))
             return 1;
@@ -148,13 +155,57 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int addToDeck(String idStr, String deckName) {
-        int id = Integer.parseInt(idStr);
-
-        return 0;
+    private int addToDeck(String idStr, String deckName) { // is id an integer or a string after all???
+        if (!account.getCollection().getDeckHashMap().containsKey(deckName))
+            return 9;
+        if (!account.getCollection().getCardsHashMap().containsKey(idStr)
+                && !account.getCollection().getItemsHashMap().containsKey(idStr))
+            return 3;
+        if (account.getCollection().getCardsHashMap().containsKey(idStr)
+                || account.getCollection().getItemsHashMap().containsKey(idStr))
+            return 4;
+        if (account.getCollection().getCardsHashMap().size() == Deck.MAX_CARD_NUMBER
+                && account.getCollection().getItemsHashMap().size() == Deck.MAX_ITEM_NUMBER
+                && !account.getCollection().getItemsHashMap().containsKey(idStr))
+            if (!(account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero))
+                return 5;
+        if (account.getCollection().getCardsHashMap().containsKey(idStr))
+            if (account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero
+                    && account.getCollection().getDeckHashMap().get(deckName).getHero() != null)
+                return 6;
+        //
+        if (account.getCollection().getCardsHashMap().containsKey(idStr))
+            if (account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero) {
+                account.getCollection().getDeckHashMap().get(deckName)
+                        .setHero((MovableCard.Hero) account.getCollection().getCardsHashMap().get(idStr));
+                return 0;
+            }
+        if (account.getCollection().getItemsHashMap().containsKey(idStr)
+                && account.getCollection().getItemsHashMap().size() < Deck.MAX_ITEM_NUMBER) {
+            account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap()
+                    .put(idStr, account.getCollection().getItemsHashMap().get(idStr));
+            return 0;
+        }
+        if (account.getCollection().getCardsHashMap().containsKey(idStr)) {
+            account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap()
+                    .put(idStr, account.getCollection().getCardsHashMap().get(idStr));
+            return 0;
+        }
+        return 0; // should be checked for bugs
     }
 
-    private static int removeFromDeck(String idStr, String deckName) {
+    private int removeFromDeck(String idStr, String deckName) {
+        if (!account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap().containsKey(idStr)
+                && !account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().containsKey(idStr))
+            return 3;
+        if (account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero
+                && account.getCollection().getDeckHashMap().get(deckName).getHero() != null
+                && account.getCollection().getDeckHashMap().get(deckName).getHero().getCardID().equals(idStr)) {
+            account.getCollection().getDeckHashMap().get(deckName).setHero(null);
+            return 0;
+        }
+        account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap().remove(idStr);
+        account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().remove(idStr);
         return 0;
     }
 
@@ -177,6 +228,10 @@ public class CollectionMenuProcess {
     }
 
     private static int showDeck(String deckName) {
+        return 0;
+    }
+
+    private int showAllDecks() {
         return 0;
     }
 

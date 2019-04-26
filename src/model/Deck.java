@@ -8,12 +8,15 @@ public class Deck {
     private ArrayList<Card> cards;
     private ArrayList<UsableItem> items;
     private HashMap<String, Card> cardsHashMap;
-    private MovableCard.Hero hero;
-    public final int MAX_CARD_NUMBER = 20;
+    private HashMap<String, UsableItem> itemsHashMap;
+    private MovableCard.Hero hero = null;
+    public static final int MAX_CARD_NUMBER = 20;
+    public static final int MAX_ITEM_NUMBER = 3;
 
     {
         cards = new ArrayList<>();
         cardsHashMap = new HashMap<>();
+        itemsHashMap = new HashMap<>();
     }
 
     @Override
@@ -52,5 +55,28 @@ public class Deck {
     public String getName() {
         return name;
     }
+
+    public MovableCard.Hero getHero() {
+        return hero;
+    }
+
+    public ArrayList<UsableItem> getItems() {
+        return items;
+    }
+
+    public HashMap<String, Card> getCardsHashMap() {
+        return cardsHashMap;
+    }
+
+    public HashMap<String, UsableItem> getItemsHashMap() {
+        return itemsHashMap;
+    }
     //getters
+
+    //setters
+    public void setHero(MovableCard.Hero hero) {
+        this.hero = hero;
+    }
+
+    //setters
 }

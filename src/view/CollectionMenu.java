@@ -41,31 +41,31 @@ public class CollectionMenu {
     private static void handleErrors(int messageID) {
         switch (messageID) {
             case 1:
-                CollectionMenu.showMessage("a deck with this name already exists");
+                CollectionMenu.showMessage("A deck with this name already exists");
                 break;
             case 2:
-                CollectionMenu.showMessage("card doesn't exist");
+                CollectionMenu.showMessage("Card/Item doesn't exist");
                 break;
             case 3:
-                CollectionMenu.showMessage("no card with this id was found in the collection");
+                CollectionMenu.showMessage("No card/item with this id was found in the collection");
                 break;
             case 4:
-                CollectionMenu.showMessage("card is already in the deck");
+                CollectionMenu.showMessage("Card/Item is already in the deck");
                 break;
             case 5:
-                CollectionMenu.showMessage("number of the cards in the deck must not exceed 20");
+                CollectionMenu.showMessage("Number of the cards in the deck must not exceed 20");
                 break;
             case 6:
-                CollectionMenu.showMessage("there's a hero in the deck already");
+                CollectionMenu.showMessage("There's supposed to be only one hero in the deck");
                 break;
             case 7:
-                CollectionMenu.showMessage("card doesn't exist in the deck");
+                CollectionMenu.showMessage("Card doesn't exist in the deck");
                 break;
             case 8:
                 CollectionMenu.showMessage("Deck is invalid");
                 break;
             case 9:
-                CollectionMenu.showMessage("deck not found");
+                CollectionMenu.showMessage("Deck not found");
                 break;
             case 10:
                 CollectionMenu.showMessage("Card/Item not found");
