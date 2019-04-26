@@ -1,8 +1,8 @@
 package model;
 
 class Item {
-    private String name;
-    private String description;
+    protected String name;
+    protected String description;
     protected String itemID;
 
     public String getDescription() {

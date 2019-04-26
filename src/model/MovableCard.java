@@ -13,15 +13,13 @@ class MovableCard extends Card {
     private int moveRange;
     private int minAttackRange;
     private int maxAttackRange;
-    private boolean isMelee;
-    private boolean isHybrid;
-    private boolean isComboAttacker;
+    private boolean isMelee = false;
+    private boolean isHybrid = false;
+    private boolean isComboAttacker = false;
     int nonPassiveHealthChange = 0;
     int nonPassiveDamageChange = 0;
 
-
     //card casting
-
     public void castCard(Cell cell) {
         cell.setMovableCard(this);
         this.cardCell = cell;
@@ -32,7 +30,6 @@ class MovableCard extends Card {
     public boolean isCoordinationValid(Cell cell){
         return cell.getMovableCard() == null;
     }
-
     //card casting
 
     //attack & counterAttack
@@ -95,7 +92,6 @@ class MovableCard extends Card {
             return false;
         return true;
     }
-
     //attack & counterAttack
 
     public void goThroughTime() {
@@ -166,8 +162,7 @@ class MovableCard extends Card {
     }
 
     //getters
-
-    public String getName() {
+        public String getName() {
         return name;
     }
 
@@ -195,16 +190,15 @@ class MovableCard extends Card {
         return isHybrid;
     }
 
+    public boolean isComboAttacker() { return isComboAttacker; }
     //getters
 
     //setters
-
-
     public void setCardCell(Cell cardCell) {
         this.cardCell = cardCell;
     }
-
     //setters
+
     class Hero extends MovableCard {
 
         private Spell heroSpell;
@@ -220,6 +214,17 @@ class MovableCard extends Card {
             this.damage = damage;
         }
 
+        @Override
+        public String toString() {
+            String heroClass = "";
+            if (isHybrid) heroClass = "Hybrid";
+            if (isMelee) heroClass = "Melee";
+            if (isComboAttacker) heroClass = " Combo Attacker";
+            //
+            return "Name : " + name + " - AP : " + damage + " - HP : " + health + " - Class : " + heroClass
+                    + " - Special power : " + description;
+        }
+
         public void castSpell(Cell cell) {
 //            heroSpell.castCard(this.getMatch(), cell);
             // check should be in spell class
@@ -227,8 +232,8 @@ class MovableCard extends Card {
             // cast spell
             // put the impact of spell in all targets impacts applied to this one
         }
-        // getters
 
+        // getters
         public int getSpellCost() {
             return spellCost;
         }
@@ -236,7 +241,6 @@ class MovableCard extends Card {
         public int getSpellCoolDown() {
             return spellCoolDown;
         }
-
         // getters
     }
 
@@ -246,6 +250,17 @@ class MovableCard extends Card {
         private Impact onDefendImpact;
         private Impact onAttackImpact;
         private Impact onComboImpact;
+
+        @Override
+        public String toString() {
+            String minionClass = "";
+            if (isHybrid) minionClass = "Hybrid";
+            if (isMelee) minionClass = "Melee";
+            if (isComboAttacker) minionClass = " Combo Attacker";
+            //
+            return "Type : Minion - Name : " + name + " - Class : " + minionClass + " - AP : " + damage
+                    + " - HP : " + health + " - MP" + manaCost + " - Special Power : " + description; // ??
+        }
 
         @Override
         protected void manageCasualties() {

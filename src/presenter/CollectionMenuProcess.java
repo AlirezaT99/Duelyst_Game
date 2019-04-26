@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 public class CollectionMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
-    private  Account account;
-    private  Player player;
+    private Account account;
+    private Player player;
     public static String[] commandParts;
 
     static {
@@ -35,7 +35,7 @@ public class CollectionMenuProcess {
         int doIt() throws IOException;
     }
 
-    public  DoCommand[] DoCommands = new DoCommand[]{
+    public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
@@ -130,11 +130,7 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int showAllDecks() {
-        return 0;
-    }
-
-    private  int createDeck(String deckName) {
+    private int createDeck(String deckName) {
         if (account.getCollection().getDeckHashMap().containsKey(deckName))
             return 1;
         Deck deck = new Deck(deckName);
@@ -161,21 +157,34 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int validateDeck(String deckName) {
-        return 0;
+    private int validateDeck(String deckName) {
+        boolean isValid = account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName));
+        if (isValid) {
+            CollectionMenu.showMessage("Deck is Valid");
+            return 0;
+        }
+        return 8;
     }
 
-    private static int selectDeck(String deckName) {
-        return 0;
+    private int selectDeck(String deckName) {
+        boolean isValid = account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName));
+        if (isValid) {
+            account.getCollection().setSelectedDeck(deckName);
+            return 0;
+        }
+        return 8;
     }
 
     private static int showDeck(String deckName) {
         return 0;
     }
 
-    private static int search(String name) {
-        if (account.getCollection().search(name).equals("-1")) return 10;
+    private static int showAllDecks() {
+        return 0;
+    }
 
+    private int search(String name) {
+        if (account.getCollection().search(name).equals("-1")) return 10;
         return 0;
     }
 
@@ -187,15 +196,12 @@ public class CollectionMenuProcess {
     }
 
     //setters
-
     public void setAccount(Account account) {
         this.account = account;
     }
 
-    public  void setPlayer(Player player) {
+    public void setPlayer(Player player) {
         this.player = player;
     }
-
-
     //setters
 }

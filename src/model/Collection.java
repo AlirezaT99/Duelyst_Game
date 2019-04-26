@@ -23,7 +23,7 @@ public class Collection {
         deckHashMap = new HashMap<>();
     }
 
-    public void selectDeck(String name) {
+    public void setSelectedDeck(String name) {
         selectedDeck = deckHashMap.get(name);
     }
 

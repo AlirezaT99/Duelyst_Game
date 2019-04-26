@@ -62,7 +62,7 @@ public class CollectionMenu {
                 CollectionMenu.showMessage("card doesn't exist in the deck");
                 break;
             case 8:
-                CollectionMenu.showMessage("deck is invalid");
+                CollectionMenu.showMessage("Deck is invalid");
                 break;
             case 9:
                 CollectionMenu.showMessage("deck not found");

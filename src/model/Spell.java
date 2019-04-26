@@ -9,6 +9,12 @@ class Spell extends Card {
     private Impact primaryImpact;
     private Impact secondaryImpact;
 
+
+    @Override
+    public String toString() {
+        return "Type : Spell - Name : " + name + " - MP : " + manaCost + " - Desc : " + description; // ?
+    }
+
     public boolean isCastingValid(Player castingPlayer, Cell cell, Impact impact) {
         String targetsType = impact.getTargetTypeId();
         if (targetsType.charAt(0) == '1')
