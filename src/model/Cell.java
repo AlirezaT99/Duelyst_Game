@@ -3,7 +3,7 @@ package model;
 class Cell {
     private Coordination coordination;
     private MovableCard movableCard;
-    private Item item;
+    private CollectibleItem item;
 
     public Coordination getCellCoordination() {
         return coordination;
@@ -33,7 +33,7 @@ class Cell {
         return x + y <= 2 && (x == 0 || y == 0 || (x == 1 && y == 1));
     }
 
-    public Item getItem() {
+    public CollectibleItem getItem() {
         return item;
     }
 

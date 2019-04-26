@@ -195,6 +195,10 @@ class MovableCard extends Card {
         return isHybrid;
     }
 
+    public ArrayList<Impact> getImpactsAppliedToThisOne() {
+        return impactsAppliedToThisOne;
+    }
+
     //getters
 
     //setters
