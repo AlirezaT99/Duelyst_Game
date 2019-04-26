@@ -1,27 +1,34 @@
 package view;
 
 import model.Account;
+import model.Collection;
+import model.Player;
 import presenter.CollectionMenuProcess;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class CollectionMenu {
-    private static boolean isInCollectionMenu = true;
-
-    static void run(Account account) throws IOException {
-        CollectionMenuProcess.setAccount(account);
+    private  boolean isInCollectionMenu = true;
+    private  Account currentAccount;
+    private CollectionMenuProcess collectionMenuProcess;
+    public CollectionMenu(Account account){
+        this.currentAccount= account;
+        collectionMenuProcess = new CollectionMenuProcess();
+        collectionMenuProcess.setAccount(currentAccount);
+    }
+    void run() throws IOException {
         while (true) {
+            if (!isInCollectionMenu)
+                break;
             Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
             CollectionMenuProcess.commandParts = command.split("[ ]");
-            if (!isInCollectionMenu)
-                break;
             int commandType = presenter.CollectionMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                handleErrors(presenter.CollectionMenuProcess.DoCommands[commandType].doIt());
+                handleErrors(collectionMenuProcess.DoCommands[commandType].doIt());
             scanner.close(); // ?
         }
     }
@@ -64,8 +71,8 @@ public class CollectionMenu {
     }
 
     //setters
-    public static void setIsInCollectionMenu(boolean isInLoginMenu) {
-        CollectionMenu.isInCollectionMenu = isInLoginMenu;
+    public void setIsInCollectionMenu(boolean isInLoginMenu) {
+        this.isInCollectionMenu = isInLoginMenu;
     }
     //setters
 

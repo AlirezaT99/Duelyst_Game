@@ -5,6 +5,7 @@ import model.Account;
 import model.Player;
 
 import com.google.gson.*;
+import view.MainMenu;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,9 +17,9 @@ import java.util.regex.Pattern;
 public class LoginMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private static ArrayList<Account> users = new ArrayList<>();
-    private static Account currentAccount;
-    private static Player player;
     public static String[] commandParts;
+    private  Account currentAccount;
+    private LoginMenu loginMenu;
 
     static {
         commandPatterns.add(Pattern.compile("create account [a-zA-Z0-9._]+"));
@@ -33,7 +34,7 @@ public class LoginMenuProcess {
         int doIt() throws IOException;
     }
 
-    public static DoCommand[] DoCommands = new DoCommand[]{
+    public  DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
@@ -55,7 +56,7 @@ public class LoginMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return save(player);
+                    return save(currentAccount);
                 }
             },
             new DoCommand() {
@@ -73,10 +74,12 @@ public class LoginMenuProcess {
     };
 
     public static int findPatternIndex(String command, String[] commandParts) {
+        if (commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
+                && commandParts[1].toLowerCase().equals("account"))
+            return 0;
+        if(commandParts.length == 2 && commandParts[0].toLowerCase().equals("login"))
+            return 1;
         for (int i = 0; i < commandPatterns.size(); i++) {
-            if (commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
-                    && commandParts[1].toLowerCase().equals("account"))
-                return 0;
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
         }
@@ -108,7 +111,7 @@ public class LoginMenuProcess {
 //        }
     }
 
-    private static int login(String userName) throws IOException {
+    private  int login(String userName) throws IOException {
         readUsers();
         for (Account user : users) {
             if (user.getUserName().equals(userName)) {
@@ -116,11 +119,12 @@ public class LoginMenuProcess {
                 String passWord = LoginMenu.scan();
                 if (user.getPassword().equals(passWord)) {
                     currentAccount = user;
-                    LoginMenu.setIsInLoginMenu(false);
-                    Player currentPlayer = new Player();
-                    currentPlayer.setAccount(currentAccount);
-                    player = currentPlayer;
-                    //todo : login, pass onto main menu
+                    loginMenu.setIsInLoginMenu(false);
+//                    Player currentPlayer = new Player();
+//                    currentPlayer.setAccount(currentAccount);
+//                    player = currentPlayer;
+                    MainMenu mainMenu = new MainMenu(currentAccount);
+                    mainMenu.run();
                     return 0;
                 } else
                     return 2; // message id : 2
@@ -142,22 +146,30 @@ public class LoginMenuProcess {
         users.sort(Comparator.comparing(Account::getNumberOfWins).reversed()); // reversed ??
     }
 
-    private static int save(Player player) throws IOException {
-        currentAccount.setMoney(player.getMoney());
-        // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
-        String fileName = "src/model/accounts/" + player.getUserName() + ".json";
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
-            Gson gson = new Gson();
-            gson.toJson(currentAccount, isr);
-        }
+    private  int save(Account account) throws IOException {
+//        currentAccount.setMoney(player.getMoney());
+//        // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
+//        String fileName = "src/model/accounts/" + player.getUserName() + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            Gson gson = new Gson();
+//            gson.toJson(currentAccount, isr);
+//        }
+        // todo : save konim :/
         return 0;
     }
 
-    private static int logout(Account account) {
+    private  int logout(Account account) {
         if (currentAccount.equals(account))
             currentAccount = null;
         return 0;
     }
+    //setters
+
+    public void setLoginMenu(LoginMenu loginMenu) {
+        this.loginMenu = loginMenu;
+    }
+
+    //setters
 }

@@ -16,7 +16,6 @@ class Impact {
     // 7.(0,n)turnsToBeActivated |8.(0,n)turnsActive
     //**** //9.(0,1)fromWhichTeamAssigned{player1, player 2} ****
 
-
     //set ImpactArea
 
     public void setImpactArea(Player friendlyPlayer, Player opponentPlayer, Match match, Cell targetCell) {
