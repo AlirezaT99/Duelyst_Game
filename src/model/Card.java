@@ -24,7 +24,7 @@ class Card {
         return true;
     }
 
-    void castCard(int x, int y) {
+    void castCard(Match match, Cell cell , Player castingPlayer) {
 
     }
 

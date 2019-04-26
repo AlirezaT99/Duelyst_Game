@@ -16,13 +16,13 @@ class MovableCard extends Card {
     private boolean isMelee;
     private boolean isHybrid;
     private boolean isComboAttacker;
-    int nonPassiveHealthChange = 0;
-    int nonPassiveDamageChange = 0;
+    int buffHealthChange = 0;
+    int buffDamageChange = 0;
 
 
     //card casting
 
-    public void castCard(Cell cell) {
+    public void castCard(Match match,Cell cell,Player castingPlayer ){
         cell.setMovableCard(this);
         this.cardCell = cell;
         player.getHand().deleteCastedCard(this);
@@ -106,7 +106,7 @@ class MovableCard extends Card {
     }
 
     protected void manageCasualties() {
-        if (this.health + nonPassiveHealthChange <= 0)
+        if (this.health + buffHealthChange <= 0)
             this.isAlive = false;
     }
 
@@ -195,6 +195,10 @@ class MovableCard extends Card {
         return isHybrid;
     }
 
+    public ArrayList<Impact> getImpactsAppliedToThisOne() {
+        return impactsAppliedToThisOne;
+    }
+
     //getters
 
     //setters
@@ -256,7 +260,7 @@ class MovableCard extends Card {
             }
         }
 
-        public void castCard(Cell cell) {
+        public void castCard(Match match,Cell cell,Player castingPlayer) {
             this.cardCell = cell;
             this.isAlive = true;
             summonImpact.doImpact();
