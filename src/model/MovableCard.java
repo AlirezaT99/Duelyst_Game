@@ -22,14 +22,14 @@ class MovableCard extends Card {
 
     //card casting
 
-    public void castCard(Match match,Cell cell,Player castingPlayer ){
+    public void castCard(Match match, Cell cell, Player castingPlayer) {
         cell.setMovableCard(this);
         this.cardCell = cell;
         player.getHand().deleteCastedCard(this);
         player.setMana(player.getMana() - this.manaCost);
     }
 
-    public boolean isCoordinationValid(Cell cell){
+    public boolean isCoordinationValid(Cell cell) {
         return cell.getMovableCard() == null;
     }
 
@@ -42,8 +42,10 @@ class MovableCard extends Card {
             MovableCard opponent = cell.getMovableCard();
             opponent.takeDamage(this.damage);
             didAttackInThisTurn = true;
+            if (!Impact.doesHaveAntiHolyBuff(this))
+                Impact.holyBuff(opponent, this.damage);
             //do attack
-            cell.getMovableCard().counterAttack(this);
+            opponent.counterAttack(this);
             manageCasualties();
         }
     }
@@ -77,6 +79,8 @@ class MovableCard extends Card {
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent.cardCell)) {
             opponent.takeDamage(this.damage);
+            if (!Impact.doesHaveAntiHolyBuff(this))
+                Impact.holyBuff(opponent, this.damage);
             manageCasualties();
         }
     }
@@ -100,7 +104,7 @@ class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact();
+            impact.doImpact(this.player,cardCell,cardCell);
             impact.goThroughTime();
         }
     }
@@ -198,7 +202,6 @@ class MovableCard extends Card {
     public ArrayList<Impact> getImpactsAppliedToThisOne() {
         return impactsAppliedToThisOne;
     }
-
     //getters
 
     //setters
@@ -250,12 +253,13 @@ class MovableCard extends Card {
         private Impact onDefendImpact;
         private Impact onAttackImpact;
         private Impact onComboImpact;
+        private Impact onTurnImpact;
 
         @Override
         protected void manageCasualties() {
             if (this.health <= 0) {
                 this.isAlive = false;
-                dyingWishImpact.doImpact();
+                dyingWishImpact.doImpact(this.player, cardCell, cardCell);
                 //do dyingWish
             }
         }
@@ -263,7 +267,7 @@ class MovableCard extends Card {
         public void castCard(Cell cell) {
             this.cardCell = cell;
             this.isAlive = true;
-            summonImpact.doImpact();
+            summonImpact.doImpact(this.player, cardCell, cardCell);
             // do summonImpact
         }
 
@@ -271,12 +275,12 @@ class MovableCard extends Card {
         public void attack(Cell cell) {
             if (MovableCard.this.isAttackValid(cell)) {
                 super.attack(cell);
-                onAttackImpact.doImpact();
+                onAttackImpact.doImpact(this.player, cell, this.cardCell);
             }
         }
 
         public void comboAttack(Cell cell, ArrayList<Minion> minions) {
-            minions.get(0).onComboImpact.doImpact();
+            minions.get(0).onComboImpact.doImpact(this.player, cell, this.cardCell);
             super.attack(cell);
             for (int i = 1; i < minions.size(); i++) {
                 MovableCard movableCard = minions.get(i);
@@ -291,7 +295,7 @@ class MovableCard extends Card {
         @Override
         protected void counterAttack(MovableCard opponent) {
             super.counterAttack(opponent);
-            onDefendImpact.doImpact();
+            onDefendImpact.doImpact(this.player, opponent.cardCell, this.cardCell);
         }
     }
 }

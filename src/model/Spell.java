@@ -46,9 +46,9 @@ class Spell extends Card {
 
     public void castCard(Match match, Cell cell, Player castingPlayer) {
         if (isCastingValid(castingPlayer, cell, primaryImpact))
-            primaryImpact.doImpact();
+            primaryImpact.doImpact(castingPlayer,cell,cell);
         if (secondaryImpact != null && isCastingValid(castingPlayer, cell, secondaryImpact))
-            secondaryImpact.doImpact();
+            secondaryImpact.doImpact(castingPlayer,cell,cell);
     }
 
     //getters

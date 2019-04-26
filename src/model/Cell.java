@@ -8,7 +8,7 @@ class Cell {
     private MovableCard movableCard;
     private CollectibleItem item;
     private ArrayList<Cell> adjacentCells;
-
+    ArrayList<Impact> cellImpacts;
     {
         adjacentCells = new ArrayList<>();
     }
@@ -49,6 +49,12 @@ class Cell {
         this.adjacentCells.add(cell);
     }
 
+
+
+    void addToImpacts(Impact impact){
+        cellImpacts.add(impact);
+    }
+
     //getters
 
     public ArrayList<Cell> getAdjacentCells() {
@@ -56,4 +62,5 @@ class Cell {
     }
 
     //getters
+
 }

@@ -63,4 +63,10 @@ class Match {
     public void play(Player player) {
         //
     }
+
+    public Player giveOtherPlayer(Player player){
+        if(player.equals(player1))
+            return player2;
+        return player1;
+    }
 }
