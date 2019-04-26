@@ -27,7 +27,7 @@ class Shop {
     public String search(String name) {
         Item item = findItemByName(name);
         if (item != null)
-            return item.getId();
+            return item.getItemID();
         Card card = findCardByName(name);
         if (card != null)
             return card.getCardID();
@@ -36,6 +36,9 @@ class Shop {
     }
 
     public int searchCollection(String name, Account buyingAccount) {
+        int result = buyingAccount.getCollection().search(name);
+        if (result == -1)
+            printMessage("Card/Item not found");
         return buyingAccount.getCollection().search(name);
     }
 

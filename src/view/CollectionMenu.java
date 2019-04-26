@@ -60,6 +60,9 @@ public class CollectionMenu {
             case 9:
                 CollectionMenu.showMessage("deck not found");
                 break;
+            case 10:
+                CollectionMenu.showMessage("Card/Item not found");
+                break;
         }
     }
 

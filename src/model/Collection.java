@@ -1,5 +1,7 @@
 package model;
 
+import view.CollectionMenu;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,6 +9,8 @@ public class Collection {
     private ArrayList<UsableItem> items;
     private ArrayList<Card> cards;
     private ArrayList<Deck> decks;
+    private HashMap<String, UsableItem> itemsHashMap;
+    private HashMap<String, Card> cardsHashMap;
     private HashMap<String, Deck> deckHashMap;
     private Deck selectedDeck;
 
@@ -14,6 +18,8 @@ public class Collection {
         items = new ArrayList<>();
         cards = new ArrayList<>();
         decks = new ArrayList<>();
+        itemsHashMap = new HashMap<>();
+        cardsHashMap = new HashMap<>();
         deckHashMap = new HashMap<>();
     }
 
@@ -31,7 +37,8 @@ public class Collection {
             deckHashMap.remove(deckName);
         }
         else
-            printMessage("Deck not found"); // must be moved to view
+            CollectionMenu.showMessage("Deck not found"); // must be moved to view
+
     }
 
     public void showDeck(Deck deck) {
@@ -60,15 +67,14 @@ public class Collection {
     }
 
     //search
-    public int search(String name) {
+    public String search(String name) {
         Item item = findItemByName(name);
         if (item != null)
-            return items.indexOf(item);
+            return item.getItemID();
         Card card = findCardByName(name);
         if (card != null)
-            return cards.indexOf(card);
-        printMessage("Card/Item not found");
-        return -1;
+            return card.getCardID();
+        return "-1";
     }
 
     public UsableItem findItemByName(String itemName) {
@@ -87,9 +93,26 @@ public class Collection {
         }
         return null;
     }
+
+    public UsableItem findItemByID(String itemID) {
+        for (UsableItem item : items) {
+            if (item.getItemID().equals(itemID))
+                return item;
+        }
+        return null;
+    }
+
+    public Card findCardByID(String cardID) {
+        for (Card card : cards) {
+            if (card.getCardID().equals(cardID))
+                return card;
+        }
+        return null;
+    }
     //search
 
     //getters
+
     public ArrayList<UsableItem> getItems() {
         return items;
     }
@@ -109,10 +132,5 @@ public class Collection {
     public HashMap<String, Deck> getDeckHashMap() {
         return deckHashMap;
     }
-
     //getters
-
-    private void printMessage(String message) {
-        System.out.println(message);
-    }
 }

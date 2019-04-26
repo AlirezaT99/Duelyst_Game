@@ -152,6 +152,8 @@ public class CollectionMenuProcess {
     }
 
     private static int addToDeck(String idStr, String deckName) {
+        int id = Integer.parseInt(idStr);
+
         return 0;
     }
 
@@ -172,6 +174,8 @@ public class CollectionMenuProcess {
     }
 
     private static int search(String name) {
+        if (account.getCollection().search(name).equals("-1")) return 10;
+
         return 0;
     }
 
@@ -183,10 +187,8 @@ public class CollectionMenuProcess {
     }
 
     //setters
-
     public static void setAccount(Account account) {
         CollectionMenuProcess.account = account;
     }
-
     //setters
 }

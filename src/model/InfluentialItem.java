@@ -2,7 +2,6 @@ package model;
 
 class InfluentialItem extends Item {
     private Impact impact;
-    private String itemID;
 
     public Impact getImpact() {
         return impact;
