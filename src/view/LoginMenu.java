@@ -13,21 +13,22 @@ public class LoginMenu {
         loginMenuProcess.setLoginMenu(this);
         // we'll be adding stuff here
     }
-    void run() throws IOException {
-        while (true) {
+    public void run() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        while (true){
             if (!isInLoginMenu)
                 break;
-            Scanner scanner = new Scanner(System.in);
+           // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
             String[] commandParts = command.split("[ ]");
-            LoginMenuProcess.commandParts = commandParts;
+            loginMenuProcess.commandParts = commandParts;
             int commandType = presenter.LoginMenuProcess.findPatternIndex(command, commandParts);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
                 handleErrors(loginMenuProcess.DoCommands[commandType].doIt());
-            scanner.close(); // ?
         }
+        scanner.close(); // ?
     }
 
     public static String scan() {
