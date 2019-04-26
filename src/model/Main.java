@@ -16,54 +16,56 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) throws IOException {
         // address haye local
-//        String fileName = "src/model/spells/totaldisarm/primaryImpact.json";
-//        String fileName1 = "src/model/spells/totaldisarm/spell.json";
-        // address haye local
-        ///// mesal baraye tabdil be file e JSON
+       String fileName = "src/model/spells/kingsguard.json";
+      //  String fileName1 = "src/model/spells//spell.json";
+//        String fileName2 = "src/model/spells/allpower/secondaryImpact.json";
+        Gson gson = new GsonBuilder().serializeNulls().create();
+//        /// mesal baraye tabdil be file e JSON
 //        try (FileOutputStream fos = new FileOutputStream(fileName);
 //             OutputStreamWriter isr = new OutputStreamWriter(fos,
 //                     StandardCharsets.UTF_8)) {
-//            Gson gson = new Gson();
 //            Impact impact = new Impact();
-//            impact.setName("TotalDisarm");
-//            impact.setPositive(false);
-//            impact.setIsvalidOnHero(true);
-//            impact.setIsvalidOnMinion(true);
-//            impact.setIsvalidOnAllies(false);
-//            impact.setIsvalidOnEnemies(true);
-//            impact.setMana(false);
-//            impact.setHealthChange(false);
-//            impact.setDamageChange(false);
-//            impact.setHolyBuff(false);
-//            impact.setPowerBuff(false);
-//            impact.setPoisonBuff(false);
-//            impact.setWeaknessBuff(false);
-//            impact.setStunBuff(false);
-//            impact.setDisarmBuff(true);
-//            impact.setPassive(true);
-//            impact.setTurnsActive(0);
-//            impact.setTurnsToBeActivated(1000);
-//            impact.setImpactQuantity(1);
+//            impact.setName("All Power");
+//            impact.setTargetTypeId("001020000");
+//            impact.setImpactTypeId("112320200");
 //            gson.toJson(impact, isr);
 // }
-//        ///entehaye mesal.
-//        //baraye neveshtane spell.
-//        try(FileOutputStream fos = new FileOutputStream(fileName1);
-//            OutputStreamWriter isr = new OutputStreamWriter(fos,
-//                    StandardCharsets.UTF_8)){
-//            Spell spell = new Spell();
-//            spell.setName("Total Disarm");
-//            spell.setCost(1000);
-//            spell.setManaCost(0);
-//            spell.setAreaTargetSquare(1);
-//            gson.toJson(spell,isr);
+//        try (FileOutputStream fos = new FileOutputStream(fileName2);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            Impact impact = new Impact();
+//            impact.setName("Madness");
+//            impact.setTargetTypeId("010020100");
+//            impact.setImpactTypeId("111220003");
+//            gson.toJson(impact, isr);
 //        }
+        ///entehaye mesal.
+//        baraye neveshtane spell.
+        try(FileOutputStream fos = new FileOutputStream(fileName);
+            OutputStreamWriter isr = new OutputStreamWriter(fos,
+                    StandardCharsets.UTF_8)){
+            Spell spell = new Spell();
+            spell.setName("Kings Guard");
+            Impact impact = new Impact();
+            impact.setName("Kings Guard");
+            impact.setTargetTypeId("010110001");
+            impact.setImpactTypeId("");
+            spell.setPrimaryImpact(impact);
+//            Impact secondaryImpact = new Impact();
+//            secondaryImpact.setName("Sacrifice");
+//            secondaryImpact.setTargetTypeId("010010100");
+//            secondaryImpact.setImpactTypeId("112380001");
+//            spell.setSecondaryImpact(secondaryImpact);
+            spell.setCost(1600);
+            spell.setManaCost(2);
+            spell.setDescription("increases AP by 8 units, but reduces HP by 6.");
+            gson.toJson(spell,isr);
+        }
         /////etmame neveshtane spell
         //vali say konid mostaghim az khode file edit konid baghie ro inja vaghtetouno migire
         ///// khoundane Impact va spell
 //        GsonBuilder builder = new GsonBuilder();
 //        builder.serializeNulls();
-//        Gson gson = new GsonBuilder().serializeNulls().create();
 //        Path path = new File(fileName).toPath();
 //        Reader reader = Files.newBufferedReader(path,
 //                StandardCharsets.UTF_8);
@@ -72,6 +74,8 @@ public class Main {
 //        reader = Files.newBufferedReader(path,
 //                StandardCharsets.UTF_8);
 //        Spell spell = gson.fromJson(reader,Spell.class);
+//        spell.setPrimaryImpact(impact);
+//        System.out.println(spell.getDescription());
     }
 }
 

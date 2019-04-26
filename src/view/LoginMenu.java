@@ -5,46 +5,64 @@ import presenter.LoginMenuProcess;
 import java.io.IOException;
 import java.util.Scanner;
 
-
 public class LoginMenu {
-    private static boolean isInLoginMenu = true;
-    private static String commandParts[];
-
-    public static void main(String[] args) throws IOException {
-        while (true) {
-            Scanner scanner = new Scanner(System.in);
-            String command = scanner.nextLine();
-            commandParts = command.split("[ ]");
-            LoginMenuProcess.commandParts = commandParts;
+    private  boolean isInLoginMenu = true;
+    private LoginMenuProcess loginMenuProcess;
+    public LoginMenu(){
+        loginMenuProcess = new LoginMenuProcess();
+        loginMenuProcess.setLoginMenu(this);
+        // we'll be adding stuff here
+    }
+    public void run() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        while (true){
             if (!isInLoginMenu)
                 break;
-            int commandType = presenter.LoginMenuProcess.findPatternIndex(command);
+           // if(scanner.hasNextLine()){
+            String command = scanner.nextLine();
+            String[] commandParts = command.split("[ ]");
+            loginMenuProcess.commandParts = commandParts;
+            int commandType = presenter.LoginMenuProcess.findPatternIndex(command, commandParts);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                presenter.LoginMenuProcess.DoCommands[commandType].doIt();
-            // it should return an int in order to handle the messages
+                handleErrors(loginMenuProcess.DoCommands[commandType].doIt());
         }
+        scanner.close(); // ?
     }
 
     public static String scan() {
-        // there's supposed to be only one scanner defined in the code
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
 
+    private static void handleErrors(int messageID) {
+        switch (messageID) {
+                case 1:
+                    LoginMenu.showMessage("an account with this username already exists");
+                    break;
+                case 2:
+                    LoginMenu.showMessage("incorrect password");
+                    break;
+                case 3:
+                    LoginMenu.showMessage("no account with this username found");
+                    break;
+            }
+        }
+
     //setters
-    public static void setIsInLoginMenu(boolean isInLoginMenu) {
-        LoginMenu.isInLoginMenu = isInLoginMenu;
+    public  void setIsInLoginMenu(boolean isInLoginMenu) {
+        this.isInLoginMenu = isInLoginMenu;
     }
     //setters
 
-    public static void help() {
+    public static int help() {
         showMessage("create account [user name]");
         showMessage("login [user name]");
         showMessage("show leaderBoard");
         showMessage("save");
         showMessage("logout");
+        return 0;
     }
 
     public static void showMessage(String message) {

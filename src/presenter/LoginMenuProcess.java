@@ -3,27 +3,23 @@ package presenter;
 import view.LoginMenu;
 import model.Account;
 import model.Player;
-import com.google.gson.*;
 
-import java.nio.file.*;
-import java.io.*;
+import com.google.gson.*;
+import view.MainMenu;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class LoginMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private static ArrayList<Account> users = new ArrayList<>();
-    private static Account currentAccount;
-    private static Player player;
-    private static boolean isInLoginMenu = true;
-    public static String commandParts[];
+    public static String[] commandParts;
+    private  Account currentAccount;
+    private LoginMenu loginMenu;
 
     static {
         commandPatterns.add(Pattern.compile("create account [a-zA-Z0-9._]+"));
@@ -35,83 +31,76 @@ public class LoginMenuProcess {
     }
 
     public interface DoCommand {
-        void doIt() throws IOException;
+        int doIt() throws IOException;
     }
 
-    public static DoCommand[] DoCommands = new DoCommand[]{
+    public  DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    createAccount(commandParts[2]);
+                public int doIt() throws IOException {
+                    return createAccount(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    login(commandParts[1]);
+                public int doIt() throws IOException {
+                    return login(commandParts[1]);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    showLeaderBoard();
+                public int doIt() throws IOException {
+                    return showLeaderBoard();
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    save(player);
+                public int doIt() throws IOException {
+                    return save(currentAccount);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    logout(currentAccount);
+                public int doIt() throws IOException {
+                    return logout(currentAccount);
                 }
             },
             new DoCommand() {
                 @Override
-                public void doIt() throws IOException {
-                    LoginMenu.help();
+                public int doIt() throws IOException {
+                    return LoginMenu.help();
                 }
             }
     };
 
-    public static int findPatternIndex(String command) {
+    public static int findPatternIndex(String command, String[] commandParts) {
+        if (commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
+                && commandParts[1].toLowerCase().equals("account"))
+            return 0;
+        if(commandParts.length == 2 && commandParts[0].toLowerCase().equals("login"))
+            return 1;
         for (int i = 0; i < commandPatterns.size(); i++) {
-            if (command.matches(commandPatterns.get(i).pattern()))
+            if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
         }
         return -1;
     }
 
     private static void readUsers() throws IOException {
-//        File folder = new File("src/model/accounts");
-//        File[] listOfFiles = folder.listFiles();
-//        Gson gson = new Gson();
-//        for (File file : listOfFiles) {
-//            if (file.isFile()) {
-//                Path path = new File(file.getPath()).toPath();
-//                Reader reader = Files.newBufferedReader(path,
-//                        StandardCharsets.UTF_8);
-//                Account account = gson.fromJson(reader, Account.class);
-//                users.add(account);
-//            }
-//        }
+        users.clear();
         users.addAll(Account.getAccounts());
     }
 
-    private static void createAccount(String userName) throws IOException {
+    private static int createAccount(String userName) throws IOException {
         readUsers();
         for (Account user : users)
-            if (user.getUserName().equals(userName)) {
-                LoginMenu.showMessage("an account with this username already exists");
-                return;
-            }
+            if (user.getUserName().equals(userName))
+                return 1; //message id : 1
         LoginMenu.showMessage("Enter password:");
         String passWord = LoginMenu.scan();
         Account account = new Account(userName, passWord);
         Account.addAccount(account);
+        return 0;
 //        users.add(account);
 //        String fileName = "src/model/accounts/" + userName + ".json";
 //        try (FileOutputStream fos = new FileOutputStream(fileName);
@@ -122,58 +111,66 @@ public class LoginMenuProcess {
 //        }
     }
 
-    private static void login(String userName) throws IOException {
+    private  int login(String userName) throws IOException {
         readUsers();
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserName().equals(userName)) {
-                Scanner scanner = new Scanner(System.in);
+        for (Account user : users) {
+            if (user.getUserName().equals(userName)) {
                 LoginMenu.showMessage("Enter your password:");
                 String passWord = LoginMenu.scan();
-                if (users.get(i).getPassword().equals(passWord)) {
-                    currentAccount = users.get(i);
-                    view.LoginMenu.setIsInLoginMenu(false);
-                    Player currentPlayer = new Player();
-                    currentPlayer.setAccount(currentAccount);
-                    player = currentPlayer;
-                    //todo : login, pass onto main menu
+                if (user.getPassword().equals(passWord)) {
+                    currentAccount = user;
+                    loginMenu.setIsInLoginMenu(false);
+//                    Player currentPlayer = new Player();
+//                    currentPlayer.setAccount(currentAccount);
+//                    player = currentPlayer;
+                    MainMenu mainMenu = new MainMenu(currentAccount);
+                    mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
+                    mainMenu.run();
+                    return 0;
                 } else
-                    LoginMenu.showMessage("incorrect password");
-                return;
+                    return 2; // message id : 2
             }
         }
-        LoginMenu.showMessage("no account with this username found");
-        return;
+        return 3; //message id :3
     }
 
-    private static void showLeaderBoard() throws IOException {
+    private static int showLeaderBoard() throws IOException {
         readUsers();
         sortUsers();
-        for (int i = 0; i < users.size(); i++) {
-            LoginMenu.showMessage((i + 1) + "-" + "UserName : " + users.get(i).getUserName() + "-" + "Wins : " +
+        for (int i = 0; i < users.size(); i++)
+            LoginMenu.showMessage((i + 1) + "-UserName : " + users.get(i).getUserName() + " -Wins : " +
                     users.get(i).getNumberOfWins());
-        }
+        return 0;
     }
 
     private static void sortUsers() {
-        List<Account> accounts = new Account(users);
-        Collections.sort(users);
+        users.sort(Comparator.comparing(Account::getNumberOfWins).reversed()); // reversed ??
     }
 
-    private static void save(Player player) throws IOException {
-        currentAccount.setMoney(player.getMoney());
-        // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
-        String fileName = "src/model/accounts/" + player.getUserName() + ".json";
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
-            Gson gson = new Gson();
-            gson.toJson(currentAccount, isr);
-        }
+    private  int save(Account account) throws IOException {
+//        currentAccount.setMoney(player.getMoney());
+//        // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
+//        String fileName = "src/model/accounts/" + player.getUserName() + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            Gson gson = new Gson();
+//            gson.toJson(currentAccount, isr);
+//        }
+        // todo : save konim :/
+        return 0;
     }
 
-    private static void logout(Account account) {
+    private  int logout(Account account) {
         if (currentAccount.equals(account))
             currentAccount = null;
+        return 0;
     }
-}
+    //setters
 
+    public void setLoginMenu(LoginMenu loginMenu) {
+        this.loginMenu = loginMenu;
+    }
+
+    //setters
+}

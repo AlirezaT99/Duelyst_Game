@@ -1,43 +1,50 @@
 package model;
 
+import java.util.ArrayList;
+
 class Spell extends Card {
+    private ArrayList spells = new ArrayList();
     private Impact impact;
     private int[] areaTargetSquare = new int[2];
     private Impact primaryImpact;
     private Impact secondaryImpact;
 
+
+    @Override
+    public String toString() {
+        return "Type : Spell - Name : " + name + " - MP : " + manaCost + " - Desc : " + description; // ?
+    }
+
     public boolean isCastingValid(Player castingPlayer, Cell cell, Impact impact) {
         String targetsType = impact.getTargetTypeId();
-        if(targetsType.charAt(0) == '1')
+        if (targetsType.charAt(0) == '1')
             return true;
-        if(targetsType.charAt(1) == '0')
+        if (targetsType.charAt(1) == '0')
             return true;
-        if(targetsType.charAt(2) == '1')
+        if (targetsType.charAt(2) == '1')
             return true;
-        if(targetsType.charAt(3) == '2')
+        if (targetsType.charAt(3) == '2')
             return true;
-        if(targetsType.charAt(4) == '0')
+        if (targetsType.charAt(4) == '0')
             return true;
-        if(targetsType.charAt(4) == '2') {
+        if (targetsType.charAt(4) == '2') {
             if (targetsType.charAt(3) == '0')
                 return cell.getMovableCard() != null && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
-            else
-                if(targetsType.charAt(3) == '1')
-                    return cell.getMovableCard() != null && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+            else if (targetsType.charAt(3) == '1')
+                return cell.getMovableCard() != null && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
         }
-        if(targetsType.charAt(4) == '1'){
-            if(targetsType.charAt(3) == '0')
+        if (targetsType.charAt(4) == '1') {
+            if (targetsType.charAt(3) == '0')
                 return cell.getMovableCard() instanceof MovableCard.Minion && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
-            else
-                if(targetsType.charAt(3) == '1')
-                    return cell.getMovableCard() instanceof MovableCard.Minion && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+            else if (targetsType.charAt(3) == '1')
+                return cell.getMovableCard() instanceof MovableCard.Minion && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
         }
-        if(targetsType.charAt(8) == '1')
+        if (targetsType.charAt(8) == '1')
             return castingPlayer.findPlayerHero().cardCell.isTheseCellsAdjacent(cell);
         return false;
     }
 
-    public void castCard(Match match, Cell cell,Player castingPlayer) {
+    public void castCard(Match match, Cell cell, Player castingPlayer) {
         if (isCastingValid(castingPlayer, cell, primaryImpact))
             primaryImpact.doImpact();
         if (secondaryImpact != null && isCastingValid(castingPlayer, cell, secondaryImpact))
@@ -52,6 +59,8 @@ class Spell extends Card {
     public Impact getSecondaryImpact() {
         return secondaryImpact;
     }
+
+
 
     //getters
 

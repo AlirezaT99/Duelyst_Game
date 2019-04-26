@@ -5,7 +5,13 @@ class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
 
-    public void setDeck(Deck deck) {
+    @Override
+    public String toString() {
+        return "Name : " + name + " - Desc :" + description;
+    }
+
+    // setter & getter
+        public void setDeck(Deck deck) {
         this.deck = deck;
     }
 
@@ -24,4 +30,5 @@ class UsableItem extends InfluentialItem {
     public Match getMatch() {
         return match;
     }
+    // setter & getter
 }

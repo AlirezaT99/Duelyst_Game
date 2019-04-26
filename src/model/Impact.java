@@ -1,6 +1,5 @@
 package model;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 
 class Impact {
@@ -110,84 +109,24 @@ class Impact {
                 impactArea.add(cell);
     }
 
-    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero, Table table) {
-        int heroX = hero.cardCell.getCellCoordination().getX();
-        int herorY = hero.cardCell.getCellCoordination().getY();
-        int chosenX = cell.getCellCoordination().getX();
-        int chosenY = cell.getCellCoordination().getY();
-        if (Math.abs(heroX - chosenX) == 1 && Math.abs(herorY - chosenY) == 1) {
-            if (cell.getMovableCard().player.getUserName().compareTo(hero.player.getUserName()) != 0)
-                impactArea.add(cell);
-        }
+    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero) {
+        if(hero.cardCell.isTheseCellsAdjacent(cell))
+            impactArea.add(cell);
     }
+
     //set ImpactArea
-
-    //impact manager
-
-    public void addImpact(Impact impactInSet) {
-        while (impactInSet.next != null)
-            impactInSet = impactInSet.next;
-        impactInSet.next = this;
-    }
-
-    public void removeImpact() {
-        this.next.previous = this.previous;
-        this.previous.next = this.next;
-    }
-
-    //impact manager
-
-    //buff manager
-
-    void holyBuff(MovableCard movableCard){
-        for (Impact impact: movableCard.getImpactsAppliedToThisOne()    ) {
-            if(impact.impactTypeId.charAt(1) == '1') //is holyBuff
-                    movableCard.health++;
-        }
-    }
-
-    void poisonBuff(MovableCard movableCard){
-        for (Impact impact: movableCard.getImpactsAppliedToThisOne()) {
-            if(impact.impactTypeId.charAt(1) == '3') //is poisonBuff
-                movableCard.health--;
-        }
-    }
-
-    void powerBuffOrWeaknessBuff(int sign){
-        for (Cell cell: this.impactArea    ) {
-            if(impactTypeId.charAt(2)== '2') //heath change
-                cell.getMovableCard().buffHealthChange += sign*Integer.parseInt(impactTypeId.substring(4,6));
-            if(impactTypeId.charAt(2) == '3') //damage change
-                cell.getMovableCard().buffDamageChange += sign*Integer.parseInt(impactTypeId.substring(4,6));
-        }
-    }
-
-    void powerBuff(){
-        powerBuffOrWeaknessBuff(1);
-    }
-
-    void weaknessBuff(){
-        powerBuffOrWeaknessBuff(-1);
-    }
-
-    //buff manager
-
 
     public void doImpact() {
 
         String id = impactTypeId;
-        if (id.charAt(11) == 1) //deactivated for this turn
-            return;
-        if(id.charAt(1) == '2')
-            powerBuff();
-        if(id.charAt(1) == '4')
-            weaknessBuff();
-        if (id.charAt(3) == '1')
-            manaChange();
-        if (id.charAt(3) == '2')
-            healthChange();
-        if (id.charAt(3) == '3')
-            damageChange();
+        if (id.charAt(6) == '0') {
+            if (id.charAt(3) == '1')
+                manaChange();
+            if (id.charAt(3) == '2')
+                healthChange();
+            if (id.charAt(3) == '3')
+                damageChange();
+        }
     }
 
 
@@ -201,33 +140,14 @@ class Impact {
 
     private void healthChange() {
         int impactQuantity = Integer.parseInt(impactTypeId.substring(4, 5));
-        for (Cell cell : impactArea){
-            cell.getMovableCard().buffHealthChange += impactQuantity;
-
-        }
+        for (Cell cell : impactArea)
+            cell.getMovableCard().nonPassiveHealthChange += impactQuantity;
     }
 
     private void damageChange() {
         int impactQuantity = Integer.parseInt(impactTypeId.substring(4, 5));
         for (Cell cell : impactArea)
-            cell.getMovableCard().buffDamageChange += impactQuantity;
-    }
-
-    private void dispell(String dispellingPlayerUserName) {
-        for (Cell cell : impactArea) {
-            for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne()) {
-                if (impact.targetTypeId.charAt(14) != '1') { //dispel
-                    if(impact.targetTypeId.charAt(6) == '3')
-                        impact.impactTypeId = changeString(12,13,"1",impact.impactTypeId);
-                    else
-                        removeImpact();
-                }
-            }
-        }
-    }
-
-    private String changeString(int startIndex,int endIndex,String newThings, String string){
-        return string.substring(0,startIndex) + newThings + string.substring(endIndex);
+            cell.getMovableCard().nonPassiveDamageChange += impactQuantity;
     }
 
     void goThroughTime() {
@@ -238,8 +158,6 @@ class Impact {
         c2++;
         impactTypeId = s + c1 + c2;
     }
-
-
 
     //getters
 
@@ -265,9 +183,16 @@ class Impact {
 
     //getters
     //setters
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setTargetTypeId(String targetTypeId) {
+        this.targetTypeId = targetTypeId;
+    }
+
+    public void setImpactTypeId(String impactTypeId) {
+        this.impactTypeId = impactTypeId;
     }
     //setters
 }

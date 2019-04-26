@@ -195,10 +195,6 @@ class MovableCard extends Card {
         return isHybrid;
     }
 
-    public ArrayList<Impact> getImpactsAppliedToThisOne() {
-        return impactsAppliedToThisOne;
-    }
-
     //getters
 
     //setters
@@ -260,7 +256,7 @@ class MovableCard extends Card {
             }
         }
 
-        public void castCard(Match match,Cell cell,Player castingPlayer) {
+        public void castCard(Cell cell) {
             this.cardCell = cell;
             this.isAlive = true;
             summonImpact.doImpact();

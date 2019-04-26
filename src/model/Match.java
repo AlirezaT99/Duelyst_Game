@@ -13,7 +13,7 @@ class Match {
     private ArrayList<Card> graveYardPlayer1;
     private ArrayList<Card> graveYardPlayer2;
     private int turn = 0;
-
+    private Integer AILevel = 0;
 
     {
         graveYardPlayer1 = new ArrayList<>();
@@ -35,7 +35,16 @@ class Match {
     public Table getTable() {
         return table;
     }
+    public Player getPlayer1(){
+        return player1;
+    }
+    public Player getPlayer2(){
+        return player2;
+    }
 
+    public Integer getAILevel() {
+        return AILevel;
+    }
 
     public void switchTurn() {
         turn ^= 1;

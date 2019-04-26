@@ -8,10 +8,7 @@ class Card {
     private Match match;
     protected Player player;
     private String cardID;
-
-    public String getName() {
-        return name;
-    }
+    protected String description;
 
     boolean isManaSufficient(int playerMana) {
         if (playerMana >= manaCost)
@@ -29,6 +26,10 @@ class Card {
     }
 
     //getters
+
+    public String getName() {
+        return name;
+    }
     public int getCost() {
         return cost;
     }
@@ -48,6 +49,11 @@ class Card {
     public String getCardID() {
         return cardID;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
     //getters
 
     //setters
@@ -73,6 +79,10 @@ class Card {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     //setters
