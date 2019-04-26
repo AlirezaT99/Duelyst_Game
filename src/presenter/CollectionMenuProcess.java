@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 public class CollectionMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
-    private static Account account;
-    private static Player player;
+    private  Account account;
+    private  Player player;
     public static String[] commandParts;
 
     static {
@@ -35,7 +35,7 @@ public class CollectionMenuProcess {
         int doIt() throws IOException;
     }
 
-    public static DoCommand[] DoCommands = new DoCommand[]{
+    public  DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
@@ -134,7 +134,7 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int createDeck(String deckName) {
+    private  int createDeck(String deckName) {
         if (account.getCollection().getDeckHashMap().containsKey(deckName))
             return 1;
         Deck deck = new Deck(deckName);
@@ -143,7 +143,7 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int deleteDeck(String deckName) {
+    private int deleteDeck(String deckName) {
         if (!account.getCollection().getDeckHashMap().containsKey(deckName))
             return 9;
         account.getCollection().getDecks().remove(account.getCollection().getDeckHashMap().get(deckName));
@@ -187,8 +187,15 @@ public class CollectionMenuProcess {
     }
 
     //setters
-    public static void setAccount(Account account) {
-        CollectionMenuProcess.account = account;
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
+
+    public  void setPlayer(Player player) {
+        this.player = player;
+    }
+
+
     //setters
 }

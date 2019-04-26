@@ -6,21 +6,26 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class LoginMenu {
-    private static boolean isInLoginMenu = true;
-
-    static void run() throws IOException {
+    private  boolean isInLoginMenu = true;
+    private LoginMenuProcess loginMenuProcess;
+    public LoginMenu(){
+        loginMenuProcess = new LoginMenuProcess();
+        loginMenuProcess.setLoginMenu(this);
+        // we'll be adding stuff here
+    }
+    void run() throws IOException {
         while (true) {
+            if (!isInLoginMenu)
+                break;
             Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
             String[] commandParts = command.split("[ ]");
             LoginMenuProcess.commandParts = commandParts;
-            if (!isInLoginMenu)
-                break;
             int commandType = presenter.LoginMenuProcess.findPatternIndex(command, commandParts);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                handleErrors(presenter.LoginMenuProcess.DoCommands[commandType].doIt());
+                handleErrors(loginMenuProcess.DoCommands[commandType].doIt());
             scanner.close(); // ?
         }
     }
@@ -45,8 +50,8 @@ public class LoginMenu {
         }
 
     //setters
-    public static void setIsInLoginMenu(boolean isInLoginMenu) {
-        LoginMenu.isInLoginMenu = isInLoginMenu;
+    public  void setIsInLoginMenu(boolean isInLoginMenu) {
+        this.isInLoginMenu = isInLoginMenu;
     }
     //setters
 

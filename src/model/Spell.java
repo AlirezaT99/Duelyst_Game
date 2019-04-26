@@ -54,6 +54,8 @@ class Spell extends Card {
         return secondaryImpact;
     }
 
+
+
     //getters
 
     //setters

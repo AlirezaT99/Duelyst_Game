@@ -16,29 +16,49 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) throws IOException {
         // address haye local
-        String fileName = "src/model/spells/allpoison/primaryImpact.json";
-        String fileName1 = "src/model/spells/allpoison/spell.json";
+       String fileName = "src/model/spells/kingsguard.json";
+      //  String fileName1 = "src/model/spells//spell.json";
+//        String fileName2 = "src/model/spells/allpower/secondaryImpact.json";
         Gson gson = new GsonBuilder().serializeNulls().create();
 //        /// mesal baraye tabdil be file e JSON
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
-            Impact impact = new Impact();
-            impact.setName("All Poison");
-            impact.setImpactTypeId("013210004");
-            impact.setTargetTypeId("001127000");
-            gson.toJson(impact, isr);
- }
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            Impact impact = new Impact();
+//            impact.setName("All Power");
+//            impact.setTargetTypeId("001020000");
+//            impact.setImpactTypeId("112320200");
+//            gson.toJson(impact, isr);
+// }
+//        try (FileOutputStream fos = new FileOutputStream(fileName2);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            Impact impact = new Impact();
+//            impact.setName("Madness");
+//            impact.setTargetTypeId("010020100");
+//            impact.setImpactTypeId("111220003");
+//            gson.toJson(impact, isr);
+//        }
         ///entehaye mesal.
 //        baraye neveshtane spell.
-        try(FileOutputStream fos = new FileOutputStream(fileName1);
+        try(FileOutputStream fos = new FileOutputStream(fileName);
             OutputStreamWriter isr = new OutputStreamWriter(fos,
                     StandardCharsets.UTF_8)){
             Spell spell = new Spell();
-            spell.setName("All Poison");
-            spell.setCost(1500);
-            spell.setManaCost(8);
-            spell.setDescription("All opponent forces are poisoned for 4 consecutive turns.");
+            spell.setName("Kings Guard");
+            Impact impact = new Impact();
+            impact.setName("Kings Guard");
+            impact.setTargetTypeId("010110001");
+            impact.setImpactTypeId("");
+            spell.setPrimaryImpact(impact);
+//            Impact secondaryImpact = new Impact();
+//            secondaryImpact.setName("Sacrifice");
+//            secondaryImpact.setTargetTypeId("010010100");
+//            secondaryImpact.setImpactTypeId("112380001");
+//            spell.setSecondaryImpact(secondaryImpact);
+            spell.setCost(1600);
+            spell.setManaCost(2);
+            spell.setDescription("increases AP by 8 units, but reduces HP by 6.");
             gson.toJson(spell,isr);
         }
         /////etmame neveshtane spell
@@ -55,7 +75,7 @@ public class Main {
 //                StandardCharsets.UTF_8);
 //        Spell spell = gson.fromJson(reader,Spell.class);
 //        spell.setPrimaryImpact(impact);
-//        System.out.println(spell.getPrimaryimpact().getTargetTypeId());
+//        System.out.println(spell.getDescription());
     }
 }
 

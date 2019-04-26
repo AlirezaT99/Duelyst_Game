@@ -49,6 +49,11 @@ class Card {
     public String getCardID() {
         return cardID;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
     //getters
 
     //setters
