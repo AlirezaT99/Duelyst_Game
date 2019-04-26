@@ -173,11 +173,11 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static int search(String name) {
-        if (account.getCollection().search(name).equals("-1")) return 10;
-
-        return 0;
-    }
+//    private static int search(String name) {
+//        if (account.getCollection().search(name).equals("-1")) return 10;
+//
+//        return 0;
+//    }
 
     public static int findPatternIndex(String command) {
         for (int i = 0; i < commandPatterns.size(); i++)

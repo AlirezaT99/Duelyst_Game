@@ -18,10 +18,10 @@ public class CollectionMenu {
         collectionMenuProcess.setAccount(currentAccount);
     }
     void run() throws IOException {
+        Scanner scanner = new Scanner(System.in);
         while (true) {
             if (!isInCollectionMenu)
                 break;
-            Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
             CollectionMenuProcess.commandParts = command.split("[ ]");
             int commandType = presenter.CollectionMenuProcess.findPatternIndex(command);
@@ -29,8 +29,8 @@ public class CollectionMenu {
                 System.out.println("invalid input");
             else
                 handleErrors(collectionMenuProcess.DoCommands[commandType].doIt());
-            scanner.close(); // ?
         }
+        scanner.close(); // ?
     }
 
     public static String scan() {
