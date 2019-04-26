@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-class MovableCard extends Card {
+public class MovableCard extends Card {
     protected int health;
     protected boolean isAlive = false;
     protected Cell cardCell;
@@ -14,6 +14,7 @@ class MovableCard extends Card {
     private int minAttackRange;
     private int maxAttackRange;
     private boolean isMelee;
+    private boolean isRanged;
     private boolean isHybrid;
     private boolean isComboAttacker;
     int buffHealthChange = 0;
@@ -195,6 +196,8 @@ class MovableCard extends Card {
         return isHybrid;
     }
 
+    public boolean isRanged(){ return  isRanged;}
+
     //getters
 
     //setters
@@ -218,6 +221,18 @@ class MovableCard extends Card {
             this.health = health;
             this.name = name;
             this.damage = damage;
+        }
+        @Override
+        public String toString(){
+            String classType = new String();
+            if(this.isMelee())
+                classType = "Melee";
+            if(this.isHybrid())
+                classType = "Hybrid";
+            if(this.isRanged())
+                classType = "Ranged";
+            return ("Name : "+this.name+" - AP : "+this.damage+" - HP : "+this.health+" - Class : "+classType+
+                    " - Special power : "+ this.description);
         }
 
         public void castSpell(Cell cell) {
@@ -283,7 +298,17 @@ class MovableCard extends Card {
                 }
             }
         }
-
+        public String toString(){
+            String classType ="";
+            if(this.isMelee())
+                classType = "Melee";
+            if(this.isHybrid())
+                classType = "Hybrid";
+            if(this.isRanged())
+                classType = "Ranged";
+            return ("Type : Minion - Name : "+this.name+ " - Class : "+classType+" - AP : "+this.damage+
+                    " HP : "+ this.health + " - MP :"+this.manaCost+ " Speacial power : "+ this.description);
+        }
         @Override
         protected void counterAttack(MovableCard opponent) {
             super.counterAttack(opponent);

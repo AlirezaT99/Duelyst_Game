@@ -17,7 +17,7 @@ public class CollectionMenu {
         collectionMenuProcess = new CollectionMenuProcess();
         collectionMenuProcess.setAccount(currentAccount);
     }
-    void run() throws IOException {
+    public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             if (!isInCollectionMenu)

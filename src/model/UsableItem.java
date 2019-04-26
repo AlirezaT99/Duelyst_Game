@@ -1,6 +1,6 @@
 package model;
 
-class UsableItem extends InfluentialItem {
+public class UsableItem extends InfluentialItem {
     private int cost;
     private Deck deck;
     private Match match;
