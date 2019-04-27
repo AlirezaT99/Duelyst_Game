@@ -4,7 +4,7 @@ interface toStr {
     String toString(boolean showCost);
 }
 
-public class Card implements toStr{
+public class Card implements toStr {
     protected int manaCost;
     protected String name;
     private Cell cell;
@@ -25,7 +25,7 @@ public class Card implements toStr{
         return true;
     }
 
-    void castCard(Match match, Cell cell , Player castingPlayer) {
+    void castCard(Match match, Cell cell, Player castingPlayer) {
 
     }
 
@@ -41,6 +41,7 @@ public class Card implements toStr{
     public String getName() {
         return name;
     }
+
     public int getCost() {
         return this.cost;
     }

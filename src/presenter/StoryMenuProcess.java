@@ -11,9 +11,11 @@ public class StoryMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private StoryMenu storyMenu;
     public String[] commandParts;
-    public StoryMenuProcess(StoryMenu storyMenu){
+
+    public StoryMenuProcess(StoryMenu storyMenu) {
         this.storyMenu = storyMenu;
     }
+
     static {
         commandPatterns.add(Pattern.compile("enter 1"));
         commandPatterns.add(Pattern.compile("1"));
@@ -35,13 +37,14 @@ public class StoryMenuProcess {
         int doIt() throws IOException;
     }
 
-    public static int findPatternIndex(String command, String[] commandParts){
+    public static int findPatternIndex(String command, String[] commandParts) {
         for (int i = 0; i < commandPatterns.size(); i++) {
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
         }
         return -1;
     }
+
     public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
@@ -129,17 +132,19 @@ public class StoryMenuProcess {
             }
     };
 
-    public int enterFirstLevel(){
+    public int enterFirstLevel() {
         return 0;
     }
 
-    public int enterSecondLevel(){
+    public int enterSecondLevel() {
         return 0;
     }
-    public int enterThirdLevel(){
+
+    public int enterThirdLevel() {
         return 0;
     }
-    public int exit() throws IOException{
+
+    public int exit() throws IOException {
         storyMenu.setInStoryMenu(false);
         storyMenu.getSinglePlayerMenu().setHasRun(false);
         storyMenu.getSinglePlayerMenu().setInSinglePlayerMenu(true);

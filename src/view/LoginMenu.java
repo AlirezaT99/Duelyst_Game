@@ -6,19 +6,21 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class LoginMenu {
-    private  boolean isInLoginMenu = true;
+    private boolean isInLoginMenu = true;
     private LoginMenuProcess loginMenuProcess;
-    public LoginMenu(){
+
+    public LoginMenu() {
         loginMenuProcess = new LoginMenuProcess();
         loginMenuProcess.setLoginMenu(this);
         // we'll be adding stuff here
     }
+
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        while (true){
+        while (true) {
             if (!isInLoginMenu)
                 break;
-           // if(scanner.hasNextLine()){
+            // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
             String[] commandParts = command.split("[ ]");
             loginMenuProcess.commandParts = commandParts;
@@ -38,20 +40,20 @@ public class LoginMenu {
 
     private static void handleErrors(int messageID) {
         switch (messageID) {
-                case 1:
-                    LoginMenu.showMessage("an account with this username already exists");
-                    break;
-                case 2:
-                    LoginMenu.showMessage("incorrect password");
-                    break;
-                case 3:
-                    LoginMenu.showMessage("no account with this username found");
-                    break;
-            }
+            case 1:
+                LoginMenu.showMessage("an account with this username already exists");
+                break;
+            case 2:
+                LoginMenu.showMessage("incorrect password");
+                break;
+            case 3:
+                LoginMenu.showMessage("no account with this username found");
+                break;
         }
+    }
 
     //setters
-    public  void setIsInLoginMenu(boolean isInLoginMenu) {
+    public void setIsInLoginMenu(boolean isInLoginMenu) {
         this.isInLoginMenu = isInLoginMenu;
     }
     //setters

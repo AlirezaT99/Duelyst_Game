@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) throws IOException {
         // address haye local
-       String fileName = "src/model/spells/kingsguard.json";
-      //  String fileName1 = "src/model/spells//spell.json";
+        String fileName = "src/model/spells/kingsguard.json";
+        //  String fileName1 = "src/model/spells//spell.json";
 //        String fileName2 = "src/model/spells/allpower/secondaryImpact.json";
         Gson gson = new GsonBuilder().serializeNulls().create();
 //        /// mesal baraye tabdil be file e JSON
@@ -41,9 +41,9 @@ public class Main {
 //        }
         ///entehaye mesal.
 //        baraye neveshtane spell.
-        try(FileOutputStream fos = new FileOutputStream(fileName);
-            OutputStreamWriter isr = new OutputStreamWriter(fos,
-                    StandardCharsets.UTF_8)){
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+             OutputStreamWriter isr = new OutputStreamWriter(fos,
+                     StandardCharsets.UTF_8)) {
             Spell spell = new Spell();
             spell.setName("Kings Guard");
             Impact impact = new Impact();
@@ -59,7 +59,7 @@ public class Main {
             spell.setCost(1600);
             spell.setManaCost(2);
             spell.setDescription("increases AP by 8 units, but reduces HP by 6.");
-            gson.toJson(spell,isr);
+            gson.toJson(spell, isr);
         }
         /////etmame neveshtane spell
         //vali say konid mostaghim az khode file edit konid baghie ro inja vaghtetouno migire

@@ -2,23 +2,17 @@ package presenter;
 
 import view.LoginMenu;
 import model.Account;
-import model.Player;
-
-import com.google.gson.*;
 import view.MainMenu;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class LoginMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private static ArrayList<Account> users = new ArrayList<>();
-    public  String[] commandParts;
-    private  Account currentAccount;
+    public String[] commandParts;
+    private Account currentAccount;
     private LoginMenu loginMenu;
 
     static {
@@ -34,7 +28,7 @@ public class LoginMenuProcess {
         int doIt() throws IOException;
     }
 
-    public  DoCommand[] DoCommands = new DoCommand[]{
+    public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
@@ -61,13 +55,13 @@ public class LoginMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return logout(currentAccount);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return LoginMenu.help();
                 }
             }
@@ -77,7 +71,7 @@ public class LoginMenuProcess {
         if (commandParts.length == 3 && commandParts[0].toLowerCase().equals("create")
                 && commandParts[1].toLowerCase().equals("account"))
             return 0;
-        if(commandParts.length == 2 && commandParts[0].toLowerCase().equals("login"))
+        if (commandParts.length == 2 && commandParts[0].toLowerCase().equals("login"))
             return 1;
         for (int i = 0; i < commandPatterns.size(); i++) {
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
@@ -86,12 +80,12 @@ public class LoginMenuProcess {
         return -1;
     }
 
-    private static void readUsers() throws IOException {
+    private static void readUsers() {
         users.clear();
         users.addAll(Account.getAccounts());
     }
 
-    private static int createAccount(String userName) throws IOException {
+    private static int createAccount(String userName) {
         readUsers();
         for (Account user : users)
             if (user.getUserName().equals(userName))
@@ -111,7 +105,7 @@ public class LoginMenuProcess {
 //        }
     }
 
-    private  int login(String userName) throws IOException {
+    private int login(String userName) throws IOException {
         readUsers();
         for (Account user : users) {
             if (user.getUserName().equals(userName)) {
@@ -134,7 +128,7 @@ public class LoginMenuProcess {
         return 3; //message id :3
     }
 
-    private static int showLeaderBoard() throws IOException {
+    private static int showLeaderBoard() {
         readUsers();
         sortUsers();
         for (int i = 0; i < users.size(); i++)
@@ -147,7 +141,7 @@ public class LoginMenuProcess {
         users.sort(Comparator.comparing(Account::getNumberOfWins).reversed()); // reversed ??
     }
 
-    private  int save(Account account) throws IOException {
+    private int save(Account account) {
 //        currentAccount.setMoney(player.getMoney());
 //        // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
 //        String fileName = "src/model/accounts/" + player.getUserName() + ".json";
@@ -161,16 +155,15 @@ public class LoginMenuProcess {
         return 0;
     }
 
-    private  int logout(Account account) {
+    private int logout(Account account) {
         if (currentAccount.equals(account))
             currentAccount = null;
         return 0;
     }
-    //setters
 
+    //setters
     public void setLoginMenu(LoginMenu loginMenu) {
         this.loginMenu = loginMenu;
     }
-
     //setters
 }

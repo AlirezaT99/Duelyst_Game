@@ -73,8 +73,7 @@ class Impact {
                 oneMinionFromOneTeam(targetCell, opponentPlayer);
             else
                 oneMinionFromOneTeam(targetCell, null);
-        }
-        else if(targetTypeId.charAt(13) == '1')
+        } else if (targetTypeId.charAt(13) == '1')
             oneRandomClosest(castingCell.getMovableCard());
     }
 
@@ -183,9 +182,9 @@ class Impact {
         }
     }
 
-    private void oneRandomClosest(MovableCard movableCard){
+    private void oneRandomClosest(MovableCard movableCard) {
 
-        ArrayList<Cell> cellArrayList = match.table.findClosestSoldiers(movableCard,match.giveOtherPlayer(movableCard.player));
+        ArrayList<Cell> cellArrayList = match.table.findClosestSoldiers(movableCard, match.giveOtherPlayer(movableCard.player));
         findAndAddRandomCellFromGivenCells(cellArrayList);
     }
 
@@ -246,8 +245,8 @@ class Impact {
         antiSomeThingOnDefend(1, '6');
     }
 
-    private void kill(){
-        for (Cell cell: impactArea) {
+    private void kill() {
+        for (Cell cell : impactArea) {
             cell.getMovableCard().health = 0;
         }
     }
@@ -280,7 +279,7 @@ class Impact {
             antiPoisonOnDefend();
         if (impactTypeIdComp.charAt(2) == '1')
             antiDisarmOnDefend();
-        if(impactTypeIdComp.charAt(3) == '1')
+        if (impactTypeIdComp.charAt(3) == '1')
             kill();
 
 
@@ -307,7 +306,7 @@ class Impact {
     } //buff or nonBuff change(?)
 
     private void dispell(Player dispellingPlayer) {
-        if(impactTypeId.charAt(14) == '1') {
+        if (impactTypeId.charAt(14) == '1') {
             for (Cell cell : impactArea) {
                 if (cell.getMovableCard().player.equals(dispellingPlayer)) {
                     for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne())
@@ -318,10 +317,10 @@ class Impact {
                         if (impact.impactTypeId.charAt(0) == '1' && impact.impactTypeId.charAt(1) != '0')
                             impact.removeImpact();
             }
-        }else if(impactTypeId.charAt(14) == '2'){
-            for (Cell cell:impactArea  ) {
-                for (Impact impact: cell.getMovableCard().getImpactsAppliedToThisOne()   ) {
-                    if(impact.impactTypeId.charAt(0) == '1')
+        } else if (impactTypeId.charAt(14) == '2') {
+            for (Cell cell : impactArea) {
+                for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne()) {
+                    if (impact.impactTypeId.charAt(0) == '1')
                         impact.removeImpact();
                 }
             }

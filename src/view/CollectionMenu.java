@@ -9,14 +9,16 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class CollectionMenu {
-    private  boolean isInCollectionMenu = true;
-    private  Account currentAccount;
+    private boolean isInCollectionMenu = true;
+    private Account currentAccount;
     private CollectionMenuProcess collectionMenuProcess;
-    public CollectionMenu(Account account){
-        this.currentAccount= account;
+
+    public CollectionMenu(Account account) {
+        this.currentAccount = account;
         collectionMenuProcess = new CollectionMenuProcess();
         collectionMenuProcess.setAccount(currentAccount);
     }
+
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         while (true) {

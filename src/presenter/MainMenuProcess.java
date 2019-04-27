@@ -10,11 +10,12 @@ import java.util.regex.Pattern;
 
 public class MainMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
-    private  Account currentAccount;
+    private Account currentAccount;
     public static String[] commandParts;
     private MainMenu mainMenu;
     private LoginMenu loginMenu;
     private BattleInit battleInit;
+
     static {
         commandPatterns.add(Pattern.compile("enter collection"));
         commandPatterns.add(Pattern.compile("collection"));
@@ -37,7 +38,7 @@ public class MainMenuProcess {
         int doIt() throws IOException;
     }
 
-    public  DoCommand[] DoCommands = new DoCommand[]{
+    public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
@@ -130,7 +131,7 @@ public class MainMenuProcess {
             },
     };
 
-    private  int enterCollection(Account account) throws IOException{
+    private int enterCollection(Account account) throws IOException {
         mainMenu.setIsInMainMenu(false);
         CollectionMenu collectionMenu = new CollectionMenu(currentAccount);
         collectionMenu.setIsInCollectionMenu(true);
@@ -138,7 +139,7 @@ public class MainMenuProcess {
         return 0;
     }
 
-    private int enterShop(Account account) throws IOException{
+    private int enterShop(Account account) throws IOException {
         mainMenu.setIsInMainMenu(false);
         ShopMenu shopMenu = new ShopMenu(currentAccount);
         shopMenu.setIsInShopMenu(true);
@@ -146,14 +147,16 @@ public class MainMenuProcess {
         shopMenu.run();
         return 0;
     }
-    private int enterBattle() throws IOException{
+
+    private int enterBattle() throws IOException {
 //        if(!currentAccount.getCollection().validateDeck(currentAccount.getCollection().getSelectedDeck()))
 //            return 1; //message : "selected deck is invalid"
         battleInit = new BattleInit(mainMenu);
         battleInit.run();
         return 0;
     }
-    private int enterExit() throws IOException{
+
+    private int enterExit() throws IOException {
         mainMenu.setIsInMainMenu(false);
         loginMenu.setIsInLoginMenu(true);
         loginMenu.run();
@@ -168,7 +171,7 @@ public class MainMenuProcess {
     }
 
     //setters
-    public void setCurrentAccount(Account account){
+    public void setCurrentAccount(Account account) {
         this.currentAccount = account;
     }
 

@@ -26,8 +26,8 @@ public class Match {
         return player2;
     }
 
-    public Player notCurrentTurnPlayer(){
-        if(turn == 0)
+    public Player notCurrentTurnPlayer() {
+        if (turn == 0)
             return player2;
         return player1;
     }
@@ -35,10 +35,12 @@ public class Match {
     public Table getTable() {
         return table;
     }
-    public Player getPlayer1(){
+
+    public Player getPlayer1() {
         return player1;
     }
-    public Player getPlayer2(){
+
+    public Player getPlayer2() {
         return player2;
     }
 
@@ -64,8 +66,8 @@ public class Match {
         //
     }
 
-    public Player giveOtherPlayer(Player player){
-        if(player.equals(player1))
+    public Player giveOtherPlayer(Player player) {
+        if (player.equals(player1))
             return player2;
         return player1;
     }

@@ -23,7 +23,7 @@ public class MainMenu {
         while (true) {
             if (!isInMainMenu)
                 break;
-            if (!hasRun){
+            if (!hasRun) {
                 help();
                 hasRun = true;
             }
@@ -38,8 +38,9 @@ public class MainMenu {
         }
         scanner.close(); // ?
     }
+
     private static void handleErrors(int messageID) {
-        switch (messageID){
+        switch (messageID) {
             case 1:
                 System.out.println("selected deck is invalid");
                 break;

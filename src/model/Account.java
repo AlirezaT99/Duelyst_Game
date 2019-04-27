@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Account {
-    private ArrayList <MatchHistory> matchHistories = new ArrayList<>();
+    private ArrayList<MatchHistory> matchHistories = new ArrayList<>();
     private static ArrayList<Account> accounts;
     private String userName;
     private String password;
@@ -44,7 +44,7 @@ public class Account {
         accounts.add(account);
     }
 
-    public int compareTo(Account account){
+    public int compareTo(Account account) {
         return this.numberOfWins - account.numberOfWins;
     }
 
@@ -73,9 +73,11 @@ public class Account {
         return numberOfWins;
     }
 
-    public static ArrayList<Account> getAccounts() { return accounts; }
+    public static ArrayList<Account> getAccounts() {
+        return accounts;
+    }
 
-    public  ArrayList<MatchHistory> getMatchHistory() {
+    public ArrayList<MatchHistory> getMatchHistory() {
         return matchHistories;
     }
     //getters

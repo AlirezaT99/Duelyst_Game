@@ -8,18 +8,20 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ShopMenu {
-    private  boolean isInShopMenu = true;
+    private boolean isInShopMenu = true;
     private Account currentAccount;
     private ShopMenuProcess shopMenuProcess = new ShopMenuProcess();
     private static Shop shop = Shop.initShop();
-    public ShopMenu(Account account){
+
+    public ShopMenu(Account account) {
         shopMenuProcess.setShopMenu(this);
         currentAccount = account;
         // we'll be adding stuff here
     }
+
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        while (true){
+        while (true) {
             if (!isInShopMenu)
                 break;
             // if(scanner.hasNextLine()){
@@ -62,6 +64,7 @@ public class ShopMenu {
                 break;
         }
     }
+
     public static int help() {
         showMessage("exit");
         showMessage("show collection");
@@ -79,10 +82,11 @@ public class ShopMenu {
     }
 
     //setters
-    public  void setIsInShopMenu(boolean isInLoginMenu) {
+    public void setIsInShopMenu(boolean isInLoginMenu) {
         this.isInShopMenu = isInLoginMenu;
     }
     //setters
+
     //getters
     public ShopMenuProcess getShopMenuProcess() {
         return shopMenuProcess;

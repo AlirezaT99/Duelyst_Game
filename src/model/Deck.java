@@ -19,7 +19,6 @@ public class Deck {
         itemsHashMap = new HashMap<>();
     }
 
-
     public String show(boolean showCost) {
         String output = "Heroes :\n" + "\t\t1 : " + hero.toString(false);
         output = output + "Items :\n";

@@ -9,6 +9,7 @@ class Cell {
     private CollectibleItem item;
     private ArrayList<Cell> adjacentCells;
     ArrayList<Impact> cellImpacts;
+
     {
         adjacentCells = new ArrayList<>();
     }
@@ -45,13 +46,12 @@ class Cell {
         return item;
     }
 
-    void addCellToAdjacentCells(Cell cell){
+    void addCellToAdjacentCells(Cell cell) {
         this.adjacentCells.add(cell);
     }
 
 
-
-    void addToImpacts(Impact impact){
+    void addToImpacts(Impact impact) {
         cellImpacts.add(impact);
     }
 

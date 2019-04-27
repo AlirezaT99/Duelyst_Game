@@ -12,9 +12,11 @@ public class BattleInitProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private BattleInit battleInit;
     public String[] commandParts;
-    public BattleInitProcess(BattleInit battleInit){
+
+    public BattleInitProcess(BattleInit battleInit) {
         this.battleInit = battleInit;
     }
+
     static {
         commandPatterns.add(Pattern.compile("enter single player"));
         commandPatterns.add(Pattern.compile("single player"));
@@ -30,13 +32,14 @@ public class BattleInitProcess {
         int doIt() throws IOException;
     }
 
-    public static int findPatternIndex(String command, String[] commandParts){
+    public static int findPatternIndex(String command, String[] commandParts) {
         for (int i = 0; i < commandPatterns.size(); i++) {
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
         }
         return -1;
     }
+
     public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
@@ -97,10 +100,11 @@ public class BattleInitProcess {
         return 0;
     }
 
-    public int enterMultiPlayer(){
+    public int enterMultiPlayer() {
         return 0;
     }
-    public int exit() throws IOException{
+
+    public int exit() throws IOException {
         battleInit.setInBattleInit(false);
         battleInit.getMainMenu().setHasRun(false);
         battleInit.getMainMenu().setIsInMainMenu(true);
