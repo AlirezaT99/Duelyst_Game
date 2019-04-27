@@ -2,10 +2,7 @@ package presenter;
 
 import model.Account;
 import model.Player;
-import view.CollectionMenu;
-import view.LoginMenu;
-import view.MainMenu;
-import view.ShopMenu;
+import view.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,14 +14,23 @@ public class MainMenuProcess {
     public static String[] commandParts;
     private MainMenu mainMenu;
     private LoginMenu loginMenu;
+    private BattleInit battleInit;
     static {
         commandPatterns.add(Pattern.compile("enter collection"));
+        commandPatterns.add(Pattern.compile("collection"));
+        commandPatterns.add(Pattern.compile("1"));
         commandPatterns.add(Pattern.compile("enter shop"));
+        commandPatterns.add(Pattern.compile("shop"));
+        commandPatterns.add(Pattern.compile("2"));
         commandPatterns.add(Pattern.compile("enter battle"));
+        commandPatterns.add(Pattern.compile("battle"));
+        commandPatterns.add(Pattern.compile("3"));
         commandPatterns.add(Pattern.compile("enter exit"));
-        commandPatterns.add(Pattern.compile("enter help"));
         commandPatterns.add(Pattern.compile("exit"));
+        commandPatterns.add(Pattern.compile("4"));
+        commandPatterns.add(Pattern.compile("enter help"));
         commandPatterns.add(Pattern.compile("help"));
+        commandPatterns.add(Pattern.compile("5"));
     }
 
     public interface DoCommand {
@@ -36,6 +42,30 @@ public class MainMenuProcess {
                 @Override
                 public int doIt() throws IOException {
                     return enterCollection(currentAccount);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return enterCollection(currentAccount);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return enterCollection(currentAccount);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return enterShop(currentAccount);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return enterShop(currentAccount);
                 }
             },
             new DoCommand() {
@@ -53,6 +83,30 @@ public class MainMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
+                    return enterBattle(); //todo: argument haye enterBattle ro moshakhas konim bade zadane battle.
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return enterBattle(); //todo: argument haye enterBattle ro moshakhas konim bade zadane battle.
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return enterExit();
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
+                    return enterExit();
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() throws IOException {
                     return enterExit();
                 }
             },
@@ -65,7 +119,7 @@ public class MainMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return enterExit();
+                    return mainMenu.help();
                 }
             },
             new DoCommand() {
@@ -92,7 +146,9 @@ public class MainMenuProcess {
         shopMenu.run();
         return 0;
     }
-    private int enterBattle(){
+    private int enterBattle() throws IOException{
+        battleInit = new BattleInit(mainMenu);
+        battleInit.run();
         return 0;
     }
     private int enterExit() throws IOException{

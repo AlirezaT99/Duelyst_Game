@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 enum GameMode {HeroesFight, CaptureTheFlag, CaptureMostFlags}
 
-class Match {
+public class Match {
     private boolean singleMode;
     private model.GameMode gameMode;
     Table table;

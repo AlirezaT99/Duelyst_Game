@@ -73,7 +73,7 @@ public class Spell extends Card {
     }
 
     public void setCost(int cost) {
-        this.cost = cost;
+        this.setCost(cost);
     }
 
     public void setPrimaryImpact(Impact primaryImpact) {
