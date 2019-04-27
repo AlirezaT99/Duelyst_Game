@@ -118,11 +118,8 @@ public class CollectionMenuProcess {
             }
     };
 
-    private static int show() {
-        return 0;
-    }
-
     private static int save() {
+        //todo: save
         return 0;
     }
 
@@ -131,10 +128,6 @@ public class CollectionMenuProcess {
         mainMenu.setHasRun(false);
         collectionMenu.setIsInCollectionMenu(false);
         mainMenu.run(); // ?
-        return 0;
-    }
-
-    private int search(String name) {
         return 0;
     }
 
@@ -227,11 +220,38 @@ public class CollectionMenuProcess {
         return 8;
     }
 
-    private static int showDeck(String deckName) {
+    private int show() {
+        CollectionMenu.showMessage(account.getCollection().show(true));
+        return 0;
+    }
+
+    private int showDeck(String deckName) {
+        CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show(false));
         return 0;
     }
 
     private int showAllDecks() {
+        if (account.getCollection().getSelectedDeck() != null) {
+            System.out.println("1 : " + account.getCollection().getSelectedDeck().getName() + " :");
+            showDeck(account.getCollection().getSelectedDeck().getName());
+            int idx = 2;
+            for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
+                if (!account.getCollection().getDecks().get(idx).getName()
+                        .equals(account.getCollection().getSelectedDeck().getName())) {
+                    System.out.println(idx + " : " + account.getCollection().getDecks().get(idx).getName() + " :");
+                    showDeck(account.getCollection().getDecks().get(idx).getName());
+                    idx++;
+                }
+            }
+        } else
+            for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
+                System.out.println((i + 1) + " : " + account.getCollection().getSelectedDeck().getName() + " :");
+                showDeck(account.getCollection().getDecks().get(i).getName());
+            }
+        return 0;
+    }
+
+    private int search(String name) {
         return 0;
     }
 

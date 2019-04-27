@@ -10,8 +10,11 @@ public class Spell extends Card {
 
 
     @Override
-    public String toString() {
-        return "Type : Spell - Name : " + name + " - MP : " + manaCost + " - Desc : " + description; // ?
+    public String toString(boolean showCost) {
+        String output = "Type : Spell - Name : " + name + " - MP : " + manaCost + " - Desc : " + description;
+        if (showCost) output = output + " - Sell Cost : " + getCost();
+        output += "\n";
+        return output;
     }
 
     public boolean isCastingValid(Player castingPlayer, Cell cell, Impact impact) {
@@ -45,9 +48,9 @@ public class Spell extends Card {
 
     public void castCard(Match match, Cell cell, Player castingPlayer) {
         if (isCastingValid(castingPlayer, cell, primaryImpact))
-            primaryImpact.doImpact(castingPlayer,cell,cell);
+            primaryImpact.doImpact(castingPlayer, cell, cell);
         if (secondaryImpact != null && isCastingValid(castingPlayer, cell, secondaryImpact))
-            secondaryImpact.doImpact(castingPlayer,cell,cell);
+            secondaryImpact.doImpact(castingPlayer, cell, cell);
     }
 
     //getters
@@ -58,7 +61,6 @@ public class Spell extends Card {
     public Impact getSecondaryImpact() {
         return secondaryImpact;
     }
-
 
 
     //getters

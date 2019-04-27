@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class MovableCard extends Card {
+public abstract class MovableCard extends Card {
     protected int health;
     protected boolean isAlive = false;
     protected Cell cardCell;
@@ -105,7 +105,7 @@ public class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact(this.player,cardCell,cardCell);
+            impact.doImpact(this.player, cardCell, cardCell);
             impact.goThroughTime();
         }
     }
@@ -120,7 +120,7 @@ public class MovableCard extends Card {
         if (isMoveValid(destination)) {
             didMoveInThisTurn = true;
             this.cardCell = destination;
-            if(!cardCell.cellImpacts.isEmpty()){
+            if (!cardCell.cellImpacts.isEmpty()) {
                 this.impactsAppliedToThisOne.addAll(cardCell.cellImpacts);
             }
         }
@@ -235,23 +235,26 @@ public class MovableCard extends Card {
             this.onHitImpact = null;
         }
 
-        public void attack(Cell cell){
+        public void attack(Cell cell) {
             super.attack(cell);
-            if(onHitImpact != null)
-                onHitImpact.doImpact(this.player,cell,this.cardCell);
+            if (onHitImpact != null)
+                onHitImpact.doImpact(this.player, cell, this.cardCell);
         }
 
-        public void counterAttack(MovableCard opponent){
+        public void counterAttack(MovableCard opponent) {
             super.counterAttack(opponent);
-            if(onHitImpact != null)
-                onHitImpact.doImpact(this.player,opponent.cardCell,this.cardCell);
+            if (onHitImpact != null)
+                onHitImpact.doImpact(this.player, opponent.cardCell, this.cardCell);
         }
 
-        @Override
-        public String toString() {
+        @Override // ?
+        public String toString(boolean showCost) {
             String classType = getClassType(this);
-            return ("Name : " + this.name + " - AP : " + this.damage + " - HP : " + this.health + " - Class : " + classType +
-                    " - Special power : " + this.description);
+            String output = "Name : " + name + " - AP : " + damage + " - HP : " + health + " - Class : "
+                    + classType + " - Special power : " + description;
+            if (showCost) output = output + " - Sell Cost : " + getCost();
+            output = output + "\n";
+            return output;
         }
 
         public void castSpell(Cell cell) {
@@ -319,10 +322,14 @@ public class MovableCard extends Card {
             }
         }
 
-        public String toString() {
+        @Override
+        public String toString(boolean showCost) {
             String classType = getClassType(this);
-            return ("Type : Minion - Name : " + this.name + " - Class : " + classType + " - AP : " + this.damage +
-                    " HP : " + this.health + " - MP :" + this.manaCost + " Speacial power : " + this.description);
+            String output = "Type : Minion - Name : " + this.name + " - Class : " + classType + " - AP : " + this.damage +
+                    " HP : " + this.health + " - MP :" + this.manaCost + " Special power : " + this.description;
+            if (showCost) output = output + " - Sell Cost : " + getCost();
+            output = output + "\n";
+            return output;
         }
 
         @Override

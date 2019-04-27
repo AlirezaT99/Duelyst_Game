@@ -5,13 +5,16 @@ public class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
 
-    @Override
-    public String toString() {
-        return "Name : " + name + " - Desc :" + description;
+
+    public String toString(boolean showCost) {
+        String output = "Name : " + name + " - Desc :" + description;
+        if (showCost) output = output + " - Sell Cost : " + getCost();
+        output = output + "\n";
+        return output;
     }
 
     // setter & getter
-        public void setDeck(Deck deck) {
+    public void setDeck(Deck deck) {
         this.deck = deck;
     }
 

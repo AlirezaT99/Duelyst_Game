@@ -19,17 +19,15 @@ public class Deck {
         itemsHashMap = new HashMap<>();
     }
 
-    @Override
-    public String toString() {
-        String output = "Heroes :\n" + "\t\t1 : " + hero.toString() + " - Sell Cost : " + hero.getCost() + "\n";
+
+    public String show(boolean showCost) {
+        String output = "Heroes :\n" + "\t\t1 : " + hero.toString(false);
         output = output + "Items :\n";
         for (int i = 0; i < items.size(); i++)
-            output = output + "\t\t" + (i+1) + " : " + items.get(i).toString()
-                    + " - Sell Cost : " + items.get(i).getCost() + "\n";
+            output = output + "\t\t" + (i + 1) + " : " + items.get(i).toString(false);
         output = output + "Cards :\n";
         for (int i = 0; i < cards.size(); i++)
-            output = output + "\t\t" + (i+1) + " : " + cards.get(i).toString()
-                    + " - Sell Cost : " + cards.get(i).getCost() + "\n";
+            output = output + "\t\t" + (i + 1) + " : " + cards.get(i).toString(false);
 
         return output;
     }

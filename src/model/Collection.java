@@ -12,7 +12,7 @@ public class Collection {
     private HashMap<String, UsableItem> itemsHashMap;
     private HashMap<String, Card> cardsHashMap;
     private HashMap<String, Deck> deckHashMap;
-    private Deck selectedDeck;
+    private Deck selectedDeck = null;
 
     {
         items = new ArrayList<>();
@@ -35,8 +35,7 @@ public class Collection {
         if (deckHashMap.containsKey(deckName)) {
             decks.remove(deckHashMap.get(deckName));
             deckHashMap.remove(deckName);
-        }
-        else
+        } else
             CollectionMenu.showMessage("Deck not found"); // must be moved to view
 
     }
@@ -50,16 +49,37 @@ public class Collection {
     public boolean validateDeck(Deck deck) {
         if (deck.getCards().size() != 20)
             return false;
-        int heroCounter = 0;
-        for (Card card : deck.getCards())
-            if (card instanceof MovableCard.Hero)
-                heroCounter++;
-        return heroCounter == 1;
+        return deck.getHero() != null;
     }
 
     public void add(String id, Deck deck) {
         //find card and item and hero by id
         //it must be written in presenter and an instance should be held in presenter and the changes should be applied in the copy instance
+    }
+
+    public String show(boolean showCost) {
+        String output = "Heroes :\n";
+        int idx = 0;
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i) instanceof MovableCard.Hero) {
+                output = output + "\t\t" + (idx + 1) + " : " + items.get(i).toString(showCost);
+                idx++;
+            }
+        }
+        output = output + "Items :\n";
+        for (int i = 0; i < items.size(); i++)
+            output = output + "\t\t" + (i + 1) + " : " + items.get(i).toString(showCost);
+
+        idx = 0;
+        output = output + "Cards :\n";
+        for (int i = 0; i < cards.size(); i++) {
+            if (!(cards.get(i) instanceof MovableCard.Hero)) {
+                output = output + "\t\t" + (idx + 1) + " : " + items.get(i).toString(showCost);
+                idx++;
+            }
+        }
+
+        return output;
     }
 
     public void remove(String id) {

@@ -1,6 +1,10 @@
 package model;
 
-public class Card {
+interface toStr {
+    String toString(boolean showCost);
+}
+
+public class Card implements toStr{
     protected int manaCost;
     protected String name;
     private Cell cell;
@@ -25,8 +29,15 @@ public class Card {
 
     }
 
-    //getters
+    public String toString(boolean showCost) {
+        return "don't care";
+        /* we need to call "toString" method in Hero and Minion from the Cards ArrayList
+         * and it's impossible to instantiate an abstract class so it had to implement the interface
+         * but the function will be called in the subClasses, not this...
+         */
+    }
 
+    //getters
     public String getName() {
         return name;
     }

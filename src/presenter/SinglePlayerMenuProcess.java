@@ -14,9 +14,11 @@ public class SinglePlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private SinglePlayerMenu singlePlayerMenu;
     public String[] commandParts;
-    public SinglePlayerMenuProcess(SinglePlayerMenu singlePlayerMenu){
+
+    public SinglePlayerMenuProcess(SinglePlayerMenu singlePlayerMenu) {
         this.singlePlayerMenu = singlePlayerMenu;
     }
+
     static {
         commandPatterns.add(Pattern.compile("enter story"));
         commandPatterns.add(Pattern.compile("story"));
@@ -34,13 +36,14 @@ public class SinglePlayerMenuProcess {
         int doIt() throws IOException;
     }
 
-    public static int findPatternIndex(String command, String[] commandParts){
+    public static int findPatternIndex(String command, String[] commandParts) {
         for (int i = 0; i < commandPatterns.size(); i++) {
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
         }
         return -1;
     }
+
     public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
@@ -113,15 +116,16 @@ public class SinglePlayerMenuProcess {
         return 0;
     }
 
-    public int enterCustomGame() throws IOException{
-        CustomGameMenu customGameMenu= new CustomGameMenu(singlePlayerMenu);
+    public int enterCustomGame() throws IOException {
+        CustomGameMenu customGameMenu = new CustomGameMenu(singlePlayerMenu);
         singlePlayerMenu.setInSinglePlayerMenu(false);
         customGameMenu.setHasRun(false);
         customGameMenu.setInCustomGameMenu(true);
         customGameMenu.run();
         return 0;
     }
-    public int exit() throws IOException{
+
+    public int exit() throws IOException {
         singlePlayerMenu.setInSinglePlayerMenu(false);
         singlePlayerMenu.getBattleInit().setHasRun(false);
         singlePlayerMenu.getBattleInit().setInBattleInit(true);
