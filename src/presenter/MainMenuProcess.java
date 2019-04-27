@@ -147,6 +147,8 @@ public class MainMenuProcess {
         return 0;
     }
     private int enterBattle() throws IOException{
+//        if(!currentAccount.getCollection().validateDeck(currentAccount.getCollection().getSelectedDeck()))
+//            return 1; //message : "selected deck is invalid"
         battleInit = new BattleInit(mainMenu);
         battleInit.run();
         return 0;

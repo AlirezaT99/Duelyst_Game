@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import view.BattleInit;
+import view.CustomGameMenu;
 import view.SinglePlayerMenu;
 import view.StoryMenu;
 
@@ -112,8 +113,12 @@ public class SinglePlayerMenuProcess {
         return 0;
     }
 
-    public int enterCustomGame(){
-
+    public int enterCustomGame() throws IOException{
+        CustomGameMenu customGameMenu= new CustomGameMenu(singlePlayerMenu);
+        singlePlayerMenu.setInSinglePlayerMenu(false);
+        customGameMenu.setHasRun(false);
+        customGameMenu.setInCustomGameMenu(true);
+        customGameMenu.run();
         return 0;
     }
     public int exit() throws IOException{
