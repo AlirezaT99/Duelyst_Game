@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 class Table {
     private Cell[][] cells;
@@ -90,6 +91,39 @@ class Table {
             }
         }
         return wantedCells;
+    }
+
+    ArrayList<Cell> findAllSpecificSoldiers(Player player, boolean isHybrid, boolean isMelee, boolean isRanged) {
+        ArrayList<Cell> candidateCells = findAllSoldiers(player);
+        Iterator<Cell> cellIterator = candidateCells.iterator();
+        while (cellIterator.hasNext()) {
+            Cell cell = cellIterator.next();
+            if (isHybrid && cell.getMovableCard().isHybrid())
+                continue;
+            if (isMelee && cell.getMovableCard().isMelee())
+                continue;
+            if (isRanged && cell.getMovableCard().isRanged())
+                continue;
+            cellIterator.remove();
+        }
+        return candidateCells;
+    }
+
+    ArrayList<Cell> findClosestSoldiers(MovableCard movableCard,Player opponent){
+        ArrayList<Cell> cellArrayList = findAllSoldiers(opponent);
+        int length = 999;
+        int min = length;
+        for (Cell cell: cellArrayList) {
+            length = cell.findDistanceBetweenCells(movableCard.cardCell);
+            if(length < min)
+                min = length;
+        }
+        Iterator<Cell> cellIterator = cellArrayList.iterator();
+        while (cellIterator.hasNext()){
+            if(cellIterator.next().findDistanceBetweenCells(movableCard.cardCell) != min)
+                cellIterator.remove();
+        }
+        return cellArrayList;
     }
 
     ArrayList<Cell> findAllMinions(Player player) {

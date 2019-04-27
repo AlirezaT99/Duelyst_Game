@@ -10,15 +10,18 @@ class Impact {
     private Match match;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
     // 3.(0-2)"onWhichTeam"{friendly, hostile, both}|4.(0-2)"targetSoldierType"{hero,minion,both}|
-    // 5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(1,0)
-    //8.nearHeroHostileMinion(0-2){none, one , all}| 9. random(0,1)|10.column(0,1)
+    // 5.(0-n)"targetFactionType"|6.(2,3)"SquareLength"|7.column(1,0)|
+    //8.nearHeroHostileMinion(0-2){none, one , all}| 9. random(0,1)|10.column(0,1)|11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
+    //12.row(0,1)//13.closestSoldiers(0,1)
     private String impactTypeId = "";//0.(0,1)isPositive|1.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
     // 2.(0-4)QuantityChange{mana,health,damage}|3.(0,1)quantityChangeSign{negative/positive}|4,5.(0,n)"impactQuantity"|
     // 6.(0,2)PassivePermanent{none , passive , permanent , continuous, momentary }|7.(0,n)turnsToBeActivated |8,9.(0,n)turnsActive|
     // 10.(0,1)fromWhichTeamAssigned{player1 , player2} |11.isAssignedOnWhichTeam(0,1){player1,player2}
     // 12.deactivatedForThisTurn(0,1) |13.theWayItIsGonnaBeAssigned(0-3){spellWay,attack,defend,don't care}
-    // 14.dispel(0,1)|15.setsOnCells(0,1) | 16.appliedToOnWhichState(state is for card that have impact)(0-3){none,defend,attack}
-    private String impactTypeIdComp = ""; //0.antiHolyBuff |1.antiNegativeImpactOnDefend(0,1) | 2.antiPoisonOnDefend(0,1)
+    // 14.dispel(0-2){none,buffDispel,allPositiveDispel}|15.setsOnCells(0,1) | 16.appliedToOnWhichState(state is for card that have impact)(0-3){none,defend,attack}
+    // |17.cellImpact(0-4){none,poison,fire,holy}
+    private String impactTypeIdComp = ""; //0.antiHolyBuff |1.antiNegativeImpactOnDefend(0,1) |
+    // 2.antiPoisonOnDefend(0,1)|3.kill(0,1)|4.risingDamage(0-2){none,firstOneInDoc,secondOneInDoc}|5.immuneToMinDamage(0,1)
 
     //set ImpactArea
     public void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
@@ -34,12 +37,12 @@ class Impact {
                 oneTeam(match.table, opponentPlayer);
         } else if (targetTypeId.charAt(1) == '0') { // hit hero
             if (targetTypeId.charAt(3) == '0')
-                oneHero(match.table, friendlyPlayer);
+                oneHero(friendlyPlayer);
             else if (targetTypeId.charAt(3) == '1')
-                oneHero(match.table, opponentPlayer);
+                oneHero(opponentPlayer);
             else {
-                oneHero(match.table, friendlyPlayer);
-                oneHero(match.table, opponentPlayer);
+                oneHero(friendlyPlayer);
+                oneHero(opponentPlayer);
             }
         } else if (targetTypeId.charAt(6) != '0') //square hit
             oneSquare(match.table, targetCell, Integer.parseInt(targetTypeId.substring(3, 4)));
@@ -71,25 +74,33 @@ class Impact {
             else
                 oneMinionFromOneTeam(targetCell, null);
         }
+        else if(targetTypeId.charAt(13) == '1')
+            oneRandomClosest(castingCell.getMovableCard());
     }
 
-    private void oneHero(Table table, Player player) {
-        for (int i = 1; i <= 5; i++)
-            for (int j = 1; j <= 9; j++) {
-                MovableCard movableCard = table.getCellByCoordination(i, j).getMovableCard();
-                if (movableCard instanceof MovableCard.Hero && movableCard.player.getUserName().compareTo(player.getUserName()) == 0) {
-                    impactArea.add(table.getCellByCoordination(i, j));
-                    return;
-                }
-            }
+
+    private void oneHero(Player player) {
+        if (targetTypeId.charAt(12) == '1') {
+            oneRow(player.findPlayerHero().cardCell);
+        } else if (targetTypeId.charAt(11) == '0') {
+            impactArea.add(player.findPlayerHero().cardCell);
+        } else if (targetTypeId.charAt(11) == '2' || targetTypeId.charAt(11) == '3') {
+            MovableCard.Hero hero = player.findPlayerHero();
+            if (hero.isHybrid() || hero.isRanged())
+                impactArea.add(hero.cardCell);
+        }
     }
 
     private void oneTeam(Table table, Player player) {
-        for (int i = 1; i <= 5; i++) {
-            for (int j = 1; j <= 9; j++) {
-                MovableCard movableCard = table.getCellByCoordination(i, j).getMovableCard();
-                if (movableCard.player.getUserName().compareTo(player.getUserName()) == 0)
-                    impactArea.add(table.getCellByCoordination(i, j));
+        if (targetTypeId.charAt(11) == '0') {
+            impactArea.addAll(match.table.findAllSoldiers(player));
+        } else if (targetTypeId.charAt(11) == '1') {
+            ArrayList<Cell> cells = match.table.findAllSoldiers(player);
+            for (Cell cell : cells) {
+                if (cell.getMovableCard() != null) {
+                    if (cell.getMovableCard().isMelee())
+                        impactArea.add(cell);
+                }
             }
         }
     }
@@ -119,19 +130,29 @@ class Impact {
     }
 
     private void oneSoldierFromOneTeam(Cell cell, Player player) {
-        if (targetTypeId.charAt(9) == '0') {
-            if (player != null) {
-                if (cell.getMovableCard().player.getUserName().equals(player.getUserName()))
+        if (targetTypeId.charAt(11) == '0') { // soldier attack type doesn't matter
+            if (targetTypeId.charAt(9) == '0') { //is not random
+                if (player != null) {
+                    if (cell.getMovableCard().player.getUserName().equals(player.getUserName()))
+                        impactArea.add(cell);
+                } else
                     impactArea.add(cell);
-            } else
-                impactArea.add(cell);
-        } else {
-            ArrayList<Cell> soldiersCells = match.table.findAllSoldiers(player);
-            double i = Math.random() % soldiersCells.size();
-            int j = (int) i;
-            impactArea.add(soldiersCells.get(j));
+            } else {
+                ArrayList<Cell> soldiersCells = match.table.findAllSoldiers(player);
+                findAndAddRandomCellFromGivenCells(soldiersCells);
+            }
+        } else if ((targetTypeId.charAt(11) == '2' || targetTypeId.charAt(11) == '3') && targetTypeId.charAt(9) == '1') {
+            ArrayList<Cell> soldierCells = match.table.findAllSpecificSoldiers(player, true, false, true);
+            findAndAddRandomCellFromGivenCells(soldierCells);
         }
     }
+
+    private void findAndAddRandomCellFromGivenCells(ArrayList<Cell> soldiersCells) {
+        double i = Math.random() % soldiersCells.size();
+        int j = (int) i;
+        impactArea.add(soldiersCells.get(j));
+    }
+
 
     private void oneMinionFromOneTeam(Cell cell, Player player) {
         if (targetTypeId.charAt(9) == '0') {
@@ -144,9 +165,7 @@ class Impact {
                 impactArea.add(cell);
         } else {
             ArrayList<Cell> minionsCells = match.table.findAllMinions(player);
-            double i = Math.random() % minionsCells.size();
-            int j = (int) i;
-            impactArea.add(minionsCells.get(j));
+            findAndAddRandomCellFromGivenCells(minionsCells);
         }
     }
 
@@ -163,6 +182,13 @@ class Impact {
                 impactArea.add(cell);
         }
     }
+
+    private void oneRandomClosest(MovableCard movableCard){
+
+        ArrayList<Cell> cellArrayList = match.table.findClosestSoldiers(movableCard,match.giveOtherPlayer(movableCard.player));
+        findAndAddRandomCellFromGivenCells(cellArrayList);
+    }
+
     //set ImpactArea
 
     //impact manager
@@ -220,6 +246,12 @@ class Impact {
         antiSomeThingOnDefend(1, '6');
     }
 
+    private void kill(){
+        for (Cell cell: impactArea) {
+            cell.getMovableCard().health = 0;
+        }
+    }
+
     //special impacts manager
 
     public void doImpact(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
@@ -242,12 +274,14 @@ class Impact {
             if (id.charAt(3) == '3')
                 damageChange();
         }
-        if (impactTypeIdComp.charAt(1) == '1')
+        if (impactTypeIdComp.charAt(0) == '1')
             antiNegativeImpactOnDefend();
-        if (impactTypeIdComp.charAt(2) == '1')
+        if (impactTypeIdComp.charAt(1) == '1')
             antiPoisonOnDefend();
-        if (impactTypeIdComp.charAt(3) == '1')
+        if (impactTypeIdComp.charAt(2) == '1')
             antiDisarmOnDefend();
+        if(impactTypeIdComp.charAt(3) == '1')
+            kill();
 
 
     }
@@ -273,15 +307,24 @@ class Impact {
     } //buff or nonBuff change(?)
 
     private void dispell(Player dispellingPlayer) {
-        for (Cell cell : impactArea) {
-            if (cell.getMovableCard().player.equals(dispellingPlayer)) {
-                for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne())
-                    if (impact.impactTypeId.charAt(0) == '0' && impact.impactTypeId.charAt(1) != '0')
+        if(impactTypeId.charAt(14) == '1') {
+            for (Cell cell : impactArea) {
+                if (cell.getMovableCard().player.equals(dispellingPlayer)) {
+                    for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne())
+                        if (impact.impactTypeId.charAt(0) == '0' && impact.impactTypeId.charAt(1) != '0')
+                            impact.removeImpact();
+                } else
+                    for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne())
+                        if (impact.impactTypeId.charAt(0) == '1' && impact.impactTypeId.charAt(1) != '0')
+                            impact.removeImpact();
+            }
+        }else if(impactTypeId.charAt(14) == '2'){
+            for (Cell cell:impactArea  ) {
+                for (Impact impact: cell.getMovableCard().getImpactsAppliedToThisOne()   ) {
+                    if(impact.impactTypeId.charAt(0) == '1')
                         impact.removeImpact();
-            } else
-                for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne())
-                    if (impact.impactTypeId.charAt(0) == '1' && impact.impactTypeId.charAt(1) != '0')
-                        impact.removeImpact();
+                }
+            }
         }
     }
 

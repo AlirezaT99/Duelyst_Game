@@ -120,6 +120,9 @@ public class MovableCard extends Card {
         if (isMoveValid(destination)) {
             didMoveInThisTurn = true;
             this.cardCell = destination;
+            if(!cardCell.cellImpacts.isEmpty()){
+                this.impactsAppliedToThisOne.addAll(cardCell.cellImpacts);
+            }
         }
     }
 
@@ -220,6 +223,7 @@ public class MovableCard extends Card {
         private Spell heroSpell;
         private int spellCost;
         private int spellCoolDown;
+        private Impact onHitImpact;
 
         public Hero(String name, int health, int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
             this.heroSpell = heroSpell;
@@ -228,6 +232,19 @@ public class MovableCard extends Card {
             this.health = health;
             this.name = name;
             this.damage = damage;
+            this.onHitImpact = null;
+        }
+
+        public void attack(Cell cell){
+            super.attack(cell);
+            if(onHitImpact != null)
+                onHitImpact.doImpact(this.player,cell,this.cardCell);
+        }
+
+        public void counterAttack(MovableCard opponent){
+            super.counterAttack(opponent);
+            if(onHitImpact != null)
+                onHitImpact.doImpact(this.player,opponent.cardCell,this.cardCell);
         }
         @Override
         public String toString(){
