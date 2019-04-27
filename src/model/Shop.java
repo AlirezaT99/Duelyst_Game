@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Shop {
     private ArrayList<MovableCard.Hero> shopHeroes;
@@ -127,8 +126,8 @@ public class Shop {
     private void printMessage(String message) {
         System.out.println(message);
     }
-    //getters
 
+    //getters
     public ArrayList<MovableCard.Hero> getShopHeroes() {
         return shopHeroes;
     }

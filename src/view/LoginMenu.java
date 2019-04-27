@@ -20,7 +20,6 @@ public class LoginMenu {
         while (true) {
             if (!isInLoginMenu)
                 break;
-            // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
             String[] commandParts = command.split("[ ]");
             loginMenuProcess.commandParts = commandParts;

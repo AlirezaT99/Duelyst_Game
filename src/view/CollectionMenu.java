@@ -1,8 +1,6 @@
 package view;
 
 import model.Account;
-import model.Collection;
-import model.Player;
 import presenter.CollectionMenuProcess;
 
 import java.io.IOException;
@@ -14,7 +12,7 @@ public class CollectionMenu {
     private CollectionMenuProcess collectionMenuProcess;
 
     public CollectionMenu(Account account) {
-        this.currentAccount = account;
+        currentAccount = account;
         collectionMenuProcess = new CollectionMenuProcess();
         collectionMenuProcess.setAccount(currentAccount);
     }
@@ -32,12 +30,7 @@ public class CollectionMenu {
             else
                 handleErrors(collectionMenuProcess.DoCommands[commandType].doIt());
         }
-        scanner.close(); // ?
-    }
-
-    public static String scan() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
+        scanner.close();
     }
 
     private static void handleErrors(int messageID) {
@@ -75,12 +68,6 @@ public class CollectionMenu {
         }
     }
 
-    //setters
-    public void setIsInCollectionMenu(boolean isInLoginMenu) {
-        this.isInCollectionMenu = isInLoginMenu;
-    }
-    //setters
-
     public static int help() {
         showMessage("exit");
         showMessage("show");
@@ -95,6 +82,10 @@ public class CollectionMenu {
         showMessage("show all decks");
         showMessage("show deck [deck name]");
         return 0;
+    }
+
+    public void setIsInCollectionMenu(boolean isInCollectionMenu) {
+        this.isInCollectionMenu = isInCollectionMenu;
     }
 
     public static void showMessage(String message) {

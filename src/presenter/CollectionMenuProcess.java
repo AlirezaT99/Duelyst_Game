@@ -39,74 +39,74 @@ public class CollectionMenuProcess {
     public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return createDeck(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return deleteDeck(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return addToDeck(commandParts[1], commandParts[4]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return removeFromDeck(commandParts[1], commandParts[4]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return selectDeck(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return validateDeck(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return search(commandParts[1]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return showAllDecks();
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return showDeck(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return show();
                 }
             },
 
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return save();
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return CollectionMenu.help();
                 }
             },
@@ -134,18 +134,12 @@ public class CollectionMenuProcess {
     private int createDeck(String deckName) {
         if (account.getCollection().getDeckHashMap().containsKey(deckName))
             return 1;
-        Deck deck = new Deck(deckName);
-        account.getCollection().getDeckHashMap().put(deckName, deck);
-        account.getCollection().getDecks().add(deck); // gotta choose one to remove (HMap or Arrls)
+        account.getCollection().addDeck(new Deck(deckName));
         return 0;
     }
 
     private int deleteDeck(String deckName) {
-        if (!account.getCollection().getDeckHashMap().containsKey(deckName))
-            return 9;
-        account.getCollection().getDecks().remove(account.getCollection().getDeckHashMap().get(deckName));
-        account.getCollection().getDeckHashMap().remove(deckName);
-        return 0;
+        return account.getCollection().deleteDeck(deckName);
     }
 
     private int addToDeck(String idStr, String deckName) { // is id an integer or a string after all???
@@ -232,20 +226,20 @@ public class CollectionMenuProcess {
 
     private int showAllDecks() {
         if (account.getCollection().getSelectedDeck() != null) {
-            System.out.println("1 : " + account.getCollection().getSelectedDeck().getName() + " :");
+            CollectionMenu.showMessage("1 : " + account.getCollection().getSelectedDeck().getName() + " :");
             showDeck(account.getCollection().getSelectedDeck().getName());
             int idx = 2;
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
                 if (!account.getCollection().getDecks().get(idx).getName()
                         .equals(account.getCollection().getSelectedDeck().getName())) {
-                    System.out.println(idx + " : " + account.getCollection().getDecks().get(idx).getName() + " :");
+                    CollectionMenu.showMessage(idx + " : " + account.getCollection().getDecks().get(idx).getName() + " :");
                     showDeck(account.getCollection().getDecks().get(idx).getName());
                     idx++;
                 }
             }
         } else
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
-                System.out.println((i + 1) + " : " + account.getCollection().getSelectedDeck().getName() + " :");
+                CollectionMenu.showMessage((i + 1) + " : " + account.getCollection().getSelectedDeck().getName() + " :");
                 showDeck(account.getCollection().getDecks().get(i).getName());
             }
         return 0;

@@ -39,43 +39,43 @@ public class ShopMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return showCollection();
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return search(commandParts[1]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return searchCollection(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return buy(commandParts[1]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return sell(commandParts[1]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return show();
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return ShopMenu.help();
                 }
             }
@@ -112,14 +112,14 @@ public class ShopMenuProcess {
     }
 
     private int search(String name) {
-        if (shopMenu.getShop().search(name) == "-1")
+        if (shopMenu.getShop().search(name).equals("-1"))
             return 1;
         ShopMenu.showMessage(shopMenu.getShop().search(name));
         return 0;
     }
 
     private int searchCollection(String name) {
-        if (shopMenu.getShop().searchCollection(name, currentAccount) == "-1")
+        if (shopMenu.getShop().searchCollection(name, currentAccount).equals("-1"))
             return 2;
         ShopMenu.showMessage(shopMenu.getShop().searchCollection(name, currentAccount));
         return 0;
@@ -168,7 +168,6 @@ public class ShopMenuProcess {
     }
 
     //setters
-
     public void setShopMenu(ShopMenu shopMenu) {
         this.shopMenu = shopMenu;
     }

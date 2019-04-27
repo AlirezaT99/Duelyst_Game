@@ -1,7 +1,5 @@
 package model;
 
-import view.CollectionMenu;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,21 +27,15 @@ public class Collection {
 
     public void addDeck(Deck deck) {
         decks.add(deck);
+        deckHashMap.put(deck.getName(), deck);
     }
 
-    public void deleteDeck(String deckName) {
-        if (deckHashMap.containsKey(deckName)) {
-            decks.remove(deckHashMap.get(deckName));
-            deckHashMap.remove(deckName);
-        } else
-            CollectionMenu.showMessage("Deck not found"); // must be moved to view
-
-    }
-
-    public void showDeck(Deck deck) {
-        //show deck probably in presenter
-        // and int the view
-        // it must not be here
+    public int deleteDeck(String deckName) {
+        if (!getDeckHashMap().containsKey(deckName))
+            return 9;
+        getDecks().remove(getDeckHashMap().get(deckName));
+        getDeckHashMap().remove(deckName);
+        return 0;
     }
 
     public boolean validateDeck(Deck deck) {
@@ -54,7 +46,8 @@ public class Collection {
 
     public void add(String id, Deck deck) {
         //find card and item and hero by id
-        //it must be written in presenter and an instance should be held in presenter and the changes should be applied in the copy instance
+        //it must be written in presenter and an instance should be held in presenter and the changes
+        // should be applied in the copy instance
     }
 
     public String show(boolean showCost) {
@@ -80,10 +73,6 @@ public class Collection {
         }
 
         return output;
-    }
-
-    public void remove(String id) {
-        //same as add
     }
 
     //search
@@ -140,11 +129,11 @@ public class Collection {
         return cardsHashMap;
     }
 
-    public ArrayList<UsableItem> getItems() {
+    ArrayList<UsableItem> getItems() {
         return items;
     }
 
-    public ArrayList<Card> getCards() {
+    ArrayList<Card> getCards() {
         return cards;
     }
 

@@ -81,13 +81,10 @@ public class ShopMenu {
         System.out.println(message);
     }
 
-    //setters
     public void setIsInShopMenu(boolean isInLoginMenu) {
         this.isInShopMenu = isInLoginMenu;
     }
-    //setters
 
-    //getters
     public ShopMenuProcess getShopMenuProcess() {
         return shopMenuProcess;
     }
@@ -95,5 +92,4 @@ public class ShopMenu {
     public Shop getShop() {
         return shop;
     }
-    //getters
 }
