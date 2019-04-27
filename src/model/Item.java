@@ -1,6 +1,6 @@
 package model;
 
-class Item {
+public class Item {
     protected String name;
     protected String description;
     protected String itemID;

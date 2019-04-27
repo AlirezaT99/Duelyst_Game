@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class LoginMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private static ArrayList<Account> users = new ArrayList<>();
-    public static String[] commandParts;
+    public  String[] commandParts;
     private  Account currentAccount;
     private LoginMenu loginMenu;
 

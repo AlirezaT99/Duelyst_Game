@@ -39,6 +39,11 @@ public class MainMenu {
         scanner.close(); // ?
     }
     private static void handleErrors(int messageID) {
+        switch (messageID){
+            case 1:
+                System.out.println("selected deck is invalid");
+                break;
+        }
     }
 
     public static int help() {
@@ -68,6 +73,10 @@ public class MainMenu {
     //getters
     public MainMenuProcess getMainMenuProcess() {
         return mainMenuProcess;
+    }
+
+    public Account getCurrentAccount() {
+        return currentAccount;
     }
     //getters
 }

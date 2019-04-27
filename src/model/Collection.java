@@ -112,6 +112,13 @@ public class Collection {
     //search
 
     //getters
+    public HashMap<String, UsableItem> getItemsHashMap() {
+        return itemsHashMap;
+    }
+
+    public HashMap<String, Card> getCardsHashMap() {
+        return cardsHashMap;
+    }
 
     public ArrayList<UsableItem> getItems() {
         return items;
