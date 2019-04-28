@@ -15,9 +15,7 @@ public class Card implements toStr {
     protected String description;
 
     boolean isManaSufficient(int playerMana) {
-        if (playerMana >= manaCost)
-            return true;
-        return false;
+        return playerMana >= manaCost;
     }
 
     public boolean isCoordinationValid() {
