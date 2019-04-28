@@ -101,7 +101,7 @@ public class Main {
         primaryImpact.addToTargetTypeID("1");
 
         //4.(0-2)"targetSoldierType"{hero,minion,both}
-        primaryImpact.addToTargetTypeID("1");
+        primaryImpact.addToTargetTypeID("2");
 
         //5.(0-n)"targetFactionType"
         primaryImpact.addToTargetTypeID("0");
@@ -113,16 +113,16 @@ public class Main {
         primaryImpact.addToTargetTypeID("0");
 
         //8.nearHeroHostileMinion(0-2){none, one , all}
-        primaryImpact.addToTargetTypeID("1");
+        primaryImpact.addToTargetTypeID("0");
 
         //9. random(0,1)
-        primaryImpact.addToTargetTypeID("1");
+        primaryImpact.addToTargetTypeID("0");
 
         //10.column(0,1)
         primaryImpact.addToTargetTypeID("0");
 
         //11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
-        primaryImpact.addToTargetTypeID("0");
+        primaryImpact.addToTargetTypeID("2");
 
         //12.row(0,1)
         primaryImpact.addToTargetTypeID("0");
@@ -144,51 +144,57 @@ public class Main {
         // |17.cellImpact(0-4){none,poison,fire,holy}
 
         //0.(0,1)isPositive
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //1.(0-6)buffType{none,holy,power,poison,weakness,stun,disarm}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //2.(0-3)QuantityChange{none,mana,health,damage}
-        primaryImpact.addToImpactTypeID("2");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //3.(0,1)quantityChangeSign{negative/positive}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //4,5.(0,n)"impactQuantity"
-        primaryImpact.addToImpactTypeID("0");
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //6.(0,3)PassivePermanent{none , passive , permanent , continuous}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //7.(0,n)turnsToBeActivated
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //8,9.(0,n)turnsActive
-        primaryImpact.addToImpactTypeID("0");
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //10.dispel(0-2){none,buffDispel,allPositiveDispel}
         primaryImpact.addToImpactTypeID("0");
+        //12.dispel(0-2){none,buffDispel,allPositiveDispel}
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //11.setsOnCells(0,1)
         primaryImpact.addToImpactTypeID("0");
+        //13.setsOnCells(0,1)
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //12.cellImpact(0-3){none,poison,fire,holy}
         primaryImpact.addToImpactTypeID("0");
+        //15.cellImpact(0-3){none,poison,fire,holy}
+        primaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //end of impact setting
@@ -210,7 +216,7 @@ public class Main {
         secondaryImpact.addToImpactTypeIdComp("0");
 
         //3.kill(0,1)
-        primaryImpact.addToImpactTypeIdComp("1");
+        primaryImpact.addToImpactTypeIdComp("0");
         secondaryImpact.addToImpactTypeIdComp("0");
 
         //4.risingDamage(0-2){none,firstOneInDoc,secondOneInDoc}
@@ -223,20 +229,37 @@ public class Main {
         //end of ImpactTypeIDComp setting
 
         //creating spells
-        Spell spell = new Spell();
-        spell.setName("Kings Guard");
-        String fileName = "src/model/spells/" + fileNameCreator(spell.getName()) + ".json";
-        spell.description = "kills one of the minions around our hero randomly.";
-        spell.setCost(1750);
-        spell.setManaCost(9);
-        spell.setPrimaryImpact(primaryImpact);
-        if (secondaryImpact.getImpactTypeId().length() != 0) {
-            spell.setSecondaryImpact(secondaryImpact);
-        }
+//        Spell spell = new Spell();
+//        spell.setName("Kings Guard");
+//        String fileName = "src/model/spells/" + fileNameCreator(spell.getName()) + ".json";
+//        spell.description = "kills one of the minions around our hero randomly.";
+//        spell.setCost(1750);
+//        spell.setManaCost(9);
+//        spell.setPrimaryImpact(primaryImpact);
+//        if (secondaryImpact.getImpactTypeId().length() != 0) {
+//            spell.setSecondaryImpact(secondaryImpact);
+//        }
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(spell, isr);
+//        }
+        // end of creating spells
+        //creating minions
+        Minion minion = new Minion();
+        minion.setName("Persian Archer");
+        minion.setCost(300);
+        minion.setManaCost(2);
+        minion.setHealth(6);
+        minion.setDamage(6);
+        minion.setMelee(false);
+        minion.setRanged(true);
+        minion.setHybrid(false);
+        String fileName = "src/model/minions/" + fileNameCreator(minion.getName()) + ".json";
         try (FileOutputStream fos = new FileOutputStream(fileName);
              OutputStreamWriter isr = new OutputStreamWriter(fos,
                      StandardCharsets.UTF_8)) {
-            gson.toJson(spell, isr);
+            gson.toJson(minion, isr);
         }
     }
 

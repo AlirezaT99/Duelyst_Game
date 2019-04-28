@@ -3,13 +3,13 @@ package model;
 import java.util.ArrayList;
 
 public abstract class MovableCard extends Card {
-    protected int health;
+    private int health;
     protected boolean isAlive = false;
     protected Cell cardCell;
-    protected int damage;
+    private int damage;
     private ArrayList<Impact> impactsAppliedToThisOne;
-    private boolean didMoveInThisTurn;
-    private boolean didAttackInThisTurn;
+    protected boolean didMoveInThisTurn;
+    protected boolean didAttackInThisTurn;
     private int moveRange;
     private int minAttackRange;
     private int maxAttackRange;
@@ -19,7 +19,6 @@ public abstract class MovableCard extends Card {
     private boolean isComboAttacker;
     int buffHealthChange = 0;
     int buffDamageChange = 0;
-
 
     //card casting
 
@@ -169,7 +168,7 @@ public abstract class MovableCard extends Card {
         System.out.println(message);
     }
 
-    private void takeDamage(int damage) {
+    protected void takeDamage(int damage) {
         this.health -= damage;
     }
 
@@ -210,134 +209,43 @@ public abstract class MovableCard extends Card {
     public ArrayList<Impact> getImpactsAppliedToThisOne() {
         return impactsAppliedToThisOne;
     }
+
+    public int getDamage() {
+        return damage;
+    }
+
     //getters
 
     //setters
     public void setCardCell(Cell cardCell) {
         this.cardCell = cardCell;
     }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public void setMelee(boolean melee) {
+        isMelee = melee;
+    }
+
+    public void setRanged(boolean ranged) {
+        isRanged = ranged;
+    }
+
+    public void setHybrid(boolean hybrid) {
+        isHybrid = hybrid;
+    }
+
     //setters
-
-    public class Hero extends MovableCard {
-
-        private Spell heroSpell;
-        private int spellCost;
-        private int spellCoolDown;
-        private Impact onHitImpact;
-
-        public Hero(String name, int health, int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
-            this.heroSpell = heroSpell;
-            this.spellCost = spellCost;
-            this.spellCoolDown = spellCoolDown;
-            this.health = health;
-            this.name = name;
-            this.damage = damage;
-            this.onHitImpact = null;
-        }
-
-        public void attack(Cell cell) {
-            super.attack(cell);
-            if (onHitImpact != null)
-                onHitImpact.doImpact(this.player, cell, this.cardCell);
-        }
-
-        public void counterAttack(MovableCard opponent) {
-            super.counterAttack(opponent);
-            if (onHitImpact != null)
-                onHitImpact.doImpact(this.player, opponent.cardCell, this.cardCell);
-        }
-
-        @Override // ?
-        public String toString(boolean showCost) {
-            String classType = getClassType(this);
-            String output = "Name : " + name + " - AP : " + damage + " - HP : " + health + " - Class : "
-                    + classType + " - Special power : " + description;
-            if (showCost) output = output + " - Sell Cost : " + getCost();
-            output = output + "\n";
-            return output;
-        }
-
-        public void castSpell(Cell cell) {
-//            heroSpell.castCard(this.getMatch(), cell);
-            // check should be in spell class
-            // if check
-            // cast spell
-            // put the impact of spell in all targets impacts applied to this one
-        }
-        // getters
-
-        public int getSpellCost() {
-            return spellCost;
-        }
-
-        public int getSpellCoolDown() {
-            return spellCoolDown;
-        }
-
-        // getters
-    }
-
-    public class Minion extends MovableCard {
-        private Impact summonImpact;
-        private Impact dyingWishImpact;
-        private Impact onDefendImpact;
-        private Impact onAttackImpact;
-        private Impact onComboImpact;
-        private Impact onTurnImpact;
-
-        @Override
-        protected void manageCasualties() {
-            if (this.health <= 0) {
-                this.isAlive = false;
-                dyingWishImpact.doImpact(this.player, cardCell, cardCell);
-                //do dyingWish
-            }
-        }
-
-        public void castCard(Cell cell) {
-            this.cardCell = cell;
-            this.isAlive = true;
-            summonImpact.doImpact(this.player, cardCell, cardCell);
-            // do summonImpact
-        }
-
-        @Override
-        public void attack(Cell cell) {
-            if (MovableCard.this.isAttackValid(cell)) {
-                super.attack(cell);
-                onAttackImpact.doImpact(this.player, cell, this.cardCell);
-            }
-        }
-
-        public void comboAttack(Cell cell, ArrayList<Minion> minions) {
-            minions.get(0).onComboImpact.doImpact(this.player, cell, this.cardCell);
-            super.attack(cell);
-            for (int i = 1; i < minions.size(); i++) {
-                MovableCard movableCard = minions.get(i);
-                if (movableCard.isAttackValid(cell)) {
-                    MovableCard opponent = cell.getMovableCard();
-                    opponent.takeDamage(this.damage);
-                    didAttackInThisTurn = true;
-                }
-            }
-        }
-
-        @Override
-        public String toString(boolean showCost) {
-            String classType = getClassType(this);
-            String output = "Type : Minion - Name : " + this.name + " - Class : " + classType + " - AP : " + this.damage +
-                    " HP : " + this.health + " - MP :" + this.manaCost + " Special power : " + this.description;
-            if (showCost) output = output + " - Sell Cost : " + getCost();
-            output = output + "\n";
-            return output;
-        }
-
-        @Override
-        protected void counterAttack(MovableCard opponent) {
-            super.counterAttack(opponent);
-            onDefendImpact.doImpact(this.player, opponent.cardCell, this.cardCell);
-        }
-    }
 
     String getClassType(MovableCard movableCard) {
         if (movableCard.isMelee)

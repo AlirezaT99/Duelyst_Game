@@ -9,13 +9,12 @@ import java.util.Scanner;
 
 public class ShopMenu {
     private boolean isInShopMenu = true;
-    private Account currentAccount;
     private ShopMenuProcess shopMenuProcess = new ShopMenuProcess();
     private static Shop shop = Shop.initShop();
 
     public ShopMenu(Account account) {
         shopMenuProcess.setShopMenu(this);
-        currentAccount = account;
+        shopMenuProcess.setCurrentAccount(account);
         // we'll be adding stuff here
     }
 
@@ -27,7 +26,7 @@ public class ShopMenu {
             // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
             String[] commandParts = command.split("[ ]");
-            shopMenuProcess.commandParts = commandParts;
+            ShopMenuProcess.commandParts = commandParts;
             int commandType = presenter.ShopMenuProcess.findPatternIndex(command, commandParts);
             if (commandType == -1)
                 System.out.println("invalid input");

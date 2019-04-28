@@ -37,9 +37,9 @@ public class Spell extends Card {
         }
         if (targetsType.charAt(4) == '1') {
             if (targetsType.charAt(3) == '0')
-                return cell.getMovableCard() instanceof MovableCard.Minion && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+                return cell.getMovableCard() instanceof Minion && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
             else if (targetsType.charAt(3) == '1')
-                return cell.getMovableCard() instanceof MovableCard.Minion && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+                return cell.getMovableCard() instanceof Minion && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
         }
         if (targetsType.charAt(8) == '1')
             return castingPlayer.findPlayerHero().cardCell.isTheseCellsAdjacent(cell);

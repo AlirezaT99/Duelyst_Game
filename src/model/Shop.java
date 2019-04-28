@@ -3,8 +3,8 @@ package model;
 import java.util.ArrayList;
 
 public class Shop {
-    private ArrayList<MovableCard.Hero> shopHeroes;
-    private ArrayList<MovableCard.Minion> shopMinions;
+    private ArrayList<Hero> shopHeroes;
+    private ArrayList<Minion> shopMinions;
     private ArrayList<Spell> shopSpells;
     private ArrayList<UsableItem> shopItems;
 
@@ -128,11 +128,11 @@ public class Shop {
     }
 
     //getters
-    public ArrayList<MovableCard.Hero> getShopHeroes() {
+    public ArrayList<Hero> getShopHeroes() {
         return shopHeroes;
     }
 
-    public ArrayList<MovableCard.Minion> getShopMinions() {
+    public ArrayList<Minion> getShopMinions() {
         return shopMinions;
     }
 

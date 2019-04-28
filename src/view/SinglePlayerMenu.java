@@ -28,9 +28,8 @@ public class SinglePlayerMenu {
             }
             // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
-            String[] commandParts = command.split("[ ]");
-            singlePlayerMenuProcess.commandParts = commandParts;
-            int commandType = SinglePlayerMenuProcess.findPatternIndex(command, commandParts);
+            singlePlayerMenuProcess.commandParts = command.split("[ ]");
+            int commandType = SinglePlayerMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
@@ -46,12 +45,12 @@ public class SinglePlayerMenu {
     public int help() {
         showMessage("1. Story");
         showMessage("2. Custom game");
-        showMessage("3. exit");
-        showMessage("4. help");
+        showMessage("3. Exit");
+        showMessage("4. Help");
         return 0;
     }
 
-    public void showMessage(String message) {
+    public static void showMessage(String message) {
         System.out.println(message);
     }
 
@@ -59,8 +58,8 @@ public class SinglePlayerMenu {
     public BattleInit getBattleInit() {
         return battleInit;
     }
-
     //getters
+
     //setters
     public void setInSinglePlayerMenu(boolean isInSinglePlayerMenu) {
         this.isInSinglePlayerMenu = isInSinglePlayerMenu;

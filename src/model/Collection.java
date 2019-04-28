@@ -54,7 +54,7 @@ public class Collection {
         String output = "Heroes :\n";
         int idx = 0;
         for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) instanceof MovableCard.Hero) {
+            if (cards.get(i) instanceof Hero) {
                 output = output + "\t\t" + (idx + 1) + " : " + items.get(i).toString(showCost);
                 idx++;
             }
@@ -66,7 +66,7 @@ public class Collection {
         idx = 0;
         output = output + "Cards :\n";
         for (int i = 0; i < cards.size(); i++) {
-            if (!(cards.get(i) instanceof MovableCard.Hero)) {
+            if (!(cards.get(i) instanceof Hero)) {
                 output = output + "\t\t" + (idx + 1) + " : " + items.get(i).toString(showCost);
                 idx++;
             }
