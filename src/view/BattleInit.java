@@ -33,13 +33,9 @@ public class BattleInit {
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                handleErrors(battleInitProcess.DoCommands[commandType].doIt());
+                battleInitProcess.DoCommands[commandType].doIt();
         }
         scanner.close();
-    }
-
-    public void handleErrors(int message) {
-
     }
 
     public static int help() {

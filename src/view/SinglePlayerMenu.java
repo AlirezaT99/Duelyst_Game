@@ -31,15 +31,11 @@ public class SinglePlayerMenu {
             singlePlayerMenuProcess.commandParts = command.split("[ ]");
             int commandType = SinglePlayerMenuProcess.findPatternIndex(command);
             if (commandType == -1)
-                System.out.println("invalid input");
+                showMessage("invalid input");
             else
-                handleErrors(singlePlayerMenuProcess.DoCommands[commandType].doIt());
+                singlePlayerMenuProcess.DoCommands[commandType].doIt();
         }
-        scanner.close(); // ?
-    }
-
-    public void handleErrors(int message) {
-
+        scanner.close();
     }
 
     public int help() {

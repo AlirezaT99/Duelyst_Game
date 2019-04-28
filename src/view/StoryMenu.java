@@ -60,7 +60,7 @@ public class StoryMenu {
         return singlePlayerMenu;
     }
     //getters
-    
+
     //setters
     public void setInStoryMenu(boolean inStoryMenu) {
         isInStoryMenu = inStoryMenu;
