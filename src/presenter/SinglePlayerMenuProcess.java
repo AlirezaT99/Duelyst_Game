@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import view.BattleInit;
 import view.CustomGameMenu;
 import view.SinglePlayerMenu;
@@ -95,13 +95,13 @@ public class SinglePlayerMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return singlePlayerMenu.help();
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return singlePlayerMenu.help();
                 }
             }

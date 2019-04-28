@@ -9,7 +9,7 @@ public class LoginMenu {
     private boolean isInLoginMenu = true;
     private LoginMenuProcess loginMenuProcess;
 
-    public LoginMenu() {
+    LoginMenu() {
         loginMenuProcess = new LoginMenuProcess();
         loginMenuProcess.setLoginMenu(this);
         // we'll be adding stuff here

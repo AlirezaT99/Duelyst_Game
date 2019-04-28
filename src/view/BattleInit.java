@@ -26,30 +26,29 @@ public class BattleInit {
                 help();
                 hasRun = true;
             }
-            // if(scanner.hasNextLine()){
+            // if(scanner.hasNextLine()) {
             String command = scanner.nextLine();
-            String[] commandParts = command.split("[ ]");
-            battleInitProcess.commandParts = commandParts;
-            int commandType = BattleInitProcess.findPatternIndex(command, commandParts);
+            battleInitProcess.commandParts = command.split("[ ]");
+            int commandType = BattleInitProcess.findPatternIndex(command);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
                 handleErrors(battleInitProcess.DoCommands[commandType].doIt());
         }
-        scanner.close(); // ?
+        scanner.close();
     }
 
     public void handleErrors(int message) {
 
     }
 
-    public int help() {
+    public static int help() {
         showMessage("1. Single Player");
         showMessage("2. Multi Player");
         return 0;
     }
 
-    public void showMessage(String message) {
+    public static void showMessage(String message) {
         System.out.println(message);
     }
 
@@ -57,8 +56,8 @@ public class BattleInit {
     public MainMenu getMainMenu() {
         return mainMenu;
     }
-
     //getters
+
     //setters
     public void setInBattleInit(boolean inBattleInit) {
         isInBattleInit = inBattleInit;

@@ -1,6 +1,5 @@
 package presenter;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import view.BattleInit;
 import view.SinglePlayerMenu;
 
@@ -18,12 +17,8 @@ public class BattleInitProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("enter single player"));
-        commandPatterns.add(Pattern.compile("single player"));
-        commandPatterns.add(Pattern.compile("1"));
-        commandPatterns.add(Pattern.compile("enter multi player"));
-        commandPatterns.add(Pattern.compile("multi player"));
-        commandPatterns.add(Pattern.compile("2"));
+        commandPatterns.add(Pattern.compile("enter single player|single player|1"));
+        commandPatterns.add(Pattern.compile("enter multi player|multi player|2"));
         commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("help"));
     }
@@ -32,66 +27,21 @@ public class BattleInitProcess {
         int doIt() throws IOException;
     }
 
-    public static int findPatternIndex(String command, String[] commandParts) {
-        for (int i = 0; i < commandPatterns.size(); i++) {
+    public static int findPatternIndex(String command) {
+        for (int i = 0; i < commandPatterns.size(); i++)
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
-        }
         return -1;
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterSinglePlayer();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterSinglePlayer();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterSinglePlayer();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterMultiPlayer();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterMultiPlayer();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterMultiPlayer();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return battleInit.help();
-                }
-            }
+            this::enterSinglePlayer,
+            this::enterMultiPlayer,
+            this::exit,
+            BattleInit::help
     };
 
-    public int enterSinglePlayer() throws IOException {
+    private int enterSinglePlayer() throws IOException {
         SinglePlayerMenu singlePlayerMenu = new SinglePlayerMenu(battleInit);
         singlePlayerMenu.setHasRun(false);
         battleInit.setInBattleInit(false);
@@ -100,7 +50,7 @@ public class BattleInitProcess {
         return 0;
     }
 
-    public int enterMultiPlayer() {
+    private int enterMultiPlayer() {
         return 0;
     }
 

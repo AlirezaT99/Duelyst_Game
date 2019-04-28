@@ -1,6 +1,6 @@
 package presenter;
 
-import model.Match;
+
 import view.StoryMenu;
 
 import java.io.IOException;
