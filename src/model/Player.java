@@ -80,7 +80,6 @@ public class Player {
     public Account getAccount() {
         return account;
     }
-
     //getters
 
     //setters

@@ -179,15 +179,15 @@ public class Main {
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
-        //12.dispel(0-2){none,buffDispel,allPositiveDispel}
+        //10.dispel(0-2){none,buffDispel,allPositiveDispel}
         primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
-        //13.setsOnCells(0,1)
+        //11.setsOnCells(0,1)
         primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
-        //15.cellImpact(0-3){none,poison,fire,holy}
+        //12.cellImpact(0-3){none,poison,fire,holy}
         primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
