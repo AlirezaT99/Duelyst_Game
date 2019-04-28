@@ -117,7 +117,7 @@ public class LoginMenuProcess {
 //                    Player currentPlayer = new Player();
 //                    currentPlayer.setAccount(currentAccount);
 //                    player = currentPlayer;
-                    MainMenu mainMenu = new MainMenu();
+                    MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
                     mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
                     mainMenu.run();
                     return 0;

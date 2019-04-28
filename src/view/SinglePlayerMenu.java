@@ -1,5 +1,6 @@
 package view;
 
+import model.Account;
 import presenter.SinglePlayerMenuProcess;
 
 import java.io.IOException;
@@ -11,10 +12,11 @@ public class SinglePlayerMenu {
     private SinglePlayerMenuProcess singlePlayerMenuProcess;
     private boolean hasRun = false;
 
-    public SinglePlayerMenu(BattleInit battleInit) {
+    public SinglePlayerMenu(BattleInit battleInit, Account account) {
         isInSinglePlayerMenu = true;
         this.battleInit = battleInit;
         singlePlayerMenuProcess = new SinglePlayerMenuProcess(this);
+        singlePlayerMenuProcess.setAccount(account);
     }
 
     public void run() throws IOException {

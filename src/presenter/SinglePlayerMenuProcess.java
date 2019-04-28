@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import model.Account;
 import view.SinglePlayerMenu;
 import view.StoryMenu;
 
@@ -11,6 +12,7 @@ public class SinglePlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private SinglePlayerMenu singlePlayerMenu;
     public String[] commandParts;
+    private Account account;
 
     public SinglePlayerMenuProcess(SinglePlayerMenu singlePlayerMenu) {
         this.singlePlayerMenu = singlePlayerMenu;
@@ -56,11 +58,11 @@ public class SinglePlayerMenuProcess {
     }
 
     private int enterCustomGame() {
-        CustomGameMenu customGameMenu = new CustomGameMenu(singlePlayerMenu);
-        singlePlayerMenu.setInSinglePlayerMenu(false);
-        customGameMenu.setHasRun(false);
-        customGameMenu.setInCustomGameMenu(true);
-        customGameMenu.run();
+//        CustomGameMenu customGameMenu = new CustomGameMenu(singlePlayerMenu);
+//        singlePlayerMenu.setInSinglePlayerMenu(false);
+//        customGameMenu.setHasRun(false);
+//        customGameMenu.setInCustomGameMenu(true);
+//        customGameMenu.run();
         return 0;
     }
 
@@ -71,4 +73,10 @@ public class SinglePlayerMenuProcess {
         singlePlayerMenu.getBattleInit().run();
         return 0;
     }
+
+    //setters
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+    //setters
 }

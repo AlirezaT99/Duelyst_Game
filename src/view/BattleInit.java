@@ -1,5 +1,6 @@
 package view;
 
+import model.Account;
 import presenter.BattleInitProcess;
 
 import java.io.IOException;
@@ -11,10 +12,11 @@ public class BattleInit {
     private BattleInitProcess battleInitProcess;
     private boolean hasRun = false;
 
-    public BattleInit(MainMenu mainMenu) {
+    public BattleInit(MainMenu mainMenu, Account account) {
         isInBattleInit = true;
         this.mainMenu = mainMenu;
         battleInitProcess = new BattleInitProcess(this);
+        battleInitProcess.setAccount(account);
     }
 
     public void run() throws IOException {

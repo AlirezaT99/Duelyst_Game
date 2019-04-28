@@ -12,12 +12,15 @@ public class MultiPlayerMenu {
     private BattleInit battleInit;
     private MultiPlayerMenuProcess multiPlayerMenuProcess;
     private boolean hasRun = false;
+    private Account account;
     private ArrayList<Account> users = Account.getAccounts();
 
-    public MultiPlayerMenu(BattleInit battleInit) {
+    public MultiPlayerMenu(BattleInit battleInit, Account account) {
         isInMultiPlayerMenu = true;
         this.battleInit = battleInit;
         multiPlayerMenuProcess = new MultiPlayerMenuProcess(this);
+        multiPlayerMenuProcess.setAccount(account);
+        this.setAccount(account);
     }
 
     public void run() throws IOException {
@@ -26,10 +29,6 @@ public class MultiPlayerMenu {
         while (true) {
             if (!isInMultiPlayerMenu)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             String command = scanner.nextLine();
             multiPlayerMenuProcess.commandParts = command.split("[ ]");
             int commandType = MultiPlayerMenuProcess.findPatternIndex(command);
@@ -43,9 +42,9 @@ public class MultiPlayerMenu {
 
     private void printUsers() {
         showMessage("Choose a user to to start the match:");
-        for (Account account : users) {
-            showMessage(" - " + account.getUserName());
-        }
+        for (Account account : users)
+            if (!account.getUserName().equals(this.account.getUserName()))
+                showMessage(" - " + account.getUserName());
     }
 
     private void handleErrors(int message) {
@@ -80,6 +79,10 @@ public class MultiPlayerMenu {
 
     public void setHasRun(boolean hasRun) {
         this.hasRun = hasRun;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
     //setters
 }

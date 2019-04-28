@@ -154,7 +154,7 @@ class Impact {
         } else if (!targetAttackTypeMatters) {
             impactArea.add(player.findPlayerHero().cardCell);
         } else if (targetTypeId.charAt(11) == '2' || targetTypeId.charAt(11) == '3') {
-            MovableCard.Hero hero = player.findPlayerHero();
+            Hero hero = player.findPlayerHero();
             if (hero.isHybrid() || hero.isRanged())
                 impactArea.add(hero.cardCell);
         }
@@ -215,7 +215,7 @@ class Impact {
     private void oneMinionFromOneTeam(Cell cell, Player player) {
         if (!isRandom) {
             if (player != null) {
-                if (cell.getMovableCard() instanceof MovableCard.Minion)
+                if (cell.getMovableCard() instanceof Minion)
                     if (cell.getMovableCard().player.getUserName().compareTo(player.getUserName()) == 0)
                         impactArea.add(cell);
             } else
@@ -226,7 +226,7 @@ class Impact {
         }
     }
 
-    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero) {
+    private void oneHostileMinionBesideHero(Cell cell, Hero hero) {
         if (hero.cardCell.isTheseCellsAdjacent(cell))
             impactArea.add(cell);
     }
@@ -312,7 +312,7 @@ class Impact {
 
     private void kill() {
         for (Cell cell : impactArea) {
-            cell.getMovableCard().health = 0;
+            cell.getMovableCard().setHealth(0);
         }
     }
 
@@ -361,7 +361,7 @@ class Impact {
     private void healthChange() {
         int impactQuantity = getImpactQuantityWithSign();
         for (Cell cell : impactArea)
-            cell.getMovableCard().health += impactQuantity;
+            cell.getMovableCard().setHealth(cell.getMovableCard().getHealth() + impactQuantity);
     } //buff or nonBuff change (?)
 
     private void damageChange() {
@@ -405,7 +405,7 @@ class Impact {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '1') { //is holyBuff
                 int maxHeal = Math.max(impact.getImpactQuantityWithSign(), damageTaken);
-                movableCard.health += maxHeal;
+                movableCard.setHealth(movableCard.getHealth() + maxHeal);
             }
         }
     }
@@ -413,7 +413,7 @@ class Impact {
     void poisonBuff(MovableCard movableCard) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3') //is poisonBuff
-                movableCard.health += getImpactQuantityWithSign();
+                movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
 
         }
     }
