@@ -355,7 +355,7 @@ class Impact {
 
     private void powerBuffOrWeaknessBuff() {
         for (Cell cell : this.impactArea) {
-            if (impactTypeId.charAt(2) == '2') //heath change
+            if (impactTypeId.charAt(2) == '2') //health change
                 cell.getMovableCard().buffHealthChange += getImpactQuantityWithSign();
             if (impactTypeId.charAt(2) == '3') //damage change
                 cell.getMovableCard().buffDamageChange += getImpactQuantityWithSign();
@@ -415,6 +415,11 @@ class Impact {
             sign = 1;
         return sign * Integer.parseInt(impactTypeId.substring(4, 6));
     }
+
+    public String getImpactTypeId() {
+        return impactTypeId;
+    }
+
     //getters
     //setters
 
@@ -428,6 +433,14 @@ class Impact {
 
     public void setImpactTypeId(String impactTypeId) {
         this.impactTypeId = impactTypeId;
+    }
+
+    public void addToTargetTypeID(String targetTypeId){this.targetTypeId+=targetTypeId;}
+
+    public void addToImpactTypeID(String impactTypeId){this.impactTypeId+=impactTypeId;}
+
+    public void addToImpactTypeIdComp(String impactTypeIdComp){
+        this.impactTypeIdComp+=impactTypeIdComp;
     }
     //setters
 }

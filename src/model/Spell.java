@@ -74,10 +74,6 @@ public class Spell extends Card {
         this.manaCost = manaCost;
     }
 
-    public void setCost(int cost) {
-        this.setCost(cost);
-    }
-
     public void setPrimaryImpact(Impact primaryImpact) {
         this.primaryImpact = primaryImpact;
     }
