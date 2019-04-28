@@ -3,10 +3,10 @@ package model;
 import java.util.ArrayList;
 
 public abstract class MovableCard extends Card {
-    protected int health;
+    private int health;
     protected boolean isAlive = false;
     protected Cell cardCell;
-    protected int damage;
+    private int damage;
     private ArrayList<Impact> impactsAppliedToThisOne;
     protected boolean didMoveInThisTurn;
     protected boolean didAttackInThisTurn;
@@ -19,7 +19,6 @@ public abstract class MovableCard extends Card {
     private boolean isComboAttacker;
     int buffHealthChange = 0;
     int buffDamageChange = 0;
-
 
     //card casting
 
@@ -210,12 +209,42 @@ public abstract class MovableCard extends Card {
     public ArrayList<Impact> getImpactsAppliedToThisOne() {
         return impactsAppliedToThisOne;
     }
+
+    public int getDamage() {
+        return damage;
+    }
+
     //getters
 
     //setters
     public void setCardCell(Cell cardCell) {
         this.cardCell = cardCell;
     }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public void setMelee(boolean melee) {
+        isMelee = melee;
+    }
+
+    public void setRanged(boolean ranged) {
+        isRanged = ranged;
+    }
+
+    public void setHybrid(boolean hybrid) {
+        isHybrid = hybrid;
+    }
+
     //setters
 
     String getClassType(MovableCard movableCard) {

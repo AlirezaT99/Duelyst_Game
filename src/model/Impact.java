@@ -247,7 +247,7 @@ class Impact {
 
     private void kill() {
         for (Cell cell : impactArea) {
-            cell.getMovableCard().health = 0;
+            cell.getMovableCard().setHealth(0);
         }
     }
 
@@ -296,7 +296,7 @@ class Impact {
     private void healthChange() {
         int impactQuantity = getImpactQuantityWithSign();
         for (Cell cell : impactArea)
-            cell.getMovableCard().health += impactQuantity;
+            cell.getMovableCard().setHealth(cell.getMovableCard().getHealth()+impactQuantity);
     } //buff or nonBuff change (?)
 
     private void damageChange() {
@@ -340,7 +340,7 @@ class Impact {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '1') { //is holyBuff
                 int maxHeal = Math.max(impact.getImpactQuantityWithSign(), damageTaken);
-                movableCard.health += maxHeal;
+                movableCard.setHealth(movableCard.getHealth()+maxHeal);
             }
         }
     }
@@ -348,7 +348,7 @@ class Impact {
     void poisonBuff(MovableCard movableCard) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3') //is poisonBuff
-                movableCard.health += getImpactQuantityWithSign();
+                movableCard.setHealth(movableCard.getHealth()+getImpactQuantityWithSign());
 
         }
     }
