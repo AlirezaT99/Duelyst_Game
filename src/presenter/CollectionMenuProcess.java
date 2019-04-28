@@ -154,17 +154,17 @@ public class CollectionMenuProcess {
         if (account.getCollection().getCardsHashMap().size() == Deck.MAX_CARD_NUMBER
                 && account.getCollection().getItemsHashMap().size() == Deck.MAX_ITEM_NUMBER
                 && !account.getCollection().getItemsHashMap().containsKey(idStr))
-            if (!(account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero))
+            if (!(account.getCollection().getCardsHashMap().get(idStr) instanceof Hero))
                 return 5;
         if (account.getCollection().getCardsHashMap().containsKey(idStr))
-            if (account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero
+            if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero
                     && account.getCollection().getDeckHashMap().get(deckName).getHero() != null)
                 return 6;
         //
         if (account.getCollection().getCardsHashMap().containsKey(idStr))
-            if (account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero) {
+            if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero) {
                 account.getCollection().getDeckHashMap().get(deckName)
-                        .setHero((MovableCard.Hero) account.getCollection().getCardsHashMap().get(idStr));
+                        .setHero((Hero) account.getCollection().getCardsHashMap().get(idStr));
                 return 0;
             }
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
@@ -185,7 +185,7 @@ public class CollectionMenuProcess {
         if (!account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap().containsKey(idStr)
                 && !account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().containsKey(idStr))
             return 3;
-        if (account.getCollection().getCardsHashMap().get(idStr) instanceof MovableCard.Hero
+        if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero
                 && account.getCollection().getDeckHashMap().get(deckName).getHero() != null
                 && account.getCollection().getDeckHashMap().get(deckName).getHero().getCardID().equals(idStr)) {
             account.getCollection().getDeckHashMap().get(deckName).setHero(null);

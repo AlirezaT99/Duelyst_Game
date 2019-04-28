@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        cardCreator();
+        //cardCreator();
         // address haye local
 //        String fileName = "src/model/spells/kingsguard.json";
         //  String fileName1 = "src/model/spells//spell.json";
@@ -223,21 +223,27 @@ public class Main {
         //end of ImpactTypeIDComp setting
 
         //creating spells
-        Spell spell = new Spell();
-        spell.setName("Kings Guard");
-        String fileName = "src/model/spells/" + fileNameCreator(spell.getName()) + ".json";
-        spell.description = "kills one of the minions around our hero randomly.";
-        spell.setCost(1750);
-        spell.setManaCost(9);
-        spell.setPrimaryImpact(primaryImpact);
-        if (secondaryImpact.getImpactTypeId().length() != 0) {
-            spell.setSecondaryImpact(secondaryImpact);
-        }
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
-            gson.toJson(spell, isr);
-        }
+//        Spell spell = new Spell();
+//        spell.setName("Kings Guard");
+//        String fileName = "src/model/spells/" + fileNameCreator(spell.getName()) + ".json";
+//        spell.description = "kills one of the minions around our hero randomly.";
+//        spell.setCost(1750);
+//        spell.setManaCost(9);
+//        spell.setPrimaryImpact(primaryImpact);
+//        if (secondaryImpact.getImpactTypeId().length() != 0) {
+//            spell.setSecondaryImpact(secondaryImpact);
+//        }
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(spell, isr);
+//        }
+        // end of creating spells
+        //creating minions
+        Card card = new Card();
+       // MovableCard movableCard = new MovableCard.Minion();
+
+        //MovableCard.Minion minion = new MovableCard.Minion();
     }
 
     private static String fileNameCreator(String name) {

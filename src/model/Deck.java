@@ -9,7 +9,7 @@ public class Deck {
     private ArrayList<UsableItem> items;
     private HashMap<String, Card> cardsHashMap;
     private HashMap<String, UsableItem> itemsHashMap;
-    private MovableCard.Hero hero = null;
+    private Hero hero = null;
     public static final int MAX_CARD_NUMBER = 20;
     public static final int MAX_ITEM_NUMBER = 3;
 
@@ -53,7 +53,7 @@ public class Deck {
         return name;
     }
 
-    public MovableCard.Hero getHero() {
+    public Hero getHero() {
         return hero;
     }
 
@@ -71,7 +71,7 @@ public class Deck {
     //getters
 
     //setters
-    public void setHero(MovableCard.Hero hero) {
+    public void setHero(Hero hero) {
         this.hero = hero;
     }
 

@@ -84,7 +84,7 @@ class Impact {
         } else if (targetTypeId.charAt(11) == '0') {
             impactArea.add(player.findPlayerHero().cardCell);
         } else if (targetTypeId.charAt(11) == '2' || targetTypeId.charAt(11) == '3') {
-            MovableCard.Hero hero = player.findPlayerHero();
+            Hero hero = player.findPlayerHero();
             if (hero.isHybrid() || hero.isRanged())
                 impactArea.add(hero.cardCell);
         }
@@ -157,7 +157,7 @@ class Impact {
         if (targetTypeId.charAt(9) == '0') {
             if (player != null) {
 
-                if (cell.getMovableCard() instanceof MovableCard.Minion)
+                if (cell.getMovableCard() instanceof Minion)
                     if (cell.getMovableCard().player.getUserName().compareTo(player.getUserName()) == 0)
                         impactArea.add(cell);
             } else
@@ -168,7 +168,7 @@ class Impact {
         }
     }
 
-    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero) {
+    private void oneHostileMinionBesideHero(Cell cell, Hero hero) {
         if (hero.cardCell.isTheseCellsAdjacent(cell))
             impactArea.add(cell);
     }

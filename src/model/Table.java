@@ -130,7 +130,7 @@ class Table {
         ArrayList<Cell> wantedCells = new ArrayList<>();
         for (int i = 1; i <= 5; i++)
             for (int j = 1; j <= 9; j++)
-                if (cells[i][j].getMovableCard() instanceof MovableCard.Minion) {
+                if (cells[i][j].getMovableCard() instanceof Minion) {
                     if (player == null)
                         wantedCells.add(cells[i][j]);
                     else if (cells[i][j].getMovableCard().player.equals(player))

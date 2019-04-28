@@ -44,10 +44,10 @@ public class Player {
     }
 
 
-    MovableCard.Hero findPlayerHero() {
+    Hero findPlayerHero() {
         for (Card card : collection.getCards()) {
-            if (card instanceof MovableCard.Hero)
-                return (MovableCard.Hero) card;
+            if (card instanceof Hero)
+                return (Hero) card;
         }
         return null;
     }
