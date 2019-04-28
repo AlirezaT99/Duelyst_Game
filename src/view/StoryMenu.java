@@ -28,15 +28,14 @@ public class StoryMenu {
             }
             // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
-            String[] commandParts = command.split("[ ]");
-            storyMenuProcess.commandParts = commandParts;
-            int commandType = StoryMenuProcess.findPatternIndex(command, commandParts);
+            storyMenuProcess.commandParts = command.split("[ ]");
+            int commandType = StoryMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 System.out.println("invalid input");
             else
                 handleErrors(storyMenuProcess.DoCommands[commandType].doIt());
         }
-        scanner.close(); // ?
+        scanner.close();
     }
 
     public void handleErrors(int message) {
@@ -60,8 +59,8 @@ public class StoryMenu {
     public SinglePlayerMenu getSinglePlayerMenu() {
         return singlePlayerMenu;
     }
-
     //getters
+    
     //setters
     public void setInStoryMenu(boolean inStoryMenu) {
         isInStoryMenu = inStoryMenu;

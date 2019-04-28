@@ -17,130 +17,46 @@ public class StoryMenuProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("enter 1"));
-        commandPatterns.add(Pattern.compile("1"));
-        commandPatterns.add(Pattern.compile("enter 2"));
-        commandPatterns.add(Pattern.compile("2"));
-        commandPatterns.add(Pattern.compile("enter 3"));
-        commandPatterns.add(Pattern.compile("3"));
-        commandPatterns.add(Pattern.compile("enter 4"));
-        commandPatterns.add(Pattern.compile("enter exit"));
-        commandPatterns.add(Pattern.compile("exit"));
-        commandPatterns.add(Pattern.compile("4"));
-        commandPatterns.add(Pattern.compile("enter 5"));
-        commandPatterns.add(Pattern.compile("enter help"));
-        commandPatterns.add(Pattern.compile("help"));
-        commandPatterns.add(Pattern.compile("5"));
+        commandPatterns.add(Pattern.compile("enter 1|1"));
+        commandPatterns.add(Pattern.compile("enter 2|2"));
+        commandPatterns.add(Pattern.compile("enter 3|3"));
+        commandPatterns.add(Pattern.compile("enter exit|exit|4"));
+        commandPatterns.add(Pattern.compile("enter help|help|5"));
     }
 
     public interface DoCommand {
         int doIt() throws IOException;
     }
 
-    public static int findPatternIndex(String command, String[] commandParts) {
-        for (int i = 0; i < commandPatterns.size(); i++) {
+    public static int findPatternIndex(String command) {
+        for (int i = 0; i < commandPatterns.size(); i++)
             if (command.toLowerCase().matches(commandPatterns.get(i).pattern()))
                 return i;
-        }
         return -1;
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
+            this::enterFirstLevel,
+            this::enterSecondLevel,
+            this::enterThirdLevel,
+            this::exit,
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
-                    return enterFirstLevel();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterFirstLevel();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterSecondLevel();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterSecondLevel();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterThirdLevel();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterThirdLevel();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return storyMenu.help();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return storyMenu.help();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return storyMenu.help();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return storyMenu.help();
                 }
             }
     };
 
-    public int enterFirstLevel() {
+    private int enterFirstLevel() {
         return 0;
     }
 
-    public int enterSecondLevel() {
+    private int enterSecondLevel() {
         return 0;
     }
 
-    public int enterThirdLevel() {
+    private int enterThirdLevel() {
         return 0;
     }
 
