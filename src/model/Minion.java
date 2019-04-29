@@ -3,18 +3,18 @@ package model;
 import java.util.ArrayList;
 
     public class Minion extends MovableCard {
-        private Impact summonImpact;
-        private Impact dyingWishImpact;
+        private Impact onSpawnImpact;
+        private Impact onDeathImpact;
+        private Impact passiveImpact;
         private Impact onDefendImpact;
         private Impact onAttackImpact;
         private Impact onComboImpact;
-        private Impact onTurnImpact;
-
+        private Impact secondaryImpact;
         @Override
         protected void manageCasualties() {
             if (this.getHealth() <= 0) {
                 this.isAlive = false;
-                dyingWishImpact.doImpact(this.player, cardCell, cardCell);
+                onDeathImpact.doImpact(this.player, cardCell, cardCell);
                 //do dyingWish
             }
         }
@@ -22,8 +22,8 @@ import java.util.ArrayList;
         public void castCard(Cell cell) {
             this.cardCell = cell;
             this.isAlive = true;
-            summonImpact.doImpact(this.player, cardCell, cardCell);
-            // do summonImpact
+            onSpawnImpact.doImpact(this.player, cardCell, cardCell);
+            // do onSpawnImpact
         }
 
         @Override
@@ -65,12 +65,12 @@ import java.util.ArrayList;
 
         //setters
 
-        public void setSummonImpact(Impact summonImpact) {
-            this.summonImpact = summonImpact;
+        public void setOnSpawnImpact(Impact onSpawnImpact) {
+            this.onSpawnImpact = onSpawnImpact;
         }
 
-        public void setDyingWishImpact(Impact dyingWishImpact) {
-            this.dyingWishImpact = dyingWishImpact;
+        public void setOnDeathImpact(Impact onDeathImpact) {
+            this.onDeathImpact = onDeathImpact;
         }
 
         public void setOnDefendImpact(Impact onDefendImpact) {
@@ -81,12 +81,16 @@ import java.util.ArrayList;
             this.onAttackImpact = onAttackImpact;
         }
 
+        public void setSecondaryImpact(Impact secondaryImpact) {
+            this.secondaryImpact = secondaryImpact;
+        }
+
         public void setOnComboImpact(Impact onComboImpact) {
             this.onComboImpact = onComboImpact;
         }
 
-        public void setOnTurnImpact(Impact onTurnImpact) {
-            this.onTurnImpact = onTurnImpact;
+        public void setPassiveImpact(Impact passiveImpact) {
+            this.passiveImpact = passiveImpact;
         }
 
         //setters

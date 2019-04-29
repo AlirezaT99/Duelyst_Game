@@ -92,13 +92,13 @@ public class Main {
         primaryImpact.addToTargetTypeID("0");
 
         //1.(0,1)"SelectedCellImportance"
-        primaryImpact.addToTargetTypeID("1");
-
-        //2.(0,1)"ValidOnAWholeTeam"
         primaryImpact.addToTargetTypeID("0");
 
-        //3.(0-2)"onWhichTeam"{friendly, hostile, both}
+        //2.(0,1)"ValidOnAWholeTeam"
         primaryImpact.addToTargetTypeID("1");
+
+        //3.(0-2)"onWhichTeam"{friendly, hostile, both}
+        primaryImpact.addToTargetTypeID("0");
 
         //4.(0-2)"targetSoldierType"{hero,minion,both}
         primaryImpact.addToTargetTypeID("2");
@@ -122,7 +122,7 @@ public class Main {
         primaryImpact.addToTargetTypeID("0");
 
         //11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
-        primaryImpact.addToTargetTypeID("2");
+        primaryImpact.addToTargetTypeID("0");
 
         //12.row(0,1)
         primaryImpact.addToTargetTypeID("0");
@@ -144,51 +144,51 @@ public class Main {
         // |17.cellImpact(0-4){none,poison,fire,holy}
 
         //0.(0,1)isPositive
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("");
 
         //1.(0-6)buffType{none,holy,power,poison,weakness,stun,disarm}
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("2");
         secondaryImpact.addToImpactTypeID("");
 
         //2.(0-3)QuantityChange{none,mana,health,damage}
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("2");
         secondaryImpact.addToImpactTypeID("");
 
         //3.(0,1)quantityChangeSign{negative/positive}
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("");
 
         //4,5.(0,n)"impactQuantity"
-        primaryImpact.addToImpactTypeID("");
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("10");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //6.(0,3)PassivePermanent{none , passive , permanent , continuous}
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("");
 
         //7.(0,n)turnsToBeActivated
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //8,9.(0,n)turnsActive
-        primaryImpact.addToImpactTypeID("");
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("9");
+        primaryImpact.addToImpactTypeID("9");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //12.dispel(0-2){none,buffDispel,allPositiveDispel}
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //13.setsOnCells(0,1)
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //15.cellImpact(0-3){none,poison,fire,holy}
-        primaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //end of impact setting
@@ -241,14 +241,19 @@ public class Main {
         // end of creating spells
         //creating minions
         Minion minion = new Minion();
-        minion.setName("Persian Archer");
-        minion.setCost(300);
-        minion.setManaCost(2);
-        minion.setHealth(6);
-        minion.setDamage(6);
-        minion.setMelee(false);
-        minion.setRanged(true);
+        minion.setName("The Eagle"); //
+        minion.setCost(400);
+        minion.setManaCost(5);
+        minion.setHealth(8);
+        minion.setDamage(2);
+        minion.setMelee(true);
+        minion.setRanged(false);
         minion.setHybrid(false);
+       // minion.setMaxAttackRange(3);
+        minion.setComboAttacker(false);
+        minion.setDescription("");
+        minion.setPassiveImpact(primaryImpact);
+        //minion.setSecondaryImpact(secondaryImpact);
         String fileName = "src/model/minions/" + fileNameCreator(minion.getName()) + ".json";
         try (FileOutputStream fos = new FileOutputStream(fileName);
              OutputStreamWriter isr = new OutputStreamWriter(fos,
