@@ -1,5 +1,6 @@
 package view;
 
+import model.Account;
 import presenter.BattleInitProcess;
 
 import java.io.IOException;
@@ -11,10 +12,11 @@ public class BattleInit {
     private BattleInitProcess battleInitProcess;
     private boolean hasRun = false;
 
-    public BattleInit(MainMenu mainMenu) {
+    public BattleInit(MainMenu mainMenu, Account account) {
         isInBattleInit = true;
         this.mainMenu = mainMenu;
         battleInitProcess = new BattleInitProcess(this);
+        battleInitProcess.setAccount(account);
     }
 
     public void run() throws IOException {
@@ -33,13 +35,9 @@ public class BattleInit {
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                handleErrors(battleInitProcess.DoCommands[commandType].doIt());
+                battleInitProcess.DoCommands[commandType].doIt();
         }
         scanner.close();
-    }
-
-    public void handleErrors(int message) {
-
     }
 
     public static int help() {

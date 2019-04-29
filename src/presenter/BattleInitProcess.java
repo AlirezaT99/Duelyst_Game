@@ -1,6 +1,8 @@
 package presenter;
 
+import model.Account;
 import view.BattleInit;
+import view.MultiPlayerMenu;
 import view.SinglePlayerMenu;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.regex.Pattern;
 public class BattleInitProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private BattleInit battleInit;
+    private Account account;
     public String[] commandParts;
 
     public BattleInitProcess(BattleInit battleInit) {
@@ -42,7 +45,7 @@ public class BattleInitProcess {
     };
 
     private int enterSinglePlayer() throws IOException {
-        SinglePlayerMenu singlePlayerMenu = new SinglePlayerMenu(battleInit);
+        SinglePlayerMenu singlePlayerMenu = new SinglePlayerMenu(battleInit, account);
         singlePlayerMenu.setHasRun(false);
         battleInit.setInBattleInit(false);
         singlePlayerMenu.setInSinglePlayerMenu(true);
@@ -50,7 +53,12 @@ public class BattleInitProcess {
         return 0;
     }
 
-    private int enterMultiPlayer() {
+    private int enterMultiPlayer() throws IOException {
+        MultiPlayerMenu multiPlayerMenu = new MultiPlayerMenu(battleInit, account);
+        multiPlayerMenu.setHasRun(false);
+        battleInit.setInBattleInit(false);
+        multiPlayerMenu.setInMultiPlayerMenu(true);
+        multiPlayerMenu.run();
         return 0;
     }
 
@@ -61,4 +69,10 @@ public class BattleInitProcess {
         battleInit.getMainMenu().run();
         return 0;
     }
+
+    //setters
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+    //setters
 }

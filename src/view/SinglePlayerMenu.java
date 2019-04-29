@@ -1,5 +1,6 @@
 package view;
 
+import model.Account;
 import presenter.SinglePlayerMenuProcess;
 
 import java.io.IOException;
@@ -11,10 +12,11 @@ public class SinglePlayerMenu {
     private SinglePlayerMenuProcess singlePlayerMenuProcess;
     private boolean hasRun = false;
 
-    public SinglePlayerMenu(BattleInit battleInit) {
+    public SinglePlayerMenu(BattleInit battleInit, Account account) {
         isInSinglePlayerMenu = true;
         this.battleInit = battleInit;
         singlePlayerMenuProcess = new SinglePlayerMenuProcess(this);
+        singlePlayerMenuProcess.setAccount(account);
     }
 
     public void run() throws IOException {
@@ -31,15 +33,11 @@ public class SinglePlayerMenu {
             singlePlayerMenuProcess.commandParts = command.split("[ ]");
             int commandType = SinglePlayerMenuProcess.findPatternIndex(command);
             if (commandType == -1)
-                System.out.println("invalid input");
+                showMessage("invalid input");
             else
-                handleErrors(singlePlayerMenuProcess.DoCommands[commandType].doIt());
+                singlePlayerMenuProcess.DoCommands[commandType].doIt();
         }
-        scanner.close(); // ?
-    }
-
-    public void handleErrors(int message) {
-
+        scanner.close();
     }
 
     public int help() {

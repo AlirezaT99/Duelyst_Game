@@ -27,37 +27,13 @@ public class MainMenuProcess {
         int doIt() throws IOException;
     }
 
+    //todo: argument haye enterBattle ro moshakhas konim bade zadane battle.
     public DoCommand[] DoCommands = new DoCommand[]{
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterCollection();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterShop();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return enterBattle(); //todo: argument haye enterBattle ro moshakhas konim bade zadane battle.
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return MainMenu.help();
-                }
-            }
+            this::enterCollection,
+            this::enterShop,
+            this::enterBattle, //todo: argument haye enterBattle ro moshakhas konim bade zadane battle.
+            this::exit,
+            MainMenu::help
     };
 
     private int enterCollection() throws IOException {
@@ -80,7 +56,7 @@ public class MainMenuProcess {
     private int enterBattle() throws IOException {
         if(!currentAccount.getCollection().validateDeck(currentAccount.getCollection().getSelectedDeck()))
             return 1; //message : "selected deck is invalid"
-        battleInit = new BattleInit(mainMenu);
+        battleInit = new BattleInit(mainMenu, currentAccount);
         battleInit.run();
         return 0;
     }
