@@ -106,7 +106,7 @@ public abstract class MovableCard extends Card {
         for (Impact impact : impactsAppliedToThisOne) {
             impact.setImpactArea(this.player, cardCell, cardCell);
             impact.goThroughTime();
-            //salam
+
         }
     }
 
