@@ -146,7 +146,7 @@ class Impact {
     }
 
     //setImpact main methods
-    private void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
+    void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
         Player opponentPlayer = match.getOtherPlayer(friendlyPlayer);
         impactArea.clear();
         teamOrHeroSets(friendlyPlayer, opponentPlayer);

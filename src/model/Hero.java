@@ -20,13 +20,13 @@ public class Hero extends MovableCard {
     public void attack(Cell cell) {
         super.attack(cell);
         if (onHitImpact != null)
-            onHitImpact.doImpact(this.player, cell, this.cardCell);
+            onHitImpact.setImpactArea(this.player,cell,this.cardCell);
     }
 
     public void counterAttack(MovableCard opponent) {
         super.counterAttack(opponent);
         if (onHitImpact != null)
-            onHitImpact.doImpact(this.player, opponent.cardCell, this.cardCell);
+            onHitImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
     }
 
     @Override // ?
