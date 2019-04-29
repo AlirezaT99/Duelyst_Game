@@ -92,16 +92,16 @@ public class Main {
         primaryImpact.addToTargetTypeID("0");
 
         //1.(0,1)"SelectedCellImportance"
-        primaryImpact.addToTargetTypeID("0");
-
-        //2.(0,1)"ValidOnAWholeTeam"
         primaryImpact.addToTargetTypeID("1");
 
-        //3.(0-2)"onWhichTeam"{friendly, hostile, both}
+        //2.(0,1)"ValidOnAWholeTeam"
         primaryImpact.addToTargetTypeID("0");
 
+        //3.(0-2)"onWhichTeam"{friendly, hostile, both}
+        primaryImpact.addToTargetTypeID("1");
+
         //4.(0-2)"targetSoldierType"{hero,minion,both}
-        primaryImpact.addToTargetTypeID("2");
+        primaryImpact.addToTargetTypeID("0");
 
         //5.(0-n)"targetFactionType"
         primaryImpact.addToTargetTypeID("0");
@@ -144,11 +144,11 @@ public class Main {
         // |17.cellImpact(0-4){none,poison,fire,holy}
 
         //0.(0,1)isPositive
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //1.(0-6)buffType{none,holy,power,poison,weakness,stun,disarm}
-        primaryImpact.addToImpactTypeID("2");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //2.(0-3)QuantityChange{none,mana,health,damage}
@@ -156,17 +156,17 @@ public class Main {
         secondaryImpact.addToImpactTypeID("");
 
         //3.(0,1)quantityChangeSign{negative/positive}
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //4,5.(0,n)"impactQuantity"
-        primaryImpact.addToImpactTypeID("1");
-        primaryImpact.addToImpactTypeID("10");
+        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("6");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //6.(0,3)PassivePermanent{none , passive , permanent , continuous}
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //7.(0,n)turnsToBeActivated
@@ -174,8 +174,8 @@ public class Main {
         secondaryImpact.addToImpactTypeID("");
 
         //8,9.(0,n)turnsActive
-        primaryImpact.addToImpactTypeID("9");
-        primaryImpact.addToImpactTypeID("9");
+        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
@@ -222,6 +222,10 @@ public class Main {
         secondaryImpact.addToImpactTypeIdComp("0");
         //end of ImpactTypeIDComp setting
 
+        //6.antiDisarmOnDefend(0,1)
+        primaryImpact.addToImpactTypeIdComp("0");
+        secondaryImpact.addToImpactTypeIdComp("0");
+
         //creating spells
 //        Spell spell = new Spell();
 //        spell.setName("Kings Guard");
@@ -241,27 +245,27 @@ public class Main {
         // end of creating spells
         //creating minions
         Minion minion = new Minion();
-        minion.setName("The Eagle"); //
-        minion.setCost(400);
-        minion.setManaCost(5);
-        minion.setHealth(8);
-        minion.setDamage(2);
+        minion.setName("Div e Sefid"); //
+        minion.setCost(8000);
+       // minion.setManaCost();
+        minion.setHealth(50);
+        minion.setDamage(4);
         minion.setMelee(true);
         minion.setRanged(false);
         minion.setHybrid(false);
-       // minion.setMaxAttackRange(3);
+        //minion.setMaxAttackRange(5);
         minion.setComboAttacker(false);
-        minion.setDescription("");
-        minion.setPassiveImpact(primaryImpact);
+        minion.setDescription("combo");
+        //minion.setPassiveImpact(primaryImpact);
         //minion.setSecondaryImpact(secondaryImpact);
-        String fileName = "src/model/minions/" + fileNameCreator(minion.getName()) + ".json";
+        String fileName = "src/model/heroes/" + fileNameCreator(minion.getName()) + ".json";
         try (FileOutputStream fos = new FileOutputStream(fileName);
              OutputStreamWriter isr = new OutputStreamWriter(fos,
                      StandardCharsets.UTF_8)) {
             gson.toJson(minion, isr);
         }
     }
-
+    //
     private static String fileNameCreator(String name) {
         String fileName = "";
         String[] nameCompleted = name.split("[ ]");
