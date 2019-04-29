@@ -1,0 +1,5 @@
+
+"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ÜÕï8À£ì­¦-
+"squid:ClassVariableVisibilityCheck%"VMake DoCommands a static final constant or non-public and provide accessors if needed.(Ê°Í´üÿÿÿÿ8À£ì­¦-
+ysquid:S00116%"URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8À£ì­¦-
+Wsquid:S34006"9Remove this method and declare a constant for this value.(”·³›8À£ì­¦-

@@ -1,0 +1,21 @@
+
+bsquid:CommentedOutCodeLineh"<This block of commented-out lines of code should be removed.(▄омН
+gsquid:CommentedOutCodeLinel"<This block of commented-out lines of code should be removed.(╪ї┼°¤    
+е%squid:RedundantThrowsDeclarationCheckЦ"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(╤ўл░8Нек■е-
+bsquid:S3398Й">Move this method into the anonymous class declared at line 50.(рлб·¤    8Нек■е-
+\squid:S3398^">Move this method into the anonymous class declared at line 38.(╕Ї╦й8Нек■е-
+asquid:S3398r">Move this method into the anonymous class declared at line 44.(тШ∙├∙    8Нек■е-
+Osquid:S1444"2Make this "public static commandParts" field final(ыАШ,8Нек■е-
+nsquid:CommentedOutCodeLine{"<This block of commented-out lines of code should be removed.(╨ЪЧ·¤    8Нек■е-
+jsquid:CommentedOutCodeLineЧ"<This block of commented-out lines of code should be removed.(№МЖр8Нек■е-
+osquid:CommentedOutCodeLineЩ"<This block of commented-out lines of code should be removed.(┌╙шп     8Нек■е-
+osquid:CommentedOutCodeLineЬ"<This block of commented-out lines of code should be removed.(╪ї┼°¤    8Нек■е-
+М"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ыАШ,8Нек■е-
+Р"squid:ClassVariableVisibilityCheck%"VMake DoCommands a static final constant or non-public and provide accessors if needed.(╩░═┤№    8Нек■е-
+Vsquid:S1135а"2Complete the task associated to this TODO comment.(И╓фи·    8Нек■е-
+Xsquid:S3400б"9Remove this method and declare a constant for this value.(Ф╖│Ы8Нек■е-
+Msquid:S1172Ц".Remove this unused method parameter "account".(╤ўл░8Нек■е-
+ysquid:S00116%"URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(╩░═┤№    8Нек■е-
+Жsquid:S1157M"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(е▄ў╜√    8Нек■е-
+Бsquid:S1157N"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(╓Л░√8Нек■е-
+Жsquid:S1157P"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(Е╓╡╬■    8Нек■е-
