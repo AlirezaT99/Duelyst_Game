@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import model.Account;
+import model.Match;
 import view.MultiPlayerMenu;
 
 public class MultiPlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private MultiPlayerMenu multiPlayerMenu;
     public String[] commandParts;
-    private Account account;
-    private Account opponent;
+    private static Account account;
+    private static Account opponent;
 
     public MultiPlayerMenuProcess(MultiPlayerMenu multiPlayerMenu) {
         this.multiPlayerMenu = multiPlayerMenu;
@@ -49,8 +50,13 @@ public class MultiPlayerMenuProcess {
     };
 
     public static void customGame(String command) {
-        String[] commandparts = command.split("\\s+");
-
+        String[] commandParts = command.split("\\s+");
+        String deckName = commandParts[2]; // space ke nadare vasatesh?
+        int mode = Integer.parseInt(commandParts[3]);
+        int numberOfFlags = -1;
+        if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
+        Match match = new Match(false, mode);
+        match.setup(account, opponent, deckName, numberOfFlags);
     }
 
     private int selectUser(String opponentUserName) {
@@ -59,12 +65,12 @@ public class MultiPlayerMenuProcess {
                 opponent = account;
                 return 0;
             }
-        return 0;
+        return 2;
     }
 
 
     private int gameInit() {
-        return 2;
+        return 3;
     }
 
     public int exit() throws IOException {
@@ -77,7 +83,7 @@ public class MultiPlayerMenuProcess {
 
     //setters
     public void setAccount(Account account) {
-        this.account = account;
+        MultiPlayerMenuProcess.account = account;
     }
     //setters
 }

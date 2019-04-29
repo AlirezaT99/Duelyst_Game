@@ -40,6 +40,9 @@ public class MultiPlayerMenu {
                         showMessage("selected deck for second player is invalid");
                         break;
                     case 2:
+                        showMessage("username is invalid");
+                        break;
+                    case 3:
                         inner_Loop:
                         while (true) {
                             command = scanner.nextLine();
@@ -77,13 +80,6 @@ public class MultiPlayerMenu {
         for (Account account : users)
             if (!account.getUserName().equals(this.account.getUserName()))
                 showMessage(" - " + account.getUserName());
-    }
-
-    private void handleErrors(int message) {
-        switch (message) {
-            case 1:
-
-        }
     }
 
     public static int help() {

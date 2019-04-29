@@ -35,6 +35,8 @@ public class SinglePlayerMenu {
             if (commandType == -1)
                 showMessage("invalid input");
             else if (singlePlayerMenuProcess.DoCommands[commandType].doIt() == 4) {
+                //todo : show heroes to play against
+                //todo : show decks
                 inner_Loop:
                 while (true) {
                     command = scanner.nextLine();
@@ -52,7 +54,6 @@ public class SinglePlayerMenu {
                     }
                 }
             }
-
         }
         scanner.close();
     }
@@ -60,7 +61,7 @@ public class SinglePlayerMenu {
     private static int customGameMenu(String command) {
         if (command.equals("help")) return 1;
         else if (command.equals("exit")) return 2;
-        else if (command.matches("Start game [a-zA-Z0-9._]+ \\d \\d+]")) return 3;
+        else if (command.matches("Start game [a-zA-Z0-9._]+ \\d[ \\d+]*")) return 3;
         else return -1;
     }
 
