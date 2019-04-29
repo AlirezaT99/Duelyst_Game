@@ -19,8 +19,8 @@ public class MultiPlayerMenuProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("Start multiPlayer game \\d [\\d+]*")); // format of mode ?
         commandPatterns.add(Pattern.compile("Select user [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("Start multiPlayer game \\d [\\d+]*")); // format of mode ?
         commandPatterns.add(Pattern.compile("Exit"));
         commandPatterns.add(Pattern.compile("Help"));
     }
@@ -37,21 +37,21 @@ public class MultiPlayerMenuProcess {
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
-            this::gameInit,
             new DoCommand() {
                 @Override
                 public int doIt() {
                     return selectUser(commandParts[2]);
                 }
             },
+            this::gameInit,
             this::exit,
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return multiPlayerMenu.help();
-                }
-            }
+            MultiPlayerMenu::help
     };
+
+    public static void customGame(String command) {
+        String[] commandparts = command.split("\\s+");
+
+    }
 
     private int selectUser(String opponentUserName) {
         for (Account account : Account.getAccounts())
@@ -62,9 +62,9 @@ public class MultiPlayerMenuProcess {
         return 0;
     }
 
-    private int gameInit() {
 
-        return 0;
+    private int gameInit() {
+        return 2;
     }
 
     public int exit() throws IOException {

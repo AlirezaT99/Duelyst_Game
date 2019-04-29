@@ -25,6 +25,11 @@ public class SinglePlayerMenuProcess {
         commandPatterns.add(Pattern.compile("help|4"));
     }
 
+    public static void customGame(String command) {
+        String[] commandparts = command.split("\\s+");
+
+    }
+
     public interface DoCommand {
         int doIt() throws IOException;
     }
@@ -40,12 +45,7 @@ public class SinglePlayerMenuProcess {
             this::enterStory,
             this::enterCustomGame,
             this::exit,
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return singlePlayerMenu.help();
-                }
-            }
+            SinglePlayerMenu::help
     };
 
     private int enterStory() throws IOException {
@@ -58,12 +58,7 @@ public class SinglePlayerMenuProcess {
     }
 
     private int enterCustomGame() {
-//        CustomGameMenu customGameMenu = new CustomGameMenu(singlePlayerMenu);
-//        singlePlayerMenu.setInSinglePlayerMenu(false);
-//        customGameMenu.setHasRun(false);
-//        customGameMenu.setInCustomGameMenu(true);
-//        customGameMenu.run();
-        return 0;
+        return 4;
     }
 
     public int exit() throws IOException {

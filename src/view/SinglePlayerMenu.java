@@ -34,18 +34,46 @@ public class SinglePlayerMenu {
             int commandType = SinglePlayerMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 showMessage("invalid input");
-            else
-                singlePlayerMenuProcess.DoCommands[commandType].doIt();
+            else if (singlePlayerMenuProcess.DoCommands[commandType].doIt() == 4) {
+                inner_Loop:
+                while (true) {
+                    command = scanner.nextLine();
+                    switch (customGameMenu(command)) {
+                        case 1:
+                            customGameHelp();
+                            break;
+                        case 2:
+                            break inner_Loop;
+                        case 3:
+                            SinglePlayerMenuProcess.customGame(command);
+                            break;
+                        default:
+                            showMessage("invalid input");
+                    }
+                }
+            }
+
         }
         scanner.close();
     }
 
-    public int help() {
+    private static int customGameMenu(String command) {
+        if (command.equals("help")) return 1;
+        else if (command.equals("exit")) return 2;
+        else if (command.matches("Start game [a-zA-Z0-9._]+ \\d \\d+]")) return 3;
+        else return -1;
+    }
+
+    public static int help() {
         showMessage("1. Story");
         showMessage("2. Custom game");
         showMessage("3. Exit");
         showMessage("4. Help");
         return 0;
+    }
+
+    private static void customGameHelp() {
+        showMessage("Start game [deck name] [mode] [number of flags]->(only for the 3rd mode)");
     }
 
     public static void showMessage(String message) {
