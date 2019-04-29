@@ -1,10 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // 10.(0,1)fromWhichTeamAssigned{player1 , player2} |11.isAssignedOnWhichTeam(0,1){player1,player2}
 // 12.deactivatedForThisTurn(0,1) |13.theWayItIsGonnaBeAssigned(0-3){spellWay,attack,defend,don't care}
-// 16.appliedToOnWhichState(state is for card that have impact)(0-3){none,defend,attack}
+// 16.appliedToOnWhichState(state is for card that have isPositiveImpact)(0-3){none,defend,attack}
 class Impact {
     private String name;
     private Impact next;
@@ -17,15 +18,16 @@ class Impact {
     //8.nearHeroHostileMinion(0-2){none, one , all}| 9. random(0,1)|10.column(0,1)|11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
     //12.row(0,1)//13.closestSoldiers(0,1)
     private String impactTypeId = "";//0.(0,1)isPositive|1.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
-    // 2.(0-4)QuantityChange{mana,health,damage}|3.(0,1)quantityChangeSign{negative/positive}|4,5.(0,n)"impactQuantity"|
-    // 6.(0,2)PassivePermanent{none , passive , permanent , continuous, momentary }|7.(0,n)turnsToBeActivated |8,9.(0,n)turnsActive|
+    // 2.(0-3)QuantityChange{mana,health,damage}|3.(0,1)quantityChangeSign{negative/isPositiveImpact}|4,5.(0,n)"impactQuantity"|
+    // 6.(0-3)PassivePermanent{none , passive , permanent , continuous}|7.(0,n)turnsToBeActivated |8,9.(0,n)turnsActive|
     // 10.dispel(0-2){none,buffDispel,allPositiveDispel}|11.setsOnCells(0,1) |
     // |12.cellImpact(0-4){none,poison,fire,holy}
     private String impactTypeIdComp = ""; //0.antiHolyBuff |1.antiNegativeImpactOnDefend(0,1) |
-    // 2.antiPoisonOnDefend(0,1)|3.kill(0,1)|4.risingDamage(0-2){none,firstOneInDoc,secondOneInDoc}|5.immuneToMinDamage(0,1)
-
+    // 2.antiPoisonOnDefend(0,1)|3.kill(0,1)|4.risingDamage(0-2){none,firstOneInDoc,secondOneInDoc}|5.immuneToMinDamage(0,1)|6.antiDisarmOnDefend(0,1)
+    private String ImpactWayOfAssigning=""; //0.castingImpact(0-4){doesn't matter,spell,attack,defend,item}//1.wayCardGotIt(0-4){doesn't matter,spell,defend,attack}
+    //3.impactSetterTeam(0-3) //4.impactGetterTeam(0-3)
+    //needed id variables
     //targetTypeId variables
-
     private boolean validOnAll;
     private boolean targetAttackTypeMatters;
     private boolean validOnAWholeTeam;
@@ -59,28 +61,104 @@ class Impact {
         oneRow = targetTypeId.charAt(12) == '1';
         oneRandomClosest = targetTypeId.charAt(13) == '1';
     }
-
     //targetTypeIdVariables
+
+    //impactTypeVariables
+
+    private boolean isPositiveImpact;
+    private boolean buff;
+    private boolean holyBuff;
+    private boolean powerBuff;
+    private boolean poisonBuff;
+    private boolean weaknessBuff;
+    private boolean stunBuff;
+    private boolean disarmBuff;
+    private boolean manaChange;
+    private boolean healthChange;
+    private boolean damageChange;
+    private boolean passive;
+    private boolean continuos;
+    private boolean permanent;
+    private boolean cellImpact;
+    private boolean fireCelll;
+    private boolean holyCell;
+    private boolean poisonCell;
+    private boolean dispel;
+
+    private void setImpactTypeIdVariables() {
+        isPositiveImpact = impactTypeId.charAt(0) == '1';
+        buff = impactTypeId.charAt(1) != '0';
+        holyBuff = impactTypeId.charAt(1) == '1';
+        powerBuff = impactTypeId.charAt(1) == '2';
+        poisonBuff = impactTypeId.charAt(1) == '3';
+        weaknessBuff = impactTypeId.charAt(1) == '4';
+        stunBuff = impactTypeId.charAt(1) == '5';
+        disarmBuff = impactTypeId.charAt(1) == '6';
+        manaChange = impactTypeId.charAt(2) == '1';
+        healthChange = impactTypeId.charAt(2) == '2';
+        damageChange = impactTypeId.charAt(2) == '3';
+        passive = impactTypeId.charAt(6) == '1';
+        permanent = impactTypeId.charAt(6) == '2';
+        continuos = impactTypeId.charAt(6) == '3';
+        dispel = impactTypeId.charAt(10) != '0';
+        cellImpact = impactTypeId.charAt(11) == '1';
+        poisonCell = impactTypeId.charAt(12) == '1';
+        fireCelll = impactTypeId.charAt(12) == '2';
+        holyCell = impactTypeId.charAt(12) == '3';
+    }
+    //impactTypeVariables
+
+    //impactTypeComp variables
+
+    private boolean doesHaveAntiHolyBuff;
+    private boolean doesHaveAntiNegativeImpact;
+    private boolean doesHaveAntiPoison;
+    private boolean killIt;
+    private boolean doesHaveAntiDisarm;
+    private boolean doesHaveRisingDamage;
+
+    private void setAllImpactTypeCompVariables() {
+        doesHaveAntiHolyBuff = impactTypeIdComp.charAt(0) == '1';
+        doesHaveAntiNegativeImpact = impactTypeIdComp.charAt(1) == '1';
+        doesHaveAntiPoison = impactTypeIdComp.charAt(2) == '1';
+        killIt = impactTypeIdComp.charAt(3) == '1';
+        doesHaveRisingDamage = impactTypeIdComp.charAt(4) != '0';
+        doesHaveAntiDisarm = impactTypeIdComp.charAt(6) == '1';
+    }
+
+    //impactTypeComp variables
 
     void setAllVariablesNeeded() {
         setAllTargetTypeIdVariables();
+        setImpactTypeIdVariables();
+        setAllImpactTypeCompVariables();
     }
-
+    //needed id variables
 
     //set ImpactArea
 
-    //set impact main methods
+    private void addToCardsImpact(){
+        for (Cell cell: impactArea  ) {
+            if(cell.getMovableCard() != null){
+                cell.getMovableCard().getImpactsAppliedToThisOne().add(this);
+            }
+        }
+    }
+
+    //setImpact main methods
     private void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
         Player opponentPlayer = match.getOtherPlayer(friendlyPlayer);
         impactArea.clear();
         teamOrHeroSets(friendlyPlayer, opponentPlayer);
         oneTargetSets(friendlyPlayer, targetCell, opponentPlayer);
-        geometricSets(friendlyPlayer, targetCell, opponentPlayer);
         specialSets(friendlyPlayer, targetCell, castingCell);
+        geometricSets(friendlyPlayer, targetCell, opponentPlayer);
+        addToCardsImpact();
+
     }
 
     private void teamOrHeroSets(Player friendlyPlayer, Player opponentPlayer) {
-        if (validOnAll) { //impact on all soldiers on the table
+        if (validOnAll) { //isPositiveImpact on all soldiers on the table
             oneTeam(opponentPlayer, targetAttackTypeMatters);
             oneTeam(friendlyPlayer, targetAttackTypeMatters);
         } else if (validOnAWholeTeam) {
@@ -145,8 +223,7 @@ class Impact {
         else if (oneRandomClosest)
             oneRandomClosest(castingCell.getMovableCard());
     }
-
-    //set impact main methods
+    //setImpact  main methods
 
     private void oneHero(Player player) {
         if (oneRow) {
@@ -154,7 +231,7 @@ class Impact {
         } else if (!targetAttackTypeMatters) {
             impactArea.add(player.findPlayerHero().cardCell);
         } else if (targetTypeId.charAt(11) == '2' || targetTypeId.charAt(11) == '3') {
-            MovableCard.Hero hero = player.findPlayerHero();
+            Hero hero = player.findPlayerHero();
             if (hero.isHybrid() || hero.isRanged())
                 impactArea.add(hero.cardCell);
         }
@@ -215,7 +292,7 @@ class Impact {
     private void oneMinionFromOneTeam(Cell cell, Player player) {
         if (!isRandom) {
             if (player != null) {
-                if (cell.getMovableCard() instanceof MovableCard.Minion)
+                if (cell.getMovableCard() instanceof Minion)
                     if (cell.getMovableCard().player.getUserName().compareTo(player.getUserName()) == 0)
                         impactArea.add(cell);
             } else
@@ -226,7 +303,7 @@ class Impact {
         }
     }
 
-    private void oneHostileMinionBesideHero(Cell cell, MovableCard.Hero hero) {
+    private void oneHostileMinionBesideHero(Cell cell, Hero hero) {
         if (hero.cardCell.isTheseCellsAdjacent(cell))
             impactArea.add(cell);
     }
@@ -252,149 +329,79 @@ class Impact {
         int j = (int) i;
         impactArea.add(soldiersCells.get(j));
     }
-
     //set ImpactArea
 
-    //impact manager
 
-    public void addImpact(Impact impactInSet) {
-        while (impactInSet.next != null)
-            impactInSet = impactInSet.next;
-        impactInSet.next = this;
-    }
-
-    private void removeImpact() {
-        try {
-            this.next.previous = this.previous;
-            this.previous.next = this.next;
-        } catch (NullPointerException ignored) {
-        }
-    }
-
-    //impact manager
-
-    //special impacts manager
-
-    static boolean doesHaveAntiHolyBuff(MovableCard attackingCard) {
-        for (Impact impact : attackingCard.getImpactsAppliedToThisOne())
-            if (impact.impactTypeIdComp.charAt(0) == '1')
-                return true;
-        return false;
-    }
-
-    private void antiSomeThingOnDefend(int indexOfThatThingInImpactIdComp, char wantedState) {
-        Impact impact = this;
-        Impact movingImpact = this;
-        while (movingImpact.next != null) {
-            movingImpact = movingImpact.next;
-            if (movingImpact.previous.impactTypeId.charAt(16) == '1' && movingImpact.previous.impactTypeId.charAt(indexOfThatThingInImpactIdComp) == wantedState)
-                movingImpact.previous.removeImpact();
-        }
-        movingImpact = this;
-        while (movingImpact.previous != null) {
-            movingImpact = movingImpact.previous;
-            if (movingImpact.next.impactTypeId.charAt(16) == '1' && movingImpact.previous.impactTypeId.charAt(indexOfThatThingInImpactIdComp) == wantedState)
-                movingImpact.next.removeImpact();
-        }
-    }
-
-    private void antiNegativeImpactOnDefend() {
-        antiSomeThingOnDefend(0, '0');
-    }
-
-    private void antiPoisonOnDefend() {
-        antiSomeThingOnDefend(1, '3');
-    }
-
-    private void antiDisarmOnDefend() {
-        antiSomeThingOnDefend(1, '6');
-    }
-
-    private void kill() {
-        for (Cell cell : impactArea) {
-            cell.getMovableCard().health = 0;
-        }
-    }
-
-    //special impacts manager
-
-    public void doImpact(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
-        setImpactArea(friendlyPlayer, targetCell, castingCell);
-        String id = impactTypeId;
-        if (id.charAt(11) == 1) //deactivated for this turn
-            return;
-
-        if (id.charAt(1) == '2')
-            powerBuff();
-        if (id.charAt(1) == '4')
-            weaknessBuff();
-        if (id.charAt(15) == '1')
-            setImpactONCells();
-        if (id.charAt(1) == '0') {
-            if (id.charAt(3) == '1')
-                manaChange();
-            if (id.charAt(3) == '2')
-                healthChange();
-            if (id.charAt(3) == '3')
-                damageChange();
-        }
-        if (impactTypeIdComp.charAt(0) == '1')
-            antiNegativeImpactOnDefend();
-        if (impactTypeIdComp.charAt(1) == '1')
-            antiPoisonOnDefend();
-        if (impactTypeIdComp.charAt(2) == '1')
-            antiDisarmOnDefend();
-        if (impactTypeIdComp.charAt(3) == '1')
+    void doImpact(Player friendlyPlayer , MovableCard movableCard) {
+        if (doesHaveAntiNegativeImpact)
+            antiNegativeImpactOnDefend(movableCard);
+        else if (doesHaveAntiPoison)
+            antiPoisonOnDefend(movableCard);
+        else if (doesHaveAntiDisarm)
+            antiDisarmOnDefend(movableCard);
+        else if (killIt)
             kill();
-
+        else if (powerBuff)
+            powerBuff();
+        else if (weaknessBuff)
+            weaknessBuff();
+        else if (cellImpact)
+            setImpactOnCells();
+        else if (!buff) {
+            if (manaChange)
+                manaChange(friendlyPlayer);
+            else if (healthChange)
+                healthChange();
+            else if (damageChange)
+                damageChange();
+        } else if (dispel)
+            dispel(friendlyPlayer);
 
     }
 
-    private void manaChange() {
-        int impactQuantity = getImpactQuantityWithSign();
-        for (Cell cell : impactArea) {
-            Player player = cell.getMovableCard().player;
-            player.setMana(player.getMana() + impactQuantity);
-        }
+    private void manaChange(Player player) {
+        player.setMana(player.getMana() + getImpactQuantityWithSign());
     }
 
     private void healthChange() {
         int impactQuantity = getImpactQuantityWithSign();
         for (Cell cell : impactArea)
-            cell.getMovableCard().health += impactQuantity;
-    } //buff or nonBuff change (?)
+            cell.getMovableCard().setHealth(cell.getMovableCard().getHealth() + impactQuantity);
+    }
 
     private void damageChange() {
         int impactQuantity = getImpactQuantityWithSign();
         for (Cell cell : impactArea)
-            cell.getMovableCard().buffDamageChange += impactQuantity;
-    } //buff or nonBuff change(?)
+            cell.getMovableCard().dispelableDamageChange += impactQuantity;
+    }
 
-    private void dispell(Player dispellingPlayer) {
-        if (impactTypeId.charAt(14) == '1') {
+    private void dispel(Player dispellingPlayer) {
+        buffDispel(dispellingPlayer);
+        allPositiveImpactDispel();
+    }
+
+    private void allPositiveImpactDispel() {
+        if (impactTypeId.charAt(14) == '2') {
             for (Cell cell : impactArea) {
-                if (cell.getMovableCard().player.equals(dispellingPlayer)) {
-                    for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne())
-                        if (impact.impactTypeId.charAt(0) == '0' && impact.impactTypeId.charAt(1) != '0')
-                            impact.removeImpact();
-                } else
-                    for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne())
-                        if (impact.impactTypeId.charAt(0) == '1' && impact.impactTypeId.charAt(1) != '0')
-                            impact.removeImpact();
-            }
-        } else if (impactTypeId.charAt(14) == '2') {
-            for (Cell cell : impactArea) {
-                for (Impact impact : cell.getMovableCard().getImpactsAppliedToThisOne()) {
-                    if (impact.impactTypeId.charAt(0) == '1')
-                        impact.removeImpact();
-                }
+                cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> impact.isPositiveImpact);
             }
         }
     }
 
-    private void setImpactONCells() {
+    private void buffDispel(Player dispellingPlayer) {
+        if (impactTypeId.charAt(14) == '1') {
+            for (Cell cell : impactArea) {
+                if (cell.getMovableCard().player.equals(dispellingPlayer)) {
+                    cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> !impact.isPositiveImpact && impact.buff);
+                } else
+                    cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> impact.isPositiveImpact && impact.buff);
+            }
+        }
+    }
+
+    private void setImpactOnCells() {
         for (Cell cell : impactArea) {
-            changeCharAtDesiredIndex(15, '0', impactTypeId);
+            changeCharAtDesiredIndex(11, '0', impactTypeId);
             cell.addToImpacts(this);
         }
     }
@@ -403,9 +410,9 @@ class Impact {
 
     static void holyBuff(MovableCard movableCard, int damageTaken) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
-            if (impact.impactTypeId.charAt(1) == '1') { //is holyBuff
+            if (impact.holyBuff) {
                 int maxHeal = Math.max(impact.getImpactQuantityWithSign(), damageTaken);
-                movableCard.health += maxHeal;
+                movableCard.setHealth(movableCard.getHealth() + maxHeal);
             }
         }
     }
@@ -413,17 +420,17 @@ class Impact {
     void poisonBuff(MovableCard movableCard) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3') //is poisonBuff
-                movableCard.health += getImpactQuantityWithSign();
+                movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
 
         }
     }
 
     private void powerBuffOrWeaknessBuff() {
         for (Cell cell : this.impactArea) {
-            if (impactTypeId.charAt(2) == '2') //health change
-                cell.getMovableCard().buffHealthChange += getImpactQuantityWithSign();
-            if (impactTypeId.charAt(2) == '3') //damage change
-                cell.getMovableCard().buffDamageChange += getImpactQuantityWithSign();
+            if (healthChange) //health change
+                cell.getMovableCard().dispelableHealthChange += getImpactQuantityWithSign();
+            if (damageChange) //damage change
+                cell.getMovableCard().dispelableDamageChange += getImpactQuantityWithSign();
         }
     }
 
@@ -434,8 +441,42 @@ class Impact {
     private void weaknessBuff() {
         powerBuffOrWeaknessBuff();
     }
-
     //buff manager
+
+    //special impacts manager
+
+    static boolean doesHaveAntiHolyBuff(MovableCard attackingCard) {
+        for (Impact impact : attackingCard.getImpactsAppliedToThisOne())
+            if (impact.doesHaveAntiHolyBuff)
+                return true;
+        return false;
+    }
+
+    private void antiSomeThingOnDefend(int indexOfThatThingInImpactId, char wantedState, MovableCard movableCard) {
+        movableCard.getImpactsAppliedToThisOne().removeIf(impact -> impact.ImpactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == wantedState);
+    }
+
+    private void antiNegativeImpactOnDefend(MovableCard movableCard) {
+        antiSomeThingOnDefend(0, '0',movableCard);
+    }
+
+    private void antiPoisonOnDefend(MovableCard movableCard) {
+        antiSomeThingOnDefend(1, '3',movableCard);
+    }
+
+    private void antiDisarmOnDefend(MovableCard movableCard) {
+        antiSomeThingOnDefend(1, '6',movableCard);
+    }
+
+    private void kill() {
+        for (Cell cell : impactArea) {
+            cell.getMovableCard().setHealth(0);
+            cell.getMovableCard().dispelableHealthChange = 0;
+        }
+    }
+
+    //special impacts manager
+
 
     void goThroughTime() {
         String s = impactTypeId.substring(0, 7);

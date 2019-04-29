@@ -38,7 +38,6 @@ public class Match {
 
     //turn based manager
 
-
     public Player currentTurnPlayer() {
         if (turn == 0)
             return player1;
