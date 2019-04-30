@@ -1,8 +1,4 @@
 
-Wsquid:S3400e"9Remove this method and declare a constant for this value.(”·³›8é›Õê¥-
-ysquid:S00116("URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8‘»ğê¥-
-Qsquid:S1172!"3Remove this unused method parameter "commandParts".(’ÿô8¬ÔŞê¥-
-"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ÜÕï8ÃƒÀê¥-
+"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ÜÕï8ÃƒÀê¥-
 "squid:ClassVariableVisibilityCheck("VMake DoCommands a static final constant or non-public and provide accessors if needed.(Ê°Í´üÿÿÿÿ8Ã »ê¥-
-Ssquid:S1191"5Use classes from the Java API instead of Sun classes.(Û•‚€8äøıë¥-
-~squid:UselessImportCheck"SRemove this unused import 'com.sun.xml.internal.ws.policy.privateutil.PolicyUtils'.(Û•‚€8äøıë¥-
+ysquid:S00116("URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8‘»ğê¥-

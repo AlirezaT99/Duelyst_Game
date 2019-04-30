@@ -1,17 +1,20 @@
 
-"squid:ClassVariableVisibilityCheck"VMake DoCommands a static final constant or non-public and provide accessors if needed.(Ê°Í´üÿÿÿÿ8Î˜’•¦-
-†squid:S1157G"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(¥Ü÷½ûÿÿÿÿ8Î˜’•¦-
-\squid:S3398X">Move this method into the anonymous class declared at line 32.(‰ô‡®8Î˜’•¦-
-Xsquid:S3400›"9Remove this method and declare a constant for this value.(”·³›8Î˜’•¦-
-bsquid:S3398">Move this method into the anonymous class declared at line 56.(à¶Öòúÿÿÿÿ8Î˜’•¦-
-ysquid:S00116"URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8Î˜’•¦-
-]squid:S3398">Move this method into the anonymous class declared at line 50.(ç±ùæ8Î˜’•¦-
-]squid:S3398ƒ">Move this method into the anonymous class declared at line 44.(ö ºú8Î˜’•¦-
-Msquid:S1172".Remove this unused method parameter "account".(ç±ùæ8Î˜’•¦-
-squid:S1157H"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(Ö‹°û8Î˜’•¦-
-asquid:S3398l">Move this method into the anonymous class declared at line 38.(â˜ùÃùÿÿÿÿ8Î˜’•¦-
-Fsquid:S1604>"(Make this anonymous inner class a lambda(¾‹¹ı8Î˜’•¦-
-"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ÜÕï8Î˜’•¦-
 Fsquid:S16048"(Make this anonymous inner class a lambda(¾‹¹ı8Î˜’•¦-
+Fsquid:S1604>"(Make this anonymous inner class a lambda(¾‹¹ı8Î˜’•¦-
+†squid:S1157G"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(¥Ü÷½ûÿÿÿÿ8Î˜’•¦-
 †squid:S1157J"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(…ÖµÎşÿÿÿÿ8Î˜’•¦-
+]squid:S3398ƒ">Move this method into the anonymous class declared at line 44.(ö ºú8Î˜’•¦-
+asquid:S3398l">Move this method into the anonymous class declared at line 38.(â˜ùÃùÿÿÿÿ8Î˜’•¦-
+Xsquid:S3400›"9Remove this method and declare a constant for this value.(”·³›8Î˜’•¦-
 Vsquid:S1135š"2Complete the task associated to this TODO comment.(ˆÖä¨úÿÿÿÿ8Î˜’•¦-
+\squid:S3398X">Move this method into the anonymous class declared at line 32.(‰ô‡®8Î˜’•¦-
+ysquid:S00116"URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8Î˜’•¦-
+bsquid:S3398">Move this method into the anonymous class declared at line 56.(à¶Öòúÿÿÿÿ8Î˜’•¦-
+"squid:ClassVariableVisibilityCheck"VMake DoCommands a static final constant or non-public and provide accessors if needed.(Ê°Í´üÿÿÿÿ8Î˜’•¦-
+squid:S1157H"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(Ö‹°û8Î˜’•¦-
+"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ÜÕï8Î˜’•¦-
+Fsquid:S16042"(Make this anonymous inner class a lambda(¾‹¹ı8•óê¦-
+Fsquid:S1604,"(Make this anonymous inner class a lambda(¾‹¹ı8•óê¦-
+Fsquid:S1604 "(Make this anonymous inner class a lambda(¾‹¹ı8•óê¦-
+]squid:S3398">Move this method into the anonymous class declared at line 50.(ç±ùæ8Î˜’•¦-
+Msquid:S1172".Remove this unused method parameter "account".(ç±ùæ8Î˜’•¦-

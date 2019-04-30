@@ -3,17 +3,10 @@ package model;
 import java.util.ArrayList;
 
 public class Shop {
-    private ArrayList<Hero> shopHeroes;
-    private ArrayList<Minion> shopMinions;
-    private ArrayList<Spell> shopSpells;
-    private ArrayList<UsableItem> shopItems;
-
-    {
-        shopHeroes = new ArrayList<>();
-        shopMinions = new ArrayList<>();
-        shopSpells = new ArrayList<>();
-        shopItems = new ArrayList<>();
-    }
+    private static ArrayList<Hero> shopHeroes = new ArrayList<>();
+    private static ArrayList<Minion> shopMinions = new ArrayList<>();
+    private static ArrayList<Spell> shopSpells = new ArrayList<>();
+    private static ArrayList<UsableItem> shopItems = new ArrayList<>();
 
     public static Shop initShop() {
         Shop shop = new Shop();
@@ -128,21 +121,36 @@ public class Shop {
     }
 
     //getters
-    public ArrayList<Hero> getShopHeroes() {
+    public static ArrayList<Hero> getShopHeroes() {
         return shopHeroes;
     }
 
-    public ArrayList<Minion> getShopMinions() {
+    public static ArrayList<Minion> getShopMinions() {
         return shopMinions;
     }
 
-    public ArrayList<Spell> getShopSpells() {
+    public static ArrayList<Spell> getShopSpells() {
         return shopSpells;
     }
 
-    public ArrayList<UsableItem> getShopItems() {
+    public static ArrayList<UsableItem> getShopItems() {
         return shopItems;
     }
 
     //getters
+
+    //setters
+    public static void addToHeroes(Hero hero){
+        shopHeroes.add(hero);
+    }
+    public static void addToMinions(Minion minion){
+        shopMinions.add(minion);
+    }
+    public static void addToSpells(Spell spell){
+        shopSpells.add(spell);
+    }
+    public static void addToItems(UsableItem usableItem){
+        shopItems.add(usableItem);
+    }
+
 }

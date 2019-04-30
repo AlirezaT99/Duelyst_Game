@@ -8,7 +8,7 @@ public class Account {
     private String userName;
     private String password;
     private long money;
-    private Collection collection;
+    private Collection collection = new Collection();
     private ArrayList<model.Account> friends;
     private int numberOfWins;
 
@@ -24,12 +24,20 @@ public class Account {
         accounts = new ArrayList<>();
     }
 
-    public void buy(int cost, UsableItem item, Card card) {
+    public void buy(int cost, UsableItem item, Card card) throws NullPointerException {
         money -= cost;
         if (item != null)
             collection.getItems().add(item);
-        if (card != null)
-            collection.getCards().add(card);
+        try {
+            if (card != null){
+//                if(collection == null)
+//                    System.out.println(1);
+//                if(collection!= null && collection.getCards() == null)
+//                    System.out.println(2);
+                collection.getCards().add(card);}
+        }catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void sell(int cost, UsableItem item, Card card) {

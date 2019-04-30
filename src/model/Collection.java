@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Collection {
-    private ArrayList<UsableItem> items;
-    private ArrayList<Card> cards;
-    private ArrayList<Deck> decks;
+    private ArrayList<UsableItem> items = new ArrayList<>();
+    private ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Deck> decks = new ArrayList<>();
     private HashMap<String, UsableItem> itemsHashMap;
     private HashMap<String, Card> cardsHashMap;
     private HashMap<String, Deck> deckHashMap;
     private Deck selectedDeck = null;
 
     {
-        items = new ArrayList<>();
-        cards = new ArrayList<>();
-        decks = new ArrayList<>();
         itemsHashMap = new HashMap<>();
         cardsHashMap = new HashMap<>();
         deckHashMap = new HashMap<>();

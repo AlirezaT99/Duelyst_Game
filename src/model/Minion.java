@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
     public class Minion extends MovableCard {
+        private static ArrayList<Minion> minions = new ArrayList<>();
         private Impact onSpawnImpact;
         private Impact onDeathImpact;
         private Impact passiveImpact;
@@ -53,7 +54,7 @@ import java.util.ArrayList;
             String output = "Type : Minion - Name : " + this.name + " - Class : " + classType + " - AP : " + this.getDamage() +
                     " HP : " + this.getHealth() + " - MP :" + this.manaCost + " Special power : " + this.description;
             if (showCost) output = output + " - Sell Cost : " + getCost();
-            output = output + "\n";
+            //output = output + "\n";
             return output;
         }
 
@@ -93,6 +94,9 @@ import java.util.ArrayList;
             this.passiveImpact = passiveImpact;
         }
 
+        public static void addToMinions(Minion minion){
+            minions.add(minion);
+        }
         //setters
     }
 

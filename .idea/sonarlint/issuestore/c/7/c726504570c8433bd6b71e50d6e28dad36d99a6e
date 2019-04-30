@@ -1,9 +1,8 @@
 
-@squid:S1643"Use a StringBuilder instead.(³üÇ°üÿÿÿÿ8©âÑš¦-
 [squid:UselessImportCheck"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÄÖÚ…£-
-Qsquid:S1135ˆ"2Complete the task associated to this TODO comment.(™ªÀ¬8Ğ°ğÄ¦-
-Tsquid:UselessImportCheck")Remove this unused import 'java.net.URI'.(Ö¦¨°8òÌêà£-
+Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ8òÌêà£-
 dsquid:UselessImportCheck"4Remove this unused import 'java.util.regex.Pattern'.(Ã•…Äúÿÿÿÿ8òÌêà£-
+@squid:S1643¾"Use a StringBuilder instead.(³üÇ°üÿÿÿÿ8©âÑš¦-
 µ%squid:RedundantThrowsDeclarationCheckT"xRemove the declaration of thrown exception 'java.io.FileNotFoundException' which is a subclass of 'java.io.IOException'.(¼×øáıÿÿÿÿ8Âö —¦-
 [squid:UselessImportCheck"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8ÄÖÚ…£-
-Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ8òÌêà£-
+Tsquid:UselessImportCheck")Remove this unused import 'java.net.URI'.(Ö¦¨°8òÌêà£-

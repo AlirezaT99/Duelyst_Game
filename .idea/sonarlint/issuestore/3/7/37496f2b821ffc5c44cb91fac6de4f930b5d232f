@@ -1,8 +1,8 @@
 
-squid:S1450"^Remove the "isComboAttacker" field and declare it as a local variable in the relevant methods.(õóúúÿÿÿÿ8–œª¦-
-”squid:S1319Ñ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÂÜŠûÿÿÿÿ8¹ä—¨¦-
+^squid:S1161²":Add the "@Override" annotation above this method signature(ú›Šøøÿÿÿÿ8¹ä—¨¦-
 Vsquid:S1068"3Remove this unused "isComboAttacker" private field.(õóúúÿÿÿÿ8¹ä—¨¦-
-Xsquid:S1161":Add the "@Override" annotation above this method signature(ë¯¡ë8¹ä—¨¦-
+squid:S1450"^Remove the "isComboAttacker" field and declare it as a local variable in the relevant methods.(õóúúÿÿÿÿ8–œª¦-
+”squid:S1319Ò"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÂÜŠûÿÿÿÿ8¹ä—¨¦-
 \
-squid:S106¨"9Replace this use of System.out or System.err by a logger.(øºÑûúÿÿÿÿ8¹ä—¨¦-
-^squid:S1161±":Add the "@Override" annotation above this method signature(ú›Šøøÿÿÿÿ8¹ä—¨¦-
+squid:S106©"9Replace this use of System.out or System.err by a logger.(øºÑûúÿÿÿÿ8¹ä—¨¦-
+Xsquid:S1161":Add the "@Override" annotation above this method signature(ë¯¡ë8”ÚÕÒ¦-
