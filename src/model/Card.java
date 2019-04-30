@@ -36,6 +36,7 @@ public class Card implements toStr {
     }
 
     //getters
+
     public String getName() {
         return name;
     }
@@ -63,10 +64,10 @@ public class Card implements toStr {
     public String getDescription() {
         return description;
     }
-
     //getters
 
     //setters
+
     public void setCardID(String cardID) {
         this.cardID = cardID;
     }
@@ -94,7 +95,6 @@ public class Card implements toStr {
     public void setDescription(String description) {
         this.description = description;
     }
-
     //setters
 
 }

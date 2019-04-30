@@ -4,6 +4,8 @@ class CollectibleItem extends InfluentialItem {
     private Cell cell;
     private Match match;
 
+    //getters
+
     public Cell getCell() {
         return cell;
     }
@@ -12,7 +14,11 @@ class CollectibleItem extends InfluentialItem {
         return match;
     }
 
+    //getters
+
+    //setters
     public void setMatch(Match match) {
         this.match = match;
     }
+    //setters
 }

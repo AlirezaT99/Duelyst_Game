@@ -1,9 +1,4 @@
 
-Ksquid:S1068"*Remove this unused "spells" private field.(‡‰‚áıÿÿÿÿ8å±×È¥-
-]squid:S1161G":Add the "@Override" annotation above this method signature(…ÌÌÿÿÿÿÿ8«“´¥-
-€squid:S1450"_Remove the "areaTargetSquare" field and declare it as a local variable in the relevant methods.(°·ßŞúÿÿÿÿ8å±×È¥-
-Usquid:S1068"4Remove this unused "areaTargetSquare" private field.(°·ßŞúÿÿÿÿ8å±×È¥-
-Xsquid:S1161K":Add the "@Override" annotation above this method signature(æø†ï8«“´¥-
-nsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(‰†™Æ8å±×È¥-
-Esquid:S1068"*Remove this unused "impact" private field.(·£‚8å±×È¥-
-Hsquid:S1172",Remove this unused method parameter "match".(ë¯¡ë8å±×È¥-
+Gsquid:S1068"*Remove this unused "impact" private field.(·£‚8å±×È¥-
+Msquid:S1068"*Remove this unused "spells" private field.(‡‰‚áıÿÿÿÿ8å±×È¥-
+psquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(‰†™Æ8å±×È¥-

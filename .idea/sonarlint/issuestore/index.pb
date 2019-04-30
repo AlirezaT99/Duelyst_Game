@@ -56,3 +56,13 @@ T
 $src/presenter/BattleInitProcess.java,b\f\bf266344392b7cf0d9aaf1529e97c1ff2d20ed2e
 C
 src/model/Hero.java,e\0\e00a941f944eb165d4c17e00ee1ce21feea128f8
+=
+project-3.iml,0\a\0a5681467b14c6470223714429c6fae31435ff77
+E
+src/model/Minion.java,1\f\1f4f0680fd4f404c031b4879ffbe089267bbfdda
+M
+.idea/dictionaries/Lenovo.xml,6\f\6f9f3ad266c4374cb97027fd7686eeb14ecd0b80
+Q
+!.idea/libraries/testng_6_14_3.xml,f\3\f31b603fd335edbeface69359bde0b051679ac93
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0

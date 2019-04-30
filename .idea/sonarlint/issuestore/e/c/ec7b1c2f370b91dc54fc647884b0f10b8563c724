@@ -1,4 +1,4 @@
 
-|squid:S1171	"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8š“˜Ï¥-
-usquid:S1171*"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
 squid:S13194"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ŠØ…,8¡¯üı£-
+usquid:S1171*"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+|squid:S1171	"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8š“˜Ï¥-

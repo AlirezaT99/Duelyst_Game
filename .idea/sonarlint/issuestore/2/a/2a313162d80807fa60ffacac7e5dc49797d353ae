@@ -1,38 +1,35 @@
 
-Qsquid:S1068J".Remove this unused "disarmBuff" private field.(–Õİ±şÿÿÿÿ8ö÷ğ®¦-
-Jsquid:S1068S",Remove this unused "holyCell" private field.(Û»éÏ8‡ªú®¦-
-Fsquid:S1068	"(Remove this unused "name" private field.(Ë¥¼8µúë­¦-
-Nsquid:S1068N"+Remove this unused "passive" private field.(Øà·şúÿÿÿÿ8–‚õ®¦-
-nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ü®Íşÿÿÿÿ8µúë­¦-
-Msquid:S1068s"*Remove this unused "killIt" private field.(ªğÊûÿÿÿÿ8Ó‹ç¯¦-
-ysquid:S1450N"VRemove the "passive" field and declare it as a local variable in the relevant methods.(Øà·şúÿÿÿÿ8–‚õ®¦-
-xsquid:S1450s"URemove the "killIt" field and declare it as a local variable in the relevant methods.(ªğÊûÿÿÿÿ8Çäí¯¦-
-Psquid:S1068P"-Remove this unused "permanent" private field.(¨ëÕšüÿÿÿÿ8ÇØö®¦-
-nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(£ÀÄ§ÿÿÿÿÿ8µúë­¦-
-qsquid:S1450	"SRemove the "name" field and declare it as a local variable in the relevant methods.(Ë¥¼8µúë­¦-
-{squid:S1450P"XRemove the "permanent" field and declare it as a local variable in the relevant methods.(¨ëÕšüÿÿÿÿ8ÇØö®¦-
-Osquid:S1481Ö"+Remove this unused "impact" local variable.(‰É¸¦øÿÿÿÿ8Šèÿ®¦-
-Psquid:S1068O"-Remove this unused "continuos" private field.(–©ƒôıÿÿÿÿ8ÇØö®¦-
-asquid:S1068q">Remove this unused "doesHavaAntiNegativeImpact" private field.(ĞÊ“¡ÿÿÿÿÿ8Ó‹ç¯¦-
-vsquid:S3776‘"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(‰İßØúÿÿÿÿ8×ŒØ¯¦-
-|squid:S1450J"YRemove the "disarmBuff" field and declare it as a local variable in the relevant methods.(–Õİ±şÿÿÿÿ8ö÷ğ®¦-
-”squid:S1319•"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ì±¿¡şÿÿÿÿ8ñ ı®¦-
-Ksquid:S1481Õ"'Remove this unused "id" local variable.(——Š‹ûÿÿÿÿ8È½†¯¦-
-^squid:S1854Ö":Remove this useless assignment to local variable "impact".(‰É¸¦øÿÿÿÿ8Šèÿ®¦-
-Tsquid:S1068r"6Remove this unused "doesHaveAntiPoison" private field.(Óç Ã8Ó‹ç¯¦-
-Vsquid:S1068t"8Remove this unused "doesHaveRisingDamage" private field.(ä¿…µ8Ó‹ç¯¦-
-|squid:S1450G"YRemove the "poisonBuff" field and declare it as a local variable in the relevant methods.(ä¶ïöúÿÿÿÿ8áèî®¦-
-Zsquid:S1854Õ"6Remove this useless assignment to local variable "id".(——Š‹ûÿÿÿÿ8È½†¯¦-
-squid:S1450r"aRemove the "doesHaveAntiPoison" field and declare it as a local variable in the relevant methods.(Óç Ã8¥´ë¯¦-
-Qsquid:S1068T".Remove this unused "poisonCell" private field.(õÛà¸ıÿÿÿÿ8‡ªú®¦-
-nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Å±³çùÿÿÿÿ8µúë­¦-
-Osquid:S1068I",Remove this unused "stunBuff" private field.(ˆŞ‰îøÿÿÿÿ8˜õï®¦-
-Psquid:S1068R"-Remove this unused "fireCelll" private field.(™İùÏşÿÿÿÿ8‡ªú®¦-
-usquid:S1450S"WRemove the "holyCell" field and declare it as a local variable in the relevant methods.(Û»éÏ8‡ªú®¦-
-squid:S3923­"[Remove this conditional structure or edit its code blocks so that they're not all the same.(ï§¾´ıÿÿÿÿ8ñ ı®¦-
-|squid:S1450T"YRemove the "poisonCell" field and declare it as a local variable in the relevant methods.(õÛà¸ıÿÿÿÿ8‡ªú®¦-
-Œsquid:S1450q"iRemove the "doesHavaAntiNegativeImpact" field and declare it as a local variable in the relevant methods.(ĞÊ“¡ÿÿÿÿÿ8¥´ë¯¦-
-{squid:S1450O"XRemove the "continuos" field and declare it as a local variable in the relevant methods.(–©ƒôıÿÿÿÿ8ÇØö®¦-
-squid:S1450t"cRemove the "doesHaveRisingDamage" field and declare it as a local variable in the relevant methods.(ä¿…µ8Æãî¯¦-
-zsquid:S1450I"WRemove the "stunBuff" field and declare it as a local variable in the relevant methods.(ˆŞ‰îøÿÿÿÿ8˜õï®¦-
-{squid:S1450R"XRemove the "fireCelll" field and declare it as a local variable in the relevant methods.(™İùÏşÿÿÿÿ8‡ªú®¦-
+nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Å±³çùÿÿÿÿ8‰ÉñÀ¦-
+ƒsquid:S00116"_Rename this field "ImpactWayOfAssigning" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹Öø»üÿÿÿÿ8‰ÉñÀ¦-
+nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(£ÀÄ§ÿÿÿÿÿ8‰ÉñÀ¦-
+qsquid:S1450
+"SRemove the "name" field and declare it as a local variable in the relevant methods.(Ë¥¼8‰ÉñÀ¦-
+Psquid:S1068Q"-Remove this unused "permanent" private field.(¨ëÕšüÿÿÿÿ8‰ÉñÀ¦-
+squid:S3923¹"[Remove this conditional structure or edit its code blocks so that they're not all the same.(ï§¾´ıÿÿÿÿ8‰ÉñÀ¦-
+Qsquid:S1068K".Remove this unused "disarmBuff" private field.(–Õİ±şÿÿÿÿ8‰ÉñÀ¦-
+Osquid:S1068",Remove this unused "previous" private field.(šäÖıÿÿÿÿ8‰ÉñÀ¦-
+zsquid:S1450J"WRemove the "stunBuff" field and declare it as a local variable in the relevant methods.(ˆŞ‰îøÿÿÿÿ8‰ÉñÀ¦-
+usquid:S1450T"WRemove the "holyCell" field and declare it as a local variable in the relevant methods.(Û»éÏ8‰ÉñÀ¦-
+Fsquid:S1068
+"(Remove this unused "name" private field.(Ë¥¼8‰ÉñÀ¦-
+Qsquid:S1068U".Remove this unused "poisonCell" private field.(õÛà¸ıÿÿÿÿ8‰ÉñÀ¦-
+Jsquid:S1068T",Remove this unused "holyCell" private field.(Û»éÏ8‰ÉñÀ¦-
+”squid:S1319ü"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ì±¿¡şÿÿÿÿ8—ˆ‡À¦-
+Psquid:S1068P"-Remove this unused "continuos" private field.(–©ƒôıÿÿÿÿ8‰ÉñÀ¦-
+|squid:S1450K"YRemove the "disarmBuff" field and declare it as a local variable in the relevant methods.(–Õİ±şÿÿÿÿ8‰ÉñÀ¦-
+nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(‹Öø»üÿÿÿÿ8‰ÉñÀ¦-
+Psquid:S1068S"-Remove this unused "fireCelll" private field.(™İùÏşÿÿÿÿ8‰ÉñÀ¦-
+|squid:S1450U"YRemove the "poisonCell" field and declare it as a local variable in the relevant methods.(õÛà¸ıÿÿÿÿ8‰ÉñÀ¦-
+|squid:S1450H"YRemove the "poisonBuff" field and declare it as a local variable in the relevant methods.(ä¶ïöúÿÿÿÿ8‰ÉñÀ¦-
+{squid:S1450S"XRemove the "fireCelll" field and declare it as a local variable in the relevant methods.(™İùÏşÿÿÿÿ8‰ÉñÀ¦-
+}squid:S1450D"_Remove the "isPositiveImpact" field and declare it as a local variable in the relevant methods.(…µ¿8‰ÉñÀ¦-
+Nsquid:S1068O"+Remove this unused "passive" private field.(Øà·şúÿÿÿÿ8‰ÉñÀ¦-
+Vsquid:S1068v"8Remove this unused "doesHaveRisingDamage" private field.(ä¿…µ8‰ÉñÀ¦-
+{squid:S1450P"XRemove the "continuos" field and declare it as a local variable in the relevant methods.(–©ƒôıÿÿÿÿ8‰ÉñÀ¦-
+squid:S1450v"cRemove the "doesHaveRisingDamage" field and declare it as a local variable in the relevant methods.(ä¿…µ8‰ÉñÀ¦-
+Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ8‰ÉñÀ¦-
+Osquid:S1068J",Remove this unused "stunBuff" private field.(ˆŞ‰îøÿÿÿÿ8‰ÉñÀ¦-
+nsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ü®Íşÿÿÿÿ8‰ÉñÀ¦-
+Fsquid:S1068"(Remove this unused "next" private field.(İ‡¥Ö8‰ÉñÀ¦-
+ysquid:S1450O"VRemove the "passive" field and declare it as a local variable in the relevant methods.(Øà·şúÿÿÿÿ8‰ÉñÀ¦-
+{squid:S1450Q"XRemove the "permanent" field and declare it as a local variable in the relevant methods.(¨ëÕšüÿÿÿÿ8‰ÉñÀ¦-

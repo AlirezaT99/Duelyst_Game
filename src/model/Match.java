@@ -42,6 +42,20 @@ public class Match {
     }
 
 
+    public void setup(Account account, String deckName, int numberOfFlags) {
+        player1.setAccount(account);
+        player1.setDeck(player1.getCollection().getDeckHashMap().get(deckName));
+        player2.setAccount(null);
+        this.numberOfFlags = numberOfFlags;
+    }
+
+    public void setup(Account account1, Account account2, String deckName, int numberOfFlags) {
+        player1.setAccount(account1);
+        player1.setAccount(account2);
+        player1.setDeck(player1.getCollection().getDeckHashMap().get(deckName));
+        this.numberOfFlags = numberOfFlags;
+    }
+
     //turn based manager
 
     public Player currentTurnPlayer() {
@@ -59,9 +73,7 @@ public class Match {
     void switchTurn() {
         turn ^= 1;
     }
-
     //turn based manager
-
 
     //getters
     Player getOtherPlayer(Player player) {
@@ -87,17 +99,4 @@ public class Match {
     }
     //getters
 
-    public void setup(Account account, String deckName, int numberOfFlags) {
-        player1.setAccount(account);
-        player1.setDeck(player1.getCollection().getDeckHashMap().get(deckName));
-        player2.setAccount(null);
-        this.numberOfFlags = numberOfFlags;
-    }
-
-    public void setup(Account account1, Account account2, String deckName, int numberOfFlags) {
-        player1.setAccount(account1);
-        player1.setAccount(account2);
-        player1.setDeck(player1.getCollection().getDeckHashMap().get(deckName));
-        this.numberOfFlags = numberOfFlags;
-    }
 }
