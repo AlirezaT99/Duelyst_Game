@@ -62,7 +62,6 @@ public class Collection {
         output = output + "Items :\n";
         for (int i = 0; i < items.size(); i++)
             output = output + "\t\t" + (i + 1) + " : " + items.get(i).toString(showCost);
-
         idx = 0;
         output = output + "Cards :\n";
         for (int i = 0; i < cards.size(); i++) {
@@ -71,39 +70,21 @@ public class Collection {
                 idx++;
             }
         }
-
         return output;
     }
 
     //search
-    public String search(String name) {
-        Item item = findItemByName(name);
+    String search(String name) {
+        Item item = itemsHashMap.get(name);
         if (item != null)
             return item.getItemID();
-        Card card = findCardByName(name);
+        Card card = cardsHashMap.get(name);
         if (card != null)
             return card.getCardID();
         return "-1";
     }
 
-    public UsableItem findItemByName(String itemName) {
-        for (UsableItem item : items) {
-            if (item.getName().equals(itemName))
-                return item;
-
-        }
-        return null;
-    }
-
-    public Card findCardByName(String cardName) {
-        for (Card card : cards) {
-            if (card.getName().equals(cardName))
-                return card;
-        }
-        return null;
-    }
-
-    public UsableItem findItemByID(String itemID) {
+    UsableItem findItemByID(String itemID) {
         for (UsableItem item : items) {
             if (item.getItemID().equals(itemID))
                 return item;
@@ -111,7 +92,7 @@ public class Collection {
         return null;
     }
 
-    public Card findCardByID(String cardID) {
+     Card findCardByID(String cardID) {
         for (Card card : cards) {
             if (card.getCardID().equals(cardID))
                 return card;

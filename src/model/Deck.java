@@ -35,18 +35,26 @@ public class Deck {
         this.name = name;
     }
 
+    void putTheCardBackInTheQueue(Card card){
+        cards.add(card);
+        cardsHashMap.put(card.name,card);
+    }
+
+    Card getLastCard(){
+        Card card = cards.get(0);
+        cards.remove(card);
+        cardsHashMap.remove(card);
+        return card;
+    }
+
     public static void createDeck(String deckName) {
         Deck deck = new Deck(deckName);
-    }
+    } //shouldn't it be added to collection decks
 
     //getters
+
     public ArrayList<Card> getCards() {
         return cards;
-    }
-
-    public Card getLastCard() {
-        //todo
-        return new Card();
     }
 
     public String getName() {
@@ -74,6 +82,5 @@ public class Deck {
     public void setHero(Hero hero) {
         this.hero = hero;
     }
-
     //setters
 }

@@ -83,6 +83,9 @@ public class Player {
     //getters
 
     //setters
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
 
     public void setMana(int mana) {
         this.mana = mana;

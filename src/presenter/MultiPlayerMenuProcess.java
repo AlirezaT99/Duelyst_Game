@@ -5,22 +5,23 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import model.Account;
+import model.Match;
 import view.MultiPlayerMenu;
 
 public class MultiPlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private MultiPlayerMenu multiPlayerMenu;
     public String[] commandParts;
-    private Account account;
-    private Account opponent;
+    private static Account account;
+    private static Account opponent;
 
     public MultiPlayerMenuProcess(MultiPlayerMenu multiPlayerMenu) {
         this.multiPlayerMenu = multiPlayerMenu;
     }
 
     static {
-        commandPatterns.add(Pattern.compile("Start multiPlayer game \\d [\\d+]*")); // format of mode ?
         commandPatterns.add(Pattern.compile("Select user [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("Start multiPlayer game \\d [\\d+]*")); // format of mode ?
         commandPatterns.add(Pattern.compile("Exit"));
         commandPatterns.add(Pattern.compile("Help"));
     }
@@ -37,21 +38,26 @@ public class MultiPlayerMenuProcess {
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
-            this::gameInit,
             new DoCommand() {
                 @Override
                 public int doIt() {
                     return selectUser(commandParts[2]);
                 }
             },
+            this::gameInit,
             this::exit,
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return multiPlayerMenu.help();
-                }
-            }
+            MultiPlayerMenu::help
     };
+
+    public static void customGame(String command) {
+        String[] commandParts = command.split("\\s+");
+        String deckName = commandParts[2]; // space ke nadare vasatesh?
+        int mode = Integer.parseInt(commandParts[3]);
+        int numberOfFlags = -1;
+        if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
+        Match match = new Match(false, mode);
+        match.setup(account, opponent, deckName, numberOfFlags);
+    }
 
     private int selectUser(String opponentUserName) {
         for (Account account : Account.getAccounts())
@@ -59,12 +65,12 @@ public class MultiPlayerMenuProcess {
                 opponent = account;
                 return 0;
             }
-        return 0;
+        return 2;
     }
 
-    private int gameInit() {
 
-        return 0;
+    private int gameInit() {
+        return 3;
     }
 
     public int exit() throws IOException {
@@ -77,7 +83,7 @@ public class MultiPlayerMenuProcess {
 
     //setters
     public void setAccount(Account account) {
-        this.account = account;
+        MultiPlayerMenuProcess.account = account;
     }
     //setters
 }

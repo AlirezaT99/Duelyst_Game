@@ -6,13 +6,15 @@ enum GameMode {HeroesFight, CaptureTheFlag, CaptureMostFlags}
 
 public class Match {
     private boolean singleMode;
-    private model.GameMode gameMode;
+    //    private model.GameMode gameMode;
+    private int gameMode;
     Table table;
-    private Player player1;
-    private Player player2;
+    private Player player1 = new Player();
+    private Player player2 = new Player();
     private ArrayList<Card> graveYardPlayer1;
     private ArrayList<Card> graveYardPlayer2;
     private int turn = 0;
+    private int numberOfFlags = -1;
     private Integer AILevel = 0;
 
     {
@@ -20,6 +22,10 @@ public class Match {
         graveYardPlayer2 = new ArrayList<>();
     }
 
+    public Match(boolean singleMode, int gameMode) {
+        this.singleMode = singleMode;
+        this.gameMode = gameMode;
+    }
 
     public void moveToGraveYard(Card card, Player player) {
         if (player.getUserName().equals(player1.getUserName())) {
@@ -36,6 +42,20 @@ public class Match {
     }
 
 
+    public void setup(Account account, String deckName, int numberOfFlags) {
+        player1.setAccount(account);
+        player1.setDeck(player1.getCollection().getDeckHashMap().get(deckName));
+        player2.setAccount(null);
+        this.numberOfFlags = numberOfFlags;
+    }
+
+    public void setup(Account account1, Account account2, String deckName, int numberOfFlags) {
+        player1.setAccount(account1);
+        player1.setAccount(account2);
+        player1.setDeck(player1.getCollection().getDeckHashMap().get(deckName));
+        this.numberOfFlags = numberOfFlags;
+    }
+
     //turn based manager
 
     public Player currentTurnPlayer() {
@@ -50,12 +70,10 @@ public class Match {
         return player1;
     }
 
-    public void switchTurn() {
+    void switchTurn() {
         turn ^= 1;
     }
-
     //turn based manager
-
 
     //getters
     Player getOtherPlayer(Player player) {
@@ -63,19 +81,20 @@ public class Match {
             return player2;
         return player1;
     }
+
     public Table getTable() {
         return table;
     }
 
-    public Player getPlayer1() {
+    Player getPlayer1() {
         return player1;
     }
 
-    public Player getPlayer2() {
+    Player getPlayer2() {
         return player2;
     }
 
-    public Integer getAILevel() {
+    Integer getAILevel() {
         return AILevel;
     }
     //getters

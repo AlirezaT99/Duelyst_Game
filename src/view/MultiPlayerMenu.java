@@ -35,9 +35,44 @@ public class MultiPlayerMenu {
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                handleErrors(multiPlayerMenuProcess.DoCommands[commandType].doIt());
+                switch (multiPlayerMenuProcess.DoCommands[commandType].doIt()) {
+                    case 1:
+                        showMessage("selected deck for second player is invalid");
+                        break;
+                    case 2:
+                        showMessage("username is invalid");
+                        break;
+                    case 3:
+                        inner_Loop:
+                        while (true) {
+                            command = scanner.nextLine();
+                            switch (customGameMenu(command)) {
+                                case 1:
+                                    customGameHelp();
+                                    break;
+                                case 2:
+                                    break inner_Loop;
+                                case 3:
+                                    MultiPlayerMenuProcess.customGame(command);
+                                    break;
+                                default:
+                                    showMessage("invalid input");
+                            }
+                        }
+                }
         }
         scanner.close();
+    }
+
+    private int customGameMenu(String command) {
+        if (command.equals("help")) return 1;
+        else if (command.equals("exit")) return 2;
+        else if (command.matches("Start multiplayer game [a-zA-Z0-9._]+ \\d \\d+]")) return 3;
+        else return -1;
+    }
+
+    private void customGameHelp() {
+        showMessage("Start multiPlayer game [deck name] [mode] [number of flags]->(only for the 3rd mode)");
     }
 
     private void printUsers() {
@@ -47,14 +82,7 @@ public class MultiPlayerMenu {
                 showMessage(" - " + account.getUserName());
     }
 
-    private void handleErrors(int message) {
-        switch (message) {
-            case 1:
-                showMessage("selected deck for second player is invalid");
-        }
-    }
-
-    public int help() {
+    public static int help() {
         showMessage("Select user [user name]");
         showMessage("Start multiPlayer game [mode] [number of flags]->(for the 3rd mode only)");
         showMessage("Exit");

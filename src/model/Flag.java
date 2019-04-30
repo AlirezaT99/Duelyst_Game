@@ -4,6 +4,13 @@ class Flag extends Item {
     Cell cell;
     Match match;
 
+    public Flag(Match match, Cell cell) {
+        this.match = match;
+        this.cell = cell;
+    }
+
+
+    //getters
     public Cell getCell() {
         return cell;
     }
@@ -11,9 +18,5 @@ class Flag extends Item {
     public Match getMatch() {
         return match;
     }
-
-    public Flag(Match match, Cell cell) {
-        this.match = match;
-        this.cell = cell;
-    }
+    //getters
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import model.Account;
+import model.Match;
 import view.SinglePlayerMenu;
 import view.StoryMenu;
 
@@ -12,7 +13,7 @@ public class SinglePlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private SinglePlayerMenu singlePlayerMenu;
     public String[] commandParts;
-    private Account account;
+    private static Account account;
 
     public SinglePlayerMenuProcess(SinglePlayerMenu singlePlayerMenu) {
         this.singlePlayerMenu = singlePlayerMenu;
@@ -23,6 +24,16 @@ public class SinglePlayerMenuProcess {
         commandPatterns.add(Pattern.compile("enter custom game|custom game|2"));
         commandPatterns.add(Pattern.compile("exit|3"));
         commandPatterns.add(Pattern.compile("help|4"));
+    }
+
+    public static void customGame(String command) {
+        String[] commandParts = command.split("\\s+");
+        String deckName = commandParts[2]; // space ke nadare vasatesh?
+        int mode = Integer.parseInt(commandParts[3]);
+        int numberOfFlags = -1;
+        if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
+        Match match = new Match(true, mode);
+        match.setup(account, deckName, numberOfFlags);
     }
 
     public interface DoCommand {
@@ -40,12 +51,7 @@ public class SinglePlayerMenuProcess {
             this::enterStory,
             this::enterCustomGame,
             this::exit,
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return singlePlayerMenu.help();
-                }
-            }
+            SinglePlayerMenu::help
     };
 
     private int enterStory() throws IOException {
@@ -58,12 +64,7 @@ public class SinglePlayerMenuProcess {
     }
 
     private int enterCustomGame() {
-//        CustomGameMenu customGameMenu = new CustomGameMenu(singlePlayerMenu);
-//        singlePlayerMenu.setInSinglePlayerMenu(false);
-//        customGameMenu.setHasRun(false);
-//        customGameMenu.setInCustomGameMenu(true);
-//        customGameMenu.run();
-        return 0;
+        return 4;
     }
 
     public int exit() throws IOException {
@@ -76,7 +77,7 @@ public class SinglePlayerMenuProcess {
 
     //setters
     public void setAccount(Account account) {
-        this.account = account;
+        SinglePlayerMenuProcess.account = account;
     }
     //setters
 }
