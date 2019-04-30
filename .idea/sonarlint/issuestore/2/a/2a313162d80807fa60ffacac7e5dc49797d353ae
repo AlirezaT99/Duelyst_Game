@@ -1,0 +1,15 @@
+
+Jsquid:S1172]",Remove this unused method parameter "table".(Ğ¾ãÍ8Â¥’•¦-
+Nsquid:S00108Í")Either remove or fill this block of code.(–ŠúÃşÿÿÿÿ8Â¥’•¦-
+usquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(ÚëŠşÿÿÿÿ8Â¥’•¦-
+Osquid:S1481İ"+Remove this unused "impact" local variable.(‰É¸¦øÿÿÿÿ8Â¥’•¦-
+Fsquid:S1068"(Remove this unused "name" private field.(Ë¥¼8³ÈÅƒ£-
+^squid:S1854İ":Remove this useless assignment to local variable "impact".(‰É¸¦øÿÿÿÿ8Â¥’•¦-
+”squid:S1319’"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ì±¿¡şÿÿÿÿ8ƒÂåè¥-
+qsquid:S1450"SRemove the "name" field and declare it as a local variable in the relevant methods.(Ë¥¼8ÀÆè…£-
+Msquid:S1066d"/Merge this if statement with the enclosing one.(üßî 8Â¥’•¦-
+^squid:UnusedPrivateMethod´",Remove this unused private "dispell" method.(‘›‰˜üÿÿÿÿ8Â¥’•¦-
+vsquid:S3776´"RRefactor this method to reduce its Cognitive Complexity from 37 to the 15 allowed.(‘›‰˜üÿÿÿÿ8Â¥’•¦-
+qsquid:S1871µ"MThis branch's code block is the same as the block for the branch on line 179.(şšàûÿÿÿÿÿ8Â¥’•¦-
+Nsquid:S1066¡"/Merge this if statement with the enclosing one.(ëªâ¾8Â¥’•¦-
+Msquid:S00108w")Either remove or fill this block of code.(–ŠúÃşÿÿÿÿ8Â¥’•¦-

@@ -44,10 +44,6 @@ public class Account {
         accounts.add(account);
     }
 
-    public int compareTo(Account account) {
-        return this.numberOfWins - account.numberOfWins;
-    }
-
     //getters
     public long getMoney() {
         return money;

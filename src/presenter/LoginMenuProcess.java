@@ -31,7 +31,7 @@ public class LoginMenuProcess {
     public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return createAccount(commandParts[2]);
                 }
             },
@@ -43,13 +43,13 @@ public class LoginMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return showLeaderBoard();
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() throws IOException {
+                public int doIt() {
                     return save(currentAccount);
                 }
             },
@@ -117,7 +117,7 @@ public class LoginMenuProcess {
 //                    Player currentPlayer = new Player();
 //                    currentPlayer.setAccount(currentAccount);
 //                    player = currentPlayer;
-                    MainMenu mainMenu = new MainMenu(currentAccount);
+                    MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
                     mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
                     mainMenu.run();
                     return 0;

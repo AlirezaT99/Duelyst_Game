@@ -1,5 +1,6 @@
 package view;
 
+import model.Account;
 import presenter.SinglePlayerMenuProcess;
 
 import java.io.IOException;
@@ -11,10 +12,11 @@ public class SinglePlayerMenu {
     private SinglePlayerMenuProcess singlePlayerMenuProcess;
     private boolean hasRun = false;
 
-    public SinglePlayerMenu(BattleInit battleInit) {
+    public SinglePlayerMenu(BattleInit battleInit, Account account) {
         isInSinglePlayerMenu = true;
         this.battleInit = battleInit;
         singlePlayerMenuProcess = new SinglePlayerMenuProcess(this);
+        singlePlayerMenuProcess.setAccount(account);
     }
 
     public void run() throws IOException {
@@ -28,30 +30,25 @@ public class SinglePlayerMenu {
             }
             // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
-            String[] commandParts = command.split("[ ]");
-            singlePlayerMenuProcess.commandParts = commandParts;
-            int commandType = SinglePlayerMenuProcess.findPatternIndex(command, commandParts);
+            singlePlayerMenuProcess.commandParts = command.split("[ ]");
+            int commandType = SinglePlayerMenuProcess.findPatternIndex(command);
             if (commandType == -1)
-                System.out.println("invalid input");
+                showMessage("invalid input");
             else
-                handleErrors(singlePlayerMenuProcess.DoCommands[commandType].doIt());
+                singlePlayerMenuProcess.DoCommands[commandType].doIt();
         }
-        scanner.close(); // ?
-    }
-
-    public void handleErrors(int message) {
-
+        scanner.close();
     }
 
     public int help() {
         showMessage("1. Story");
         showMessage("2. Custom game");
-        showMessage("3. exit");
-        showMessage("4. help");
+        showMessage("3. Exit");
+        showMessage("4. Help");
         return 0;
     }
 
-    public void showMessage(String message) {
+    public static void showMessage(String message) {
         System.out.println(message);
     }
 
@@ -59,8 +56,8 @@ public class SinglePlayerMenu {
     public BattleInit getBattleInit() {
         return battleInit;
     }
-
     //getters
+
     //setters
     public void setInSinglePlayerMenu(boolean isInSinglePlayerMenu) {
         this.isInSinglePlayerMenu = isInSinglePlayerMenu;

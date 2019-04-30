@@ -1,6 +1,7 @@
 package presenter;
 
 import model.*;
+import view.CollectionMenu;
 import view.MainMenu;
 import view.ShopMenu;
 
@@ -25,6 +26,7 @@ public class ShopMenuProcess {
         commandPatterns.add(Pattern.compile("show"));
         commandPatterns.add(Pattern.compile("help"));
     }
+
 
     public interface DoCommand {
         int doIt() throws IOException;
@@ -107,7 +109,7 @@ public class ShopMenuProcess {
     }
 
     private int showCollection() {
-        //todo : hamoun showCollection e CollectionMenu + "Cost"
+        CollectionMenu.showMessage(currentAccount.getCollection().show(true));
         return 0;
     }
 
@@ -172,8 +174,12 @@ public class ShopMenuProcess {
         this.shopMenu = shopMenu;
     }
 
-    public void setMainMenu(MainMenu mainMenu) {
+    void setMainMenu(MainMenu mainMenu) {
         this.mainMenu = mainMenu;
+    }
+
+    public void setCurrentAccount(Account currentAccount) {
+        this.currentAccount = currentAccount;
     }
     //setters
 }

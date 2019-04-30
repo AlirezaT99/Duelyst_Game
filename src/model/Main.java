@@ -92,16 +92,16 @@ public class Main {
         primaryImpact.addToTargetTypeID("0");
 
         //1.(0,1)"SelectedCellImportance"
-        primaryImpact.addToTargetTypeID("1");
+        primaryImpact.addToTargetTypeID("0");
 
         //2.(0,1)"ValidOnAWholeTeam"
         primaryImpact.addToTargetTypeID("0");
 
         //3.(0-2)"onWhichTeam"{friendly, hostile, both}
-        primaryImpact.addToTargetTypeID("1");
+        primaryImpact.addToTargetTypeID("0");
 
         //4.(0-2)"targetSoldierType"{hero,minion,both}
-        primaryImpact.addToTargetTypeID("0");
+        primaryImpact.addToTargetTypeID("2");
 
         //5.(0-n)"targetFactionType"
         primaryImpact.addToTargetTypeID("0");
@@ -144,15 +144,15 @@ public class Main {
         // |17.cellImpact(0-4){none,poison,fire,holy}
 
         //0.(0,1)isPositive
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("");
 
         //1.(0-6)buffType{none,holy,power,poison,weakness,stun,disarm}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("");
 
         //2.(0-3)QuantityChange{none,mana,health,damage}
-        primaryImpact.addToImpactTypeID("2");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
         //3.(0,1)quantityChangeSign{negative/positive}
@@ -161,12 +161,12 @@ public class Main {
 
         //4,5.(0,n)"impactQuantity"
         primaryImpact.addToImpactTypeID("0");
-        primaryImpact.addToImpactTypeID("6");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
         //6.(0,3)PassivePermanent{none , passive , permanent , continuous}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("3");
         secondaryImpact.addToImpactTypeID("");
 
         //7.(0,n)turnsToBeActivated
@@ -174,20 +174,19 @@ public class Main {
         secondaryImpact.addToImpactTypeID("");
 
         //8,9.(0,n)turnsActive
-        primaryImpact.addToImpactTypeID("0");
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("9");
+        primaryImpact.addToImpactTypeID("9");
         secondaryImpact.addToImpactTypeID("");
         secondaryImpact.addToImpactTypeID("");
 
-        //12.dispel(0-2){none,buffDispel,allPositiveDispel}
+        //10.dispel(0-2){none,buffDispel,allPositiveDispel,allDispel}
         primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
-        //13.setsOnCells(0,1)
+        //11.setsOnCells(0,1)
         primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
-
-        //15.cellImpact(0-3){none,poison,fire,holy}
+        //12.cellImpact(0-3){none,poison,fire,holy}
         primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("");
 
@@ -244,26 +243,49 @@ public class Main {
 //        }
         // end of creating spells
         //creating minions
-        Minion minion = new Minion();
-        minion.setName("Div e Sefid"); //
-        minion.setCost(8000);
-       // minion.setManaCost();
-        minion.setHealth(50);
-        minion.setDamage(4);
-        minion.setMelee(true);
-        minion.setRanged(false);
-        minion.setHybrid(false);
-        //minion.setMaxAttackRange(5);
-        minion.setComboAttacker(false);
-        minion.setDescription("combo");
-        //minion.setPassiveImpact(primaryImpact);
-        //minion.setSecondaryImpact(secondaryImpact);
-        String fileName = "src/model/heroes/" + fileNameCreator(minion.getName()) + ".json";
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
-            gson.toJson(minion, isr);
-        }
+//        Minion minion = new Minion();
+//        minion.setName("Div e Sefid"); //
+//        minion.setCost(8000);
+//       // minion.setManaCost();
+//        minion.setHealth(50);
+//        minion.setDamage(4);
+//        minion.setMelee(true);
+//        minion.setRanged(false);
+//        minion.setHybrid(false);
+//        //minion.setMaxAttackRange(5);
+//        minion.setComboAttacker(false);
+//        minion.setDescription("combo");
+//        //minion.setPassiveImpact(primaryImpact);
+//        //minion.setSecondaryImpact(secondaryImpact);
+//        String fileName = "src/model/heroes/" + fileNameCreator(minion.getName()) + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(minion, isr);
+//        }
+
+        //creating Heroes
+//        Spell heroSpell = new Spell();
+//        heroSpell.setPrimaryImpact(primaryImpact);
+//        heroSpell.setManaCost(0);
+//        heroSpell.setDescription("has three continuous holly buffs.");
+//        Hero hero = new Hero("Esfandiar",35,3,heroSpell,0);
+//        hero.setCost(11000);
+//        hero.setMelee(false);
+//        hero.setRanged(false);
+//        hero.setHybrid(true);
+//        hero.setDescription("has three continuous holly buffs.");
+//        hero.setMaxAttackRange(3);
+//        //minion.setPassiveImpact(primaryImpact);
+//        //minion.setSecondaryImpact(secondaryImpact);
+//        String fileName = "src/model/heroes" + fileNameCreator(hero.getName()) + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(hero, isr);
+//        }
+        //creating Items
+
     }
     //
     private static String fileNameCreator(String name) {

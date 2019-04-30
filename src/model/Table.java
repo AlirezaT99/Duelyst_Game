@@ -44,7 +44,7 @@ class Table {
     }
 
     public Cell getCellByCoordination(int x, int y) {
-        if (x < 5 && y < 9)
+        if (x < 6 && y < 10  && x>0 && y>0)
             return cells[x][y];
         return null;
     }
@@ -78,6 +78,8 @@ class Table {
         return adjacentCells;
     }
 
+    //soldier finder
+
     ArrayList<Cell> findAllSoldiers(Player player) {
         ArrayList<Cell> wantedCells = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
@@ -109,22 +111,26 @@ class Table {
         return candidateCells;
     }
 
+    //find closest Soldiers
+
     ArrayList<Cell> findClosestSoldiers(MovableCard movableCard, Player opponent) {
         ArrayList<Cell> cellArrayList = findAllSoldiers(opponent);
-        int length = 999;
-        int min = length;
+        int min = getMin(movableCard, cellArrayList, 99);
+        cellArrayList.removeIf(cell -> cell.findDistanceBetweenCells(movableCard.cardCell) != min);
+        return cellArrayList;
+    }
+
+    private int getMin(MovableCard movableCard, ArrayList<Cell> cellArrayList, int min) {
+        int length;
         for (Cell cell : cellArrayList) {
             length = cell.findDistanceBetweenCells(movableCard.cardCell);
             if (length < min)
                 min = length;
         }
-        Iterator<Cell> cellIterator = cellArrayList.iterator();
-        while (cellIterator.hasNext()) {
-            if (cellIterator.next().findDistanceBetweenCells(movableCard.cardCell) != min)
-                cellIterator.remove();
-        }
-        return cellArrayList;
+        return min;
     }
+
+    // find closest Soldiers
 
     ArrayList<Cell> findAllMinions(Player player) {
         ArrayList<Cell> wantedCells = new ArrayList<>();
@@ -138,4 +144,6 @@ class Table {
                 }
         return wantedCells;
     }
+
+    //sodier finder
 }

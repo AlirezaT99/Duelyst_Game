@@ -1,0 +1,9 @@
+
+‘squid:S1319”"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(Œ‘¿“şÿÿÿÿ8¡²ÈÇ¥-
+:squid:S1643F"Use a StringBuilder instead.(ÃÛäı8Êª’•¦-
+‘squid:S1319€"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(€ã«…ıÿÿÿÿ8Êª’•¦-
+:squid:S1643:"Use a StringBuilder instead.(ÃÛäı8Êª’•¦-
+”squid:S1319Œ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ØùÇ°úÿÿÿÿ8¤š¹¢-
+‹squid:S1319|"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(’¥œÇ8Êª’•¦-
+?squid:S1643@"Use a StringBuilder instead.(ËöøÆùÿÿÿÿ8Êª’•¦-
+|squid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8Êª’•¦-

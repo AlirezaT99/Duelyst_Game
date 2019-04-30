@@ -1,7 +1,6 @@
 package view;
 
 import model.Account;
-import model.Player;
 import presenter.MainMenuProcess;
 
 import java.io.IOException;
@@ -10,11 +9,10 @@ import java.util.Scanner;
 public class MainMenu {
     private boolean isInMainMenu = true;
     private boolean hasRun = false;
-    private Account currentAccount;
     private MainMenuProcess mainMenuProcess = new MainMenuProcess();
 
     public MainMenu(Account account) {
-        this.currentAccount = account;
+        mainMenuProcess.setCurrentAccount(account);
         mainMenuProcess.setMainMenu(this);
     }
 
@@ -28,23 +26,19 @@ public class MainMenu {
                 hasRun = true;
             }
             String command = scanner.nextLine();
-            String[] commandParts = command.split("[ ]");
-            mainMenuProcess.commandParts = commandParts;
+            MainMenuProcess.commandParts = command.split("[ ]");
             int commandType = presenter.MainMenuProcess.findPatternIndex(command);
             if (commandType == -1)
-                System.out.println("invalid input \n");
+                System.out.println("invalid input");
             else
                 handleErrors(mainMenuProcess.DoCommands[commandType].doIt());
         }
-        scanner.close(); // ?
+        scanner.close();
     }
 
     private static void handleErrors(int messageID) {
-        switch (messageID) {
-            case 1:
-                System.out.println("selected deck is invalid");
-                break;
-        }
+        if (messageID == 1)
+            System.out.println("selected deck is invalid");
     }
 
     public static int help() {
@@ -68,7 +62,6 @@ public class MainMenu {
     public void setHasRun(boolean hasRun) {
         this.hasRun = hasRun;
     }
-
     //setters
 
     //getters
@@ -76,8 +69,5 @@ public class MainMenu {
         return mainMenuProcess;
     }
 
-    public Account getCurrentAccount() {
-        return currentAccount;
-    }
     //getters
 }

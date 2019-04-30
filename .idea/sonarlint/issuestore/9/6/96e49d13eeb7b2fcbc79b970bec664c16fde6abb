@@ -1,0 +1,8 @@
+
+qsquid:S00116"RRename this field "AILevel" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»…°”8¦•İŸ¥-
+~squid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ8Şæª¢-
+Qsquid:S1068".Remove this unused "singleMode" private field.(ÒÌº›ùÿÿÿÿ8÷‡©¢-
+~squid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ8Şæª¢-
+Jsquid:S1068	",Remove this unused "gameMode" private field.(å±€À8÷‡©¢-
+|squid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8´áøƒ£-
+~squid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ8Şæª¢-

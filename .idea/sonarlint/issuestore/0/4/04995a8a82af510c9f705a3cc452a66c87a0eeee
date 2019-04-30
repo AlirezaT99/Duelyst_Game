@@ -1,0 +1,12 @@
+
+|squid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8ÕØí¥-
+:squid:S1643"Use a StringBuilder instead.(åÙö¼8´’•¦-
+‹squid:S1319D"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(’¥œÇ8ÕØí¥-
+squid:S1319@"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(€ã«…ıÿÿÿÿ8ÕØí¥-
+Usquid:S11350"2Complete the task associated to this TODO comment.(ñ•Ôøÿÿÿÿ8ÕØí¥-
+“squid:S1319+"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(èĞ¥×øÿÿÿÿ8ÕØí¥-
+Gsquid:S1481'")Remove this unused "deck" local variable.(˜‹¹ô8ÕØí¥-
+9squid:S1643"Use a StringBuilder instead.(§”ÄF8´’•¦-
+“squid:S1319<"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(‹›×Üøÿÿÿÿ8ÕØí¥-
+Rsquid:S1172"/Remove this unused method parameter "showCost".(šÄÅûÿÿÿÿ8´’•¦-
+Vsquid:S1854'"8Remove this useless assignment to local variable "deck".(˜‹¹ô8ÕØí¥-

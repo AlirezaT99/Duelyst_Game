@@ -127,7 +127,7 @@ public class CollectionMenuProcess {
         mainMenu.setIsInMainMenu(true);
         mainMenu.setHasRun(false);
         collectionMenu.setIsInCollectionMenu(false);
-        mainMenu.run(); // ?
+        mainMenu.run();
         return 0;
     }
 

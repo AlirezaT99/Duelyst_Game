@@ -17,8 +17,8 @@ public abstract class MovableCard extends Card {
     private boolean isRanged;
     private boolean isHybrid;
     private boolean isComboAttacker;
-    int buffHealthChange = 0;
-    int buffDamageChange = 0;
+    int dispelableHealthChange = 0;
+    int dispelableDamageChange = 0;
 
     //card casting
 
@@ -104,13 +104,14 @@ public abstract class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact(this.player, cardCell, cardCell);
+            impact.setImpactArea(this.player, cardCell, cardCell);
             impact.goThroughTime();
+
         }
     }
 
     protected void manageCasualties() {
-        if (this.health + buffHealthChange <= 0)
+        if (this.health + dispelableHealthChange <= 0)
             this.isAlive = false;
     }
 
