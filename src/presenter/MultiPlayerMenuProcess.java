@@ -62,6 +62,8 @@ public class MultiPlayerMenuProcess {
     private int selectUser(String opponentUserName) {
         for (Account account : Account.getAccounts())
             if (account.getUserName().equals(opponentUserName)) {
+                if (!account.getCollection().validateDeck(account.getCollection().getSelectedDeck()))
+                    return 1;
                 opponent = account;
                 return 0;
             }

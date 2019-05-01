@@ -11,15 +11,15 @@ public class Match {
     Table table;
     private Player player1 = new Player();
     private Player player2 = new Player();
-    private ArrayList<Card> graveYardPlayer1;
-    private ArrayList<Card> graveYardPlayer2;
+    private ArrayList<Card> player1_graveyard;
+    private ArrayList<Card> player2_graveyard;
     private int turn = 0;
     private int numberOfFlags = -1;
     private Integer AILevel = 0;
 
     {
-        graveYardPlayer1 = new ArrayList<>();
-        graveYardPlayer2 = new ArrayList<>();
+        player1_graveyard = new ArrayList<>();
+        player2_graveyard = new ArrayList<>();
     }
 
     public Match(boolean singleMode, int gameMode) {
@@ -29,10 +29,10 @@ public class Match {
 
     public void moveToGraveYard(Card card, Player player) {
         if (player.getUserName().equals(player1.getUserName())) {
-            graveYardPlayer1.add(card);
+            player1_graveyard.add(card);
             //
         } else {
-            graveYardPlayer2.add(card);
+            player2_graveyard.add(card);
             //
         }
     }
