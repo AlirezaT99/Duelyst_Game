@@ -12,8 +12,9 @@ public class BattleMenu {
     private BattleMenuProcess battleMenuProcess;
     private boolean hasRun = false;
 
-    public BattleMenu(Match match) {
+    public BattleMenu(BattleInit battleInit, Match match) {
         isInBattleMenu = true;
+        this.battleInit = battleInit;
         battleMenuProcess = new BattleMenuProcess(this);
         BattleMenuProcess.setMatch(match);
     }
@@ -30,9 +31,8 @@ public class BattleMenu {
             String command = scanner.nextLine();
             battleMenuProcess.commandParts = command.split("[ ]");
             int commandType = BattleMenuProcess.findPatternIndex(command);
-            if (commandType == -1) {
+            if (commandType == -1)
                 System.out.println("invalid input");
-            }
 
         }
         scanner.close();
@@ -81,4 +81,10 @@ public class BattleMenu {
         this.hasRun = hasRun;
     }
     //setters
+
+    //getters
+    public BattleInit getBattleInit() {
+        return battleInit;
+    }
+    //getters
 }
