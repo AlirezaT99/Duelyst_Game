@@ -1,4 +1,4 @@
 
-Gsquid:S1068"*Remove this unused "impact" private field.(·£‚8å±×È¥-
 Msquid:S1068"*Remove this unused "spells" private field.(‡‰‚áýÿÿÿÿ8å±×È¥-
 psquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(‰†™Æ8å±×È¥-
+Gsquid:S1068"*Remove this unused "impact" private field.(·£‚8å±×È¥-

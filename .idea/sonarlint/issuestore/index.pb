@@ -66,3 +66,11 @@ Q
 !.idea/libraries/testng_6_14_3.xml,f\3\f31b603fd335edbeface69359bde0b051679ac93
 S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+Y
+)src/presenter/MultiPlayerMenuProcess.java,8\7\870aaf2eb51754bb2310e30145ffc847c37fb2cb
+Z
+*src/presenter/SinglePlayerMenuProcess.java,8\0\8029162f91404f7629872fc1bbbb9e2bda017c82
+M
+src/view/MultiPlayerMenu.java,f\3\f3d25c42883718488543ddde67eb07037e9298a0
+H
+src/model/GameLogic.java,6\6\66e8cbefcc9d2c799cc919384ce2a578d07eea25

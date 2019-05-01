@@ -8,6 +8,7 @@ public class MatchHistory {
     private boolean result;
     private LocalDateTime now;
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
     public void setMatchHistory(Player player, Match match, boolean result){
         now = LocalDateTime.now();
         this.result = result;

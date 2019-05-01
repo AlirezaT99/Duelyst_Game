@@ -1,8 +1,11 @@
 
-wsquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ
-Csquid:S1068	",Remove this unused "gameMode" private field.(å±€À
+Jsquid:S1068
+",Remove this unused "gameMode" private field.(öºÀ8Åôºç¦-
+isquid:CommentedOutCodeLine	"<This block of commented-out lines of code should be removed.(ú°¨¯8Åôºç¦-
 Jsquid:S1068".Remove this unused "singleMode" private field.(ÒÌº›ùÿÿÿÿ
 wsquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ
+qsquid:S00116"RRename this field "AILevel" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»…°”8Åôºç¦-
 wsquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ
-qsquid:S00116"RRename this field "AILevel" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»…°”8’çöÚ¥-
-usquid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+Osquid:S1068"1Remove this unused "numberOfFlags" private field.(ü¿éà8Åôºç¦-
+|squid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8Åôºç¦-
+wsquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ

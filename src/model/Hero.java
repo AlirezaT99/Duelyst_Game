@@ -55,6 +55,5 @@ public class Hero extends MovableCard {
     public int getSpellCoolDown() {
         return spellCoolDown;
     }
-
     // getters
 }

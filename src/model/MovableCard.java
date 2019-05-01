@@ -20,19 +20,30 @@ public abstract class MovableCard extends Card {
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
 
+    String getClassType(MovableCard movableCard) {
+        if (movableCard.isMelee)
+            return "Melee";
+        if (movableCard.isHybrid)
+            return "Hybrid";
+        if (movableCard.isRanged)
+            return "Ranged";
+        return null;
+    }
+
     //card casting
 
-    public void castCard(Match match, Cell cell, Player castingPlayer) {
+    @Override
+    public void castCard(Cell cell) {
         cell.setMovableCard(this);
         this.cardCell = cell;
-        player.getHand().deleteCastedCard(this);
+        player.getHand().deleteCardBySettingNull(this);
         player.setMana(player.getMana() - this.manaCost);
     }
 
-    public boolean isCoordinationValid(Cell cell) {
+    @Override
+    public boolean isCastingCoordinationValid(Cell cell) {
         return cell.getMovableCard() == null;
     }
-
     //card casting
 
     //attack & counterAttack
@@ -51,7 +62,8 @@ public abstract class MovableCard extends Card {
     }
 
     boolean isAttackValid(Cell cell) {
-        counterAttackAndNormalAttackSameParameters(cell);
+        if (!counterAttackAndNormalAttackSameParameters(cell))
+            return false;
         if (isHybrid)
             return true;
         for (Impact impact : impactsAppliedToThisOne)
@@ -94,7 +106,6 @@ public abstract class MovableCard extends Card {
                     printMessage("Disarmed. Can't CounterAttack");
                     return false;
                 }
-
         } else
             return false;
         return true;
@@ -248,13 +259,4 @@ public abstract class MovableCard extends Card {
 
     //setters
 
-    String getClassType(MovableCard movableCard) {
-        if (movableCard.isMelee)
-            return "Melee";
-        if (movableCard.isHybrid)
-            return "Hybrid";
-        if (movableCard.isRanged)
-            return "Ranged";
-        return null;
-    }
 }

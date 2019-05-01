@@ -1,7 +1,11 @@
 
-usquid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
-Dsquid:S1068"(Remove this unused "hero" private field.(š…¹‹øÿÿÿÿ
-Hsquid:S1068	"1Remove this unused "maxCardNumber" private field.(À³Ò
-Œsquid:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(èĞ¥×øÿÿÿÿ
-Dsquid:S1068
-"(Remove this unused "item" private field.(êôëèúÿÿÿÿ
+:squid:S1643"Use a StringBuilder instead.(åÙö¼8şøÙé¦-
+“squid:S1319D"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(‹›×Üøÿÿÿÿ8şøÙé¦-
+Rsquid:S1172"/Remove this unused method parameter "showCost".(šÄÅûÿÿÿÿ8şøÙé¦-
+Œsquid:S13198"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(èĞ¥×øÿÿÿÿ
+9squid:S1643"Use a StringBuilder instead.(§”ÄF8şøÙé¦-
+‹squid:S1319L"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(’¥œÇ8şøÙé¦-
+usquid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+squid:S1319H"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(€ã«…ıÿÿÿÿ8şøÙé¦-
+Vsquid:S18543"8Remove this useless assignment to local variable "deck".(˜‹¹ô8şøÙé¦-
+Gsquid:S14813")Remove this unused "deck" local variable.(˜‹¹ô8şøÙé¦-

@@ -5,13 +5,7 @@ public class Item {
     protected String description;
     protected String itemID;
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    //getters
 
     public String getName() {
         return name;
@@ -20,4 +14,19 @@ public class Item {
     public String getItemID() {
         return itemID;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    //getters
+
+    //setters
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    //setters
 }

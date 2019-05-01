@@ -23,8 +23,9 @@ class Hand {
         return false;
     }
 
-    void deleteCastedCard(Card card) {
-        cards.remove(card);
+    void deleteCardBySettingNull(Card card) {
+        int index = cards.indexOf(card);
+        cards.set(index, null);
     }
 
 
@@ -39,8 +40,8 @@ class Hand {
         Card card = deck.getLastCard();
         for (int i = 0; i < 5; i++) {
             if(cards.get(i).equals(selectedCard)){
-                cards.remove(i);
-                cards.add(i,card);
+                deleteCardBySettingNull(cards.get(i));
+                cards.set(i,card);
             }
         }
         switchCardThisTurn = true;
