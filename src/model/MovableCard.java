@@ -31,7 +31,7 @@ public abstract class MovableCard extends Card {
 
     public boolean isCoordinationValid(Cell cell) {
         return cell.getMovableCard() == null;
-    }
+    }//saloom
 
     //card casting
 
