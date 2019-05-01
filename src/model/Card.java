@@ -18,12 +18,12 @@ public class Card implements toStr {
         return playerMana >= manaCost;
     }
 
-    public boolean isCoordinationValid() {
+    public boolean isCastingCoordinationValid(Cell cell) {
         //todo
         return true;
     }
 
-    void castCard(Match match, Cell cell, Player castingPlayer) {
+    void castCard(Cell cell ) {
 
     }
 

@@ -19,10 +19,10 @@ public class ShopMenuProcess {
     static {
         commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("show collection"));
-        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("buy [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
-        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+  [a-zA-Z0-9._]* [a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("show"));
         commandPatterns.add(Pattern.compile("help"));
     }
