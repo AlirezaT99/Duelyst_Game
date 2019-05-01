@@ -1,6 +1,7 @@
 package presenter;
 
 import model.Match;
+import model.Player;
 import view.BattleMenu;
 
 import java.io.IOException;
@@ -18,32 +19,30 @@ public class BattleMenuProcess {
     }
 
     static { // card id format ??
-            commandPatterns.add(Pattern.compile("Game Info"));
-            commandPatterns.add(Pattern.compile("Show my minions"));
-            commandPatterns.add(Pattern.compile("Show opponent minions"));
-            commandPatterns.add(Pattern.compile("Show card info [a-zA-Z0-9._]+"));
-            commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
-            commandPatterns.add(Pattern.compile("Show card info [a-zA-Z0-9._]+"));
-            commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
-            commandPatterns.add(Pattern.compile("Show card info [a-zA-Z0-9._]+"));
-            commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
-            commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
-            commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
-            commandPatterns.add(Pattern.compile("Show hand"));
-            commandPatterns.add(Pattern.compile("Insert [card name] in (\\d, \\d)"));
-            commandPatterns.add(Pattern.compile("End turn"));
-            commandPatterns.add(Pattern.compile("Show collectibles"));
-            commandPatterns.add(Pattern.compile("Select [collectible id]"));
-            commandPatterns.add(Pattern.compile("Show info"));
-            commandPatterns.add(Pattern.compile("Use [location x, y]")); // regex ?
-            commandPatterns.add(Pattern.compile("Show next card"));
-            commandPatterns.add(Pattern.compile("Enter graveyard"));
-            commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
-            commandPatterns.add(Pattern.compile("Show cards"));
-            commandPatterns.add(Pattern.compile("Help"));
-            commandPatterns.add(Pattern.compile("End Game"));
-            commandPatterns.add(Pattern.compile("Help"));
-            commandPatterns.add(Pattern.compile("Show menu"));
+        commandPatterns.add(Pattern.compile("Game Info"));
+        commandPatterns.add(Pattern.compile("Show my minions"));
+        commandPatterns.add(Pattern.compile("Show opponent minions"));
+        commandPatterns.add(Pattern.compile("Show card info [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
+        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
+        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
+        commandPatterns.add(Pattern.compile("Show hand"));
+        commandPatterns.add(Pattern.compile("Insert \\w+ in (\\d, \\d)"));
+        commandPatterns.add(Pattern.compile("End turn"));
+        commandPatterns.add(Pattern.compile("Show collectibles"));
+        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
+//        commandPatterns.add(Pattern.compile("Show info"));
+//        commandPatterns.add(Pattern.compile("Use [location x, y]")); // regex ?
+        commandPatterns.add(Pattern.compile("Show next card"));
+        commandPatterns.add(Pattern.compile("Enter graveyard"));
+//        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
+//        commandPatterns.add(Pattern.compile("Show cards"));
+        commandPatterns.add(Pattern.compile("Help"));
+        commandPatterns.add(Pattern.compile("End Game"));
+        commandPatterns.add(Pattern.compile("Exit"));
+        commandPatterns.add(Pattern.compile("Show menu"));
     }
 
     public interface DoCommand {
@@ -58,16 +57,152 @@ public class BattleMenuProcess {
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
+            this::gameInfo,
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return 0;
+                    return showMinions(match.currentTurnPlayer());
                 }
             },
-            BattleMenu::help
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return showMinions(match.notCurrentTurnPlayer());
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return showCardInfo(commandParts[3]);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return moveTo(commandParts[2], commandParts[3]);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return attack(commandParts[1]);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return attackCombo(commandParts);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return useSpecialPower(commandParts[3], commandParts[4]);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return showHand(match.currentTurnPlayer());
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return insertCard(commandParts[1], commandParts[3], commandParts[4]);
+                }
+            },
+            this::endTurn,
+            this::showCollectibles,
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return selectCollectible(commandParts[1]);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return showNextCard(match.currentTurnPlayer());
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return enterGraveyard(match.currentTurnPlayer());
+                }
+            },
+            this::battleHelp,
+            this::endGame,
+            this::exit,
+            BattleMenu::showMenu
     };
 
-    public int exit() throws IOException { // ok?
+    private int endGame() {
+        return 0;
+    }
+
+    private int battleHelp() {
+        return 0;
+    }
+
+    private int enterGraveyard(Player currentTurnPlayer) {
+        return 0;
+    }
+
+    private int showNextCard(Player currentTurnPlayer) {
+        return 0;
+    }
+
+    private int selectCollectible(String commandPart) {
+        return 0;
+    }
+
+    private int showCollectibles() {
+        return 0;
+    }
+
+    private int endTurn() {
+        return 0;
+    }
+
+    private int insertCard(String commandPart, String commandPart1, String commandPart2) {
+        return 0;
+    }
+
+    private int showHand(Player currentTurnPlayer) {
+        return 0;
+    }
+
+    private int useSpecialPower(String commandPart, String commandPart1) {
+        return 0;
+    }
+
+    private int attackCombo(String[] commandParts) {
+        return 0;
+    }
+
+    private int attack(String commandPart) {
+        return 0;
+    }
+
+    private int moveTo(String commandPart, String commandPart1) {
+        return 0;
+    }
+
+    private int showCardInfo(String commandPart) {
+        return 0;
+    }
+
+    private int showMinions(Player currentTurnPlayer) {
+        return 0;
+    }
+
+    private int gameInfo() {
+
+    }
+
+    public int exit() throws IOException { // ok ?
         battleMenu.setInBattleMenu(false);
         battleMenu.getBattleInit().setHasRun(false);
         battleMenu.getBattleInit().setInBattleInit(true);

@@ -23,13 +23,13 @@ public class BattleMenu {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             if (!hasRun) {
-                help();
+                showMenu();
                 hasRun = true;
             }
             if (!isInBattleMenu)
                 break;
             String command = scanner.nextLine();
-            battleMenuProcess.commandParts = command.split("[ ]");
+            battleMenuProcess.commandParts = command.split("[) ,(]");
             int commandType = BattleMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 System.out.println("invalid input");
@@ -38,7 +38,7 @@ public class BattleMenu {
         scanner.close();
     }
 
-    public static int help() {
+    public static int showMenu() {
         showMessage("Game Info");
         showMessage("Show my minions");
         showMessage("Show opponent minions");
