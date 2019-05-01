@@ -1,4 +1,8 @@
 
-|squid:S1171	"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8š“˜Ï¥-
-usquid:S1171*"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
-squid:S13194"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ŠØ…,8¡¯üı£-
+squid:S13194"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ŠØ…,8™óê¦-
+qsquid:S1871"MThis branch's code block is the same as the block for the branch on line 141.(Ù»Û¾üÿÿÿÿ8™óê¦-
+osquid:S1871["LThis branch's code block is the same as the block for the branch on line 89.(Ù»Û¾üÿÿÿÿ8™óê¦-
+|squid:S1171	"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8¯ı¦¢-
+v
+squid:S135e"YReduce the total number of break and continue statements in this loop to use at most one.(µŸ»Ğ8™óê¦-
+|squid:S1171*"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8ôÆ§¦-

@@ -1,7 +1,5 @@
 
-Psquid:S1135"2Complete the task associated to this TODO comment.(”±¥ó8’‘´¥-
-¤squid:S1186*"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¥®êßÿÿÿÿÿ8’‘´¥-
-\squid:UnusedPrivateMethod"+Remove this unused private "logout" method.(¸Ëö­şÿÿÿÿ8’‘´¥-
-Ksquid:S1068"(Remove this unused "deck" private field.(ëÔ”ıÿÿÿÿ8ÜÔÓ³£-
-nsquid:CommentedOutCodeLine&"<This block of commented-out lines of code should be removed.(ô³á¦ûÿÿÿÿ8’‘´¥-
-vsquid:S1450"SRemove the "deck" field and declare it as a local variable in the relevant methods.(ëÔ”ıÿÿÿÿ8¢õºç¦-
+Psquid:S1135"2Complete the task associated to this TODO comment.(”±¥ó8µ–Ü­¤-
+¤squid:S1186*"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¥®êßÿÿÿÿÿ8µ–Ü­¤-
+Ksquid:S1068"(Remove this unused "deck" private field.(ëÔ”ıÿÿÿÿ8×­²™¤-
+\squid:UnusedPrivateMethod"+Remove this unused private "logout" method.(¸Ëö­şÿÿÿÿ8µ–Ü­¤-

@@ -74,6 +74,11 @@ public class MainMenuProcess {
                 return i;
         return -1;
     }
+    //getters
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+    //getters
 
     //setters
     public void setCurrentAccount(Account account) {

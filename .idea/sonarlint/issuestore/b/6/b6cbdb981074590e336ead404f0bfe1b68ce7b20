@@ -1,4 +1,4 @@
 
-“squid:S1319L"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(óäÄªûÿÿÿÿ8æ°×È¥-
-Žsquid:S13198"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ßþ ù8æ°×È¥-
-Žsquid:S1319H"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¶…É÷8«Š¢è¦-
+Žsquid:S13198"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ßþ ù8ì•ç£¥-
+Žsquid:S1319H"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¶…É÷8œŽóê¦-
+“squid:S1319L"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(óäÄªûÿÿÿÿ8ì•ç£¥-

@@ -90,47 +90,57 @@ public class Main {
 
         //0.(0,1)"ValidOnAll"
         primaryImpact.addToTargetTypeID("0");
-
+        secondaryImpact.addToTargetTypeID("0");
         //1.(0,1)"SelectedCellImportance"
-        primaryImpact.addToTargetTypeID("1");
-
+        primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
         //2.(0,1)"ValidOnAWholeTeam"
         primaryImpact.addToTargetTypeID("0");
-
+        secondaryImpact.addToTargetTypeID("0");
         //3.(0-2)"onWhichTeam"{friendly, hostile, both}
-        primaryImpact.addToTargetTypeID("1");
-
+        primaryImpact.addToTargetTypeID("2");
+        secondaryImpact.addToTargetTypeID("0");
         //4.(0-2)"targetSoldierType"{hero,minion,both}
         primaryImpact.addToTargetTypeID("2");
+        secondaryImpact.addToTargetTypeID("1");
 
         //5.(0-n)"targetFactionType"
         primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
 
         //6.(2,3)"SquareLength"
         primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
 
         //7.column(1,0)
         primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
 
         //8.nearHeroHostileMinion(0-2){none, one , all}
         primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
 
         //9. random(0,1)
-        primaryImpact.addToTargetTypeID("0");
+        primaryImpact.addToTargetTypeID("1");
+        secondaryImpact.addToTargetTypeID("1");
 
         //10.column(0,1)
         primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
 
-        //11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
-        primaryImpact.addToTargetTypeID("2");
+        //11.soldierAttackType(0-3){doesn't matter,melee, ranged or hybrid}
+        primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
 
         //12.row(0,1)
         primaryImpact.addToTargetTypeID("0");
+        secondaryImpact.addToTargetTypeID("0");
 
         //13.closestSoldiers(0,1)
-        primaryImpact.addToTargetTypeID("0");
+        primaryImpact.addToTargetTypeID("1");
+        secondaryImpact.addToTargetTypeID("0");
 
-        secondaryImpact.setTargetTypeId(primaryImpact.getTargetTypeId());
+       // secondaryImpact.setTargetTypeId(primaryImpact.getTargetTypeId());
 
         //end of target setting
 
@@ -144,58 +154,50 @@ public class Main {
         // |17.cellImpact(0-4){none,poison,fire,holy}
 
         //0.(0,1)isPositive
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
+        secondaryImpact.addToImpactTypeID("1");
 
         //1.(0-6)buffType{none,holy,power,poison,weakness,stun,disarm}
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
+        secondaryImpact.addToImpactTypeID("2");
 
         //2.(0-3)QuantityChange{none,mana,health,damage}
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("2");
+        secondaryImpact.addToImpactTypeID("3");
 
         //3.(0,1)quantityChangeSign{negative/positive}
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
+        secondaryImpact.addToImpactTypeID("1");
 
         //4,5.(0,n)"impactQuantity"
-        primaryImpact.addToImpactTypeID("");
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("8");
+        secondaryImpact.addToImpactTypeID("0");
+        secondaryImpact.addToImpactTypeID("3");
 
         //6.(0,3)PassivePermanent{none , passive , permanent , continuous}
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("2");
+        secondaryImpact.addToImpactTypeID("0");
 
         //7.(0,n)turnsToBeActivated
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("0");
+        secondaryImpact.addToImpactTypeID("0");
 
         //8,9.(0,n)turnsActive
-        primaryImpact.addToImpactTypeID("");
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
-
-        //10.dispel(0-2){none,buffDispel,allPositiveDispel}
         primaryImpact.addToImpactTypeID("0");
-        //12.dispel(0-2){none,buffDispel,allPositiveDispel}
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        primaryImpact.addToImpactTypeID("1");
+        secondaryImpact.addToImpactTypeID("0");
+        secondaryImpact.addToImpactTypeID("1");
+        //10.dispel(0-2){none,buffDispel,allPositiveDispel,allDispel}
+        primaryImpact.addToImpactTypeID("0");
+        secondaryImpact.addToImpactTypeID("0");
 
         //11.setsOnCells(0,1)
         primaryImpact.addToImpactTypeID("0");
-        //13.setsOnCells(0,1)
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
-
+        secondaryImpact.addToImpactTypeID("0");
         //12.cellImpact(0-3){none,poison,fire,holy}
         primaryImpact.addToImpactTypeID("0");
-        //15.cellImpact(0-3){none,poison,fire,holy}
-        primaryImpact.addToImpactTypeID("");
-        secondaryImpact.addToImpactTypeID("");
+        secondaryImpact.addToImpactTypeID("0");
 
         //end of impact setting
 
@@ -228,6 +230,10 @@ public class Main {
         secondaryImpact.addToImpactTypeIdComp("0");
         //end of ImpactTypeIDComp setting
 
+        //6.antiDisarmOnDefend(0,1)
+        primaryImpact.addToImpactTypeIdComp("0");
+        secondaryImpact.addToImpactTypeIdComp("0");
+
         //creating spells
 //        Spell spell = new Spell();
 //        spell.setName("Kings Guard");
@@ -246,23 +252,75 @@ public class Main {
 //        }
         // end of creating spells
         //creating minions
-        Minion minion = new Minion();
-        minion.setName("Persian Archer");
-        minion.setCost(300);
-        minion.setManaCost(2);
-        minion.setHealth(6);
-        minion.setDamage(6);
-        minion.setMelee(false);
-        minion.setRanged(true);
-        minion.setHybrid(false);
-        String fileName = "src/model/minions/" + fileNameCreator(minion.getName()) + ".json";
+//        Minion minion = new Minion();
+//        minion.setName("Div e Sefid"); //
+//        minion.setCost(8000);
+//       // minion.setManaCost();
+//        minion.setHealth(50);
+//        minion.setDamage(4);
+//        minion.setMelee(true);
+//        minion.setRanged(false);
+//        minion.setHybrid(false);
+//        //minion.setMaxAttackRange(5);
+//        minion.setComboAttacker(false);
+//        minion.setDescription("combo");
+//        //minion.setPassiveImpact(primaryImpact);
+//        //minion.setSecondaryImpact(secondaryImpact);
+//        String fileName = "src/model/heroes/" + fileNameCreator(minion.getName()) + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(minion, isr);
+//        }
+
+        //creating Heroes
+//        Spell heroSpell = new Spell();
+//        heroSpell.setPrimaryImpact(primaryImpact);
+//        heroSpell.setManaCost(0);
+//        heroSpell.setDescription("has three continuous holly buffs.");
+//        Hero hero = new Hero("Esfandiar",35,3,heroSpell,0);
+//        hero.setCost(11000);
+//        hero.setMelee(false);
+//        hero.setRanged(false);
+//        hero.setHybrid(true);
+//        hero.setDescription("has three continuous holly buffs.");
+//        hero.setMaxAttackRange(3);
+//        //minion.setPassiveImpact(primaryImpact);
+//        //minion.setSecondaryImpact(secondaryImpact);
+//        String fileName = "src/model/heroes/" + fileNameCreator(hero.getName()) + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(hero, isr);
+//        }
+        //creating Items
+        //creating UsableItems
+        // UsableItem usableItem = new UsableItem();
+//        usableItem.setName("Damoul's Bow");
+//        usableItem.setCost(30000);
+//        usableItem.setDescription("upon our hero attacking, he/she disarms his victim for a turn.");
+//        usableItem.setPrimaryImpact(primaryImpact);
+//        String fileName = "src/model/items/usableitems/" + fileNameCreator(usableItem.getName()) + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(usableItem, isr);
+//        }
+
+        //creating collectibleitems
+        CollectibleItem collectibleItem = new CollectibleItem();
+        collectibleItem.setName("Death's Curse");
+        collectibleItem.setDescription("gives a minion the ability to hit a close random force a total of 8 units of HPs.");
+        collectibleItem.setPrimaryImpact(primaryImpact);
+        //collectibleItem.setSecondaryImpact(secondaryImpact);
+        String fileName = "src/model/items/collectibleitems/" + fileNameCreator(collectibleItem.getName()) + ".json";
         try (FileOutputStream fos = new FileOutputStream(fileName);
              OutputStreamWriter isr = new OutputStreamWriter(fos,
                      StandardCharsets.UTF_8)) {
-            gson.toJson(minion, isr);
+            gson.toJson(collectibleItem, isr);
         }
     }
-
+    //
     private static String fileNameCreator(String name) {
         String fileName = "";
         String[] nameCompleted = name.split("[ ]");

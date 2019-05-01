@@ -6,13 +6,13 @@ interface toStr {
 
 public class Card implements toStr {
     protected int manaCost;
-    protected String name;
+    protected String name="";
     private Cell cell;
     private int cost;
     private Match match;
     protected Player player;
-    private String cardID;
-    protected String description;
+    private String cardID="";
+    protected String description="";
 
     boolean isManaSufficient(int playerMana) {
         return playerMana >= manaCost;

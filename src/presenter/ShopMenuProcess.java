@@ -19,10 +19,10 @@ public class ShopMenuProcess {
     static {
         commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("show collection"));
-        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("buy [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("buy [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("show"));
         commandPatterns.add(Pattern.compile("help"));
     }
@@ -60,7 +60,13 @@ public class ShopMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return buy(commandParts[1]);
+                    if(commandParts.length == 4)
+                        return buy(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
+                    if(commandParts.length == 3)
+                        return buy(commandParts[1]+" "+commandParts[2]);
+                    if(commandParts.length == 2)
+                        return buy(commandParts[1]);
+                    return 0;
                 }
             },
             new DoCommand() {
@@ -145,26 +151,26 @@ public class ShopMenuProcess {
 
     private int show() {
         ShopMenu.showMessage("Heroes :");
-        for (int i = 0; i < shopMenu.getShop().getShopHeroes().size(); i++) {
-            MovableCard hero = shopMenu.getShop().getShopHeroes().get(i);
-            ShopMenu.showMessage((i + 1) + " : " + shopMenu.getShop().getShopHeroes().get(i) + " Buy Cost : " +
+        for (int i = 0; i < Shop.getShopHeroes().size(); i++) {
+            Hero hero = Shop.getShopHeroes().get(i);
+            ShopMenu.showMessage("          "+(i + 1) + " : " + hero.toString(false) +" Buy Cost : "+
                     hero.getCost());
         }
         ShopMenu.showMessage("Items :");
-        for (int i = 0; i < shopMenu.getShop().getShopItems().size(); i++) {
-            ShopMenu.showMessage((i + 1) + " : " + shopMenu.getShop().getShopItems().get(i) + " Buy Cost : " +
-                    shopMenu.getShop().getShopItems().get(i).getCost());
+        for (int i = 0; i < Shop.getShopItems().size(); i++) {
+            ShopMenu.showMessage("          "+(i + 1) + " : " + Shop.getShopItems().get(i).toString(false) + " Buy Cost : " +
+                    Shop.getShopItems().get(i).getCost());
         }
         ShopMenu.showMessage("Cards : ");
         ShopMenu.showMessage("  Spells : ");
-        for (int i = 0; i < shopMenu.getShop().getShopSpells().size(); i++) {
-            Spell spell = shopMenu.getShop().getShopSpells().get(i);
-            ShopMenu.showMessage("  " + (i + 1) + " : " + spell + " Buy Cost : " + spell.getCost());
+        for (int i = 0; i < Shop.getShopSpells().size(); i++) {
+            Spell spell = Shop.getShopSpells().get(i);
+            ShopMenu.showMessage("            "+(i + 1) + " : " + spell.toString(false) + " Buy Cost : " + spell.getCost());
         }
         ShopMenu.showMessage("  Minions : ");
-        for (int i = 0; i < shopMenu.getShop().getShopSpells().size(); i++) {
-            MovableCard minion = shopMenu.getShop().getShopMinions().get(i);
-            ShopMenu.showMessage("  " + (i + 1) + " : " + minion + " Buy Cost : " + minion.getCost());
+        for (int i = 0; i < Shop.getShopMinions().size(); i++) {
+            Minion minion = Shop.getShopMinions().get(i);
+            ShopMenu.showMessage("            "+ (i + 1) + " : " + minion.toString(false) + " Buy Cost : " + minion.getCost());
         }
         return 0;
     }

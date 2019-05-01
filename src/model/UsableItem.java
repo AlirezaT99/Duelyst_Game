@@ -1,6 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+
 public class UsableItem extends InfluentialItem {
+    private static ArrayList<UsableItem> usableItems = new ArrayList<>();
     private int cost;
     private Deck deck;
     private Match match;
@@ -9,7 +12,7 @@ public class UsableItem extends InfluentialItem {
     public String toString(boolean showCost) {
         String output = "Name : " + name + " - Desc :" + description;
         if (showCost) output = output + " - Sell Cost : " + getCost();
-        output = output + "\n";
+        //output = output + "\n";
         return output;
     }
 
@@ -20,6 +23,10 @@ public class UsableItem extends InfluentialItem {
 
     public void setMatch(Match match) {
         this.match = match;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 
     public int getCost() {
@@ -33,5 +40,7 @@ public class UsableItem extends InfluentialItem {
     public Match getMatch() {
         return match;
     }
+
+    public static void addToUsableItems(UsableItem usableItem){ usableItems.add(usableItem);}
     // setter & getter
 }

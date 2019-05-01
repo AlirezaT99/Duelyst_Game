@@ -1,7 +1,10 @@
 
-Usquid:S1135"2Complete the task associated to this TODO comment.(ñ•Ôøÿÿÿÿ8„Ù€Û¥-
-gsquid:UnusedPrivateMethod"6Remove this unused private "isThereEmptyPlace" method.(šóıÿÿÿÿ8çÅ†‰£-
-usquid:S1171
-"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
-lsquid:UnusedPrivateMethod"";Remove this unused private "didSwitchInCurrentTurn" method.(ïœ¶øúÿÿÿÿ8çÅ†‰£-
-Nsquid:S1172"+Remove this unused method parameter "card".(šóıÿÿÿÿ8çÅ†‰£-
+Ÿsquid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(á˜û8¦¼¢-
+lsquid:UnusedPrivateMethod!";Remove this unused private "didSwitchInCurrentTurn" method.(ïœ¶øúÿÿÿÿ8¦¼¢-
+gsquid:UnusedPrivateMethod"6Remove this unused private "isThereEmptyPlace" method.(šóıÿÿÿÿ8¦¼¢-
+Ÿsquid:S1186)"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¹øöÑ8¦¼¢-
+Osquid:S1172%",Remove this unused method parameter "index".(’æ´˜ıÿÿÿÿ8¦¼¢-
+Nsquid:S1068"0Remove this unused "selectedCard" private field.(Ûå•8¦¼¢-
+Nsquid:S1172"+Remove this unused method parameter "card".(šóıÿÿÿÿ8¦¼¢-
+Usquid:S1135"2Complete the task associated to this TODO comment.(ñ•Ôøÿÿÿÿ8¥õƒ£-
+|squid:S1171	"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8¦¼¢-

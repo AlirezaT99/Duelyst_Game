@@ -68,5 +68,6 @@ public class MainMenu {
     public MainMenuProcess getMainMenuProcess() {
         return mainMenuProcess;
     }
+
     //getters
 }

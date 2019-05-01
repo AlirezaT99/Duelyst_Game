@@ -1,33 +1,8 @@
 
-osquid:CommentedOutCodeLineÂ"<This block of commented-out lines of code should be removed.(àÜèàüÿÿÿÿ8âïë­¦-
-@squid:S1643Ž"Use a StringBuilder instead.(³üÇ°üÿÿÿÿ8‹ý½¦¦-
-bsquid:CommentedOutCodeLineJ"<This block of commented-out lines of code should be removed.(Ž •‡
-nsquid:CommentedOutCodeLineg"<This block of commented-out lines of code should be removed.(¡ôº±þÿÿÿÿ8‹ý½¦¦-
-osquid:CommentedOutCodeLine¶"<This block of commented-out lines of code should be removed.(½èæÎÿÿÿÿÿ8âïë­¦-
-osquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ü®Íþÿÿÿÿ8âïë­¦-
-osquid:CommentedOutCodeLineè"<This block of commented-out lines of code should be removed.(ËÕé¿þÿÿÿÿ8âïë­¦-
-Msquid:UselessImportCheck")Remove this unused import 'java.net.URI'.(Ö¦¨°
-osquid:CommentedOutCodeLinež"<This block of commented-out lines of code should be removed.(å½øþÿÿÿÿ8âïë­¦-
-nsquid:CommentedOutCodeLine/"<This block of commented-out lines of code should be removed.(ØõÅøýÿÿÿÿ8‹ý½¦¦-
-nsquid:CommentedOutCodeLines"<This block of commented-out lines of code should be removed.(Šùèªþÿÿÿÿ8âïë­¦-
-gsquid:CommentedOutCodeLineF"<This block of commented-out lines of code should be removed.(ô„êÂÿÿÿÿÿ
-osquid:CommentedOutCodeLine¸"<This block of commented-out lines of code should be removed.(ÿª—ðûÿÿÿÿ8âïë­¦-
-osquid:CommentedOutCodeLineô"<This block of commented-out lines of code should be removed.(ØõÅøýÿÿÿÿ8âïë­¦-
-nsquid:CommentedOutCodeLined"<This block of commented-out lines of code should be removed.(©•ÖÕúÿÿÿÿ8‹ý½¦¦-
-osquid:CommentedOutCodeLineÄ"<This block of commented-out lines of code should be removed.(®Áû”þÿÿÿÿ8âïë­¦-
-bsquid:CommentedOutCodeLineN"<This block of commented-out lines of code should be removed.(Ž •‡
-bsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(’àßì
-isquid:CommentedOutCodeLine|"<This block of commented-out lines of code should be removed.(¥‡ïõ8âïë­¦-
-gsquid:CommentedOutCodeLine$"<This block of commented-out lines of code should be removed.(ØõÅøýÿÿÿÿ
-isquid:CommentedOutCodeLineš"<This block of commented-out lines of code should be removed.(ÂÖ¬N8âïë­¦-
-gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ØõÅøýÿÿÿÿ
-Ssquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ
-]squid:UselessImportCheck"4Remove this unused import 'java.util.regex.Pattern'.(Ã•…Äúÿÿÿÿ
-jsquid:CommentedOutCodeLineÞ"<This block of commented-out lines of code should be removed.(½ÿ‡Å8âïë­¦-
-Tsquid:UselessImportCheck"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ
-µ%squid:RedundantThrowsDeclarationCheckT"xRemove the declaration of thrown exception 'java.io.FileNotFoundException' which is a subclass of 'java.io.IOException'.(¼×øáýÿÿÿÿ8‹ý½¦¦-
-asquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¾ÞéJ
-Tsquid:UselessImportCheck"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ
-jsquid:CommentedOutCodeLine¨"<This block of commented-out lines of code should be removed.(ñ¼•ð8âïë­¦-
-isquid:CommentedOutCodeLine-"<This block of commented-out lines of code should be removed.(’àßì8‹ý½¦¦-
-jsquid:CommentedOutCodeLine–"<This block of commented-out lines of code should be removed.(…æàê8âïë­¦-
+[squid:UselessImportCheck"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÄÖÚ…£-
+Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ8òÌêà£-
+dsquid:UselessImportCheck"4Remove this unused import 'java.util.regex.Pattern'.(Ã•…Äúÿÿÿÿ8òÌêà£-
+@squid:S1643¾"Use a StringBuilder instead.(³üÇ°üÿÿÿÿ8©âÑš¦-
+µ%squid:RedundantThrowsDeclarationCheckT"xRemove the declaration of thrown exception 'java.io.FileNotFoundException' which is a subclass of 'java.io.IOException'.(¼×øáýÿÿÿÿ8Âö —¦-
+[squid:UselessImportCheck"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8ÄÖÚ…£-
+Tsquid:UselessImportCheck")Remove this unused import 'java.net.URI'.(Ö¦¨°8òÌêà£-

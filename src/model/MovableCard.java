@@ -257,6 +257,14 @@ public abstract class MovableCard extends Card {
         isHybrid = hybrid;
     }
 
+    public void setMaxAttackRange(int maxAttackRange) {
+        this.maxAttackRange = maxAttackRange;
+    }
+
+    public void setComboAttacker(boolean comboAttacker) {
+        isComboAttacker = comboAttacker;
+    }
+
     //setters
 
 }

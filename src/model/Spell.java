@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Spell extends Card {
-    private ArrayList spells = new ArrayList();
+    private static ArrayList<Spell> spells = new ArrayList();
     private Impact impact;
     private Impact primaryImpact;
     private Impact secondaryImpact;
@@ -13,7 +13,7 @@ public class Spell extends Card {
     public String toString(boolean showCost) {
         String output = "Type : Spell - Name : " + name + " - MP : " + manaCost + " - Desc : " + description;
         if (showCost) output = output + " - Sell Cost : " + getCost();
-        output += "\n";
+        //output += "\n";
         return output;
     }
 
@@ -81,6 +81,11 @@ public class Spell extends Card {
     public void setSecondaryImpact(Impact secondaryImpact) {
         this.secondaryImpact = secondaryImpact;
     }
+
+    public static void addToSpells(Spell spell){
+        spells.add(spell);
+    }
+
 
     //setters
 }
