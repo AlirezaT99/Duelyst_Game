@@ -1,7 +1,5 @@
 package model;
 
-import sun.plugin.services.PlatformService;
-
 import java.util.ArrayList;
 
 public class CollectibleItem extends InfluentialItem {

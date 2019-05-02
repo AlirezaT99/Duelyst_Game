@@ -111,7 +111,16 @@ public class LoginMenuProcess {
             Gson gson = new Gson();
             gson.toJson(account, isr);
         }
+        LoginMenu.showMessage("Account created");
         return 0;
+//        users.add(account);
+//        String fileName = "src/model/accounts/" + userName + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            Gson gson = new Gson();
+//            gson.toJson(account, isr);
+//        }
     }
 
     private int login(String userName) throws IOException {
@@ -123,9 +132,6 @@ public class LoginMenuProcess {
                 if (user.getPassword().equals(passWord)) {
                     currentAccount = user;
                     loginMenu.setIsInLoginMenu(false);
-//                    Player currentPlayer = new Player();
-//                    currentPlayer.setAccount(currentAccount);
-//                    player = currentPlayer;
                     MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
                     mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
                     mainMenu.run();

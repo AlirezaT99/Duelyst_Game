@@ -8,11 +8,10 @@ public class Hero extends MovableCard {
     private int spellCost;
     private int spellCoolDown;
     private Impact onHitImpact;
-    private int spellManaCost;
 
-    public Hero(String name, int health, int damage, Spell heroSpell, int spellCoolDown) {
+    public Hero(String name, int health, int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
         this.heroSpell = heroSpell;
-        this.spellCost = heroSpell.getCost();
+        this.spellCost = spellCost;
         this.spellCoolDown = spellCoolDown;
         this.setHealth(health);
         this.name = name;
@@ -38,7 +37,7 @@ public class Hero extends MovableCard {
         String output = "Name : " + name + " - AP : " + this.getDamage() + " - HP : " + this.getHealth() + " - Class : "
                 + classType + " - Special power : " + description;
         if (showCost) output = output + " - Sell Cost : " + getCost();
-       // output = output + "\n";
+        //output = output + "\n";
         return output;
     }
 
@@ -58,13 +57,7 @@ public class Hero extends MovableCard {
     public int getSpellCoolDown() {
         return spellCoolDown;
     }
+    // getters
 
-    public static ArrayList<Hero> getHeroes() {
-        return heroes;
-    }
-// getters
-
-    public static void addToHeroes(Hero hero){
-        heroes.add(hero);
-    }
+    public static void addToHeroes(Hero hero){heroes.add(hero);}
 }

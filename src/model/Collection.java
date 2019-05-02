@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 public class Collection {
     private ArrayList<UsableItem> items = new ArrayList<>();
-    private ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Minion> minions = new ArrayList<>();
+    private ArrayList<Spell> spells = new ArrayList<>();
+    private ArrayList<Hero> heroes = new ArrayList<>();
     private ArrayList<Deck> decks = new ArrayList<>();
     private HashMap<String, UsableItem> itemsHashMap;
     private HashMap<String, Card> cardsHashMap;
@@ -50,9 +52,9 @@ public class Collection {
     public String show(boolean showCost) {
         String output = "Heroes :\n";
         int idx = 0;
-        for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) instanceof Hero) {
-                output = output + "\t\t" + (idx + 1) + " : " + cards.get(i).toString(showCost) + "\n";
+        for (int i = 0; i < heroes.size(); i++) {
+            if (heroes.get(i) instanceof Hero) {
+                output = output + "\t\t" + (idx + 1) + " : " + heroes.get(i).toString(showCost) + "\n";
                 idx++;
             }
         }
@@ -61,12 +63,18 @@ public class Collection {
             output = output + "\t\t" + (i + 1) + " : " + items.get(i).toString(showCost) + "\n";
         idx = 0;
         output = output + "Cards :\n";
-        for (int i = 0; i < cards.size(); i++) {
-            if (!(cards.get(i) instanceof Hero)) {
-                output = output + "\t\t" + (idx + 1) + " : " + (cards.get(i)).toString(showCost) + "\n";
+        for (int i = 0; i < spells.size(); i++) {
+                output = output + "\t\t" + (idx + 1) + " : " + (spells.get(i)).toString(showCost) + "\n";
                 idx++;
-            }
         }
+        for (int i = 0; i < minions.size(); i++) {
+            if(i!=minions.size()-1)
+            output = output + "\t\t" + (idx + 1) + " : " + (minions.get(i)).toString(showCost) + "\n";
+            else
+                output = output + "\t\t" + (idx + 1) + " : " + (minions.get(i)).toString(showCost);
+            idx++;
+        }
+
         return output;
     }
 
@@ -98,17 +106,33 @@ public class Collection {
     }
 
     public Card findCardByID(String cardID) {
-        for (Card card : cards) {
-            if (card.getCardID() != null && card.getCardID().equals(cardID))
-                return card;
+        for (Minion minion : minions) {
+            if(minion.getCardID()!= null && minion.getCardID().equals(cardID))
+                return minion;
+        }
+        for (Hero hero : heroes) {
+            if(hero.getCardID()!=null && hero.getCardID().equals(cardID))
+                return hero;
+        }
+        for (Spell spell : spells) {
+            if(spell.getCardID()!=null && spell.getCardID().equals(cardID))
+                return spell;
         }
         return null;
     }
 
     public Card findCardByName(String cardID) {
-        for (Card card : cards) {
-            if (card.getName() != null && card.getName().equals(cardID))
-                return card;
+for (Minion minion : minions) {
+            if(minion.getName().equals(cardID))
+                return minion;
+        }
+        for (Hero hero : heroes) {
+            if(hero.getName().equals(cardID))
+                return hero;
+        }
+        for (Spell spell : spells) {
+            if(spell.getName().equals(cardID))
+                return spell;
         }
         return null;
     }
@@ -127,8 +151,16 @@ public class Collection {
         return items;
     }
 
-    ArrayList<Card> getCards() {
-        return cards;
+    public ArrayList<Minion> getMinions() {
+        return minions;
+    }
+
+    public ArrayList<Spell> getSpells() {
+        return spells;
+    }
+
+    public ArrayList<Hero> getHeroes() {
+        return heroes;
     }
 
     public ArrayList<Deck> getDecks() {

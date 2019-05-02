@@ -6,7 +6,6 @@ import model.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +14,8 @@ public class MainProcess {
 
     public static void readFiles() throws IOException {
         // reading accounts
-        Gson gson = readAccounts();
+        Gson gson = new Gson();
+        readAccounts();
         File folder;
         File[] listOfFiles;
 
@@ -58,7 +58,6 @@ public class MainProcess {
                 Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
                 CollectibleItem collectibleItem= gson.fromJson(reader, CollectibleItem.class);
                 CollectibleItem.addToCollectibleItems(collectibleItem);
-                InfluentialItem.addToCollectibleItems(collectibleItem);
                 reader.close();
             }
         }
@@ -75,7 +74,6 @@ public class MainProcess {
                 Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
                 UsableItem usableItem= gson.fromJson(reader, UsableItem.class);
                 UsableItem.addToUsableItems(usableItem);
-                InfluentialItem.addToUsableItems(usableItem);
                 Shop.addToItems(usableItem);
                 reader.close();
             }

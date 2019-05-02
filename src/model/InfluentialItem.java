@@ -1,35 +1,30 @@
 package model;
 
-import java.util.ArrayList;
-
 public class InfluentialItem extends Item {
-    private static ArrayList<UsableItem> usableItems = new ArrayList<>();
-    private static ArrayList<CollectibleItem> collectibleItems = new ArrayList<>();
-    private Impact primaryImpact;
-    private Impact secondaryImpact;
+    private Impact impact;
 
-    public Impact getPrimaryImpact() {
-        return primaryImpact;
-    }
+    //getters
 
-    public void setPrimaryImpact(Impact impact) {
-        this.primaryImpact = impact;
-    }
-
-    public void setSecondaryImpact(Impact impact) {
-        this.secondaryImpact = impact;
+    public Impact getImpact() {
+        return impact;
     }
 
     public String getItemID() {
         return itemID;
     }
 
+    //getters
+
+    //setters
+
     public void setItemID(String itemID) {
         this.itemID = itemID;
     }
 
-    public static void addToUsableItems(UsableItem usableItem){ usableItems.add(usableItem);}
+    public void setImpact(Impact impact) {
+        this.impact = impact;
+    }
 
-    public static void addToCollectibleItems(CollectibleItem collectibleItem){ collectibleItems.add(collectibleItem);}
 
+    //setters
 }

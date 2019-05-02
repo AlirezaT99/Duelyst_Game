@@ -33,13 +33,9 @@ public class StoryMenu {
             if (commandType == -1)
                 System.out.println("invalid input");
             else
-                handleErrors(storyMenuProcess.DoCommands[commandType].doIt());
+                storyMenuProcess.DoCommands[commandType].doIt();
         }
         scanner.close();
-    }
-
-    public void handleErrors(int message) {
-
     }
 
     public int help() {

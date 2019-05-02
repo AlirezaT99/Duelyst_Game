@@ -32,7 +32,12 @@ public class Account {
             item.setItemID(createID());
         }
             if (card != null) {
-                collection.getCards().add(card);
+                if(card instanceof Hero)
+                    collection.getHeroes().add((Hero)card);
+                if(card instanceof Minion)
+                    collection.getMinions().add((Minion) card);
+                if(card instanceof Spell)
+                    collection.getSpells().add((Spell) card);
                 card.setCardID(createID());
             }
         }
@@ -48,7 +53,14 @@ public class Account {
         if (item != null)
             collection.getItems().remove(item);
         if (card != null)
-            collection.getCards().remove(card);
+        {
+            if(card instanceof Hero)
+                collection.getHeroes().remove((Hero)card);
+            if(card instanceof Minion)
+                collection.getMinions().remove((Minion) card);
+            if(card instanceof Spell)
+                collection.getSpells().remove((Spell) card);
+        }
     }
 
     public static void addAccount(Account account) {

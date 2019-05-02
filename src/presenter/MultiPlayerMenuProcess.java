@@ -6,17 +6,18 @@ import java.util.regex.Pattern;
 
 import model.Account;
 import model.Match;
+import view.BattleMenu;
 import view.MultiPlayerMenu;
 
 public class MultiPlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
-    private MultiPlayerMenu multiPlayerMenu;
+    private static MultiPlayerMenu multiPlayerMenu;
     public String[] commandParts;
     private static Account account;
     private static Account opponent;
 
     public MultiPlayerMenuProcess(MultiPlayerMenu multiPlayerMenu) {
-        this.multiPlayerMenu = multiPlayerMenu;
+        MultiPlayerMenuProcess.multiPlayerMenu = multiPlayerMenu;
     }
 
     static {
@@ -57,11 +58,14 @@ public class MultiPlayerMenuProcess {
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
         Match match = new Match(false, mode);
         match.setup(account, opponent, deckName, numberOfFlags);
+        BattleMenu battleMenu = new BattleMenu(multiPlayerMenu.getBattleInit(), match);
     }
 
     private int selectUser(String opponentUserName) {
         for (Account account : Account.getAccounts())
             if (account.getUserName().equals(opponentUserName)) {
+                if (!account.getCollection().validateDeck(account.getCollection().getSelectedDeck()))
+                    return 1;
                 opponent = account;
                 return 0;
             }

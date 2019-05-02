@@ -36,6 +36,7 @@ public class SinglePlayerMenu {
                 showMessage("invalid input");
             else if (singlePlayerMenuProcess.DoCommands[commandType].doIt() == 4) {
                 //todo : show heroes to play against
+                //todo : choose the hero
                 //todo : show decks
                 inner_Loop:
                 while (true) {
