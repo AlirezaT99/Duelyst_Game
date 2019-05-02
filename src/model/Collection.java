@@ -36,7 +36,7 @@ public class Collection {
     }
 
     public boolean validateDeck(Deck deck) {
-        if (deck.getCards().size() != 20)
+        if (deck == null || deck.getCards().size() != 20)
             return false;
         return deck.getHero() != null;
     }
@@ -52,18 +52,18 @@ public class Collection {
         int idx = 0;
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i) instanceof Hero) {
-                output = output + "\t\t" + (idx + 1) + " : " + items.get(i).toString(showCost);
+                output = output + "\t\t" + (idx + 1) + " : " + cards.get(i).toString(showCost) + "\n";
                 idx++;
             }
         }
         output = output + "Items :\n";
         for (int i = 0; i < items.size(); i++)
-            output = output + "\t\t" + (i + 1) + " : " + items.get(i).toString(showCost);
+            output = output + "\t\t" + (i + 1) + " : " + items.get(i).toString(showCost) + "\n";
         idx = 0;
         output = output + "Cards :\n";
         for (int i = 0; i < cards.size(); i++) {
             if (!(cards.get(i) instanceof Hero)) {
-                output = output + "\t\t" + (idx + 1) + " : " + items.get(i).toString(showCost);
+                output = output + "\t\t" + (idx + 1) + " : " + (cards.get(i)).toString(showCost) + "\n";
                 idx++;
             }
         }
@@ -81,17 +81,33 @@ public class Collection {
         return "-1";
     }
 
-    UsableItem findItemByID(String itemID) {
+    public UsableItem findItemByID(String itemID) {
         for (UsableItem item : items) {
-            if (item.getItemID().equals(itemID))
+            if (item.getItemID() != null && item.getItemID().equals(itemID))
                 return item;
         }
         return null;
     }
 
-     Card findCardByID(String cardID) {
+    public UsableItem findItemByName(String itemName) {
+        for (UsableItem item : items) {
+            if (item.getName().equals(itemName))
+                return item;
+        }
+        return null;
+    }
+
+    public Card findCardByID(String cardID) {
         for (Card card : cards) {
-            if (card.getCardID().equals(cardID))
+            if (card.getCardID() != null && card.getCardID().equals(cardID))
+                return card;
+        }
+        return null;
+    }
+
+    public Card findCardByName(String cardID) {
+        for (Card card : cards) {
+            if (card.getName() != null && card.getName().equals(cardID))
                 return card;
         }
         return null;

@@ -8,7 +8,7 @@ public class Account {
     private String userName;
     private String password;
     private long money;
-    private Collection collection = new Collection();
+    private Collection collection;
     private ArrayList<model.Account> friends;
     private int numberOfWins;
 
@@ -18,26 +18,29 @@ public class Account {
         this.money = 15000;
         this.friends = new ArrayList<>();
         this.numberOfWins = 0;
+        this.collection = new Collection();
     }
 
     static {
         accounts = new ArrayList<>();
     }
 
-    public void buy(int cost, UsableItem item, Card card) throws NullPointerException {
+    public void buy (int cost, UsableItem item, Card card) throws NullPointerException {
         money -= cost;
-        if (item != null)
+        if (item != null){
             collection.getItems().add(item);
-        try {
-            if (card != null){
-//                if(collection == null)
-//                    System.out.println(1);
-//                if(collection!= null && collection.getCards() == null)
-//                    System.out.println(2);
-                collection.getCards().add(card);}
-        }catch (NullPointerException e) {
-            System.out.println(e.getMessage());
+            item.setItemID(createID());
         }
+            if (card != null) {
+                collection.getCards().add(card);
+                card.setCardID(createID());
+            }
+        }
+    private String createID(){
+        int i = 0;
+        while(collection.findCardByID(""+i) != null || collection.findItemByID(""+i) != null)
+            i++;
+        return ""+i;
     }
 
     public void sell(int cost, UsableItem item, Card card) {

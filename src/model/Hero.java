@@ -32,7 +32,7 @@ public class Hero extends MovableCard {
             onHitImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
     }
 
-    @Override // ?
+    @Override
     public String toString(boolean showCost) {
         String classType = getClassType(this);
         String output = "Name : " + name + " - AP : " + this.getDamage() + " - HP : " + this.getHealth() + " - Class : "

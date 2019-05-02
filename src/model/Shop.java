@@ -92,7 +92,7 @@ public class Shop {
 
     // sell
 
-    private UsableItem findItemByName(String itemName) {
+    private static UsableItem findItemByName(String itemName) {
         for (UsableItem item : shopItems) {
             if (item.getName().equals(itemName))
                 return item;
@@ -100,7 +100,7 @@ public class Shop {
         return null;
     }
 
-    private Card findCardByName(String cardName) {
+    private static Card findCardByName(String cardName) {
         for (Card card : shopHeroes) {
             if (card.getName().equals(cardName))
                 return card;

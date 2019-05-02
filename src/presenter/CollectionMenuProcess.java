@@ -23,7 +23,7 @@ public class CollectionMenuProcess {
         commandPatterns.add(Pattern.compile("remove \\d+ from deck [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("select deck [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("validate deck [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("show all decks"));
         commandPatterns.add(Pattern.compile("show deck [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("show"));
@@ -76,7 +76,13 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return search(commandParts[1]);
+                    if(commandParts.length == 4)
+                        return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
+                    if(commandParts.length == 3)
+                        return search(commandParts[1]+" "+commandParts[2]);
+                    if(commandParts.length == 2)
+                        return search(commandParts[1]);
+                    return 0;
                 }
             },
             new DoCommand() {
@@ -100,7 +106,7 @@ public class CollectionMenuProcess {
 
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws IOException {
                     return save();
                 }
             },
@@ -118,8 +124,8 @@ public class CollectionMenuProcess {
             }
     };
 
-    private static int save() {
-        //todo: save
+    private  int save()throws IOException{
+        LoginMenuProcess.save(account);
         return 0;
     }
 
@@ -246,6 +252,12 @@ public class CollectionMenuProcess {
     }
 
     private int search(String name) {
+        if(account.getCollection().findItemByName(name)==null &&   account.getCollection().findCardByName(name)==null)
+            return 10;
+        if(account.getCollection().findItemByName(name)!=null)
+             CollectionMenu.showMessage(account.getCollection().findItemByName(name).getItemID());
+        if(account.getCollection().findCardByName(name)!=null)
+            CollectionMenu.showMessage(account.getCollection().findCardByName(name).getCardID());
         return 0;
     }
 
@@ -269,6 +281,14 @@ public class CollectionMenuProcess {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public void setMainMenu(MainMenu mainMenu) {
+        this.mainMenu = mainMenu;
+    }
+
+    public void setCollectionMenu(CollectionMenu collectionMenu) {
+        this.collectionMenu = collectionMenu;
     }
     //setters
 }
