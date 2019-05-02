@@ -94,6 +94,7 @@ public class LoginMenuProcess {
         String passWord = LoginMenu.scan();
         Account account = new Account(userName, passWord);
         Account.addAccount(account);
+        LoginMenu.showMessage("Account created");
         return 0;
 //        users.add(account);
 //        String fileName = "src/model/accounts/" + userName + ".json";

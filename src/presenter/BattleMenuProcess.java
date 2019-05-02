@@ -163,6 +163,8 @@ public class BattleMenuProcess {
     }
 
     private int endTurn() {
+        match.switchTurn();
+        //fill hand
         return 0;
     }
 
@@ -199,7 +201,7 @@ public class BattleMenuProcess {
     }
 
     private int gameInfo() {
-
+        return 0;
     }
 
     public int exit() throws IOException { // ok ?

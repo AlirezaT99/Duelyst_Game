@@ -57,7 +57,6 @@ public class Match {
     }
 
     //turn based manager
-
     public Player currentTurnPlayer() {
         if (turn == 0)
             return player1;
@@ -70,7 +69,7 @@ public class Match {
         return player1;
     }
 
-    void switchTurn() {
+    public void switchTurn() {
         turn ^= 1;
     }
     //turn based manager

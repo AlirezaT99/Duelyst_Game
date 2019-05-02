@@ -6,7 +6,6 @@ import model.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;

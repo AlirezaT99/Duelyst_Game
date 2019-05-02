@@ -43,6 +43,9 @@ public class Player {
 
     }
 
+    public boolean equals(Player player) {
+        return player.getUserName().equals(this.getUserName());
+    }
 
     Hero findPlayerHero() {
         for (Card card : collection.getCards()) {
