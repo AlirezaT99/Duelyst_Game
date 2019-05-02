@@ -40,11 +40,11 @@ class Table {
     // table initiation
 
     {
-        cells = new Cell[5][9];
+        cells = new Cell[6][10];
     }
 
     public Cell getCellByCoordination(int x, int y) {
-        if (x < 6 && y < 10  && x>0 && y>0)
+        if (x < 6 && y < 10 && x > 0 && y > 0)
             return cells[x][y];
         return null;
     }

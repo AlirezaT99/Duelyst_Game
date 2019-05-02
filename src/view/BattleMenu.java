@@ -33,9 +33,65 @@ public class BattleMenu {
             int commandType = BattleMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 System.out.println("invalid input");
+            else {
+                int returnedValue = battleMenuProcess.DoCommands[commandType].doIt();
+                switch (returnedValue) {
+                    case 10:
+                        // graveyard
+                        inner_loop:
+                        while (true) {
+                            command = scanner.nextLine();
+                            switch (graveYardMenu(command)) {
+                                case 1:
+                                    break inner_loop;
+                                case 2:
+                                    graveYardHelp();
+                                    break;
+                                case 3:
+                                    BattleMenuProcess.showGraveYardCards();
+                                    break;
+                                case 4:
+                                    if (BattleMenuProcess.showGraveYardCardInfo(command.split("\\s+")[2]) == -1)
+                                        showMessage("invalid cardID");
+                                    break;
+                                default:
+                                    showMessage("invalid command");
+                            }
+                        }
+                        break;
 
+                    default:
+                        handleEvents(returnedValue);
+                        break;
+                }
+            }
         }
         scanner.close();
+    }
+
+    private void handleEvents(int messageID) {
+        switch (messageID) {
+            case 1:
+                showMessage("invalid coordination");
+                break;
+        }
+
+    }
+
+    private void graveYardHelp() {
+        showMessage("Show info [card id]");
+        showMessage("Show cards");
+        showMessage("Help");
+        showMessage("Exit");
+    }
+
+    private int graveYardMenu(String command) {
+        if (command.matches("Exit")) return 1;
+        if (command.matches("Help")) return 2;
+        if (command.matches("Show cards")) return 3;
+        if (command.matches("Show info [a-zA-Z0-9._]+")) return 4;
+
+        else return -1;
     }
 
     public static int showMenu() {

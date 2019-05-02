@@ -11,8 +11,8 @@ public class Match {
     Table table;
     private Player player1 = new Player();
     private Player player2 = new Player();
-    private ArrayList<Card> player1_graveyard;
-    private ArrayList<Card> player2_graveyard;
+    public ArrayList<Card> player1_graveyard;
+    public ArrayList<Card> player2_graveyard;
     private int turn = 0;
     private int numberOfFlags = -1;
     private Integer AILevel = 0;
@@ -85,11 +85,11 @@ public class Match {
         return table;
     }
 
-    Player getPlayer1() {
+    public Player getPlayer1() {
         return player1;
     }
 
-    Player getPlayer2() {
+    public Player getPlayer2() {
         return player2;
     }
 

@@ -102,6 +102,7 @@ public class Player {
     public void setAccount(Account account) {
         this.account = account;
     }
+
     //setters
 
 }

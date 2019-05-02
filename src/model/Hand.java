@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-class Hand {
+public class Hand {
     private ArrayList<Card> cards;
     private Card selectedCard;
     private boolean switchCardThisTurn;
@@ -49,6 +49,14 @@ class Hand {
 
     //switching
 
+    public String showHand() {
+        String output = "";
+        for (Card card : cards) {
+            output = output.concat(card.toString(false));
+        }
+        return output;
+    }
+
     public Card selectCard(int index) {
         selectedCard = cards.get(index);
         return selectedCard;
@@ -61,7 +69,18 @@ class Hand {
         return cards;
     }
 
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
+
     //getters
 
+    //setters
+
+    public void setSelectedCard(Card selectedCard) {
+        this.selectedCard = selectedCard;
+    }
+
+    //setters
 
 }
