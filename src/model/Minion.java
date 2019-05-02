@@ -1,8 +1,11 @@
 package model;
 
+import com.sun.xml.internal.org.jvnet.mimepull.MIMEConfig;
+
 import java.util.ArrayList;
 
 public class Minion extends MovableCard {
+    private static ArrayList<Minion> minions = new ArrayList<>();
     private Impact summonImpact;
     private Impact dyingWishImpact;
     private Impact onDefendImpact;
@@ -53,7 +56,7 @@ public class Minion extends MovableCard {
         String output = "Type : Minion - Name : " + this.name + " - Class : " + classType + " - AP : " + this.getDamage() +
                 " HP : " + this.getHealth() + " - MP :" + this.manaCost + " Special power : " + this.description;
         if (showCost) output = output + " - Sell Cost : " + getCost();
-        output = output + "\n";
+       // output = output + "\n";
         return output;
     }
 
@@ -87,6 +90,10 @@ public class Minion extends MovableCard {
 
     public void setOnTurnImpact(Impact onTurnImpact) {
         this.onTurnImpact = onTurnImpact;
+    }
+
+    public static void addToMinions(Minion minion){
+     minions.add(minion);
     }
     //setters
 }

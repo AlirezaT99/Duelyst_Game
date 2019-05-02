@@ -1,12 +1,20 @@
 package presenter;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import view.LoginMenu;
 import model.Account;
 import view.MainMenu;
-
+import com.google.gson.*;
 import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.io.Reader;
+import java.nio.charset.MalformedInputException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class LoginMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
@@ -31,7 +39,7 @@ public class LoginMenuProcess {
     public DoCommand[] DoCommands = new DoCommand[]{
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws IOException {
                     return createAccount(commandParts[2]);
                 }
             },
@@ -43,13 +51,13 @@ public class LoginMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws IOException {
                     return showLeaderBoard();
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws IOException {
                     return save(currentAccount);
                 }
             },
@@ -80,12 +88,13 @@ public class LoginMenuProcess {
         return -1;
     }
 
-    private static void readUsers() {
+    private static void readUsers() throws IOException {
         users.clear();
+        MainProcess.readAccounts();
         users.addAll(Account.getAccounts());
     }
 
-    private static int createAccount(String userName) {
+    private static int createAccount(String userName) throws IOException {
         readUsers();
         for (Account user : users)
             if (user.getUserName().equals(userName))
@@ -94,6 +103,14 @@ public class LoginMenuProcess {
         String passWord = LoginMenu.scan();
         Account account = new Account(userName, passWord);
         Account.addAccount(account);
+        users.add(account);
+        String fileName = "src/model/accounts/" + userName + ".json";
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+             OutputStreamWriter isr = new OutputStreamWriter(fos,
+                     StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
+            gson.toJson(account, isr);
+        }
         LoginMenu.showMessage("Account created");
         return 0;
 //        users.add(account);
@@ -115,9 +132,6 @@ public class LoginMenuProcess {
                 if (user.getPassword().equals(passWord)) {
                     currentAccount = user;
                     loginMenu.setIsInLoginMenu(false);
-//                    Player currentPlayer = new Player();
-//                    currentPlayer.setAccount(currentAccount);
-//                    player = currentPlayer;
                     MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
                     mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
                     mainMenu.run();
@@ -129,7 +143,7 @@ public class LoginMenuProcess {
         return 3; //message id :3
     }
 
-    private static int showLeaderBoard() {
+    private static int showLeaderBoard() throws IOException {
         readUsers();
         sortUsers();
         for (int i = 0; i < users.size(); i++)
@@ -142,17 +156,14 @@ public class LoginMenuProcess {
         users.sort(Comparator.comparing(Account::getNumberOfWins).reversed()); // reversed ??
     }
 
-    private int save(Account account) {
-//        currentAccount.setMoney(player.getMoney());
-//        // currentAccount.numberOfWins ro bad az har bazi avaz mikonim ounja.
-//        String fileName = "src/model/accounts/" + player.getUserName() + ".json";
-//        try (FileOutputStream fos = new FileOutputStream(fileName);
-//             OutputStreamWriter isr = new OutputStreamWriter(fos,
-//                     StandardCharsets.UTF_8)) {
-//            Gson gson = new Gson();
-//            gson.toJson(currentAccount, isr);
-//        }
-        // todo : save konim :/
+    public static int save(Account account) throws IOException {
+        String fileName = "src/model/accounts/" + account.getUserName() + ".json";
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+             OutputStreamWriter isr = new OutputStreamWriter(fos,
+                     StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
+            gson.toJson(account, isr);
+        }
         return 0;
     }
 

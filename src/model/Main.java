@@ -308,17 +308,17 @@ public class Main {
 //        }
 
         //creating collectibleitems
-        CollectibleItem collectibleItem = new CollectibleItem();
-        collectibleItem.setName("Death's Curse");
-        collectibleItem.setDescription("gives a minion the ability to hit a close random force a total of 8 units of HPs.");
-        collectibleItem.setPrimaryImpact(primaryImpact);
-        //collectibleItem.setSecondaryImpact(secondaryImpact);
-        String fileName = "src/model/items/collectibleitems/" + fileNameCreator(collectibleItem.getName()) + ".json";
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
-            gson.toJson(collectibleItem, isr);
-        }
+//        CollectibleItem collectibleItem = new CollectibleItem();
+//        collectibleItem.setName("Death's Curse");
+//        collectibleItem.setDescription("gives a minion the ability to hit a close random force a total of 8 units of HPs.");
+//        collectibleItem.setPrimaryImpact(primaryImpact);
+//        //collectibleItem.setSecondaryImpact(secondaryImpact);
+//        String fileName = "src/model/items/collectibleitems/" + fileNameCreator(collectibleItem.getName()) + ".json";
+//        try (FileOutputStream fos = new FileOutputStream(fileName);
+//             OutputStreamWriter isr = new OutputStreamWriter(fos,
+//                     StandardCharsets.UTF_8)) {
+//            gson.toJson(collectibleItem, isr);
+//        }
     }
     //
     private static String fileNameCreator(String name) {

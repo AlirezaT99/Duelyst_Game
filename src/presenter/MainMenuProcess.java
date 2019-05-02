@@ -38,7 +38,7 @@ public class MainMenuProcess {
 
     private int enterCollection() throws IOException {
         mainMenu.setIsInMainMenu(false);
-        CollectionMenu collectionMenu = new CollectionMenu(currentAccount);
+        CollectionMenu collectionMenu = new CollectionMenu(currentAccount, mainMenu);
         collectionMenu.setIsInCollectionMenu(true);
         collectionMenu.run();
         return 0;

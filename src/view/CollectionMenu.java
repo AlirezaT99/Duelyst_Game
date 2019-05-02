@@ -11,10 +11,12 @@ public class CollectionMenu {
     private Account currentAccount;
     private CollectionMenuProcess collectionMenuProcess;
 
-    public CollectionMenu(Account account) {
+    public CollectionMenu(Account account, MainMenu mainMenu) {
         currentAccount = account;
         collectionMenuProcess = new CollectionMenuProcess();
         collectionMenuProcess.setAccount(currentAccount);
+        collectionMenuProcess.setMainMenu(mainMenu);
+        collectionMenuProcess.setCollectionMenu(this);
     }
 
     public void run() throws IOException {
