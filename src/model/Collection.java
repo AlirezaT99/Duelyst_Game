@@ -5,18 +5,18 @@ import java.util.HashMap;
 
 public class Collection {
     private ArrayList<UsableItem> items = new ArrayList<>();
+    private ArrayList<Deck> decks = new ArrayList<>();
+    private ArrayList<Hero> heroes = new ArrayList<>();
     private ArrayList<Minion> minions = new ArrayList<>();
     private ArrayList<Spell> spells = new ArrayList<>();
-    private ArrayList<Hero> heroes = new ArrayList<>();
-    private ArrayList<Deck> decks = new ArrayList<>();
     private HashMap<String, UsableItem> itemsHashMap;
-    private HashMap<String, Card> cardsHashMap;
+    private HashMap<String, Card> cardHashMap;
     private HashMap<String, Deck> deckHashMap;
     private Deck selectedDeck = null;
 
     {
         itemsHashMap = new HashMap<>();
-        cardsHashMap = new HashMap<>();
+        cardHashMap = new HashMap<>();
         deckHashMap = new HashMap<>();
     }
 
@@ -53,10 +53,8 @@ public class Collection {
         String output = "Heroes :\n";
         int idx = 0;
         for (int i = 0; i < heroes.size(); i++) {
-            if (heroes.get(i) instanceof Hero) {
-                output = output + "\t\t" + (idx + 1) + " : " + heroes.get(i).toString(showCost) + "\n";
-                idx++;
-            }
+            output = output + "\t\t" + (idx + 1) + " : " + heroes.get(i).toString(showCost) + "\n";
+            idx++;
         }
         output = output + "Items :\n";
         for (int i = 0; i < items.size(); i++)
@@ -64,30 +62,23 @@ public class Collection {
         idx = 0;
         output = output + "Cards :\n";
         for (int i = 0; i < spells.size(); i++) {
-                output = output + "\t\t" + (idx + 1) + " : " + (spells.get(i)).toString(showCost) + "\n";
-                idx++;
+            output = output + "\t\t" + (idx + 1) + " : " + (spells.get(i)).toString(showCost) + "\n";
+            idx++;
         }
         for (int i = 0; i < minions.size(); i++) {
-            if(i!=minions.size()-1)
-            output = output + "\t\t" + (idx + 1) + " : " + (minions.get(i)).toString(showCost) + "\n";
+            if (i != (minions.size() - 1))
+                output = output + "\t\t" + (idx + 1) + " : " + (minions.get(i)).toString(showCost) + "\n";
             else
                 output = output + "\t\t" + (idx + 1) + " : " + (minions.get(i)).toString(showCost);
             idx++;
         }
-
         return output;
     }
 
     //search
-    String search(String name) {
-        Item item = itemsHashMap.get(name);
-        if (item != null)
-            return item.getItemID();
-        Card card = cardsHashMap.get(name);
-        if (card != null)
-            return card.getCardID();
-        return "-1";
-    }
+//    String search(String name) {
+//
+//    }
 
     public UsableItem findItemByID(String itemID) {
         for (UsableItem item : items) {
@@ -106,34 +97,28 @@ public class Collection {
     }
 
     public Card findCardByID(String cardID) {
-        for (Minion minion : minions) {
-            if(minion.getCardID()!= null && minion.getCardID().equals(cardID))
-                return minion;
-        }
-        for (Hero hero : heroes) {
-            if(hero.getCardID()!=null && hero.getCardID().equals(cardID))
-                return hero;
-        }
-        for (Spell spell : spells) {
-            if(spell.getCardID()!=null && spell.getCardID().equals(cardID))
-                return spell;
-        }
+        for(int i = 0; i < heroes.size(); i++)
+            if(heroes.get(i).getCardID()!=null && heroes.get(i).getCardID().equals(cardID))
+                return heroes.get(i);
+        for(int i = 0; i < spells.size(); i++)
+            if(spells.get(i).getCardID()!=null && spells.get(i).getCardID().equals(cardID))
+                return spells.get(i);
+        for(int i = 0; i < minions.size(); i++)
+            if(minions.get(i).getCardID()!=null &&minions.get(i).getCardID().equals(cardID))
+                return minions.get(i);
         return null;
     }
 
-    public Card findCardByName(String cardID) {
-for (Minion minion : minions) {
-            if(minion.getName().equals(cardID))
-                return minion;
-        }
-        for (Hero hero : heroes) {
-            if(hero.getName().equals(cardID))
-                return hero;
-        }
-        for (Spell spell : spells) {
-            if(spell.getName().equals(cardID))
-                return spell;
-        }
+    public Card findCardByName(String name) {
+        for(int i = 0; i < heroes.size(); i++)
+            if(heroes.get(i).getName().equals(name))
+                return heroes.get(i);
+        for(int i = 0; i < spells.size(); i++)
+            if(spells.get(i).getName().equals(name))
+                return spells.get(i);
+        for(int i = 0; i < minions.size(); i++)
+            if(minions.get(i).getName().equals(name))
+                return minions.get(i);
         return null;
     }
     //search
@@ -143,25 +128,15 @@ for (Minion minion : minions) {
         return itemsHashMap;
     }
 
-    public HashMap<String, Card> getCardsHashMap() {
-        return cardsHashMap;
+
+    public HashMap<String, Card> getCardHashMap() {
+        return cardHashMap;
     }
 
-    ArrayList<UsableItem> getItems() {
+    public ArrayList<UsableItem> getItems() {
         return items;
     }
 
-    public ArrayList<Minion> getMinions() {
-        return minions;
-    }
-
-    public ArrayList<Spell> getSpells() {
-        return spells;
-    }
-
-    public ArrayList<Hero> getHeroes() {
-        return heroes;
-    }
 
     public ArrayList<Deck> getDecks() {
         return decks;
@@ -174,5 +149,18 @@ for (Minion minion : minions) {
     public HashMap<String, Deck> getDeckHashMap() {
         return deckHashMap;
     }
+
+    public ArrayList<Hero> getHeroes() {
+        return heroes;
+    }
+
+    public ArrayList<Minion> getMinions() {
+        return minions;
+    }
+
+    public ArrayList<Spell> getSpells() {
+        return spells;
+    }
+
     //getters
 }

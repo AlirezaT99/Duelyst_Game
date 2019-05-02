@@ -1,5 +1,7 @@
 package model;
 
+import presenter.CollectionMenuProcess;
+
 import java.util.ArrayList;
 
 public class Shop {
@@ -30,8 +32,32 @@ public class Shop {
     }
 
     public String searchCollection(String name, Account buyingAccount) {
-        return buyingAccount.getCollection().search(name);
+        if(buyingAccount.getCollection().findItemByName(name)==null &&
+                buyingAccount.getCollection().findCardByName(name)==null){
+            return "Item/Card not found in collection";}
+        else
+        {
+            String result = "";
+            Collection collection = buyingAccount.getCollection();
+            if(collection.findItemByName(name)!=null){
+                for(int i = 0; i< collection.getItems().size(); i++)
+                    if( collection.getItems().get(i).getName().equals(name))
+                        result+=(collection.getItems().get(i).getItemID() + "\n");
+                return result;}
+            else{
+                for(int i = 0; i< collection.getMinions().size(); i++)
+                    if( collection.getMinions().get(i).getName().equals(name))
+                        result+=(collection.getMinions().get(i).getCardID() + "\n");
+                for(int i = 0; i< collection.getSpells().size(); i++)
+                    if( collection.getSpells().get(i).getName().equals(name))
+                        result+=(collection.getSpells().get(i).getCardID() + "\n");
+                for(int i = 0; i< collection.getHeroes().size(); i++)
+                    if( collection.getHeroes().get(i).getName().equals(name))
+                        result+=(collection.getHeroes().get(i).getCardID() + "\n");
+                return result;}
+        }
     }
+
 
     // search
 

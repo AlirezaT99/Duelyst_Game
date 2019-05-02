@@ -77,11 +77,11 @@ public class CollectionMenuProcess {
                 @Override
                 public int doIt() {
                     if(commandParts.length == 4)
-                        return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
+                        return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3], account);
                     if(commandParts.length == 3)
-                        return search(commandParts[1]+" "+commandParts[2]);
+                        return search(commandParts[1]+" "+commandParts[2], account);
                     if(commandParts.length == 2)
-                        return search(commandParts[1]);
+                        return search(commandParts[1], account);
                     return 0;
                 }
             },
@@ -151,26 +151,27 @@ public class CollectionMenuProcess {
     private int addToDeck(String idStr, String deckName) { // is id an integer or a string after all???
         if (!account.getCollection().getDeckHashMap().containsKey(deckName))
             return 9;
-        if (!account.getCollection().getCardsHashMap().containsKey(idStr)
+        Deck deck = account.getCollection().getDeckHashMap().get(deckName);
+        if (!account.getCollection().getCardHashMap().containsKey(idStr)
                 && !account.getCollection().getItemsHashMap().containsKey(idStr))
             return 3;
-        if (account.getCollection().getCardsHashMap().containsKey(idStr)
-                || account.getCollection().getItemsHashMap().containsKey(idStr))
+        if (deck.getItemsHashMap().containsKey(idStr) ||
+                deck.getCardsHashMap().containsKey(idStr))
             return 4;
-        if (account.getCollection().getCardsHashMap().size() == Deck.MAX_CARD_NUMBER
-                && account.getCollection().getItemsHashMap().size() == Deck.MAX_ITEM_NUMBER
-                && !account.getCollection().getItemsHashMap().containsKey(idStr))
-            if (!(account.getCollection().getCardsHashMap().get(idStr) instanceof Hero))
-                return 5;
-        if (account.getCollection().getCardsHashMap().containsKey(idStr))
-            if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero
-                    && account.getCollection().getDeckHashMap().get(deckName).getHero() != null)
+        if ((deck.getCardsHashMap().size()+deck.getItemsHashMap().size()) == Deck.MAX_CARD_NUMBER)
+            return 5;
+//                && account.getCollection().getItemsHashMap().size() == Deck.MAX_ITEM_NUMBER
+//                && !account.getCollection().getItemsHashMap().containsKey(idStr))
+       // if (!(account.getCollection().getCardHashMap().get(idStr) instanceof Hero))
+
+        if (account.getCollection().getCardHashMap().containsKey(idStr))
+            if (account.getCollection().getCardHashMap().get(idStr) instanceof Hero
+                    && deck.getHero() != null)
                 return 6;
         //
-        if (account.getCollection().getCardsHashMap().containsKey(idStr))
-            if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero) {
-                account.getCollection().getDeckHashMap().get(deckName)
-                        .setHero((Hero) account.getCollection().getCardsHashMap().get(idStr));
+        if (account.getCollection().getCardHashMap().containsKey(idStr))
+            if (account.getCollection().getCardHashMap().get(idStr) instanceof Hero) {
+                deck.setHero((Hero)account.getCollection().getCardHashMap().get(idStr));
                 return 0;
             }
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
@@ -179,24 +180,24 @@ public class CollectionMenuProcess {
                     .put(idStr, account.getCollection().getItemsHashMap().get(idStr));
             return 0;
         }
-        if (account.getCollection().getCardsHashMap().containsKey(idStr)) {
+        if (account.getCollection().getCardHashMap().containsKey(idStr)) {
             account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap()
-                    .put(idStr, account.getCollection().getCardsHashMap().get(idStr));
+                    .put(idStr, account.getCollection().getCardHashMap().get(idStr));
             return 0;
         }
         return 0; // should be checked for bugs
     }
 
     private int removeFromDeck(String idStr, String deckName) {
-        if (!account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap().containsKey(idStr)
-                && !account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().containsKey(idStr))
-            return 3;
-        if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero
-                && account.getCollection().getDeckHashMap().get(deckName).getHero() != null
-                && account.getCollection().getDeckHashMap().get(deckName).getHero().getCardID().equals(idStr)) {
-            account.getCollection().getDeckHashMap().get(deckName).setHero(null);
-            return 0;
-        }
+//        if (!account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap().containsKey(idStr)
+//                && !account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().containsKey(idStr))
+//            return 3;
+//        if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero
+//                && account.getCollection().getDeckHashMap().get(deckName).getHero() != null
+//                && account.getCollection().getDeckHashMap().get(deckName).getHero().getCardID().equals(idStr)) {
+//            account.getCollection().getDeckHashMap().get(deckName).setHero(null);
+//            return 0;
+//        }
         account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap().remove(idStr);
         account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().remove(idStr);
         return 0;
@@ -251,21 +252,30 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private int search(String name) {
+    public static int search(String name, Account account) {
         if(account.getCollection().findItemByName(name)==null &&   account.getCollection().findCardByName(name)==null)
             return 10;
-        if(account.getCollection().findItemByName(name)!=null)
-             CollectionMenu.showMessage(account.getCollection().findItemByName(name).getItemID());
-        if(account.getCollection().findCardByName(name)!=null)
-            CollectionMenu.showMessage(account.getCollection().findCardByName(name).getCardID());
+        String result = "";
+        if(account.getCollection().findItemByName(name)!=null){
+            for(int i = 0; i< account.getCollection().getItems().size(); i++)
+                if(account.getCollection().getItems().get(i).getName().equals(name))
+                    result+=(account.getCollection().getItems().get(i).getItemID() + "\n");
+            CollectionMenu.showMessage(result);
+        }
+        else if (account.getCollection().findCardByName(name)!=null){
+            for(int i = 0; i< account.getCollection().getMinions().size(); i++)
+                if(account.getCollection().getMinions().get(i).getName().equals(name))
+                    result+=(account.getCollection().getMinions().get(i).getCardID() + "\n");
+            for(int i = 0; i< account.getCollection().getSpells().size(); i++)
+                if( account.getCollection().getSpells().get(i).getName().equals(name))
+                    result+=(account.getCollection().getSpells().get(i).getCardID() + "\n");
+            for(int i = 0; i< account.getCollection().getHeroes().size(); i++)
+                if(account.getCollection().getHeroes().get(i).getName().equals(name))
+                    result+=(account.getCollection().getHeroes().get(i).getCardID() + "\n");
+            CollectionMenu.showMessage(result);
+        }
         return 0;
     }
-
-//    private static int search(String name) {
-//        if (account.getCollection().search(name).equals("-1")) return 10;
-//
-//        return 0;
-//    }
 
     public static int findPatternIndex(String command) {
         for (int i = 0; i < commandPatterns.size(); i++)

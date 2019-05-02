@@ -134,12 +134,13 @@ public class ShopMenuProcess {
     private int search(String name) {
         if (shopMenu.getShop().search(name).equals("-1"))
             return 1;
-        ShopMenu.showMessage(shopMenu.getShop().search(name));
+
+        ShopMenu.showMessage("this item/card exists in the shop.");
         return 0;
     }
 
     private int searchCollection(String name) {
-        if (shopMenu.getShop().searchCollection(name, currentAccount).equals("-1"))
+        if (shopMenu.getShop().searchCollection(name, currentAccount).equals("Item/Card not found in collection"))
             return 2;
         ShopMenu.showMessage(shopMenu.getShop().searchCollection(name, currentAccount));
         return 0;
