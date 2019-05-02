@@ -1,5 +1,7 @@
 package presenter;
 
+import model.Card;
+import model.Coordination;
 import model.Match;
 import model.Player;
 import view.BattleMenu;
@@ -33,7 +35,7 @@ public class BattleMenuProcess {
         commandPatterns.add(Pattern.compile("End turn"));
         commandPatterns.add(Pattern.compile("Show collectibles"));
         commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Show info"));
+//        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Use [location x, y]")); // regex ?
         commandPatterns.add(Pattern.compile("Show next card"));
         commandPatterns.add(Pattern.compile("Enter graveyard"));
@@ -46,7 +48,9 @@ public class BattleMenuProcess {
     }
 
     public interface DoCommand {
+
         int doIt() throws IOException;
+
     }
 
     public static int findPatternIndex(String command) {
@@ -74,6 +78,12 @@ public class BattleMenuProcess {
                 @Override
                 public int doIt() {
                     return showCardInfo(commandParts[3]);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return selectCard(commandParts[1]);
                 }
             },
             new DoCommand() {
@@ -129,7 +139,7 @@ public class BattleMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return enterGraveyard(match.currentTurnPlayer());
+                    return enterGraveyard();
                 }
             },
             this::battleHelp,
@@ -138,15 +148,33 @@ public class BattleMenuProcess {
             BattleMenu::showMenu
     };
 
+    private int selectCard(String cardID) {
+        return 0;
+    }
+
+    private int enterGraveyard() {
+        return 10;
+    }
+
+    public static void showGraveYardCards() {
+    }
+
+    public static int showGraveYardCardInfo(String cardID) {
+        for (Card card : match.player1_graveyard)
+            if (cardID.equals(card.getCardID()))
+                if (match.getPlayer1().equals(match.currentTurnPlayer()))
+                    return showCardInfo(cardID);
+        return -1;
+    }
+
     private int endGame() {
+        //todo: move to Main Menu
+
+        // must be called when another functions has found the winner and given out the rewards
         return 0;
     }
 
     private int battleHelp() {
-        return 0;
-    }
-
-    private int enterGraveyard(Player currentTurnPlayer) {
         return 0;
     }
 
@@ -164,15 +192,11 @@ public class BattleMenuProcess {
 
     private int endTurn() {
         match.switchTurn();
-        //fill hand
+        match.currentTurnPlayer().fillHand(); // ?
         return 0;
     }
 
-    private int insertCard(String commandPart, String commandPart1, String commandPart2) {
-        return 0;
-    }
-
-    private int showHand(Player currentTurnPlayer) {
+    private int insertCard(String cardName, String x, String y) {
         return 0;
     }
 
@@ -180,19 +204,30 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int attackCombo(String[] commandParts) {
-        return 0;
-    }
-
     private int attack(String commandPart) {
         return 0;
     }
 
-    private int moveTo(String commandPart, String commandPart1) {
+    private int attackCombo(String[] commandParts) {
         return 0;
     }
 
-    private int showCardInfo(String commandPart) {
+    private int showHand(Player currentTurnPlayer) {
+        BattleMenu.showMessage(currentTurnPlayer.getHand().showHand());
+        return 0;
+    }
+
+    private int moveTo(String card_x, String card_y) {
+        int x = Integer.parseInt(card_x),
+                y = Integer.parseInt(card_y);
+        if (x > 5 || y > 9 || x < 1 || y < 1)
+            return 1;
+        match.currentTurnPlayer().getHand().getSelectedCard().setCoordination(new Coordination(x, y));
+        return 0;
+    }
+
+    private static int showCardInfo(String cardID) {
+
         return 0;
     }
 
