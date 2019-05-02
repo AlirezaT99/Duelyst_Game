@@ -185,6 +185,7 @@ public class CollectionMenuProcess {
                 && account.getCollection().getItemsHashMap().size() < Deck.MAX_ITEM_NUMBER) {
             deck.getItemsHashMap()
                     .put(idStr, account.getCollection().getItemsHashMap().get(idStr));
+            deck.getItems().add(account.getCollection().getItemsHashMap().get(idStr));
             return 0;
         }
         if (account.getCollection().findCardByID(idStr)!=null) {
@@ -198,17 +199,27 @@ public class CollectionMenuProcess {
     }
 
     private int removeFromDeck(String idStr, String deckName) {
-//        if (!account.getCollection().getDeckHashMap().get(deckName).getCardsHashMap().containsKey(idStr)
-//                && !account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().containsKey(idStr))
-//            return 3;
-//        if (account.getCollection().getCardsHashMap().get(idStr) instanceof Hero
-//                && account.getCollection().getDeckHashMap().get(deckName).getHero() != null
-//                && account.getCollection().getDeckHashMap().get(deckName).getHero().getCardID().equals(idStr)) {
-//            account.getCollection().getDeckHashMap().get(deckName).setHero(null);
-//            return 0;
-//        }
-//        account.getCollection().getDeckHashMap().get(deckName).getCardHashMap().remove(idStr);
-//        account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().remove(idStr);
+        Deck deck = account.getCollection().getDeckHashMap().get(deckName);
+        if (deck.findCardByID(idStr) == null
+                && !deck.getItemsHashMap().containsKey(idStr))
+            return 3;
+        if (account.getCollection().findCardByID(idStr) instanceof Hero
+                && deck.getHero() != null
+                && deck.getHero().getCardID().equals(idStr)) {
+            deck.setHero(null);
+            return 0;
+        }
+        if (account.getCollection().findCardByID(idStr) instanceof Spell
+                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName())!=null) {
+            deck.getSpells().remove(account.getCollection().findCardByID(idStr));
+            return 0;
+        }
+        if (account.getCollection().findCardByID(idStr) instanceof Minion
+                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName())!=null) {
+            deck.getMinions().remove(account.getCollection().findCardByID(idStr));
+            return 0;
+        }
+        account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().remove(idStr);
         return 0;
     }
 
@@ -258,7 +269,7 @@ public class CollectionMenuProcess {
             }
         } else
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
-                CollectionMenu.showMessage((i + 1) + " : " + account.getCollection().getSelectedDeck().getName() + " :");
+                CollectionMenu.showMessage((i + 1) + " : " + account.getCollection().getDecks().get(i).getName() + " :");
                 showDeck(account.getCollection().getDecks().get(i).getName());
             }
         return 0;
