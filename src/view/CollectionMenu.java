@@ -1,6 +1,7 @@
 package view;
 
 import model.Account;
+import model.Collection;
 import presenter.CollectionMenuProcess;
 
 import java.io.IOException;
@@ -67,6 +68,8 @@ public class CollectionMenu {
             case 10:
                 CollectionMenu.showMessage("Card/Item not found");
                 break;
+            case 11:
+                CollectionMenu.showMessage("There can not be more than 3 items in the col");
         }
     }
 

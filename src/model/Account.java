@@ -30,19 +30,23 @@ public class Account {
         if (item != null){
             collection.getItems().add(item);
             item.setItemID(createID());
-            collection.getItemsHashMap().put(item.getName(),item);
+            collection.getItemsHashMap().put(item.getItemID(),item);
         }
             if (card != null) {
+                card.setCardID(createID());
             if(card instanceof Hero){
                 collection.getHeroes().add((Hero)card);
+                collection.getHeroHashMap().put(card.getCardID(),(Hero) card);
             }
             if(card instanceof Minion){
                 collection.getMinions().add((Minion) card);
+                collection.getMinionHashMap().put(card.getCardID(),(Minion) card);
             }
             if(card instanceof Spell){
                 collection.getSpells().add((Spell) card);
+                collection.getSpellHashMap().put(card.getCardID(),(Spell) card);
             }
-            card.setCardID(createID());
+//            collection.getCardHashMap().put(card.getCardID(),card);
         }
         }
     private String createID(){

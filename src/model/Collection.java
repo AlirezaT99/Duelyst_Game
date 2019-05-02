@@ -10,13 +10,17 @@ public class Collection {
     private ArrayList<Minion> minions = new ArrayList<>();
     private ArrayList<Spell> spells = new ArrayList<>();
     private HashMap<String, UsableItem> itemsHashMap;
-    private HashMap<String, Card> cardHashMap;
+    private HashMap<String, Minion> minionHashMap;
+    private HashMap<String, Hero> heroHashMap;
+    private HashMap<String, Spell> spellHashMap;
     private HashMap<String, Deck> deckHashMap;
     private Deck selectedDeck = null;
 
     {
         itemsHashMap = new HashMap<>();
-        cardHashMap = new HashMap<>();
+        minionHashMap = new HashMap<>();
+        heroHashMap = new HashMap<>();
+        spellHashMap = new HashMap<>();
         deckHashMap = new HashMap<>();
     }
 
@@ -38,7 +42,7 @@ public class Collection {
     }
 
     public boolean validateDeck(Deck deck) {
-        if (deck == null || deck.getCards().size() != 20)
+        if (deck == null || (deck.getMinions().size()+deck.getSpells().size()) != 20)
             return false;
         return deck.getHero() != null;
     }
@@ -97,15 +101,12 @@ public class Collection {
     }
 
     public Card findCardByID(String cardID) {
-        for(int i = 0; i < heroes.size(); i++)
-            if(heroes.get(i).getCardID()!=null && heroes.get(i).getCardID().equals(cardID))
-                return heroes.get(i);
-        for(int i = 0; i < spells.size(); i++)
-            if(spells.get(i).getCardID()!=null && spells.get(i).getCardID().equals(cardID))
-                return spells.get(i);
-        for(int i = 0; i < minions.size(); i++)
-            if(minions.get(i).getCardID()!=null &&minions.get(i).getCardID().equals(cardID))
-                return minions.get(i);
+        if(heroHashMap.get(cardID)!=null)
+            return heroHashMap.get(cardID);
+        if(minionHashMap.get(cardID)!=null)
+            return minionHashMap.get(cardID);
+        if(spellHashMap.get(cardID)!=null)
+            return spellHashMap.get(cardID);
         return null;
     }
 
@@ -121,16 +122,13 @@ public class Collection {
                 return minions.get(i);
         return null;
     }
+
+
     //search
 
     //getters
     public HashMap<String, UsableItem> getItemsHashMap() {
         return itemsHashMap;
-    }
-
-
-    public HashMap<String, Card> getCardHashMap() {
-        return cardHashMap;
     }
 
     public ArrayList<UsableItem> getItems() {
@@ -162,5 +160,16 @@ public class Collection {
         return spells;
     }
 
+    public HashMap<String, Minion> getMinionHashMap() {
+        return minionHashMap;
+    }
+
+    public HashMap<String, Hero> getHeroHashMap() {
+        return heroHashMap;
+    }
+
+    public HashMap<String, Spell> getSpellHashMap() {
+        return spellHashMap;
+    }
     //getters
 }
