@@ -84,16 +84,12 @@ H
 src/view/BattleInit.java,6\5\65659900c79b30474fa66a69a5b641d46660b479
 N
 src/view/SinglePlayerMenu.java,e\c\ecb0f8eb41fce89a2b3359b13d91b9d0d6481c3a
-L
-src/view/CustomGameMenu.java,b\9\b90c978c244da99bd1cd1aed6b21a403e69b1f23
 Z
 *src/presenter/SinglePlayerMenuProcess.java,8\0\8029162f91404f7629872fc1bbbb9e2bda017c82
 F
 src/view/MainMenu.java,c\2\c2a457cf6e7dd8422c69720c11c4e6792b1f3fcf
 R
 "src/presenter/MainMenuProcess.java,f\8\f886adc76826f593c3465ed7aecea0c9d86675f8
-X
-(src/presenter/CustomGameMenuProcess.java,9\1\91d2efb2d497c670fe9f72af1cbff56a56d6bbef
 O
 src/model/spells/allattack.json,1\b\1bcfc2755102fdee9c90005e5b1cab79d7877d94
 O

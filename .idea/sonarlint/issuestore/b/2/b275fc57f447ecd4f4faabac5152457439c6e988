@@ -1,4 +1,5 @@
 
-Usquid:S1135"2Complete the task associated to this TODO comment.(ñ•Ôøÿÿÿÿ8”ïÑË¥-
-¤squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¶»œøÿÿÿÿ8”ïÑË¥-
-psquid:S00114"QRename this interface name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(¼Ìûª8›¢”˜¦-
+Ÿsquid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(‹¤‹°8Ç”Å‘§-
+Nsquid:S1172"+Remove this unused method parameter "cell".(øô©íûÿÿÿÿ8Ç”Å‘§-
+Usquid:S1135"2Complete the task associated to this TODO comment.(ñ•Ôøÿÿÿÿ8Ç”Å‘§-
+psquid:S00114"QRename this interface name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(¼Ìûª8šÜš¤¦-

@@ -1,13 +1,9 @@
 
-Vsquid:UselessImportCheck	"+Remove this unused import 'java.util.Date'.(¸…¼ü8ÚøŸ¥-
-psquid:S1450"RRemove the "now" field and declare it as a local variable in the relevant methods.(ÔêÿĞ8ôª” ¥-
-bsquid:UselessImportCheck"7Remove this unused import 'java.text.SimpleDateFormat'.(ú¡ÙÛ8ÚøŸ¥-
-\squid:UselessImportCheck"1Remove this unused import 'java.text.DateFormat'.(÷Œá¼8ÚøŸ¥-
-Esquid:S1068"'Remove this unused "dtf" private field.(ËÊò8Ï€ ¥-
-Rsquid:S1068"/Remove this unused "opponetName" private field.(¼»½ÿÿÿÿÿ8³—üŸ¥-
-[squid:UselessImportCheck"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8Ïã© ¥-
-Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Calendar'.(ÿÛö´8ÚøŸ¥-
-Hsquid:S1068"*Remove this unused "result" private field.(Öà¦«8³—üŸ¥-
-ssquid:S1450"URemove the "result" field and declare it as a local variable in the relevant methods.(Öà¦«8Ù¤ ¥-
-}squid:S1450"ZRemove the "opponetName" field and declare it as a local variable in the relevant methods.(¼»½ÿÿÿÿÿ8ôª” ¥-
-Esquid:S1068"'Remove this unused "now" private field.(ÔêÿĞ8ôª” ¥-
+Asquid:S1068"*Remove this unused "result" private field.(Öà¦«
+>squid:S1068	"'Remove this unused "now" private field.(ÔêÿĞ
+isquid:S1450	"RRemove the "now" field and declare it as a local variable in the relevant methods.(ÔêÿĞ
+lsquid:S1450"URemove the "result" field and declare it as a local variable in the relevant methods.(Öà¦«
+Nsquid:S1068"0Remove this unused "opponentName" private field.(» ÆË8Äà–ì¦-
+>squid:S1068
+"'Remove this unused "dtf" private field.(ËÊò
+ysquid:S1450"[Remove the "opponentName" field and declare it as a local variable in the relevant methods.(» ÆË8Äà–ì¦-

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 class Cell {
 
@@ -37,6 +38,12 @@ class Cell {
     //getters
     ArrayList<Cell> getAdjacentCells() {
         return adjacentCells;
+    }
+
+    ArrayList<Cell> getFullAdjacentCells(Player player){
+        ArrayList<Cell> cellArrayList = this.getAdjacentCells();
+        cellArrayList.removeIf(cell -> cell.getMovableCard() == null || !cell.getMovableCard().player.equals(player));
+        return cellArrayList;
     }
 
     MovableCard getMovableCard() {
