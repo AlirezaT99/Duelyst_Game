@@ -22,18 +22,18 @@ public class Deck {
 
     public String show(boolean showCost) {
         String output = "";
-        if(hero!=null)
-         output = "Heroes :\n" + "\t\t1 : " + hero.toString(false);
+        if (hero != null)
+            output += "Heroes :\n" + "\t\t1 : " + hero.toString(false) + "\n";
         else
-            output = "Heroes :\n";
-        output = output + "Items :\n";
+            output += "Heroes :\n";
+        output += "Items :\n";
         for (int i = 0; i < items.size(); i++)
             output = output + "\t\t" + (i + 1) + " : " + items.get(i).toString(false) + "\n";
         output = output + "Cards :\n";
         for (int i = 0; i < spells.size(); i++)
             output = output + "\t\t" + (i + 1) + " : " + spells.get(i).toString(false) + "\n";
         for (int i = 0; i < minions.size(); i++)
-            output = output + "\t\t" + (i + 1+spells.size()) + " : " + minions.get(i).toString(false) + "\n";
+            output = output + "\t\t" + (i + 1 + spells.size()) + " : " + minions.get(i).toString(false) + "\n";
         return output;
     }
 
