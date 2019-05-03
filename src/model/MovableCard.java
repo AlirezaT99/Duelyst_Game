@@ -116,7 +116,7 @@ public abstract class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.setImpactArea(this.player, cardCell, cardCell);
+            impact.doImpact(this.player,this,this.cardCell,this.cardCell);
             impact.goThroughTime();
 
         }

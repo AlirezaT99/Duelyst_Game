@@ -26,6 +26,7 @@ class Impact {
     private String ImpactWayOfAssigning=""; //0.castingImpact(0-4){doesn't matter,spell,attack,defend,item}//1.wayCardGotIt(0-4){doesn't matter,spell,defend,attack}
     //3.impactSetterTeam(0-3) //4.impactGetterTeam(0-3)
     //needed id variables
+
     //targetTypeId variables
     private boolean validOnAll;
     private boolean targetAttackTypeMatters;
@@ -342,7 +343,9 @@ class Impact {
     //set ImpactArea
 
 
-    void doImpact(Player friendlyPlayer , MovableCard movableCard) {
+    void doImpact(Player friendlyPlayer , MovableCard movableCard, Cell targetCell,Cell castingCell) {
+        setAllVariablesNeeded();
+        setImpactArea(friendlyPlayer,targetCell,castingCell);
         if (doesHaveAntiNegativeImpact)
             antiNegativeImpactOnDefend(movableCard);
         else if (doesHaveAntiPoison)
@@ -393,6 +396,7 @@ class Impact {
     private void allPositiveImpactDispel() {
         if (impactTypeId.charAt(14) == '2') {
             for (Cell cell : impactArea) {
+                cell.cellImpacts.removeIf(impact -> impact.isPositiveImpact);
                 cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> impact.isPositiveImpact);
             }
         }
