@@ -43,12 +43,16 @@ public class Player {
 
     }
 
+    public boolean equals(Player player) {
+        return player.getUserName().equals(this.getUserName());
+    }
 
     Hero findPlayerHero() {
-        for (Card card : collection.getCards()) {
-            if (card instanceof Hero)
-                return (Hero) card;
-        }
+//        for (Card card : collection.getCards()) {
+//            if (card instanceof Hero)
+//                return (Hero) card;
+//        }
+//        return null;
         return null;
     }
 
@@ -98,6 +102,7 @@ public class Player {
     public void setAccount(Account account) {
         this.account = account;
     }
+
     //setters
 
 }

@@ -19,10 +19,10 @@ public class ShopMenuProcess {
     static {
         commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("show collection"));
-        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("buy [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
-        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+  [a-zA-Z0-9._]* [a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+[ ]*  [a-zA-Z0-9._]*[ ]* [a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("show"));
         commandPatterns.add(Pattern.compile("help"));
     }
@@ -48,13 +48,25 @@ public class ShopMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return search(commandParts[1]);
+                    if(commandParts.length == 4)
+                        return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
+                    if(commandParts.length == 3)
+                        return search(commandParts[1]+" "+commandParts[2]);
+                    if(commandParts.length == 2)
+                        return search(commandParts[1]);
+                    return 0;
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return searchCollection(commandParts[2]);
+                    if(commandParts.length == 5)
+                        return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4]);
+                    if(commandParts.length == 4)
+                        return searchCollection(commandParts[2]+" "+commandParts[3]);
+                    if(commandParts.length == 3)
+                        return searchCollection(commandParts[2]);
+                    return 0;
                 }
             },
             new DoCommand() {
@@ -122,12 +134,13 @@ public class ShopMenuProcess {
     private int search(String name) {
         if (shopMenu.getShop().search(name).equals("-1"))
             return 1;
-        ShopMenu.showMessage(shopMenu.getShop().search(name));
+
+        ShopMenu.showMessage("this item/card exists in the shop.");
         return 0;
     }
 
     private int searchCollection(String name) {
-        if (shopMenu.getShop().searchCollection(name, currentAccount).equals("-1"))
+        if (shopMenu.getShop().searchCollection(name, currentAccount).equals("Item/Card not found in collection"))
             return 2;
         ShopMenu.showMessage(shopMenu.getShop().searchCollection(name, currentAccount));
         return 0;

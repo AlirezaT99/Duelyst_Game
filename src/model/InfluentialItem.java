@@ -1,6 +1,6 @@
 package model;
 
-class InfluentialItem extends Item {
+public class InfluentialItem extends Item {
     private Impact impact;
 
     //getters

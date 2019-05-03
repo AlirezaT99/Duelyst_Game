@@ -22,8 +22,8 @@ public class BattleInitProcess {
     static {
         commandPatterns.add(Pattern.compile("enter single player|single player|1"));
         commandPatterns.add(Pattern.compile("enter multi player|multi player|2"));
-        commandPatterns.add(Pattern.compile("exit"));
-        commandPatterns.add(Pattern.compile("help"));
+        commandPatterns.add(Pattern.compile("exit|3"));
+        commandPatterns.add(Pattern.compile("help|4"));
     }
 
     public interface DoCommand {

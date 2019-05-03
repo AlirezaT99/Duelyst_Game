@@ -1,7 +1,9 @@
 package model;
 
-public class Hero extends MovableCard {
+import java.util.ArrayList;
 
+public class Hero extends MovableCard {
+    private static ArrayList<Hero> heroes = new ArrayList<>();
     private Spell heroSpell;
     private int spellCost;
     private int spellCoolDown;
@@ -29,13 +31,13 @@ public class Hero extends MovableCard {
             onHitImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
     }
 
-    @Override // ?
+    @Override
     public String toString(boolean showCost) {
         String classType = getClassType(this);
         String output = "Name : " + name + " - AP : " + this.getDamage() + " - HP : " + this.getHealth() + " - Class : "
                 + classType + " - Special power : " + description;
         if (showCost) output = output + " - Sell Cost : " + getCost();
-        output = output + "\n";
+        //output = output + "\n";
         return output;
     }
 
@@ -56,4 +58,6 @@ public class Hero extends MovableCard {
         return spellCoolDown;
     }
     // getters
+
+    public static void addToHeroes(Hero hero){heroes.add(hero);}
 }
