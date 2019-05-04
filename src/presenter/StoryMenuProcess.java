@@ -63,7 +63,7 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("Persian Archer"));
         deck.addMinionToDeck(Minion.getMinionByName("Tourani Lancer"));
         deck.addMinionToDeck(Minion.getMinionByName("Tourani MaceBearer"));
-        deck.addMinionToDeck(Minion.getMinionByName("Tourani Prince"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani MaceBearer"));
         deck.addMinionToDeck(Minion.getMinionByName("Black Div"));
         deck.addMinionToDeck(Minion.getMinionByName("Cyclops"));
         deck.addMinionToDeck(Minion.getMinionByName("The Viper"));
@@ -84,6 +84,42 @@ public class StoryMenuProcess {
         return 0;
     }
 
+    private int enterSecondLevel() throws IOException {
+        Deck deck = new Deck("computerDeck");
+        deck.addSpellToDeck(Spell.getSpellByName("Area Dispel"));
+        deck.addSpellToDeck(Spell.getSpellByName("Empower"));
+        deck.addSpellToDeck(Spell.getSpellByName("God Strength"));
+        deck.addSpellToDeck(Spell.getSpellByName("Madness"));
+        deck.addSpellToDeck(Spell.getSpellByName("Poison Lake"));
+        deck.addSpellToDeck(Spell.getSpellByName("Health with Profit"));
+        deck.addSpellToDeck(Spell.getSpellByName("Kings Guard"));
+        deck.addMinionToDeck(Minion.getMinionByName("Persian Swordsman"));
+        deck.addMinionToDeck(Minion.getMinionByName("Persian Lancer"));
+        deck.addMinionToDeck(Minion.getMinionByName("Persian Pahlevaan"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani GhollabSangDaar"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani Prince"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Eagle"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Eagle"));
+        deck.addMinionToDeck(Minion.getMinionByName("FireBreathing Dragon"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Leopard"));
+        deck.addMinionToDeck(Minion.getMinionByName("Goblin"));
+        deck.addMinionToDeck(Minion.getMinionByName("Giiv"));
+        deck.addMinionToDeck(Minion.getMinionByName("Iraj"));
+        deck.addMinionToDeck(Minion.getMinionByName("Shah Ghoul"));
+        deck.addItemToDeck(UsableItem.getUsableItemByName("Soul Eater"));
+        Match match = new Match(true, 2);
+        match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
+                storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
+                        .getAccount().getCollection().getSelectedDeck().getName(), 0);
+        match.getPlayer2().setDeck(deck);
+        BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
+        enterBattleMenu(battleMenu);
+        return 0;
+    }
+
+    private int enterThirdLevel() {
+        return 0;
+    }
     private  void enterBattleMenu(BattleMenu battleMenu) throws IOException {
         storyMenu.setHasRun(false);
         storyMenu.setInStoryMenu(false);
@@ -91,13 +127,6 @@ public class StoryMenuProcess {
         battleMenu.run();
     }
 
-    private int enterSecondLevel() {
-        return 0;
-    }
-
-    private int enterThirdLevel() {
-        return 0;
-    }
 
     public int exit() throws IOException {
         storyMenu.setInStoryMenu(false);
