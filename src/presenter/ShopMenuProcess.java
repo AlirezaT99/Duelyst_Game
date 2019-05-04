@@ -19,10 +19,10 @@ public class ShopMenuProcess {
     static {
         commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("show collection"));
-        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
-        commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
-        commandPatterns.add(Pattern.compile("buy [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
-        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+[ ]*  [a-zA-Z0-9._]*[ ]* [a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("buy [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("sell [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("show"));
         commandPatterns.add(Pattern.compile("help"));
     }
@@ -48,6 +48,8 @@ public class ShopMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
+                    if(commandParts.length == 5)
+                        return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]+" "+commandParts[4]);
                     if(commandParts.length == 4)
                         return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
                     if(commandParts.length == 3)
@@ -60,6 +62,8 @@ public class ShopMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
+                    if(commandParts.length == 6)
+                        return search(commandParts[2]+" "+commandParts[3]+" "+commandParts[4]+" "+commandParts[5]);
                     if(commandParts.length == 5)
                         return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4]);
                     if(commandParts.length == 4)
@@ -72,6 +76,8 @@ public class ShopMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
+                    if(commandParts.length == 5)
+                        return buy(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]+" "+commandParts[4]);
                     if(commandParts.length == 4)
                         return buy(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
                     if(commandParts.length == 3)
