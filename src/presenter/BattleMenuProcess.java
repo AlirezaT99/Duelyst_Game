@@ -1,9 +1,6 @@
 package presenter;
 
-import model.Card;
-import model.Coordination;
-import model.Match;
-import model.Player;
+import model.*;
 import view.BattleMenu;
 
 import java.io.IOException;
@@ -65,13 +62,13 @@ public class BattleMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return showMinions(match.currentTurnPlayer());
+                    return showSoldiers(match.currentTurnPlayer());
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return showMinions(match.notCurrentTurnPlayer());
+                    return showSoldiers(match.notCurrentTurnPlayer());
                 }
             },
             new DoCommand() {
@@ -143,15 +140,16 @@ public class BattleMenuProcess {
             BattleMenu::showMenu
     };
 
-    private int selectCard(String cardID) {
-        return 0;
-    }
-
     private int enterGraveyard() {
         return 10;
     }
 
+    private int selectCard(String cardID) {
+        return 0;
+    }
+
     public static void showGraveYardCards() {
+
     }
 
     public static int showGraveYardCardInfo(String cardID) {
@@ -222,15 +220,68 @@ public class BattleMenuProcess {
     }
 
     private static int showCardInfo(String cardID) {
-
+        if (match.getPlayer1().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
+            showInfo(match.getPlayer1().getCollection().getSelectedDeck().getHero());
+        if (match.getPlayer2().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
+            showInfo(match.getPlayer2().getCollection().getSelectedDeck().getHero());
+        for (Card minion : match.getPlayer1().getCollection().getSelectedDeck().getMinions())
+            if (minion.getCardID().equals(cardID))
+                showInfo(minion);
+        for (Card minion : match.getPlayer2().getCollection().getSelectedDeck().getMinions())
+            if (minion.getCardID().equals(cardID))
+                showInfo(minion);
+        for (Card spell : match.getPlayer1().getCollection().getSelectedDeck().getSpells())
+            if (spell.getCardID().equals(cardID))
+                showInfo(spell);
+        for (Card spell : match.getPlayer2().getCollection().getSelectedDeck().getSpells())
+            if (spell.getCardID().equals(cardID))
+                showInfo(spell);
         return 0;
     }
 
-    private int showMinions(Player currentTurnPlayer) {
+    private static void showInfo(Card card) {
+        if (card instanceof Hero)
+            System.out.println("Hero:\nName: " + card.getName() + "\nHP: " + ((Hero) card).getHealth()
+                    + "\nAP: " + ((Hero) card).getDamage() + "\nMP: " + card.getManaCost()
+                    + "\nCost: " + card.getCost() + "\nDesc: " + card.getDescription());
+        else if (card instanceof Minion)
+            System.out.println("Minion:\nName: " + card.getName() + "\nHP: " + ((Minion) card).getHealth()
+                    + "\nAP: " + ((Minion) card).getDamage() + "\nMP: " + card.getManaCost()
+                    + "\nCost: " + card.getCost() + "\nDesc: " + card.getDescription());
+        else if (card instanceof Spell)
+            System.out.println("Spell:\nName: " + card.getName()
+                    + "\nMP: " + card.getManaCost() + "\nCost: " + card.getCost()
+                    + "\nDesc: " + card.getDescription());
+    }
+
+    private int showSoldiers(Player player) {
+        showMinion(player.getCollection().getSelectedDeck().getHero());
+        for (Minion minion : player.getCollection().getSelectedDeck().getMinions())
+            showMinion(minion);
         return 0;
+    }
+
+    private void showMinion(MovableCard soldier) {
+        BattleMenu.showMessage(soldier.getCardID() + " : " + soldier.getName() + ", health : " + soldier.getHealth()
+                + ", location : (" + soldier.getCoordination().getX() + "," + soldier.getCoordination().getY()
+                + "), power : " + soldier.getDamage());
     }
 
     private int gameInfo() {
+        switch (match.getGameMode()) {
+            case 1:
+                System.out.println("Player1 Hero Health = "
+                        + match.getPlayer1().getCollection().getSelectedDeck().getHero());
+                System.out.println("Player2 Hero Health = "
+                        + match.getPlayer2().getCollection().getSelectedDeck().getHero());
+                break;
+            case 2:
+                // location & holder of flag
+                break;
+            case 3:
+                // soldiers' names who hold flags + their team names
+                break;
+        }
         return 0;
     }
 
