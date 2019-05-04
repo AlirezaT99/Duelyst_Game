@@ -51,12 +51,6 @@ G
 S
 #src/presenter/LoginMenuProcess.java,b\b\bb8a4b613f4bdba574eb319b21eb593729b3ee57
 K
-src/model/accounts/ali.json,0\4\0420252f515cc9b90d5f349636bb6598f4f601ac
-O
-src/model/accounts/alireza.json,0\4\04e15634908760d1879a9d579bedda04caa03d0c
-N
-src/model/accounts/Sepehr.json,b\2\b2bb12679364192ed021cda98d6b4975af2677aa
-K
 src/model/MatchHistory.java,7\1\71b097c390778742f0c462c47c55a82c2594c0d1
 F
 src/view/ShopMenu.java,e\4\e461cd225b840b8c82390b285b81a039928e8644

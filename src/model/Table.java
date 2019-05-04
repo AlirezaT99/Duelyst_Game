@@ -111,16 +111,38 @@ class Table {
         return candidateCells;
     }
 
+    private ArrayList<Cell> findLowestDamageCells(Player opponent){
+        ArrayList<Cell> cells = findAllSoldiers(opponent);
+        int min = 99;
+        for (Cell cell: cells) {
+            int damage =(cell.getMovableCard().getDamage() + cell.getMovableCard().dispelableDamageChange);
+            if(damage < min)
+                min = damage;
+        }
+        final  int min2 = min;
+        cells.removeIf(cell -> (cell.getMovableCard().getDamage() + cell.getMovableCard().dispelableDamageChange) > min2);
+        return cells;
+    }
+
+    boolean doesHaveLowestDamage(MovableCard movableCard){
+        ArrayList<Cell> cells = findLowestDamageCells(movableCard.player);
+        for (Cell cell: cells) {
+            if(cell.equals(movableCard.cardCell))
+                return true;
+        }
+        return false;
+    }
+
     //find closest Soldiers
 
     ArrayList<Cell> findClosestSoldiers(MovableCard movableCard, Player opponent) {
         ArrayList<Cell> cellArrayList = findAllSoldiers(opponent);
-        int min = getMin(movableCard, cellArrayList, 99);
+        int min = getMinionMinDistanceToThisOne(movableCard, cellArrayList, 99);
         cellArrayList.removeIf(cell -> cell.findDistanceBetweenCells(movableCard.cardCell) != min);
         return cellArrayList;
     }
 
-    private int getMin(MovableCard movableCard, ArrayList<Cell> cellArrayList, int min) {
+    private int getMinionMinDistanceToThisOne(MovableCard movableCard, ArrayList<Cell> cellArrayList, int min) {
         int length;
         for (Cell cell : cellArrayList) {
             length = cell.findDistanceBetweenCells(movableCard.cardCell);
@@ -129,6 +151,8 @@ class Table {
         }
         return min;
     }
+
+
 
     // find closest Soldiers
 

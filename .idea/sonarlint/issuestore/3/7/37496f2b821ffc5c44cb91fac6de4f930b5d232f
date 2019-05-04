@@ -1,6 +1,6 @@
 
-”squid:S1319Ş"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÂÜŠûÿÿÿÿ8À„Å‘§-
-Vsquid:S1068"3Remove this unused "isComboAttacker" private field.(õóúúÿÿÿÿ8º¤ì­¦-
+”squid:S1319ï"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÂÜŠûÿÿÿÿ8À„Å‘§-
+squid:S1450"^Remove the "isComboAttacker" field and declare it as a local variable in the relevant methods.(õóúúÿÿÿÿ8‰š‘§-
+Vsquid:S1068"3Remove this unused "isComboAttacker" private field.(õóúúÿÿÿÿ8º¤ì­¦-
 \
-squid:S106µ"9Replace this use of System.out or System.err by a logger.(øºÑûúÿÿÿÿ8À„Å‘§-
-squid:S1450"^Remove the "isComboAttacker" field and declare it as a local variable in the relevant methods.(õóúúÿÿÿÿ8‰š‘§-
+squid:S106º"9Replace this use of System.out or System.err by a logger.(øºÑûúÿÿÿÿ8À„Å‘§-

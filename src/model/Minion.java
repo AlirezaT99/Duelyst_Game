@@ -61,6 +61,12 @@ public class Minion extends MovableCard {
     @Override
     protected void counterAttack(MovableCard opponent) {
         super.counterAttack(opponent);
+        if(onDefendImpact.doesHaveAntiNegativeImpact())
+            this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
+        if(onDefendImpact.isImmuneToMinDamage()){
+            if(this.player.match.table.doesHaveLowestDamage(opponent))
+                this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
+        }
         onDefendImpact.doImpact(this.player,this, opponent.cardCell, this.cardCell);
     }
 

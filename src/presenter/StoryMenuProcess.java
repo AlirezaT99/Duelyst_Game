@@ -49,6 +49,7 @@ public class StoryMenuProcess {
     };
 
     private int enterFirstLevel() {
+
         return 0;
     }
 

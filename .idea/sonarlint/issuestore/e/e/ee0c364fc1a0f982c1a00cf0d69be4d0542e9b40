@@ -1,7 +1,8 @@
 
-usquid:S1171
-"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
-Usquid:S1135"2Complete the task associated to this TODO comment.(ñ•Ôøÿÿÿÿ8„Ù€Û¥-
-gsquid:UnusedPrivateMethod"6Remove this unused private "isThereEmptyPlace" method.(šóıÿÿÿÿ8çÅ†‰£-
-lsquid:UnusedPrivateMethod"";Remove this unused private "didSwitchInCurrentTurn" method.(ïœ¶øúÿÿÿÿ8†•Å‘§-
-Nsquid:S1172"+Remove this unused method parameter "card".(šóıÿÿÿÿ8çÅ†‰£-
+Nsquid:S1172"+Remove this unused method parameter "card".(šóıÿÿÿÿ8®§±ø§-
+|squid:S1171
+"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8®§±ø§-
+Usquid:S1135"2Complete the task associated to this TODO comment.(ñ•Ôøÿÿÿÿ8®§±ø§-
+lsquid:UnusedPrivateMethod"";Remove this unused private "didSwitchInCurrentTurn" method.(ïœ¶øúÿÿÿÿ8®§±ø§-
+hsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ı¿Êp8®§±ø§-
+gsquid:UnusedPrivateMethod"6Remove this unused private "isThereEmptyPlace" method.(šóıÿÿÿÿ8®§±ø§-
