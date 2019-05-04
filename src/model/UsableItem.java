@@ -9,7 +9,7 @@ public class UsableItem extends InfluentialItem {
     private Match match;
 
     @Override
-    UsableItem copy(){
+    public UsableItem copy(){
         UsableItem item;
         item = (UsableItem) super.copy();
         item.primaryImpact = primaryImpact.copy();
