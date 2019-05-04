@@ -6,9 +6,7 @@ import java.util.ArrayList;
 // 12.deactivatedForThisTurn(0,1) |13.theWayItIsGonnaBeAssigned(0-3){spellWay,attack,defend,don't care}
 // 16.appliedToOnWhichState(state is for card that have isPositiveImpact)(0-3){none,defend,attack}
 class Impact {
-    private String name;
-    private Impact next;
-    private Impact previous;
+    private int impactId = 1;
     private ArrayList<Cell> impactArea;
     private Match match;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
@@ -436,7 +434,7 @@ class Impact {
 
     private void setImpactOnCells() {
         for (Cell cell : impactArea) {
-            changeCharAtDesiredIndex(11, '0', impactTypeId);
+            impactTypeId = changeCharAtDesiredIndex(11, '0', impactTypeId);
             cell.addToImpacts(this);
         }
     }
@@ -487,20 +485,20 @@ class Impact {
         return false;
     }
 
-    private void antiSomeThingOnDefend(int indexOfThatThingInImpactId, char wantedState, MovableCard movableCard) {
-        movableCard.getImpactsAppliedToThisOne().removeIf(impact -> impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == wantedState);
+    private void antiSomeThingOnDefend(int indexOfThatThingInImpactId, MovableCard movableCard) {
+        movableCard.getImpactsAppliedToThisOne().removeIf(impact -> impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == (char) 1);
     }
 
     private void antiNegativeImpactOnDefend(MovableCard movableCard) {
-        antiSomeThingOnDefend(0, '0',movableCard);
+        antiSomeThingOnDefend(1, movableCard);
     }
 
     private void antiPoisonOnDefend(MovableCard movableCard) {
-        antiSomeThingOnDefend(1, '3',movableCard);
+        antiSomeThingOnDefend(2, movableCard);
     }
 
     private void antiDisarmOnDefend(MovableCard movableCard) {
-        antiSomeThingOnDefend(1, '6',movableCard);
+        antiSomeThingOnDefend(6, movableCard);
     }
 
     private void kill() {
@@ -512,9 +510,9 @@ class Impact {
 
     private void attackOnPreviousTargets(MovableCard target, MovableCard attacker){
         if(attacker.haveAttackedOnThisBefore(target)){
-            target.setHealth(target.getHealth() + getImpactQuantityWithSign());
+            target.setHealth(target.getHealth() - getImpactQuantityWithSign());
             if(targetTypeId.charAt(10) == '2')
-                changeCharAtDesiredIndex(5,'6',impactTypeId);
+                targetTypeId = changeCharAtDesiredIndex(5,'6',impactTypeId);
         }else
             attacker.addToTargetedOnes(target);
     }
@@ -577,13 +575,20 @@ class Impact {
         return doesHaveAntiNegativeImpact;
     }
 
+    Impact copy(){
+        Impact impact = new Impact();
+        impact.targetTypeId = targetTypeId;
+        impact.impactTypeId = impactTypeId;
+        impact.impactTypeIdComp = impactTypeIdComp;
+        impact.impactWayOfAssigning = impactWayOfAssigning;
+        impact.impactAdderTypes = impactAdderTypes;
+        impact.match = match;
+        return impact;
+    }
     //getters
     //setters
 
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void setTargetTypeId(String targetTypeId) {
         this.targetTypeId = targetTypeId;

@@ -101,7 +101,7 @@ public class Main {
         primaryImpact.addToTargetTypeID("1");
         secondaryImpact.addToTargetTypeID("0");
         //4.(0-2)"targetSoldierType"{hero,minion,both}
-        primaryImpact.addToTargetTypeID("2");
+        primaryImpact.addToTargetTypeID("1");
         secondaryImpact.addToTargetTypeID("0");
 
         //5.(0-n)"targetFactionType"
@@ -125,7 +125,7 @@ public class Main {
         secondaryImpact.addToTargetTypeID("0");
 
         //10.previousAttacksMatter(0,1)
-        primaryImpact.addToTargetTypeID("1");
+        primaryImpact.addToTargetTypeID("0");
         secondaryImpact.addToTargetTypeID("0");
 
         //11.soldierAttackType(0-3){doesn't matter,melee, ranged or hybrid}
@@ -140,6 +140,7 @@ public class Main {
         primaryImpact.addToTargetTypeID("0");
         secondaryImpact.addToTargetTypeID("0");
 
+        primaryImpact.addToTargetTypeID("2");
        // secondaryImpact.setTargetTypeId(primaryImpact.getTargetTypeId());
 
         //end of target setting
@@ -162,21 +163,21 @@ public class Main {
         secondaryImpact.addToImpactTypeID("0");
 
         //2.(0-3)QuantityChange{none,mana,health,damage}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("0");
 
         //3.(0,1)quantityChangeSign{negative/positive}
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("0");
 
         //4,5.(0,n)"impactQuantity"
         primaryImpact.addToImpactTypeID("0");
-        primaryImpact.addToImpactTypeID("5");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("0");
 
         //6.(0,3)PassivePermanent{none , passive , permanent , continuous}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("2");
         secondaryImpact.addToImpactTypeID("0");
 
         //7.(0,n)turnsToBeActivated
@@ -184,8 +185,8 @@ public class Main {
         secondaryImpact.addToImpactTypeID("0");
 
         //8,9.(0,n)turnsActive
-        primaryImpact.addToImpactTypeID("0");
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("9");
+        primaryImpact.addToImpactTypeID("9");
         secondaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("0");
         //10.dispel(0-2){none,buffDispel,allPositiveDispel,allDispel}
@@ -251,26 +252,25 @@ public class Main {
 //            gson.toJson(spell, isr);
 //        }
         // end of creating spells
-        //creating minions
+        //creating minions/
         Minion minion = new Minion();
-        minion.setName("the Persian Pahlevaan"); //
-        minion.setCost(600);
-        minion.setManaCost(9);
-        minion.setHealth(24);
-        minion.setDamage(6);
-        minion.setMelee(true);
-        minion.setRanged(false);
+        minion.setName("The Giant Snake"); //
+        minion.setCost(500);
+        minion.setManaCost(8);
+        minion.setHealth(14);
+        minion.setDamage(7);
+        minion.setMelee(false);
+        minion.setRanged(true);
         minion.setHybrid(false);
         //minion.setMaxAttackRange(5);
         minion.setComboAttacker(false);
-        minion.setDescription("Deals 5 extra damage to ex targets");
+        minion.setDescription("Gives to enemy minions within 2 range distance an reversedHolyBuff");
 //        minion.setPassiveImpact(primaryImpact);
         //minion.setSecondaryImpact(secondaryImpact);
         minion.setOnAttackImpact(primaryImpact);
         String fileName = "src/model/minions/" + fileNameCreator(minion.getName()) + ".json";
         try (FileOutputStream fos = new FileOutputStream(fileName);
-             OutputStreamWriter isr = new OutputStreamWriter(fos,
-                     StandardCharsets.UTF_8)) {
+             OutputStreamWriter isr = new OutputStreamWriter(fos,StandardCharsets.UTF_8)) {
             gson.toJson(minion, isr);
         }
 
@@ -295,9 +295,9 @@ public class Main {
 //            gson.toJson(hero, isr);
 //        }
         //creating Items
-        //creating UsableItems
-        // UsableItem usableItem = new UsableItem();
-//        usableItem.setName("Damoul's Bow");
+//        //creating UsableItems
+//         UsableItem usableItem = new UsableItem();
+//        usableItem.setName("Damoul'sssssssssssssss Bow");
 //        usableItem.setCost(30000);
 //        usableItem.setDescription("upon our hero attacking, he/she disarms his victim for a turn.");
 //        usableItem.setPrimaryImpact(primaryImpact);

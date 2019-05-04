@@ -8,6 +8,16 @@ public class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
 
+    UsableItem copy(){
+        UsableItem item;
+        item = (UsableItem) super.copy();
+        item.primaryImpact = primaryImpact.copy();
+        item.secondaryImpact = secondaryImpact.copy();
+        item.cost = cost;
+        item.deck = deck;
+        item.match = match;
+        return item;
+    }
 
     public String toString(boolean showCost) {
         String output = "Name : " + name + " - Desc :" + description;
