@@ -20,6 +20,22 @@ public class Deck {
         items = new ArrayList<>();
     }
 
+    Deck copy(){
+        Deck deck = new Deck(this.name);
+        for (UsableItem item: this.items) {
+            deck.items.add(item.copy());
+            deck.itemsHashMap.put(item.name,item.copy());
+        }
+        for (Minion minion:minions ) {
+            deck.minions.add(minion.copy());
+        }
+        for (Spell spell: spells   ) {
+            deck.spells.add(spell);
+        }
+        deck.hero = hero == null ? null : hero.copy();
+        return deck;
+    }
+
     public String show(boolean showCost) {
         String output = "";
         if (hero != null)
