@@ -36,14 +36,44 @@ public class BattleMenu {
             else {
                 int returnedValue = battleMenuProcess.DoCommands[commandType].doIt();
                 switch (returnedValue) {
+                    case 5:
+                        //select card
+                        selectCard_loop:
+                        while (true) {
+                            command = scanner.nextLine();
+                            switch (selectCardMenu(command)) {
+                                case 1:
+                                    break selectCard_loop;
+                                case 2:
+                                    selectCardHelp();
+                                    break;
+                                case 3:
+                                    cardHandleErrors(BattleMenuProcess.useSpecialPower(command.split("[), (]")[3]
+                                            , command.split("[), (]")[4]));
+                                    break;
+                                case 4:
+                                    cardHandleErrors(BattleMenuProcess.moveTo(command.split("[), (]")[2]
+                                            , command.split("[), (]")[3]));
+                                    break;
+                                case 5:
+                                    cardHandleErrors(BattleMenuProcess.attack(command.split("\\s+")[1]));
+                                    break;
+                                case 6:
+                                    cardHandleErrors(BattleMenuProcess.attackCombo(command.split("\\s+")));
+                                    break;
+                                default:
+                                    showMessage("invalid command");
+                            }
+                        }
+                        break;
                     case 10:
                         // graveyard
-                        inner_loop:
+                        graveYard_loop:
                         while (true) {
                             command = scanner.nextLine();
                             switch (graveYardMenu(command)) {
                                 case 1:
-                                    break inner_loop;
+                                    break graveYard_loop;
                                 case 2:
                                     graveYardHelp();
                                     break;
@@ -61,7 +91,7 @@ public class BattleMenu {
                         break;
 
                     default:
-                        handleEvents(returnedValue);
+                        handleErrors(returnedValue);
                         break;
                 }
             }
@@ -69,10 +99,37 @@ public class BattleMenu {
         scanner.close();
     }
 
-    private void handleEvents(int messageID) {
+    private void selectCardHelp() {
+        showMessage("Move to (x, y)");
+        showMessage("Attack [opponent card id]");
+        showMessage("Attack combo [opponent card id] [my card id] [my card id] [...]");
+        showMessage("Use special power (x, y)");
+        showMessage("Help");
+        showMessage("Cancel");
+    }
+
+    private int selectCardMenu(String command) {
+        if (command.matches("[cC]ancel")) return 1;
+        if (command.matches("[hH]elp")) return 2;
+        if (command.matches("[uU]se special power (\\d, \\d)")) return 3;
+        if (command.matches("[mM]ove to (\\d, \\d)")) return 4;
+        if (command.matches("[aA]ttack [a-zA-Z0-9._]+")) return 5;
+        if (command.matches("[aA]ttack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*")) return 6;
+
+        return -1;
+    }
+
+    private void handleErrors(int messageID) {
+
+    }
+
+    private void cardHandleErrors(int messageID) {
         switch (messageID) {
             case 1:
                 showMessage("invalid coordination");
+                break;
+            case 2:
+                showMessage("invalid card id");
                 break;
         }
 
@@ -86,10 +143,10 @@ public class BattleMenu {
     }
 
     private int graveYardMenu(String command) {
-        if (command.matches("Exit")) return 1;
-        if (command.matches("Help")) return 2;
-        if (command.matches("Show cards")) return 3;
-        if (command.matches("Show info [a-zA-Z0-9._]+")) return 4;
+        if (command.matches("[eE]xit")) return 1;
+        if (command.matches("[hH]elp")) return 2;
+        if (command.matches("[sS]how cards")) return 3;
+        if (command.matches("[sS]how info [a-zA-Z0-9._]+")) return 4;
 
         else return -1;
     }
@@ -101,11 +158,6 @@ public class BattleMenu {
         showMessage("Show card info [card id]");
         showMessage("Select [card id]");
         showMessage("Show card info [card id]");
-        showMessage("Move to (x, y)");
-        showMessage("Show card info [card id]");
-        showMessage("Attack [opponent card id]");
-        showMessage("Attack combo [opponent card id] [my card id] [my card id] [...]");
-        showMessage("Use special power (x, y)");
         showMessage("Show hand");
         showMessage("Insert [card name] in (x, y)");
         showMessage("End turn");

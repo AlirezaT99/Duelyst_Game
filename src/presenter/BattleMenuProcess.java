@@ -22,11 +22,11 @@ public class BattleMenuProcess {
         commandPatterns.add(Pattern.compile("Show my minions"));
         commandPatterns.add(Pattern.compile("Show opponent minions"));
         commandPatterns.add(Pattern.compile("Show card info [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
-        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
-        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
+//        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
+//        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
+//        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
+//        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
+//        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
         commandPatterns.add(Pattern.compile("Show hand"));
         commandPatterns.add(Pattern.compile("Insert \\w+ in (\\d, \\d)"));
         commandPatterns.add(Pattern.compile("End turn"));
@@ -87,7 +87,7 @@ public class BattleMenuProcess {
                 @Override
                 public int doIt() {
                     return moveTo(commandParts[2], commandParts[3]);
-                }
+                } // todo : should be commented
             },
             new DoCommand() {
                 @Override
@@ -189,19 +189,19 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int insertCard(String cardName, String x, String y) {
+    private int insertCard(String cardName, String x_str, String y_str) {
         return 0;
     }
 
-    private int useSpecialPower(String commandPart, String commandPart1) {
+    public static int useSpecialPower(String x_str, String y_str) {
         return 0;
     }
 
-    private int attack(String commandPart) {
+    public static int attack(String commandPart) {
         return 0;
     }
 
-    private int attackCombo(String[] commandParts) {
+    public static int attackCombo(String[] commandParts) {
         return 0;
     }
 
@@ -210,7 +210,7 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int moveTo(String card_x, String card_y) {
+    public static int moveTo(String card_x, String card_y) {
         int x = Integer.parseInt(card_x),
                 y = Integer.parseInt(card_y);
         if (x > 5 || y > 9 || x < 1 || y < 1)
