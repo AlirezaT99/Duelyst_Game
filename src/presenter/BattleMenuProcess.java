@@ -83,30 +83,30 @@ public class BattleMenuProcess {
                     return selectCard(commandParts[1]);
                 }
             },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return moveTo(commandParts[2], commandParts[3]);
-                } // todo : should be commented
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return attack(commandParts[1]);
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return attackCombo(commandParts);
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return useSpecialPower(commandParts[3], commandParts[4]);
-                }
-            },
+//            new DoCommand() {
+//                @Override
+//                public int doIt() {
+//                    return moveTo(commandParts[2], commandParts[3]);
+//                }
+//            },
+//            new DoCommand() {
+//                @Override
+//                public int doIt() {
+//                    return attack(commandParts[1]);
+//                }
+//            },
+//            new DoCommand() {
+//                @Override
+//                public int doIt() {
+//                    return attackCombo(commandParts);
+//                }
+//            },
+//            new DoCommand() {
+//                @Override
+//                public int doIt() {
+//                    return useSpecialPower(commandParts[3], commandParts[4]);
+//                }
+//            },
             new DoCommand() {
                 @Override
                 public int doIt() {
@@ -145,7 +145,9 @@ public class BattleMenuProcess {
     }
 
     private int selectCard(String cardID) {
-        return 0;
+        if (findCard(cardID) == null)
+            return 2;
+        return 5;
     }
 
     public static void showGraveYardCards() {
@@ -215,7 +217,15 @@ public class BattleMenuProcess {
                 y = Integer.parseInt(card_y);
         if (x > 5 || y > 9 || x < 1 || y < 1)
             return 1;
-        match.currentTurnPlayer().getHand().getSelectedCard().setCoordination(new Coordination(x, y));
+        //
+        if (match.currentTurnPlayer().getHand().getSelectedCard() instanceof MovableCard)
+            if (!((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
+                    .isMoveValid(match.getTable().getCell(x, y)))
+                return -1; // messages are handled in "isMoveValid"
+        //
+            match.currentTurnPlayer().getHand().getSelectedCard().setCoordination(new Coordination(x, y));
+        BattleMenu.showMessage(match.currentTurnPlayer().getHand().getSelectedCard().getCardID()
+                + "moved to [" + x + "][" + y + "]");
         return 0;
     }
 
@@ -252,6 +262,26 @@ public class BattleMenuProcess {
             System.out.println("Spell:\nName: " + card.getName()
                     + "\nMP: " + card.getManaCost() + "\nCost: " + card.getCost()
                     + "\nDesc: " + card.getDescription());
+    }
+
+    private static Card findCard(String cardID) {
+        if (match.getPlayer1().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
+            return match.getPlayer1().getCollection().getSelectedDeck().getHero();
+        if (match.getPlayer2().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
+            return match.getPlayer2().getCollection().getSelectedDeck().getHero();
+        for (Minion minion : match.getPlayer1().getCollection().getSelectedDeck().getMinions())
+            if (minion.getCardID().equals(cardID))
+                return minion;
+        for (Minion minion : match.getPlayer2().getCollection().getSelectedDeck().getMinions())
+            if (minion.getCardID().equals(cardID))
+                return minion;
+        for (Spell spell : match.getPlayer1().getCollection().getSelectedDeck().getSpells())
+            if (spell.getCardID().equals(cardID))
+                return spell;
+        for (Spell spell : match.getPlayer2().getCollection().getSelectedDeck().getSpells())
+            if (spell.getCardID().equals(cardID))
+                return spell;
+        return null;
     }
 
     private int showSoldiers(Player player) {

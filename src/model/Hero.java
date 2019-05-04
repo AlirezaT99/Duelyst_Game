@@ -17,6 +17,10 @@ public class Hero extends MovableCard {
         this.setDamage(damage);
     }
 
+    Hero copy(){
+        return new Hero(this.name, this.getHealth(), this.getDamage(), this.heroSpell == null?null: this.heroSpell.copy(), this.spellCost, this.spellCoolDown);
+    }
+
     public void attack(Cell cell) {
         super.attack(cell);
         if (onAttackImpact != null)

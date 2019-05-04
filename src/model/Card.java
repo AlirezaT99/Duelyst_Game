@@ -3,12 +3,22 @@ package model;
 public abstract class Card {
     protected int manaCost;
     protected String name = "";
-    private Cell cell;
-    private int cost;
-    private Match match;
+    protected Cell cell;
+    protected int cost;
+    protected Match match;
     protected Player player;
-    private String cardID = "";
+    protected String cardID = "";
     protected String description = "";
+
+    void setCardfieldsForCopy(Card card) {
+        card.cost = cost;
+        card.match = match;
+        card.player = player;
+        card.cardID = cardID+"*";
+        card.description = description;
+        card.manaCost = manaCost;
+        card.name = name;
+    }
 
     boolean isManaSufficient(int playerMana) {
         return playerMana >= manaCost;

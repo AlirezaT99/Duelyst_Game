@@ -101,7 +101,7 @@ public class Main {
         primaryImpact.addToTargetTypeID("1");
         secondaryImpact.addToTargetTypeID("0");
         //4.(0-2)"targetSoldierType"{hero,minion,both}
-        primaryImpact.addToTargetTypeID("1");
+        primaryImpact.addToTargetTypeID("2");
         secondaryImpact.addToTargetTypeID("0");
 
         //5.(0-n)"targetFactionType"
@@ -140,7 +140,6 @@ public class Main {
         primaryImpact.addToTargetTypeID("0");
         secondaryImpact.addToTargetTypeID("0");
 
-        primaryImpact.addToTargetTypeID("2");
        // secondaryImpact.setTargetTypeId(primaryImpact.getTargetTypeId());
 
         //end of target setting
@@ -163,21 +162,21 @@ public class Main {
         secondaryImpact.addToImpactTypeID("0");
 
         //2.(0-3)QuantityChange{none,mana,health,damage}
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("3");
         secondaryImpact.addToImpactTypeID("0");
 
         //3.(0,1)quantityChangeSign{negative/positive}
-        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("0");
 
         //4,5.(0,n)"impactQuantity"
         primaryImpact.addToImpactTypeID("0");
-        primaryImpact.addToImpactTypeID("1");
+        primaryImpact.addToImpactTypeID("5");
         secondaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("0");
 
         //6.(0,3)PassivePermanent{none , passive , permanent , continuous}
-        primaryImpact.addToImpactTypeID("2");
+        primaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("0");
 
         //7.(0,n)turnsToBeActivated
@@ -185,8 +184,8 @@ public class Main {
         secondaryImpact.addToImpactTypeID("0");
 
         //8,9.(0,n)turnsActive
-        primaryImpact.addToImpactTypeID("9");
-        primaryImpact.addToImpactTypeID("9");
+        primaryImpact.addToImpactTypeID("0");
+        primaryImpact.addToImpactTypeID("1");
         secondaryImpact.addToImpactTypeID("0");
         secondaryImpact.addToImpactTypeID("0");
         //10.dispel(0-2){none,buffDispel,allPositiveDispel,allDispel}
@@ -254,17 +253,17 @@ public class Main {
         // end of creating spells
         //creating minions/
         Minion minion = new Minion();
-        minion.setName("The Giant Snake"); //
-        minion.setCost(500);
-        minion.setManaCost(8);
-        minion.setHealth(14);
-        minion.setDamage(7);
-        minion.setMelee(false);
-        minion.setRanged(true);
+        minion.setName("ThePersianPahlevoon"); //
+        minion.setCost(600);
+        minion.setManaCost(9);
+        minion.setHealth(24);
+        minion.setDamage(6);
+        minion.setMelee(true);
+        minion.setRanged(false);
         minion.setHybrid(false);
         //minion.setMaxAttackRange(5);
         minion.setComboAttacker(false);
-        minion.setDescription("Gives to enemy minions within 2 range distance an reversedHolyBuff");
+        minion.setDescription("Deals 5 extra damage to ex targets");
 //        minion.setPassiveImpact(primaryImpact);
         //minion.setSecondaryImpact(secondaryImpact);
         minion.setOnAttackImpact(primaryImpact);

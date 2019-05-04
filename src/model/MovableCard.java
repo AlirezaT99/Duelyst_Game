@@ -11,15 +11,15 @@ public abstract class MovableCard extends Card {
     private ArrayList<Impact> impactsAppliedToThisOne;
     protected boolean didMoveInThisTurn;
     protected boolean didAttackInThisTurn;
-    private int moveRange;
-    private int minAttackRange;
-    private int maxAttackRange;
-    private boolean isMelee;
-    private boolean isRanged;
-    private boolean isHybrid;
+    protected int moveRange;
+    protected int minAttackRange;
+    protected int maxAttackRange;
+    protected boolean isMelee;
+    protected boolean isRanged;
+    protected boolean isHybrid;
     protected Impact onDefendImpact;
     protected Impact onAttackImpact;
-    private boolean isComboAttacker;
+    protected boolean isComboAttacker;
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
     private HashMap<String,MovableCard> previousTargets = new HashMap<>();
@@ -144,7 +144,7 @@ public abstract class MovableCard extends Card {
         }
     }
 
-    private boolean isMoveValid(Cell cell) {
+    public boolean isMoveValid(Cell cell) {
         if (didMoveInThisTurn) {
             printMessage("Already moved");
             return false;

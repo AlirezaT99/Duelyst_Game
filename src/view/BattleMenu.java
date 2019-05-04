@@ -120,10 +120,6 @@ public class BattleMenu {
     }
 
     private void handleErrors(int messageID) {
-
-    }
-
-    private void cardHandleErrors(int messageID) {
         switch (messageID) {
             case 1:
                 showMessage("invalid coordination");
@@ -132,7 +128,20 @@ public class BattleMenu {
                 showMessage("invalid card id");
                 break;
         }
+    }
 
+    private void cardHandleErrors(int messageID) {
+        switch (messageID) {
+            case 1:
+                showMessage("invalid target");
+                break;
+            case 2:
+                showMessage("opponent minion is unavailable for attack");
+                break;
+            case 3:
+                showMessage("invalid card id");
+                break;
+        }
     }
 
     private void graveYardHelp() {
@@ -157,7 +166,6 @@ public class BattleMenu {
         showMessage("Show opponent minions");
         showMessage("Show card info [card id]");
         showMessage("Select [card id]");
-        showMessage("Show card info [card id]");
         showMessage("Show hand");
         showMessage("Insert [card name] in (x, y)");
         showMessage("End turn");
