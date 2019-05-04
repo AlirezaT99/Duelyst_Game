@@ -178,21 +178,22 @@ public class CollectionMenuProcess {
         }
         if (account.getCollection().findCardByID(idStr)!=null)
             if (account.getCollection().findCardByID(idStr) instanceof Hero) {
-                deck.setHero((Hero) account.getCollection().findCardByID(idStr));
+                Hero hero = ((Hero) account.getCollection().findCardByID(idStr));
+                deck.setHero(hero.copy());
                 return 0;
             }
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
                 && account.getCollection().getItemsHashMap().size() < Deck.MAX_ITEM_NUMBER) {
             deck.getItemsHashMap()
-                    .put(idStr, account.getCollection().getItemsHashMap().get(idStr));
-            deck.getItems().add(account.getCollection().getItemsHashMap().get(idStr));
+                    .put(idStr, account.getCollection().getItemsHashMap().get(idStr).copy());
+            deck.getItems().add(account.getCollection().getItemsHashMap().get(idStr).copy());
             return 0;
         }
         if (account.getCollection().findCardByID(idStr)!=null) {
             if(account.getCollection().findCardByID(idStr) instanceof Spell)
-                deck.getSpells().add((Spell) account.getCollection().findCardByID(idStr));
+                deck.getSpells().add((Spell) ((Spell) account.getCollection().findCardByID(idStr)).copy());
             if(account.getCollection().findCardByID(idStr) instanceof Minion)
-                deck.getMinions().add((Minion)account.getCollection().findCardByID(idStr));
+                deck.getMinions().add((Minion)((Minion) account.getCollection().findCardByID(idStr)).copy());
             return 0;
         }
         return 0;

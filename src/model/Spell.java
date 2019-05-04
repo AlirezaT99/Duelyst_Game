@@ -53,7 +53,7 @@ public class Spell extends Card {
             secondaryImpact.setImpactArea(castingPlayer, cell, cell);
     }
 
-    Spell copy(){
+    public Spell copy(){
         Spell spell = new Spell();
         spell.cell = cell;
         setCardfieldsForCopy(spell);

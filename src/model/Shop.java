@@ -75,7 +75,7 @@ public class Shop {
             cost = item.getCost();
         else
             cost = card.getCost();
-        account.buy(cost, item, card);
+        account.buy(cost, item ==null?null:item.copy(), card);
         return 0;
     }
 

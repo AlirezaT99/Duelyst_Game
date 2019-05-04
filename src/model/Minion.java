@@ -11,7 +11,7 @@ public class Minion extends MovableCard {
     private Impact onComboImpact;
     private Impact onTurnImpact;
 
-    Minion copy() {
+   public Minion copy() {
         Minion minion = new Minion();
         minion.setHealth(this.getHealth());
         minion.isAlive = (this.isAlive);
