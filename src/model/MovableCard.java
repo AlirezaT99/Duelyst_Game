@@ -22,7 +22,7 @@ public abstract class MovableCard extends Card {
     private boolean isComboAttacker;
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
-    private HashMap<String,MovableCard> previousTargets = new HashMap<>();
+    private HashMap<String, MovableCard> previousTargets = new HashMap<>();
 
 
     String getClassType(MovableCard movableCard) {
@@ -121,7 +121,7 @@ public abstract class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact(this.player,this,this.cardCell,this.cardCell);
+            impact.doImpact(this.player, this, this.cardCell, this.cardCell);
             impact.goThroughTime();
 
         }
@@ -143,7 +143,7 @@ public abstract class MovableCard extends Card {
         }
     }
 
-    private boolean isMoveValid(Cell cell) {
+    public boolean isMoveValid(Cell cell) {
         if (didMoveInThisTurn) {
             printMessage("Already moved");
             return false;
@@ -179,7 +179,8 @@ public abstract class MovableCard extends Card {
     //move
 
     private int findDistanceBetweenTwoCells(Cell cell1, Cell cell2) {
-        return Math.abs(cell1.getCellCoordination().getX() - cell2.getCellCoordination().getX()) + Math.abs(cell1.getCellCoordination().getY() - cell2.getCellCoordination().getY());
+        return Math.abs(cell1.getCellCoordination().getX() - cell2.getCellCoordination().getX())
+                + Math.abs(cell1.getCellCoordination().getY() - cell2.getCellCoordination().getY());
     }
 
     private void printMessage(String message) {
@@ -192,11 +193,11 @@ public abstract class MovableCard extends Card {
 
     //previous targets manager
 
-    void addToTargetedOnes(MovableCard movableCard){
-        previousTargets.put(movableCard.name,movableCard);
+    void addToTargetedOnes(MovableCard movableCard) {
+        previousTargets.put(movableCard.name, movableCard);
     }
 
-    boolean haveAttackedOnThisBefore(MovableCard movableCard){
+    boolean haveAttackedOnThisBefore(MovableCard movableCard) {
         return previousTargets.containsKey(movableCard.name);
     }
 
