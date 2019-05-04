@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-class Table {
+public class Table {
     private Cell[][] cells;
 
     {
@@ -169,5 +169,13 @@ class Table {
         return wantedCells;
     }
 
-    //sodier finder
+    //soldier finder
+
+    //getters
+
+    public Cell getCell(int x, int y) {
+        return cells[x][y];
+    }
+
+    //getters
 }

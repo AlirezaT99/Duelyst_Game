@@ -21,10 +21,10 @@ public class MultiPlayerMenuProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("Select user [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("Start multiPlayer game \\d [\\d+]*")); // format of mode ?
-        commandPatterns.add(Pattern.compile("Exit"));
-        commandPatterns.add(Pattern.compile("Help"));
+        commandPatterns.add(Pattern.compile("select user [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("start multiPlayer game \\d [\\d+]*")); // format of mode ?
+        commandPatterns.add(Pattern.compile("exit"));
+        commandPatterns.add(Pattern.compile("help"));
     }
 
     public interface DoCommand {

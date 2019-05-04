@@ -54,7 +54,7 @@ public class SinglePlayerMenu {
                         case 2:
                             break inner_Loop;
                         case 3:
-                            if (SinglePlayerMenuProcess.customGame(command) == 4)
+                            if (singlePlayerMenuProcess.customGame(command) == 4)
                                 showMessage("invalid deck");
                             break;
                         default:
@@ -74,7 +74,7 @@ public class SinglePlayerMenu {
     private static int customGameMenu(String command) {
         if (command.equals("help")) return 1;
         else if (command.equals("exit")) return 2;
-        else if (command.matches("Start game [a-zA-Z0-9._]+ \\d[ \\d+]*")) return 3;
+        else if (command.matches("start game [a-zA-Z0-9._]+ \\d[ \\d+]*")) return 3;
         else return -1;
     }
 
@@ -98,6 +98,11 @@ public class SinglePlayerMenu {
     public BattleInit getBattleInit() {
         return battleInit;
     }
+
+    public SinglePlayerMenuProcess getSinglePlayerMenuProcess() {
+        return singlePlayerMenuProcess;
+    }
+
     //getters
 
     //setters

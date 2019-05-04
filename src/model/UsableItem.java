@@ -52,6 +52,13 @@ public class UsableItem extends InfluentialItem {
         return match;
     }
 
+    public static UsableItem getUsableItemByName(String name){
+        for(int i = 0; i < usableItems.size(); i++)
+            if(usableItems.get(i).getName().equals(name))
+                return usableItems.get(i);
+        return null;
+    }
+
     public static void addToUsableItems(UsableItem usableItem){ usableItems.add(usableItem);}
     // setter & getter
 }

@@ -56,7 +56,20 @@ public class Deck {
     public Deck(String name) {
         this.name = name;
     }
-
+    public int addItemToDeck(UsableItem item) { // only used for computer Decks
+            this.getItemsHashMap()
+                    .put(item.getItemID(), (UsableItem) item);
+            this.getItems().add((UsableItem) item);
+            return 0;
+    }
+    public int addSpellToDeck(Spell spell) { // only used for computer Decks
+        this.getSpells().add(spell);
+        return 0;
+    }
+    public int addMinionToDeck(Minion minion) { // only used for computer Decks
+        this.getMinions().add(minion);
+        return 0;
+    }
     void putTheCardBackInTheQueue(Card card) {
         if (card instanceof Spell)
             spells.add((Spell) card);

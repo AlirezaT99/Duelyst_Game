@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-class Cell {
+public class Cell {
 
     private Coordination coordination;
     private MovableCard movableCard;

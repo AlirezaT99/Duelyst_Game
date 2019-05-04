@@ -144,8 +144,7 @@ public abstract class MovableCard extends Card {
         }
     }
 
-    private boolean isMoveValid(Cell cell) {
-
+    public boolean isMoveValid(Cell cell) {
         if (didMoveInThisTurn) {
             printMessage("Already moved");
             return false;

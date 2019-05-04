@@ -44,7 +44,7 @@ public class Match {
 
     public void setup(Account account, String deckName, int numberOfFlags) {
         player1.setAccount(account);
-        player1.setDeck(player1.getCollection().getDeckHashMap().get(deckName));
+        player1.setDeck(player1.getAccount().getCollection().getDeckHashMap().get(deckName));
         player2.setAccount(null);
         this.numberOfFlags = numberOfFlags;
     }
