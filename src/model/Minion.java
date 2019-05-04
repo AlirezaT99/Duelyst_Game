@@ -11,6 +11,15 @@ public class Minion extends MovableCard {
     private Impact onComboImpact;
     private Impact onTurnImpact;
 
+    Minion copy(){
+        Minion minion =  new Minion();
+        minion.summonImpact = summonImpact.copy();
+        minion.dyingWishImpact= dyingWishImpact.copy();
+        minion.onComboImpact = onComboImpact.copy();
+        minion.onTurnImpact = onTurnImpact.copy();
+return minion;
+    }
+
     @Override
     protected void manageCasualties() {
         if (this.getHealth() + this.dispelableHealthChange <= 0) {

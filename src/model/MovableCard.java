@@ -25,6 +25,7 @@ public abstract class MovableCard extends Card {
     private HashMap<String,MovableCard> previousTargets = new HashMap<>();
 
 
+
     String getClassType(MovableCard movableCard) {
         if (movableCard.isMelee)
             return "Melee";

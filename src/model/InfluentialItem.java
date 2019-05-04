@@ -1,13 +1,12 @@
 package model;
 
 public class InfluentialItem extends Item {
-    private Impact impact;
+    protected Impact primaryImpact;
+    protected Impact secondaryImpact;
+
 
     //getters
 
-    public Impact getImpact() {
-        return impact;
-    }
 
     public String getItemID() {
         return itemID;
@@ -21,10 +20,10 @@ public class InfluentialItem extends Item {
         this.itemID = itemID;
     }
 
-    public void setImpact(Impact impact) {
-        this.impact = impact;
+    public void setPrimaryImpact(Impact impact) {
+        this.primaryImpact = impact;
     }
-
+    public void setSecondaryImpact(Impact impact){this.secondaryImpact = impact;}
 
     //setters
 }
