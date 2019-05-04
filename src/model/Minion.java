@@ -11,6 +11,15 @@ public class Minion extends MovableCard {
     private Impact onComboImpact;
     private Impact onTurnImpact;
 
+    Minion copy(){
+        Minion minion =  new Minion();
+        minion.summonImpact = summonImpact.copy();
+        minion.dyingWishImpact= dyingWishImpact.copy();
+        minion.onComboImpact = onComboImpact.copy();
+        minion.onTurnImpact = onTurnImpact.copy();
+return minion;
+    }
+
     @Override
     protected void manageCasualties() {
         if (this.getHealth() + this.dispelableHealthChange <= 0) {
@@ -69,6 +78,15 @@ public class Minion extends MovableCard {
         }
         onDefendImpact.doImpact(this.player,this, opponent.cardCell, this.cardCell);
     }
+    //getters
+    public static Minion getMinionByName(String name){
+        for(int i = 0; i < minions.size(); i++){
+            if(minions.get(i).getName().equals(name))
+                return minions.get(i);
+        }
+        return null;
+    }
+    //getters
 
     //setters
 

@@ -20,7 +20,7 @@ public class Hero extends MovableCard {
     public void attack(Cell cell) {
         super.attack(cell);
         if (onAttackImpact != null)
-            onAttackImpact.setImpactArea(this.player,cell,this.cardCell);
+            onAttackImpact.setImpactArea(this.player, cell, this.cardCell);
     }
 
     public void counterAttack(MovableCard opponent) {
@@ -55,7 +55,18 @@ public class Hero extends MovableCard {
     public int getSpellCoolDown() {
         return spellCoolDown;
     }
-    // getters
 
-    public static void addToHeroes(Hero hero){heroes.add(hero);}
+    public static Hero getHeroByName(String name) {
+        for (int i = 0; i < heroes.size(); i++) {
+            if(heroes.get(i).getName().equals(name))
+                return heroes.get(i);
+        }
+        return null;
+    }
+    // getters{
+
+
+    public static void addToHeroes(Hero hero) {
+        heroes.add(hero);
+    }
 }

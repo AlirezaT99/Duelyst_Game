@@ -8,6 +8,16 @@ public class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
 
+    UsableItem copy(){
+        UsableItem item;
+        item = (UsableItem) super.copy();
+        item.primaryImpact = primaryImpact.copy();
+        item.secondaryImpact = secondaryImpact.copy();
+        item.cost = cost;
+        item.deck = deck;
+        item.match = match;
+        return item;
+    }
 
     public String toString(boolean showCost) {
         String output = "Name : " + name + " - Desc :" + description;
@@ -39,6 +49,13 @@ public class UsableItem extends InfluentialItem {
 
     public Match getMatch() {
         return match;
+    }
+
+    public static UsableItem getUsableItemByName(String name){
+        for(int i = 0; i < usableItems.size(); i++)
+            if(usableItems.get(i).getName().equals(name))
+                return usableItems.get(i);
+        return null;
     }
 
     public static void addToUsableItems(UsableItem usableItem){ usableItems.add(usableItem);}

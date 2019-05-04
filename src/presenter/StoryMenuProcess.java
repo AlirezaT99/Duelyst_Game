@@ -1,9 +1,12 @@
 package presenter;
 
 
+import model.*;
+import view.BattleMenu;
 import view.StoryMenu;
 
 import java.io.IOException;
+import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -48,8 +51,44 @@ public class StoryMenuProcess {
             }
     };
 
-    private int enterFirstLevel() {
+    private int enterFirstLevel() throws IOException {
+        Deck deck = new Deck("computerDeck");
+        deck.addSpellToDeck(Spell.getSpellByName("Total Disarm"));
+        deck.addSpellToDeck(Spell.getSpellByName("Lightning Bolt"));
+        deck.addSpellToDeck(Spell.getSpellByName("All Disarm"));
+        deck.addSpellToDeck(Spell.getSpellByName("All Poison"));
+        deck.addSpellToDeck(Spell.getSpellByName("Dispel"));
+        deck.addSpellToDeck(Spell.getSpellByName("Sacrifice"));
+        deck.addSpellToDeck(Spell.getSpellByName("Kings Guard"));
+        deck.addMinionToDeck(Minion.getMinionByName("Persian Archer"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani Lancer"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani MaceBearer"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani Prince"));
+        deck.addMinionToDeck(Minion.getMinionByName("Black Div"));
+        deck.addMinionToDeck(Minion.getMinionByName("Cyclops"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Viper"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Giant Snake"));
+        deck.addMinionToDeck(Minion.getMinionByName("The White Direwolf"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Witch Master"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Ice Queen"));
+        deck.addMinionToDeck(Minion.getMinionByName("Siavash"));
+        deck.addMinionToDeck(Minion.getMinionByName("Arzhang Div"));
+        deck.addItemToDeck(UsableItem.getUsableItemByName("The Crown of Knowledge"));
+        Match match = new Match(true, 1);
+        match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
+                storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
+                        .getAccount().getCollection().getSelectedDeck().getName(), 0);
+        match.getPlayer2().setDeck(deck);
+        BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
+        enterBattleMenu(battleMenu);
         return 0;
+    }
+
+    private  void enterBattleMenu(BattleMenu battleMenu) throws IOException {
+        storyMenu.setHasRun(false);
+        storyMenu.setInStoryMenu(false);
+        battleMenu.setInBattleMenu(true);
+        battleMenu.run();
     }
 
     private int enterSecondLevel() {

@@ -2,7 +2,7 @@ package presenter;
 
 import com.google.gson.Gson;
 import model.*;
-
+import java.io.FileOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -131,7 +131,7 @@ public class MainProcess {
         }
     }
 
-    static Gson readAccounts() throws IOException {
+    static void readAccounts() throws IOException {
         Account.getAccounts().clear();
         File folder = new File("src/model/accounts");
         File[] listOfFiles = folder.listFiles();
@@ -145,6 +145,5 @@ public class MainProcess {
                 reader.close();
             }
         }
-        return gson;
     }
 }

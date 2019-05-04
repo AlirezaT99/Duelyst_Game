@@ -62,7 +62,13 @@ public class Spell extends Card {
         return secondaryImpact;
     }
 
-
+    public static Spell getSpellByName(String name) {
+        for (int i = 0; i < spells.size(); i++) {
+            if(spells.get(i).getName().equals(name))
+                return spells.get(i);
+        }
+        return null;
+    }
     //getters
 
     //setters
@@ -82,7 +88,7 @@ public class Spell extends Card {
         this.secondaryImpact = secondaryImpact;
     }
 
-    public static void addToSpells(Spell spell){
+    public static void addToSpells(Spell spell) {
         spells.add(spell);
     }
 
