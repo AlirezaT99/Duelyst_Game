@@ -11,18 +11,18 @@ public abstract class MovableCard extends Card {
     private ArrayList<Impact> impactsAppliedToThisOne;
     protected boolean didMoveInThisTurn;
     protected boolean didAttackInThisTurn;
-    private int moveRange;
-    private int minAttackRange;
-    private int maxAttackRange;
-    private boolean isMelee;
-    private boolean isRanged;
-    private boolean isHybrid;
+    protected int moveRange;
+    protected int minAttackRange;
+    protected int maxAttackRange;
+    protected boolean isMelee;
+    protected boolean isRanged;
+    protected boolean isHybrid;
     protected Impact onDefendImpact;
     protected Impact onAttackImpact;
-    private boolean isComboAttacker;
+    protected boolean isComboAttacker;
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
-    private HashMap<String, MovableCard> previousTargets = new HashMap<>();
+    private HashMap<String,MovableCard> previousTargets = new HashMap<>();
 
 
 
@@ -122,7 +122,7 @@ public abstract class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact(this.player, this, this.cardCell, this.cardCell);
+            impact.doImpact(this.player,this,this.cardCell,this.cardCell);
             impact.goThroughTime();
 
         }
@@ -180,8 +180,7 @@ public abstract class MovableCard extends Card {
     //move
 
     private int findDistanceBetweenTwoCells(Cell cell1, Cell cell2) {
-        return Math.abs(cell1.getCellCoordination().getX() - cell2.getCellCoordination().getX())
-                + Math.abs(cell1.getCellCoordination().getY() - cell2.getCellCoordination().getY());
+        return Math.abs(cell1.getCellCoordination().getX() - cell2.getCellCoordination().getX()) + Math.abs(cell1.getCellCoordination().getY() - cell2.getCellCoordination().getY());
     }
 
     private void printMessage(String message) {
@@ -194,11 +193,11 @@ public abstract class MovableCard extends Card {
 
     //previous targets manager
 
-    void addToTargetedOnes(MovableCard movableCard) {
-        previousTargets.put(movableCard.name, movableCard);
+    void addToTargetedOnes(MovableCard movableCard){
+        previousTargets.put(movableCard.name,movableCard);
     }
 
-    boolean haveAttackedOnThisBefore(MovableCard movableCard) {
+    boolean haveAttackedOnThisBefore(MovableCard movableCard){
         return previousTargets.containsKey(movableCard.name);
     }
 

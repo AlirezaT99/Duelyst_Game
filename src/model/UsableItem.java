@@ -8,7 +8,8 @@ public class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
 
-    UsableItem copy(){
+    @Override
+    public UsableItem copy(){
         UsableItem item;
         item = (UsableItem) super.copy();
         item.primaryImpact = primaryImpact.copy();

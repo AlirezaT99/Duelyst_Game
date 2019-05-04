@@ -53,8 +53,19 @@ public class Spell extends Card {
             secondaryImpact.setImpactArea(castingPlayer, cell, cell);
     }
 
+    public Spell copy(){
+        Spell spell = new Spell();
+        spell.cell = cell;
+        setCardfieldsForCopy(spell);
+        spell.primaryImpact = primaryImpact == null? null :primaryImpact.copy();
+        spell.secondaryImpact =secondaryImpact  == null? null : secondaryImpact.copy();
+        return spell;
+    }
+
+
+
     //getters
-    public Impact getPrimaryimpact() {
+    public Impact getPrimaryImpact() {
         return primaryImpact;
     }
 

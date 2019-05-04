@@ -9,12 +9,30 @@ public class Minion extends MovableCard {
     private Impact onComboImpact;
     private Impact onTurnImpact;
 
-    Minion copy() {
+   public Minion copy() {
         Minion minion = new Minion();
-        minion.summonImpact = summonImpact.copy();
-        minion.dyingWishImpact = dyingWishImpact.copy();
-        minion.onComboImpact = onComboImpact.copy();
-        minion.onTurnImpact = onTurnImpact.copy();
+        minion.setHealth(this.getHealth());
+        minion.isAlive = (this.isAlive);
+        minion.cardCell = cardCell;
+        minion.setDamage(this.getDamage());
+        minion.didMoveInThisTurn = didMoveInThisTurn;
+        minion.didAttackInThisTurn = didAttackInThisTurn;
+        minion.moveRange = moveRange;
+        minion.minAttackRange = minAttackRange;
+        minion.maxAttackRange = maxAttackRange;
+        minion.isMelee = this.isMelee;
+        minion.isHybrid = isHybrid;
+        minion.isRanged = isRanged;
+        minion.isComboAttacker = isComboAttacker;
+        minion.dispelableHealthChange = dispelableHealthChange;
+        minion.dispelableDamageChange = dispelableDamageChange;
+        minion.summonImpact = summonImpact == null ? null : summonImpact.copy();
+        minion.dyingWishImpact = dyingWishImpact == null ? null : dyingWishImpact.copy();
+        minion.onComboImpact = onComboImpact == null ? null : onComboImpact.copy();
+        minion.onTurnImpact = onTurnImpact == null ? null : onTurnImpact.copy();
+        minion.onDefendImpact = onDefendImpact == null ? null : onDefendImpact.copy();
+        minion.onAttackImpact = onAttackImpact == null ? null : onAttackImpact.copy();
+        minion.setCardfieldsForCopy(minion);
         return minion;
     }
 

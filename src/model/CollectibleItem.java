@@ -8,7 +8,7 @@ public class CollectibleItem extends InfluentialItem {
     private Match match;
     private Player player;
 
-    CollectibleItem copy(){
+   public CollectibleItem copy(){
         CollectibleItem collectibleItem;
         collectibleItem = (CollectibleItem) super.copy();
         collectibleItem.cell = cell;

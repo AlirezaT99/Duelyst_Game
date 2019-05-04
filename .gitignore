@@ -29,3 +29,4 @@ model/.idea
 hs_err_pid*
 
 !/.idea/sonarlint/
+/src/model/.idea/
