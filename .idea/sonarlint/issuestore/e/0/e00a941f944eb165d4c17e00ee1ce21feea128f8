@@ -1,5 +1,4 @@
 
-Osquid:S1068	"1Remove this unused "spellManaCost" private field.(á¼ŒÓ8ò‰ Ó¦-
-]squid:S1161":Add the "@Override" annotation above this method signature(Ü²ÆŠşÿÿÿÿ8ÿÊÕÒ¦-
-Ksquid:S1068"-Remove this unused "heroSpell" private field.(ëºã8Æ°§¦-
-]squid:S1161":Add the "@Override" annotation above this method signature(å·‚ñÿÿÿÿÿ8»ıé©¦-
+Dsquid:S1068"-Remove this unused "heroSpell" private field.(ëºã
+isquid:CommentedOutCodeLine&"<This block of commented-out lines of code should be removed.(Ùöå™8óû‘¨-
+gsquid:CommentedOutCodeLine+"<This block of commented-out lines of code should be removed.(ÍĞÁ¼úÿÿÿÿ

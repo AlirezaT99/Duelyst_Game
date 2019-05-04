@@ -1,15 +1,13 @@
 package model;
 
-import com.sun.xml.internal.org.jvnet.mimepull.MIMEConfig;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Minion extends MovableCard {
     private static ArrayList<Minion> minions = new ArrayList<>();
     private Impact summonImpact;
     private Impact dyingWishImpact;
-    private Impact onDefendImpact;
-    private Impact onAttackImpact;
     private Impact onComboImpact;
     private Impact onTurnImpact;
 
@@ -17,7 +15,7 @@ public class Minion extends MovableCard {
     protected void manageCasualties() {
         if (this.getHealth() + this.dispelableHealthChange <= 0) {
             this.isAlive = false;
-            dyingWishImpact.setImpactArea(this.player, this.cardCell, this.cardCell);
+            dyingWishImpact.doImpact(this.player,this ,this.cardCell, this.cardCell);
             //do dyingWish
         }
     }
@@ -25,7 +23,7 @@ public class Minion extends MovableCard {
     @Override
     public void castCard(Cell cell) {
         super.castCard(cell);
-        summonImpact.setImpactArea(this.player, this.cardCell, this.cardCell);
+        summonImpact.doImpact(this.player,this ,this.cardCell, this.cardCell);
         // do summonImpact
     }
 
@@ -33,12 +31,12 @@ public class Minion extends MovableCard {
     public void attack(Cell cell) {
         if (this.isAttackValid(cell)) {
             super.attack(cell);
-            onAttackImpact.setImpactArea(this.player, cell, this.cardCell);
+            onAttackImpact.doImpact(this.player,this, cell, this.cardCell);
         }
     }
 
     public void comboAttack(Cell cell, ArrayList<Minion> minions) {
-        minions.get(0).onComboImpact.setImpactArea(this.player, cell, this.cardCell);
+        minions.get(0).onComboImpact.doImpact(this.player, this,cell, this.cardCell);
         super.attack(cell);
         for (int i = 1; i < minions.size(); i++) {
             MovableCard movableCard = minions.get(i);
@@ -63,7 +61,13 @@ public class Minion extends MovableCard {
     @Override
     protected void counterAttack(MovableCard opponent) {
         super.counterAttack(opponent);
-        onDefendImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
+        if(onDefendImpact.doesHaveAntiNegativeImpact())
+            this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
+        if(onDefendImpact.isImmuneToMinDamage()){
+            if(this.player.match.table.doesHaveLowestDamage(opponent))
+                this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
+        }
+        onDefendImpact.doImpact(this.player,this, opponent.cardCell, this.cardCell);
     }
 
     //setters
@@ -76,13 +80,7 @@ public class Minion extends MovableCard {
         this.dyingWishImpact = dyingWishImpact;
     }
 
-    public void setOnDefendImpact(Impact onDefendImpact) {
-        this.onDefendImpact = onDefendImpact;
-    }
 
-    public void setOnAttackImpact(Impact onAttackImpact) {
-        this.onAttackImpact = onAttackImpact;
-    }
 
     public void setOnComboImpact(Impact onComboImpact) {
         this.onComboImpact = onComboImpact;

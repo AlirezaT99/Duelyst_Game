@@ -4,7 +4,9 @@ public class Item {
     protected String name;
     protected String description;
     protected String itemID;
-
+    Impact dyingWishImpact;
+    Impact summonImpact;
+    Impact impact;
     //getters
 
     public String getName() {

@@ -51,12 +51,6 @@ G
 S
 #src/presenter/LoginMenuProcess.java,b\b\bb8a4b613f4bdba574eb319b21eb593729b3ee57
 K
-src/model/accounts/ali.json,0\4\0420252f515cc9b90d5f349636bb6598f4f601ac
-O
-src/model/accounts/alireza.json,0\4\04e15634908760d1879a9d579bedda04caa03d0c
-N
-src/model/accounts/Sepehr.json,b\2\b2bb12679364192ed021cda98d6b4975af2677aa
-K
 src/model/MatchHistory.java,7\1\71b097c390778742f0c462c47c55a82c2594c0d1
 F
 src/view/ShopMenu.java,e\4\e461cd225b840b8c82390b285b81a039928e8644
@@ -84,16 +78,12 @@ H
 src/view/BattleInit.java,6\5\65659900c79b30474fa66a69a5b641d46660b479
 N
 src/view/SinglePlayerMenu.java,e\c\ecb0f8eb41fce89a2b3359b13d91b9d0d6481c3a
-L
-src/view/CustomGameMenu.java,b\9\b90c978c244da99bd1cd1aed6b21a403e69b1f23
 Z
 *src/presenter/SinglePlayerMenuProcess.java,8\0\8029162f91404f7629872fc1bbbb9e2bda017c82
 F
 src/view/MainMenu.java,c\2\c2a457cf6e7dd8422c69720c11c4e6792b1f3fcf
 R
 "src/presenter/MainMenuProcess.java,f\8\f886adc76826f593c3465ed7aecea0c9d86675f8
-X
-(src/presenter/CustomGameMenuProcess.java,9\1\91d2efb2d497c670fe9f72af1cbff56a56d6bbef
 O
 src/model/spells/allattack.json,1\b\1bcfc2755102fdee9c90005e5b1cab79d7877d94
 O

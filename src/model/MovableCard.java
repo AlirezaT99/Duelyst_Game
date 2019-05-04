@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class MovableCard extends Card {
     private int health;
@@ -16,9 +17,13 @@ public abstract class MovableCard extends Card {
     private boolean isMelee;
     private boolean isRanged;
     private boolean isHybrid;
+    protected Impact onDefendImpact;
+    protected Impact onAttackImpact;
     private boolean isComboAttacker;
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
+    private HashMap<String,MovableCard> previousTargets = new HashMap<>();
+
 
     String getClassType(MovableCard movableCard) {
         if (movableCard.isMelee)
@@ -54,7 +59,7 @@ public abstract class MovableCard extends Card {
             opponent.takeDamage(this.damage);
             didAttackInThisTurn = true;
             if (!Impact.doesHaveAntiHolyBuff(this))
-                Impact.holyBuff(opponent, this.damage);
+                Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             //do attack
             opponent.counterAttack(this);
             manageCasualties();
@@ -92,7 +97,7 @@ public abstract class MovableCard extends Card {
         if (isCounterAttackValid(opponent.cardCell)) {
             opponent.takeDamage(this.damage);
             if (!Impact.doesHaveAntiHolyBuff(this))
-                Impact.holyBuff(opponent, this.damage);
+                Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             manageCasualties();
         }
     }
@@ -116,7 +121,7 @@ public abstract class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.setImpactArea(this.player, cardCell, cardCell);
+            impact.doImpact(this.player,this,this.cardCell,this.cardCell);
             impact.goThroughTime();
 
         }
@@ -185,6 +190,18 @@ public abstract class MovableCard extends Card {
         this.health -= damage;
     }
 
+    //previous targets manager
+
+    void addToTargetedOnes(MovableCard movableCard){
+        previousTargets.put(movableCard.name,movableCard);
+    }
+
+    boolean haveAttackedOnThisBefore(MovableCard movableCard){
+        return previousTargets.containsKey(movableCard.name);
+    }
+
+    //previous targets manager
+
     //getters
 
     public String getName() {
@@ -225,6 +242,14 @@ public abstract class MovableCard extends Card {
 
     public int getDamage() {
         return damage;
+    }
+
+    public void setOnDefendImpact(Impact onDefendImpact) {
+        this.onDefendImpact = onDefendImpact;
+    }
+
+    public void setOnAttackImpact(Impact onAttackImpact) {
+        this.onAttackImpact = onAttackImpact;
     }
 
     //getters
