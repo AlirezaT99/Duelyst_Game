@@ -23,7 +23,7 @@ public class CollectionMenuProcess {
         commandPatterns.add(Pattern.compile("remove \\d+ from deck [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("select deck [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("validate deck [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
+        commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("show all decks"));
         commandPatterns.add(Pattern.compile("show deck [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("show"));
@@ -76,8 +76,6 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    if (commandParts.length == 5)
-                        return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3] + " " + commandParts[4], account);
                     if (commandParts.length == 4)
                         return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3], account);
                     if (commandParts.length == 3)
@@ -155,12 +153,12 @@ public class CollectionMenuProcess {
             return 9;
         Deck deck = account.getCollection().getDeckHashMap().get(deckName);
         if (!account.getCollection().getItemsHashMap().containsKey(idStr)
-                && account.getCollection().findCardByID(idStr) == null)
+                && account.getCollection().findCardByID(idStr)==null)
             return 3;
         if (deck.getItemsHashMap().containsKey(idStr) ||
-                deck.findCardByID(idStr) != null)
+                deck.findCardByID(idStr)!=null)
             return 4;
-        if ((deck.getMinions().size() + deck.getSpells().size()) == Deck.MAX_CARD_NUMBER
+        if ((deck.getMinions().size()+deck.getSpells().size()) == Deck.MAX_CARD_NUMBER
                 && !account.getCollection().getItemsHashMap().containsKey(idStr))
             if (!(account.getCollection().findCardByID(idStr) instanceof Hero))
                 return 5;
@@ -168,20 +166,19 @@ public class CollectionMenuProcess {
 //                && !account.getCollection().getItemsHashMap().containsKey(idStr))
         // if (!(account.getCollection().getCardHashMap().get(idStr) instanceof Hero))
 
-        if (account.getCollection().findCardByID(idStr) != null)
+        if (account.getCollection().findCardByID(idStr)!=null)
             if (account.getCollection().findCardByID(idStr) instanceof Hero
                     && deck.getHero() != null)
                 return 6;
         //
 
-        if (account.getCollection().getItemsHashMap().containsKey(idStr)
-                && account.getCollection().getItemsHashMap().size() == Deck.MAX_ITEM_NUMBER) {
+        if(account.getCollection().getItemsHashMap().containsKey(idStr)
+                && account.getCollection().getItemsHashMap().size() == Deck.MAX_ITEM_NUMBER){
             return 11;
         }
-        if (account.getCollection().findCardByID(idStr) != null)
+        if (account.getCollection().findCardByID(idStr)!=null)
             if (account.getCollection().findCardByID(idStr) instanceof Hero) {
                 deck.setHero((Hero) account.getCollection().findCardByID(idStr));
-                CollectionMenu.showMessage("card added to deck.");
                 return 0;
             }
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
@@ -189,15 +186,13 @@ public class CollectionMenuProcess {
             deck.getItemsHashMap()
                     .put(idStr, account.getCollection().getItemsHashMap().get(idStr));
             deck.getItems().add(account.getCollection().getItemsHashMap().get(idStr));
-            CollectionMenu.showMessage("item added to deck.");
             return 0;
         }
-        if (account.getCollection().findCardByID(idStr) != null) {
-            if (account.getCollection().findCardByID(idStr) instanceof Spell)
+        if (account.getCollection().findCardByID(idStr)!=null) {
+            if(account.getCollection().findCardByID(idStr) instanceof Spell)
                 deck.getSpells().add((Spell) account.getCollection().findCardByID(idStr));
-            if (account.getCollection().findCardByID(idStr) instanceof Minion)
-                deck.getMinions().add((Minion) account.getCollection().findCardByID(idStr));
-            CollectionMenu.showMessage("card added to deck.");
+            if(account.getCollection().findCardByID(idStr) instanceof Minion)
+                deck.getMinions().add((Minion)account.getCollection().findCardByID(idStr));
             return 0;
         }
         return 0;
@@ -215,12 +210,12 @@ public class CollectionMenuProcess {
             return 0;
         }
         if (account.getCollection().findCardByID(idStr) instanceof Spell
-                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName()) != null) {
+                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName())!=null) {
             deck.getSpells().remove(account.getCollection().findCardByID(idStr));
             return 0;
         }
         if (account.getCollection().findCardByID(idStr) instanceof Minion
-                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName()) != null) {
+                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName())!=null) {
             deck.getMinions().remove(account.getCollection().findCardByID(idStr));
             return 0;
         }
@@ -252,8 +247,8 @@ public class CollectionMenuProcess {
     }
 
     private int showDeck(String deckName) {
-        if (account.getCollection().getDeckHashMap().get(deckName) != null)
-            CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show(false));
+        if(account.getCollection().getDeckHashMap().get(deckName)!=null)
+        CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show(false));
         else
             return 8;
         return 0;
@@ -265,10 +260,10 @@ public class CollectionMenuProcess {
             showDeck(account.getCollection().getSelectedDeck().getName());
             int idx = 2;
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
-                if (!account.getCollection().getDecks().get(i).getName()
+                if (!account.getCollection().getDecks().get(idx).getName()
                         .equals(account.getCollection().getSelectedDeck().getName())) {
-                    CollectionMenu.showMessage(idx + " : " + account.getCollection().getDecks().get(i).getName() + " :");
-                    showDeck(account.getCollection().getDecks().get(i).getName());
+                    CollectionMenu.showMessage(idx + " : " + account.getCollection().getDecks().get(idx).getName() + " :");
+                    showDeck(account.getCollection().getDecks().get(idx).getName());
                     idx++;
                 }
             }

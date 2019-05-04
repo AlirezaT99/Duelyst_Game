@@ -67,7 +67,7 @@ public class MultiPlayerMenu {
     private int customGameMenu(String command) {
         if (command.equals("help")) return 1;
         else if (command.equals("exit")) return 2;
-        else if (command.matches("Start multiplayer game [a-zA-Z0-9._]+ \\d[ ]*[\\d]*")) return 3;
+        else if (command.matches("Start multiplayer game [a-zA-Z0-9._]+ \\d \\d+]")) return 3;
         else return -1;
     }
 

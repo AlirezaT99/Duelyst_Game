@@ -21,10 +21,10 @@ public class MultiPlayerMenuProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("select user [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("start multiplayer game \\d[ ]*[\\d+]*")); // format of mode ?
-        commandPatterns.add(Pattern.compile("exit"));
-        commandPatterns.add(Pattern.compile("help"));
+        commandPatterns.add(Pattern.compile("Select user [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("Start multiPlayer game \\d [\\d+]*")); // format of mode ?
+        commandPatterns.add(Pattern.compile("Exit"));
+        commandPatterns.add(Pattern.compile("Help"));
     }
 
     public interface DoCommand {
@@ -70,13 +70,11 @@ public class MultiPlayerMenuProcess {
     }
 
     private int selectUser(String opponentUserName) {
-        for (int i = 0; i < Account.getAccounts().size(); i++)
-            if (Account.getAccounts().get(i).getUserName().equals(opponentUserName)) {
-                if (!Account.getAccounts().get(i).getCollection().validateDeck
-                        (Account.getAccounts().get(i).getCollection().getSelectedDeck()))
+        for (Account account : Account.getAccounts())
+            if (account.getUserName().equals(opponentUserName)) {
+                if (!account.getCollection().validateDeck(account.getCollection().getSelectedDeck()))
                     return 1;
-                opponent = Account.getAccounts().get(i);
-                MultiPlayerMenu.showMessage("opponent selected.");
+                opponent = account;
                 return 0;
             }
         return 2;
