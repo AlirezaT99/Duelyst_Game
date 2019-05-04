@@ -14,7 +14,7 @@ public class SinglePlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private static SinglePlayerMenu singlePlayerMenu;
     public String[] commandParts;
-    private static Account account;
+    private  Account account;
 
     public SinglePlayerMenuProcess(SinglePlayerMenu singlePlayerMenu) {
         SinglePlayerMenuProcess.singlePlayerMenu = singlePlayerMenu;
@@ -27,10 +27,10 @@ public class SinglePlayerMenuProcess {
         commandPatterns.add(Pattern.compile("help|4"));
     }
 
-    public static int customGame(String command) throws IOException {
+    public  int customGame(String command) throws IOException {
         String[] commandParts = command.split("\\s+");
         String deckName = commandParts[2]; // space ke nadare vasatesh?
-        if (account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName)))
+        if (!account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName)))
             return 4;
         int mode = Integer.parseInt(commandParts[3]);
         int numberOfFlags = -1;
@@ -89,9 +89,15 @@ public class SinglePlayerMenuProcess {
         return 0;
     }
 
+    //getters
+    public Account getAccount() {
+        return account;
+    }
+    //getters
+
     //setters
     public void setAccount(Account account) {
-        SinglePlayerMenuProcess.account = account;
+        this.account = account;
     }
     //setters
 }
