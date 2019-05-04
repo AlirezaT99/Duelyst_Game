@@ -1,20 +1,18 @@
 
-Fsquid:S16048"(Make this anonymous inner class a lambda(¾‹¹ı8Î˜’•¦-
-Fsquid:S1604>"(Make this anonymous inner class a lambda(¾‹¹ı8Î˜’•¦-
-†squid:S1157G"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(¥Ü÷½ûÿÿÿÿ8Î˜’•¦-
-†squid:S1157J"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(…ÖµÎşÿÿÿÿ8Î˜’•¦-
-]squid:S3398ƒ">Move this method into the anonymous class declared at line 44.(ö ºú8Î˜’•¦-
-asquid:S3398l">Move this method into the anonymous class declared at line 38.(â˜ùÃùÿÿÿÿ8Î˜’•¦-
-Xsquid:S3400›"9Remove this method and declare a constant for this value.(”·³›8Î˜’•¦-
-Vsquid:S1135š"2Complete the task associated to this TODO comment.(ˆÖä¨úÿÿÿÿ8Î˜’•¦-
-\squid:S3398X">Move this method into the anonymous class declared at line 32.(‰ô‡®8Î˜’•¦-
-ysquid:S00116"URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8Î˜’•¦-
-bsquid:S3398">Move this method into the anonymous class declared at line 56.(à¶Öòúÿÿÿÿ8Î˜’•¦-
-"squid:ClassVariableVisibilityCheck"VMake DoCommands a static final constant or non-public and provide accessors if needed.(Ê°Í´üÿÿÿÿ8Î˜’•¦-
-squid:S1157H"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(Ö‹°û8Î˜’•¦-
-"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ÜÕï8Î˜’•¦-
-Fsquid:S16042"(Make this anonymous inner class a lambda(¾‹¹ı8•óê¦-
-Fsquid:S1604,"(Make this anonymous inner class a lambda(¾‹¹ı8•óê¦-
-Fsquid:S1604 "(Make this anonymous inner class a lambda(¾‹¹ı8•óê¦-
-]squid:S3398">Move this method into the anonymous class declared at line 50.(ç±ùæ8Î˜’•¦-
-Msquid:S1172".Remove this unused method parameter "account".(ç±ùæ8Î˜’•¦-
+squid:S1157P"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(Ö‹°û8Î˜’•¦-
+isquid:CommentedOutCodeLinet"<This block of commented-out lines of code should be removed.(Ü®¬8¶í“ù§-
+\squid:S3398a">Move this method into the anonymous class declared at line 40.(¸ôË©8¶í“ù§-
+†squid:S1157O"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(¥Ü÷½ûÿÿÿÿ8Î˜’•¦-
+Ssquid:S1191"5Use classes from the Java API instead of Sun classes.(Û•‚€8¶í“ù§-
+†squid:S1157R"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(…ÖµÎşÿÿÿÿ8Î˜’•¦-
+usquid:UselessImportCheck"ERemove this unused import 'java.nio.charset.MalformedInputException'.(ÖßÉ’øÿÿÿÿ8¶í“ù§-
+ysquid:S00116'"URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8Î˜’•¦-
+asquid:S3398~">Move this method into the anonymous class declared at line 46.(â˜ùÃùÿÿÿÿ8Î˜’•¦-
+nsquid:CommentedOutCodeLinex"<This block of commented-out lines of code should be removed.(ØõÅøıÿÿÿÿ8¶í“ù§-
+Fsquid:S1604@"(Make this anonymous inner class a lambda(¾‹¹ı8Î˜’•¦-
+Fsquid:S1604F"(Make this anonymous inner class a lambda(¾‹¹ı8Î˜’•¦-
+~squid:UselessImportCheck"SRemove this unused import 'com.sun.xml.internal.ws.policy.privateutil.PolicyUtils'.(Û•‚€8¶í“ù§-
+bsquid:S3398’">Move this method into the anonymous class declared at line 52.(à«¡úıÿÿÿÿ8¶í“ù§-
+[squid:UselessImportCheck"0Remove this unused import 'java.nio.file.Files'.(‚ƒü8¶í“ù§-
+Vsquid:UselessImportCheck"+Remove this unused import 'java.io.Reader'.(µû¨é8¶í“ù§-
+Zsquid:UselessImportCheck"/Remove this unused import 'java.nio.file.Path'.(×²êÂ8¶í“ù§-

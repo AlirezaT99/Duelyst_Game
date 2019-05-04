@@ -17,7 +17,6 @@ public abstract class MovableCard extends Card {
     private boolean isMelee;
     private boolean isRanged;
     private boolean isHybrid;
-    private boolean isComboAttacker;
     protected Impact onDefendImpact;
     protected Impact onAttackImpact;
     private boolean isComboAttacker;
