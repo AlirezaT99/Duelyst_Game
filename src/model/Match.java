@@ -96,6 +96,10 @@ public class Match {
     Integer getAILevel() {
         return AILevel;
     }
+
+    public int getGameMode() {
+        return gameMode;
+    }
     //getters
 
 }
