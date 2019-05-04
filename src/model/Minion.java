@@ -2,13 +2,12 @@ package model;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Minion extends MovableCard {
     private static ArrayList<Minion> minions = new ArrayList<>();
     private Impact summonImpact;
     private Impact dyingWishImpact;
-    private Impact onDefendImpact;
-    private Impact onAttackImpact;
     private Impact onComboImpact;
     private Impact onTurnImpact;
 
@@ -75,13 +74,7 @@ public class Minion extends MovableCard {
         this.dyingWishImpact = dyingWishImpact;
     }
 
-    public void setOnDefendImpact(Impact onDefendImpact) {
-        this.onDefendImpact = onDefendImpact;
-    }
 
-    public void setOnAttackImpact(Impact onAttackImpact) {
-        this.onAttackImpact = onAttackImpact;
-    }
 
     public void setOnComboImpact(Impact onComboImpact) {
         this.onComboImpact = onComboImpact;

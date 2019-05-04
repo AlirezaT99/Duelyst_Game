@@ -7,7 +7,6 @@ public class Hero extends MovableCard {
     private Spell heroSpell;
     private int spellCost;
     private int spellCoolDown;
-    private Impact onHitImpact;
 
     public Hero(String name, int health, int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
         this.heroSpell = heroSpell;
@@ -16,19 +15,18 @@ public class Hero extends MovableCard {
         this.setHealth(health);
         this.name = name;
         this.setDamage(damage);
-        this.onHitImpact = null;
     }
 
     public void attack(Cell cell) {
         super.attack(cell);
-        if (onHitImpact != null)
-            onHitImpact.setImpactArea(this.player,cell,this.cardCell);
+        if (onAttackImpact != null)
+            onAttackImpact.setImpactArea(this.player,cell,this.cardCell);
     }
 
     public void counterAttack(MovableCard opponent) {
         super.counterAttack(opponent);
-        if (onHitImpact != null)
-            onHitImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
+        if (onAttackImpact != null)
+            onAttackImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
     }
 
     @Override

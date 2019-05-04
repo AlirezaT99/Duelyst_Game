@@ -14,7 +14,7 @@ class Impact {
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
     // 3.(0-2)"onWhichTeam"{friendly, hostile, both}|4.(0-2)"targetSoldierType"{hero,minion,both}|
     // 5.(0-1)"combo"|6.(2,3)"SquareLength"|7.column(1,0)|
-    //8.nearHeroMinion(0-2){none, one , all}| 9. random(0,1)|10.column(0,1)|11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
+    //8.nearHeroMinion(0-2){none, one , all}| 9. random(0,1)|10.previousAttacksMatters(0-2){none,constRise,difRise}|11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
     //12.row(0,1)//13.closestSoldiers(0,1)
     private String impactTypeId = "";//0.(0,1)isPositive|1.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
     // 2.(0-3)QuantityChange{mana,health,damage}|3.(0,1)quantityChangeSign{negative/isPositiveImpact}|4,5.(0,n)"impactQuantity"|
@@ -124,6 +124,7 @@ class Impact {
         killIt = impactTypeIdComp.charAt(3) == '1';
         doesHaveRisingDamage = impactTypeIdComp.charAt(4) != '0';
         doesHaveAntiDisarm = impactTypeIdComp.charAt(6) == '1';
+        doesHaveRisingDamage = targetTypeId.charAt(10) != '0';
     }
 
     //impactTypeComp variables
@@ -343,15 +344,17 @@ class Impact {
     //set ImpactArea
 
 
-    void doImpact(Player friendlyPlayer , MovableCard movableCard, Cell targetCell,Cell castingCell) {
+    void doImpact(Player friendlyPlayer , MovableCard target, Cell targetCell,Cell castingCell) {
         setAllVariablesNeeded();
         setImpactArea(friendlyPlayer,targetCell,castingCell);
         if (doesHaveAntiNegativeImpact)
-            antiNegativeImpactOnDefend(movableCard);
+            antiNegativeImpactOnDefend(target);
         else if (doesHaveAntiPoison)
-            antiPoisonOnDefend(movableCard);
+            antiPoisonOnDefend(target);
         else if (doesHaveAntiDisarm)
-            antiDisarmOnDefend(movableCard);
+            antiDisarmOnDefend(target);
+        else if(doesHaveRisingDamage)
+            attackOnPreviousTargets(target, castingCell.getMovableCard());
         else if (killIt)
             kill();
         else if (powerBuff)
@@ -487,6 +490,15 @@ class Impact {
             cell.getMovableCard().setHealth(0);
             cell.getMovableCard().dispelableHealthChange = 0;
         }
+    }
+
+    private void attackOnPreviousTargets(MovableCard target, MovableCard attacker){
+        if(attacker.haveAttackedOnThisBefore(target)){
+            target.setHealth(target.getHealth() + getImpactQuantityWithSign());
+            if(targetTypeId.charAt(10) == '2')
+                changeCharAtDesiredIndex(5,'6',impactTypeId);
+        }else
+            attacker.addToTargetedOnes(target);
     }
 
     //special impacts manager
