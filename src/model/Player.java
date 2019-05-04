@@ -48,7 +48,12 @@ public class Player {
     }
 
     Hero findPlayerHero() {
-        return collection.getSelectedDeck().getHero();
+//        for (Card card : collection.getCards()) {
+//            if (card instanceof Hero)
+//                return (Hero) card;
+//        }
+//        return null;
+        return null;
     }
 
     //getters
