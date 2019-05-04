@@ -6,17 +6,18 @@ import java.util.regex.Pattern;
 
 import model.Account;
 import model.Match;
+import view.BattleMenu;
 import view.SinglePlayerMenu;
 import view.StoryMenu;
 
 public class SinglePlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
-    private SinglePlayerMenu singlePlayerMenu;
+    private static SinglePlayerMenu singlePlayerMenu;
     public String[] commandParts;
     private static Account account;
 
     public SinglePlayerMenuProcess(SinglePlayerMenu singlePlayerMenu) {
-        this.singlePlayerMenu = singlePlayerMenu;
+        SinglePlayerMenuProcess.singlePlayerMenu = singlePlayerMenu;
     }
 
     static {
@@ -26,15 +27,28 @@ public class SinglePlayerMenuProcess {
         commandPatterns.add(Pattern.compile("help|4"));
     }
 
-    public static void customGame(String command) {
+    public static int customGame(String command) throws IOException {
         String[] commandParts = command.split("\\s+");
         String deckName = commandParts[2]; // space ke nadare vasatesh?
+        if (account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName)))
+            return 4;
         int mode = Integer.parseInt(commandParts[3]);
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
         Match match = new Match(true, mode);
         match.setup(account, deckName, numberOfFlags);
+        BattleMenu battleMenu = new BattleMenu(singlePlayerMenu.getBattleInit(), match);
+        enterBattleMenu(battleMenu);
+        return 0;
     }
+
+    private static void enterBattleMenu(BattleMenu battleMenu) throws IOException {
+        singlePlayerMenu.setHasRun(false);
+        singlePlayerMenu.setInSinglePlayerMenu(false);
+        battleMenu.setInBattleMenu(true);
+        battleMenu.run();
+    }
+
 
     public interface DoCommand {
         int doIt() throws IOException;

@@ -136,12 +136,7 @@ public class BattleMenuProcess {
                     return showNextCard(match.currentTurnPlayer());
                 }
             },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return enterGraveyard();
-                }
-            },
+            this::enterGraveyard,
             this::battleHelp,
             this::endGame,
             this::exit,

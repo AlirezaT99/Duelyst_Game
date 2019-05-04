@@ -50,7 +50,7 @@ public class MultiPlayerMenuProcess {
             MultiPlayerMenu::help
     };
 
-    public static void customGame(String command) {
+    public static void customGame(String command) throws IOException {
         String[] commandParts = command.split("\\s+");
         String deckName = commandParts[2]; // space ke nadare vasatesh?
         int mode = Integer.parseInt(commandParts[3]);
@@ -59,6 +59,14 @@ public class MultiPlayerMenuProcess {
         Match match = new Match(false, mode);
         match.setup(account, opponent, deckName, numberOfFlags);
         BattleMenu battleMenu = new BattleMenu(multiPlayerMenu.getBattleInit(), match);
+        enterBattleMenu(battleMenu);
+    }
+
+    private static void enterBattleMenu(BattleMenu battleMenu) throws IOException {
+        multiPlayerMenu.setHasRun(false);
+        multiPlayerMenu.setInMultiPlayerMenu(false);
+        battleMenu.setInBattleMenu(true);
+        battleMenu.run();
     }
 
     private int selectUser(String opponentUserName) {

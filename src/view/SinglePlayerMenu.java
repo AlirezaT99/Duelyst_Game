@@ -1,9 +1,11 @@
 package view;
 
 import model.Account;
+import model.Deck;
 import presenter.SinglePlayerMenuProcess;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class SinglePlayerMenu {
@@ -11,12 +13,14 @@ public class SinglePlayerMenu {
     private BattleInit battleInit;
     private SinglePlayerMenuProcess singlePlayerMenuProcess;
     private boolean hasRun = false;
+    private Account account;
 
     public SinglePlayerMenu(BattleInit battleInit, Account account) {
         isInSinglePlayerMenu = true;
         this.battleInit = battleInit;
         singlePlayerMenuProcess = new SinglePlayerMenuProcess(this);
         singlePlayerMenuProcess.setAccount(account);
+        this.setAccount(account);
     }
 
     public void run() throws IOException {
@@ -28,16 +32,18 @@ public class SinglePlayerMenu {
                 help();
                 hasRun = true;
             }
-            // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
-            singlePlayerMenuProcess.commandParts = command.split("[ ]");
+            singlePlayerMenuProcess.commandParts = command.split("\\s+");
             int commandType = SinglePlayerMenuProcess.findPatternIndex(command);
             if (commandType == -1)
                 showMessage("invalid input");
             else if (singlePlayerMenuProcess.DoCommands[commandType].doIt() == 4) {
                 //todo : show heroes to play against
                 //todo : choose the hero
-                //todo : show decks
+
+                //show decks
+                showList(account.getCollection().getDeckHashMap());
+
                 inner_Loop:
                 while (true) {
                     command = scanner.nextLine();
@@ -48,7 +54,8 @@ public class SinglePlayerMenu {
                         case 2:
                             break inner_Loop;
                         case 3:
-                            SinglePlayerMenuProcess.customGame(command);
+                            if (SinglePlayerMenuProcess.customGame(command) == 4)
+                                showMessage("invalid deck");
                             break;
                         default:
                             showMessage("invalid input");
@@ -57,6 +64,11 @@ public class SinglePlayerMenu {
             }
         }
         scanner.close();
+    }
+
+    private void showList(HashMap<String, Deck> deckHashMap) {
+        for (Deck deck : deckHashMap.values())
+            System.out.println(" - " + deck.getName());
     }
 
     private static int customGameMenu(String command) {
@@ -96,5 +108,10 @@ public class SinglePlayerMenu {
     public void setHasRun(boolean hasRun) {
         this.hasRun = hasRun;
     }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     //setters
 }
