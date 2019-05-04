@@ -1,8 +1,6 @@
 package model;
 
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Minion extends MovableCard {
     private static ArrayList<Minion> minions = new ArrayList<>();
@@ -11,20 +9,20 @@ public class Minion extends MovableCard {
     private Impact onComboImpact;
     private Impact onTurnImpact;
 
-    Minion copy(){
-        Minion minion =  new Minion();
+    Minion copy() {
+        Minion minion = new Minion();
         minion.summonImpact = summonImpact.copy();
-        minion.dyingWishImpact= dyingWishImpact.copy();
+        minion.dyingWishImpact = dyingWishImpact.copy();
         minion.onComboImpact = onComboImpact.copy();
         minion.onTurnImpact = onTurnImpact.copy();
-return minion;
+        return minion;
     }
 
     @Override
     protected void manageCasualties() {
         if (this.getHealth() + this.dispelableHealthChange <= 0) {
             this.isAlive = false;
-            dyingWishImpact.doImpact(this.player,this ,this.cardCell, this.cardCell);
+            dyingWishImpact.doImpact(this.player, this, this.cardCell, this.cardCell);
             //do dyingWish
         }
     }
@@ -32,7 +30,7 @@ return minion;
     @Override
     public void castCard(Cell cell) {
         super.castCard(cell);
-        summonImpact.doImpact(this.player,this ,this.cardCell, this.cardCell);
+        summonImpact.doImpact(this.player, this, this.cardCell, this.cardCell);
         // do summonImpact
     }
 
@@ -40,12 +38,12 @@ return minion;
     public void attack(Cell cell) {
         if (this.isAttackValid(cell)) {
             super.attack(cell);
-            onAttackImpact.doImpact(this.player,this, cell, this.cardCell);
+            onAttackImpact.doImpact(this.player, this, cell, this.cardCell);
         }
     }
 
     public void comboAttack(Cell cell, ArrayList<Minion> minions) {
-        minions.get(0).onComboImpact.doImpact(this.player, this,cell, this.cardCell);
+        minions.get(0).onComboImpact.doImpact(this.player, this, cell, this.cardCell);
         super.attack(cell);
         for (int i = 1; i < minions.size(); i++) {
             MovableCard movableCard = minions.get(i);
@@ -63,25 +61,26 @@ return minion;
         String output = "Type : Minion - Name : " + this.name + " - Class : " + classType + " - AP : " + this.getDamage() +
                 " HP : " + this.getHealth() + " - MP :" + this.manaCost + " Special power : " + this.description;
         if (showCost) output = output + " - Sell Cost : " + getCost();
-       // output = output + "\n";
+        // output = output + "\n";
         return output;
     }
 
     @Override
     protected void counterAttack(MovableCard opponent) {
         super.counterAttack(opponent);
-        if(onDefendImpact.doesHaveAntiNegativeImpact())
+        if (onDefendImpact.doesHaveAntiNegativeImpact())
             this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
-        if(onDefendImpact.isImmuneToMinDamage()){
-            if(this.player.match.table.doesHaveLowestDamage(opponent))
+        if (onDefendImpact.isImmuneToMinDamage()) {
+            if (this.player.match.table.doesHaveLowestDamage(opponent))
                 this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
         }
-        onDefendImpact.doImpact(this.player,this, opponent.cardCell, this.cardCell);
+        onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
     }
+
     //getters
-    public static Minion getMinionByName(String name){
-        for(int i = 0; i < minions.size(); i++){
-            if(minions.get(i).getName().equals(name))
+    public static Minion getMinionByName(String name) {
+        for (int i = 0; i < minions.size(); i++) {
+            if (minions.get(i).getName().equals(name))
                 return minions.get(i);
         }
         return null;
@@ -99,7 +98,6 @@ return minion;
     }
 
 
-
     public void setOnComboImpact(Impact onComboImpact) {
         this.onComboImpact = onComboImpact;
     }
@@ -108,8 +106,8 @@ return minion;
         this.onTurnImpact = onTurnImpact;
     }
 
-    public static void addToMinions(Minion minion){
-     minions.add(minion);
+    public static void addToMinions(Minion minion) {
+        minions.add(minion);
     }
     //setters
 }

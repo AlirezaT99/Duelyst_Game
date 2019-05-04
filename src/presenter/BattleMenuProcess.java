@@ -192,18 +192,30 @@ public class BattleMenuProcess {
     }
 
     private int insertCard(String cardName, String x_str, String y_str) {
+        int x = Integer.parseInt(x_str),
+                y = Integer.parseInt(y_str);
         return 0;
     }
 
     public static int useSpecialPower(String x_str, String y_str) {
+        int x = Integer.parseInt(x_str),
+                y = Integer.parseInt(y_str);
         return 0;
     }
 
-    public static int attack(String commandPart) {
+    public static int attack(String cardID) {
+        if (findCard(cardID) == null)
+            return 3;
+        Card attackedCard = findCard(cardID);
+        if (attackedCard instanceof MovableCard)
+            ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
+                    .attack(match.getTable().getCellByCoordination(attackedCard.getCoordination().getX(), attackedCard.getCoordination().getY()));
         return 0;
     }
 
     public static int attackCombo(String[] commandParts) {
+//        Attack combo [opponent card id] [my card id] [my card id] [...]
+
         return 0;
     }
 
@@ -223,7 +235,8 @@ public class BattleMenuProcess {
                     .isMoveValid(match.getTable().getCell(x, y)))
                 return -1; // messages are handled in "isMoveValid"
         //
-            match.currentTurnPlayer().getHand().getSelectedCard().setCoordination(new Coordination(x, y));
+        ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard()).move(match.getTable().getCell(x, y));
+//        match.currentTurnPlayer().getHand().getSelectedCard().setCoordination(new Coordination(x, y));
         BattleMenu.showMessage(match.currentTurnPlayer().getHand().getSelectedCard().getCardID()
                 + "moved to [" + x + "][" + y + "]");
         return 0;
