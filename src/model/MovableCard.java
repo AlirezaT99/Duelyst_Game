@@ -17,6 +17,7 @@ public abstract class MovableCard extends Card {
     private boolean isMelee;
     private boolean isRanged;
     private boolean isHybrid;
+    private boolean isComboAttacker;
     protected Impact onDefendImpact;
     protected Impact onAttackImpact;
     private boolean isComboAttacker;
@@ -59,7 +60,7 @@ public abstract class MovableCard extends Card {
             opponent.takeDamage(this.damage);
             didAttackInThisTurn = true;
             if (!Impact.doesHaveAntiHolyBuff(this))
-                Impact.holyBuff(opponent, this.damage);
+                Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             //do attack
             opponent.counterAttack(this);
             manageCasualties();
@@ -97,7 +98,7 @@ public abstract class MovableCard extends Card {
         if (isCounterAttackValid(opponent.cardCell)) {
             opponent.takeDamage(this.damage);
             if (!Impact.doesHaveAntiHolyBuff(this))
-                Impact.holyBuff(opponent, this.damage);
+                Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             manageCasualties();
         }
     }
