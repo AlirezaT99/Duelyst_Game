@@ -40,7 +40,7 @@ public class Cell {
         return adjacentCells;
     }
 
-    ArrayList<Cell> getFullAdjacentCells(Player player){
+    ArrayList<Cell> getFullAdjacentCells(Player player) {
         ArrayList<Cell> cellArrayList = this.getAdjacentCells();
         cellArrayList.removeIf(cell -> cell.getMovableCard() == null || !cell.getMovableCard().player.equals(player));
         return cellArrayList;
@@ -53,6 +53,7 @@ public class Cell {
     Coordination getCellCoordination() {
         return coordination;
     }
+
     public CollectibleItem getItem() {
         return item;
     }

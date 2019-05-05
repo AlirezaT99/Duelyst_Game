@@ -166,24 +166,15 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
-        if (didMoveInThisTurn) {
-            printMessage("Already moved");
+        if (didMoveInThisTurn)
             return 4;
-        }
-        if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange) {
-            printMessage("Out of range");
+        if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange)
             return 5;
-        }
-        if (isOpponentInTheWayOfDesiredDestination(this.cardCell, cell)) {
-            printMessage("Enemy in the way");
+        if (isOpponentInTheWayOfDesiredDestination(this.cardCell, cell))
             return 6;
-        }
-        for (Impact impact : impactsAppliedToThisOne) {
-            if (impact.isStunBuff()) {
-                printMessage("Stunned. Can't Move");
-                return 7;
-            }
-        }
+        for (Impact impact : impactsAppliedToThisOne)
+            if (impact.isStunBuff())
+                return 8;
         return 0;
     }
 

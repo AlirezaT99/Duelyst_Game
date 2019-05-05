@@ -37,12 +37,6 @@ public class Table {
         cell.addCellToAdjacentCells(cells[indexI][indexJ]);
     }
 
-    // table initiation
-
-    {
-        cells = new Cell[6][10];
-    }
-
     public Cell getCellByCoordination(int x, int y) {
         if (x < 6 && y < 10 && x > 0 && y > 0)
             return cells[x][y];
@@ -80,7 +74,7 @@ public class Table {
 
     //soldier finder
 
-    ArrayList<Cell> findAllSoldiers(Player player) {
+    public ArrayList<Cell> findAllSoldiers(Player player) {
         ArrayList<Cell> wantedCells = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
             for (int j = 1; j < 9; j++) {
@@ -111,23 +105,23 @@ public class Table {
         return candidateCells;
     }
 
-    private ArrayList<Cell> findLowestDamageCells(Player opponent){
+    private ArrayList<Cell> findLowestDamageCells(Player opponent) {
         ArrayList<Cell> cells = findAllSoldiers(opponent);
         int min = 99;
-        for (Cell cell: cells) {
-            int damage =(cell.getMovableCard().getDamage() + cell.getMovableCard().dispelableDamageChange);
-            if(damage < min)
+        for (Cell cell : cells) {
+            int damage = (cell.getMovableCard().getDamage() + cell.getMovableCard().dispelableDamageChange);
+            if (damage < min)
                 min = damage;
         }
-        final  int min2 = min;
+        final int min2 = min;
         cells.removeIf(cell -> (cell.getMovableCard().getDamage() + cell.getMovableCard().dispelableDamageChange) > min2);
         return cells;
     }
 
-    boolean doesHaveLowestDamage(MovableCard movableCard){
+    boolean doesHaveLowestDamage(MovableCard movableCard) {
         ArrayList<Cell> cells = findLowestDamageCells(movableCard.player);
-        for (Cell cell: cells) {
-            if(cell.equals(movableCard.cardCell))
+        for (Cell cell : cells) {
+            if (cell.equals(movableCard.cardCell))
                 return true;
         }
         return false;
@@ -151,7 +145,6 @@ public class Table {
         }
         return min;
     }
-
 
 
     // find closest Soldiers
