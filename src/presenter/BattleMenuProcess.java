@@ -307,8 +307,8 @@ public class BattleMenuProcess {
     }
 
     private int showSoldiers(Player player) {
-        showMinion(player.getCollection().getSelectedDeck().getHero());
-        for (Minion minion : player.getCollection().getSelectedDeck().getMinions())
+        showMinion(player.getDeck().getHero());
+        for (Minion minion : player.getDeck().getMinions())
             showMinion(minion);
         return 0;
     }
