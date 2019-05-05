@@ -53,10 +53,9 @@ public abstract class MovableCard extends Card {
     //card casting
 
     //attack & counterAttack
-    public void attack(Cell cell) {
-        if (isAttackValid(cell)) {
+    public void attack(MovableCard opponent) {
+        if (isAttackValid(opponent)) {
             // do attack
-            MovableCard opponent = cell.getMovableCard();
             opponent.takeDamage(this.damage);
             didAttackInThisTurn = true;
             if (!Impact.doesHaveAntiHolyBuff(this))
@@ -67,8 +66,8 @@ public abstract class MovableCard extends Card {
         }
     }
 
-    boolean isAttackValid(Cell cell) {
-        if (!counterAttackAndNormalAttackSameParameters(cell))
+    boolean isAttackValid(MovableCard opponent) {
+        if (!counterAttackAndNormalAttackSameParameters(opponent))
             return false;
         if (isHybrid)
             return true;
@@ -81,21 +80,23 @@ public abstract class MovableCard extends Card {
         return true;
     }
 
-    private boolean counterAttackAndNormalAttackSameParameters(Cell cell) {
-        int distance = findDistanceBetweenTwoCells(this.cardCell, cell);
+    private boolean counterAttackAndNormalAttackSameParameters(MovableCard opponent) {
+        int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
         if (distance > maxAttackRange || distance < minAttackRange) {
             printMessage("Out of attack range");
             return false;
         }
-        if (this.player.equals(cell.getMovableCard().player)) {
+        if (this.player.equals(opponent.player)) {
             printMessage("Game doesn't have friendly fire");
             return false;
         }
         return true;
     }
 
+
+
     protected void counterAttack(MovableCard opponent) {
-        if (isCounterAttackValid(opponent.cardCell)) {
+        if (isCounterAttackValid(opponent)) {
             opponent.takeDamage(this.damage);
             if (!Impact.doesHaveAntiHolyBuff(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
@@ -103,8 +104,8 @@ public abstract class MovableCard extends Card {
         }
     }
 
-    private boolean isCounterAttackValid(Cell cell) {
-        if (counterAttackAndNormalAttackSameParameters(cell)) {
+    private boolean isCounterAttackValid(MovableCard opponent) {
+        if (counterAttackAndNormalAttackSameParameters(opponent)) {
             if (isHybrid)
                 return true;
             for (Impact impact : impactsAppliedToThisOne)
@@ -118,8 +119,28 @@ public abstract class MovableCard extends Card {
         return true;
     }
 
+    private boolean isComboAttackValid(ArrayList<MovableCard> attackers, MovableCard target){
+        for (MovableCard movableCard: attackers) {
+            if(movableCard == null)
+                return false;
+            if(!movableCard.isComboAttacker)
+                return false;
+            if(!movableCard.isAttackValid(target))
+                return false;
+        }
+        return true;
+    }
 
-
+    public void comboAttack(ArrayList<MovableCard> attackers, MovableCard target){
+        if(isComboAttackValid(attackers,target)){
+            attackers.get(0).attack(target);
+            for (int i = 1; i < attackers.size(); i++) {
+                target.health -= attackers.get(i).damage + attackers.get(i).dispelableDamageChange;
+                if(attackers.get(i).onAttackImpact != null)
+                    attackers.get(i).onAttackImpact.doImpact(attackers.get(i).player,target,target.cardCell,attackers.get(i).cardCell);
+            }
+        }
+    }
     //attack & counterAttack
 
     public void goThroughTime() {
@@ -137,7 +158,7 @@ public abstract class MovableCard extends Card {
 
     //move
     public void move(Cell destination) {
-        if (isMoveValid(destination)) {
+        if (isMoveValid(destination) == 0) {
             didMoveInThisTurn = true;
             this.cardCell = destination;
             if (!cardCell.cellImpacts.isEmpty()) {
@@ -146,26 +167,26 @@ public abstract class MovableCard extends Card {
         }
     }
 
-    public boolean isMoveValid(Cell cell) {
+    public int isMoveValid(Cell cell) {
         if (didMoveInThisTurn) {
             printMessage("Already moved");
-            return false;
+            return 4;
         }
         if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange) {
             printMessage("Out of range");
-            return false;
+            return 5;
         }
         if (isOpponentInTheWayOfDesiredDestination(this.cardCell, cell)) {
             printMessage("Enemy in the way");
-            return false;
+            return 6;
         }
         for (Impact impact : impactsAppliedToThisOne) {
             if (impact.isStunBuff()) {
                 printMessage("Stunned. Can't Move");
-                return false;
+                return 7;
             }
         }
-        return true;
+        return 0;
     }
 
     private boolean isOpponentInTheWayOfDesiredDestination(Cell start, Cell destination) {

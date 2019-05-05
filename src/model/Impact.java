@@ -12,18 +12,21 @@ class Impact {
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
     // 3.(0-2)"onWhichTeam"{friendly, hostile, both}|4.(0-2)"targetSoldierType"{hero,minion,both}|
     // 5.(0-1)"combo"|6.(2,3)"SquareLength"|7.column(1,0)|
-    //8.nearHeroMinion(0-2){none, one , all,all+self}| 9. random(0,1)|10.previousAttacksMatters(0-2){none,constRise,difRise}|11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}
+    //8.nearHeroMinion(0-3){none, one , all,all+self}| 9. random(0,1)|10.previousAttacksMatters(0-2){none,constRise,difRise}|
+    // 11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid}|
     //12.row(0,1)//13.closestSoldiers(0,1)|14.ranged(0-n)
     private String impactTypeId = "";//0.(0,1)isPositive|1.(0-6)buffType{holy,power,poison,weakness,stun,disarm}|
     // 2.(0-3)QuantityChange{mana,health,damage}|3.(0,1)quantityChangeSign{negative/isPositiveImpact}|4,5.(0,n)"impactQuantity"|
     // 6.(0-3)PassivePermanent{none , passive , permanent , continuous}|7.(0,n)turnsToBeActivated |8,9.(0,n)turnsActive|
     // 10.dispel(0-2){none,buffDispel,allPositiveDispel}|11.setsOnCells(0,1) |
-    // |12.cellImpact(0-4){none,poison,fire,holy}
+    // 12.cellImpact(0-4){none,poison,fire,holy}|
     private String impactTypeIdComp = ""; //0.antiHolyBuff |1.antiNegativeImpactOnDefend(0,1) |
-    // 2.antiPoisonOnDefend(0,1)|3.kill(0,1)|4.risingDamage(0-2){none,firstOneInDoc,secondOneInDoc}|5.immuneToMinDamage(0,1)|6.antiDisarmOnDefend(0,1)
-    private String impactWayOfAssigning =""; //0.castingImpact(0-4){doesn't matter,spell,attack,defend,item}//1.wayCardGotIt(0-4){doesn't matter,spell,defend,attack}
-    //3.impactSetterTeam(0-3) //4.impactGetterTeam(0-3)
-    private String impactAdderTypes = "";//0.addToWhichState{none, defend, attack}
+    // 2.antiPoisonOnDefend(0,1)|3.kill(0,1)|4.risingDamage(0-2){none,firstOneInDoc,secondOneInDoc}|
+    // 5.immuneToMinDamage(0,1)| 6.antiDisarmOnDefend(0,1)
+    private String impactWayOfAssigning =""; //0.castingImpact(0-4){doesn't matter,spell,attack,defend,item}|
+    // 1.wayCardGotIt(0-4){doesn't matter,spell,defend,attack}|
+    //3.impactGiverTeam(0-3)|4.impactGetterTeam(0-3)|
+    private String impactAdderTypes = "";//0.addToWhichState{none, defend, attack}|
     //needed id variables
     //targetTypeId variables
     private boolean validOnAll;
@@ -157,6 +160,20 @@ class Impact {
         specialSets(friendlyPlayer, targetCell, castingCell,opponentPlayer);
         geometricSets(friendlyPlayer, targetCell, opponentPlayer,castingCell);
         addToCardsImpact();
+        setImpactAreaComp(targetCell);
+    }
+
+    private void setImpactAreaComp(Cell targetCell){
+        boolean addToDefend = impactAdderTypes.charAt(0) == '1';
+        boolean addToAttack = impactAdderTypes.charAt(1) == '2';
+        if(addToDefend){
+            impactAdderTypes = changeCharAtDesiredIndex(0,'0',impactAdderTypes);
+            targetCell.getMovableCard().onDefendImpact= this;
+        }
+        if(addToAttack){
+            impactAdderTypes = changeCharAtDesiredIndex(0,'0',impactAdderTypes);
+            targetCell.getMovableCard().onAttackImpact = this;
+        }
     }
 
     private void teamOrHeroSets(Player friendlyPlayer, Player opponentPlayer) {

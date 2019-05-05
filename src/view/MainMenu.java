@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class MainMenu {
     private boolean isInMainMenu = true;
-    private boolean hasRun = false;
     private MainMenuProcess mainMenuProcess = new MainMenuProcess();
 
     public MainMenu(Account account) {
@@ -18,13 +17,10 @@ public class MainMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        help();
         while (true) {
             if (!isInMainMenu)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             String command = scanner.nextLine();
             MainMenuProcess.commandParts = command.split("[ ]");
             int commandType = presenter.MainMenuProcess.findPatternIndex(command);
@@ -59,9 +55,6 @@ public class MainMenu {
         this.isInMainMenu = isInMainMenu;
     }
 
-    public void setHasRun(boolean hasRun) {
-        this.hasRun = hasRun;
-    }
     //setters
 
     //getters

@@ -26,6 +26,7 @@ public class MultiPlayerMenu {
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         printUsers();
+        help();
         while (true) {
             if (!isInMultiPlayerMenu)
                 break;

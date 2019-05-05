@@ -53,25 +53,13 @@ public class Minion extends MovableCard {
     }
 
     @Override
-    public void attack(Cell cell) {
-        if (this.isAttackValid(cell)) {
-            super.attack(cell);
-            onAttackImpact.doImpact(this.player, this, cell, this.cardCell);
+    public void attack(MovableCard opponent) {
+        if (this.isAttackValid(opponent)) {
+            super.attack(opponent);
+            onAttackImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
         }
     }
 
-    public void comboAttack(Cell cell, ArrayList<Minion> minions) {
-        minions.get(0).onComboImpact.doImpact(this.player, this, cell, this.cardCell);
-        super.attack(cell);
-        for (int i = 1; i < minions.size(); i++) {
-            MovableCard movableCard = minions.get(i);
-            if (movableCard.isAttackValid(cell)) {
-                MovableCard opponent = cell.getMovableCard();
-                opponent.takeDamage(this.getDamage());
-                super.didAttackInThisTurn = true;
-            }
-        }
-    }
 
     @Override
     public String toString(boolean showCost) {

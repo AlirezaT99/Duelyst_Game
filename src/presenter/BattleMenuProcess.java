@@ -209,13 +209,21 @@ public class BattleMenuProcess {
         Card attackedCard = findCard(cardID);
         if (attackedCard instanceof MovableCard)
             ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
-                    .attack(match.getTable().getCellByCoordination(attackedCard.getCoordination().getX(), attackedCard.getCoordination().getY()));
+                    .attack((MovableCard) attackedCard);
         return 0;
     }
 
     public static int attackCombo(String[] commandParts) {
 //        Attack combo [opponent card id] [my card id] [my card id] [...]
+        for (int i = 2; i < commandParts.length; i++)
+            if (findCard(commandParts[i]) == null || !(findCard(commandParts[i]) instanceof MovableCard))
+                return 3;
 
+        ArrayList<MovableCard> attackers = new ArrayList<>();
+        for (int i = 3; i < commandParts.length; i++)
+            attackers.add((MovableCard) findCard(commandParts[i]));
+        ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
+                .comboAttack(attackers, (MovableCard) findCard(commandParts[2]));
         return 0;
     }
 
@@ -230,10 +238,11 @@ public class BattleMenuProcess {
         if (x > 5 || y > 9 || x < 1 || y < 1)
             return 1;
         //
+        int moveValid = 0;
         if (match.currentTurnPlayer().getHand().getSelectedCard() instanceof MovableCard)
-            if (!((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
-                    .isMoveValid(match.getTable().getCell(x, y)))
-                return -1; // messages are handled in "isMoveValid"
+            moveValid = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
+                    .isMoveValid(match.getTable().getCell(x, y));
+        if (moveValid != 0) return moveValid;
         //
         ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard()).move(match.getTable().getCell(x, y));
 //        match.currentTurnPlayer().getHand().getSelectedCard().setCoordination(new Coordination(x, y));
