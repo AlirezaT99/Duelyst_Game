@@ -174,7 +174,7 @@ public class StoryMenuProcess {
         return 0;
     }
 
-    private static void setDeckCardIDs(String playerName, Deck deck){ //only use it for story mode.
+    public static void setDeckCardIDs(String playerName, Deck deck){ //only use it for story mode.
         deck.getHero().setCardID(CollectionMenuProcess.createCardID(playerName,deck,deck.getHero()));
         for(int i = 0; i < deck.getMinions().size() ; i++){
             int num = 0;

@@ -37,7 +37,7 @@ public class SinglePlayerMenu {
             else if (singlePlayerMenuProcess.DoCommands[commandType].doIt() == 4) {
                 //todo : show heroes to play against
                 //todo : choose the hero
-
+                showHeroes();
                 //show decks
                 showList(account.getCollection().getDeckHashMap());
 
@@ -61,6 +61,19 @@ public class SinglePlayerMenu {
             }
         }
         scanner.close();
+    }
+
+    private void showHeroes() {
+        showMessage("1. Div e Sefid");
+        showMessage("2. Simorgh");
+        showMessage("3. Seven Headed Dragon");
+        showMessage("4. Rakhsh");
+        showMessage("5. Zahhak");
+        showMessage("6. Kaave");
+        showMessage("7. Aarash");
+        showMessage("8. Afsaane");
+        showMessage("9. Esfandiar");
+        showMessage("10. Rosatm");
     }
 
     private void showList(HashMap<String, Deck> deckHashMap) {

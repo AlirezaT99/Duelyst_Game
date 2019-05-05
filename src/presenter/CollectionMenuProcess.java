@@ -159,7 +159,7 @@ public class CollectionMenuProcess {
                 && account.getCollection().findCardByCollectionID(idStr) == null)
             return 3;
         if (deck.getItemsHashMap().containsKey(idStr) ||
-                deck.findCardByID(idStr) != null)
+                deck.findCardByCollectionID(idStr) != null)
             return 4;
         if ((deck.getMinions().size() + deck.getSpells().size()) == Deck.MAX_CARD_NUMBER
                 && !account.getCollection().getItemsHashMap().containsKey(idStr))
