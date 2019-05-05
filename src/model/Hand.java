@@ -7,6 +7,7 @@ public class Hand {
     private Card selectedCard;
     private boolean switchCardThisTurn;
     private Deck deck;
+
     {
         cards = new ArrayList<>();
     }
@@ -39,9 +40,9 @@ public class Hand {
         deck.putTheCardBackInTheQueue(selectedCard);
         Card card = deck.getLastCard();
         for (int i = 0; i < 5; i++) {
-            if(cards.get(i).equals(selectedCard)){
+            if (cards.get(i).equals(selectedCard)) {
                 deleteCardBySettingNull(cards.get(i));
-                cards.set(i,card);
+                cards.set(i, card);
             }
         }
         switchCardThisTurn = true;
