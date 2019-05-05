@@ -209,7 +209,7 @@ public class BattleMenuProcess {
         Card attackedCard = findCard(cardID);
         if (attackedCard instanceof MovableCard)
             ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
-                    .attack(match.getTable().getCellByCoordination(attackedCard.getCoordination().getX(), attackedCard.getCoordination().getY()));
+                    .attack((MovableCard) attackedCard);
         return 0;
     }
 
