@@ -33,7 +33,6 @@ public class Minion extends MovableCard {
         minion.onDefendImpact = onDefendImpact == null ? null : onDefendImpact.copy();
         minion.onAttackImpact = onAttackImpact == null ? null : onAttackImpact.copy();
         minion.collectionID = this.collectionID;
-        this.setCardfieldsForCopy(minion);
         return minion;
     }
 
