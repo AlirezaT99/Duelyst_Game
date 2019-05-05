@@ -1,8 +1,12 @@
 
-[squid:UselessImportCheck"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÄÖÚ…£-
-Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ8òÌêà£-
-dsquid:UselessImportCheck"4Remove this unused import 'java.util.regex.Pattern'.(Ã•…Äúÿÿÿÿ8òÌêà£-
-@squid:S1643¾"Use a StringBuilder instead.(³üÇ°üÿÿÿÿ8©âÑš¦-
-µ%squid:RedundantThrowsDeclarationCheckT"xRemove the declaration of thrown exception 'java.io.FileNotFoundException' which is a subclass of 'java.io.IOException'.(¼×øáıÿÿÿÿ8Âö —¦-
-[squid:UselessImportCheck"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8ÄÖÚ…£-
 Tsquid:UselessImportCheck")Remove this unused import 'java.net.URI'.(Ö¦¨°8òÌêà£-
+Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ8òÌêà£-
+[squid:UselessImportCheck"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8ÄÖÚ…£-
+µ%squid:RedundantThrowsDeclarationCheckT"xRemove the declaration of thrown exception 'java.io.FileNotFoundException' which is a subclass of 'java.io.IOException'.(¼×øáıÿÿÿÿ8Âö —¦-
+[squid:UselessImportCheck"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÄÖÚ…£-
+dsquid:UselessImportCheck"4Remove this unused import 'java.util.regex.Pattern'.(Ã•…Äúÿÿÿÿ8òÌêà£-
+^squid:UnusedPrivateMethod"4Remove this unused private "fileNameCreator" method.(–Õ¡ñ8´ÆÃœ¨-
+=squid:S1643"Use a StringBuilder instead.(³üÇ°üÿÿÿÿ8´ÆÃœ¨-
+©%squid:RedundantThrowsDeclarationCheckT"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(¼×øáıÿÿÿÿ8´ÆÃœ¨-
+Gsquid:S1481U")Remove this unused "gson" local variable.(ûÒô¶8´ÆÃœ¨-
+Vsquid:S1854U"8Remove this useless assignment to local variable "gson".(ûÒô¶8´ÆÃœ¨-

@@ -9,14 +9,24 @@ public class UsableItem extends InfluentialItem {
     private Match match;
 
     @Override
-    public UsableItem copy(){
-        UsableItem item;
-        item = (UsableItem) super.copy();
-        item.primaryImpact = primaryImpact.copy();
-        item.secondaryImpact = secondaryImpact.copy();
+    public UsableItem copy() {
+        UsableItem item = new UsableItem();
+        item.name = name;
+        item.description = description;
+        item.itemID = itemID;
+        if (dyingWishImpact != null)
+            item.dyingWishImpact = dyingWishImpact.copy();
+        if (summonImpact != null)
+            item.summonImpact = summonImpact.copy();
+        if (primaryImpact != null)
+            item.primaryImpact = primaryImpact.copy();
+        if (secondaryImpact != null)
+            item.secondaryImpact = secondaryImpact.copy();
         item.cost = cost;
+        if(deck!=null)
         item.deck = deck.copy();
         item.match = match;
+        item.collectionID = collectionID;
         return item;
     }
 
@@ -52,13 +62,15 @@ public class UsableItem extends InfluentialItem {
         return match;
     }
 
-    public static UsableItem getUsableItemByName(String name){
-        for(int i = 0; i < usableItems.size(); i++)
-            if(usableItems.get(i).getName().equals(name))
-                return usableItems.get(i);
+    public static UsableItem getUsableItemByName(String name) {
+        for (int i = 0; i < usableItems.size(); i++)
+            if (usableItems.get(i).getName().equals(name))
+                return ((UsableItem) usableItems.get(i)).copy();
         return null;
     }
 
-    public static void addToUsableItems(UsableItem usableItem){ usableItems.add(usableItem);}
+    public static void addToUsableItems(UsableItem usableItem) {
+        usableItems.add(usableItem);
+    }
     // setter & getter
 }

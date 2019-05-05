@@ -32,7 +32,7 @@ public class Minion extends MovableCard {
         minion.onTurnImpact = onTurnImpact == null ? null : onTurnImpact.copy();
         minion.onDefendImpact = onDefendImpact == null ? null : onDefendImpact.copy();
         minion.onAttackImpact = onAttackImpact == null ? null : onAttackImpact.copy();
-        minion.setCardfieldsForCopy(minion);
+        this.setCardfieldsForCopy(minion);
         return minion;
     }
 
@@ -99,7 +99,7 @@ public class Minion extends MovableCard {
     public static Minion getMinionByName(String name) {
         for (int i = 0; i < minions.size(); i++) {
             if (minions.get(i).getName().equals(name))
-                return minions.get(i);
+                return minions.get(i).copy();
         }
         return null;
     }

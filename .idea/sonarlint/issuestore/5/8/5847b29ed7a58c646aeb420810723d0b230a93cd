@@ -1,7 +1,6 @@
 
-psquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(‰†™Æ8Î›Ú¢¥-
-Xsquid:S11611":Add the "@Override" annotation above this method signature(ë¯¡ë8€Áäè¥-
-Msquid:S1068"*Remove this unused "spells" private field.(‡‰‚áıÿÿÿÿ8Œ–ä ¥-
+Xsquid:S1161V":Add the "@Override" annotation above this method signature(Ò’Š¯8€Áäè¥-
 Gsquid:S1068"*Remove this unused "impact" private field.(·£‚8´Îè­¤-
-]squid:S1161I":Add the "@Override" annotation above this method signature(…ÌÌÿÿÿÿÿ8€Áäè¥-
-Xsquid:S1161E":Add the "@Override" annotation above this method signature(Ò’Š¯8€Áäè¥-
+psquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(‰†™Æ8Î›Ú¢¥-
+Jsquid:S11721",Remove this unused method parameter "match".(ë¯¡ë8Ğˆ¬Å§-
+]squid:S1161Z":Add the "@Override" annotation above this method signature(…ÌÌÿÿÿÿÿ8€Áäè¥-
