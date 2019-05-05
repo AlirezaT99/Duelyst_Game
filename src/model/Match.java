@@ -25,6 +25,7 @@ public class Match {
     public Match(boolean singleMode, int gameMode) {
         this.singleMode = singleMode;
         this.gameMode = gameMode;
+        this.table = new Table();
     }
 
     public void moveToGraveYard(Card card, Player player) {

@@ -14,6 +14,9 @@ public class Table {
     public Table() {
         for (int i = 0; i < 7; i++) {
             cells[i] = new Cell[11];
+            for (int j = 0; j < 11; j++) {
+                cells[i][j] = new Cell();
+            }
         }
         setAdjacentCells();
     }

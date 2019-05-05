@@ -4,6 +4,8 @@ import presenter.StoryMenuProcess;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.RandomAccess;
 
 public class Deck {
     private String name;
@@ -90,18 +92,21 @@ public class Deck {
         //  cardsHashMap.put(card.name,card);
     }
 
-    public Card findCardByCollectionID(String id){
-        if (hero!=null && hero.getCollectionID().equals(id))
+    public Card findCardByCollectionID(String id) {
+        if (hero != null && hero.getCollectionID().equals(id))
             return hero;
         for (Spell spell : spells)
             if (spell.getCollectionID().equals(id))
                 return spell;
-        for (Minion minion : minions){
+        for (Minion minion : minions) {
             System.out.println(minion.getCollectionID());
-            if (minion.getCollectionID().equals(id)){
-                return minion;}}
+            if (minion.getCollectionID().equals(id)) {
+                return minion;
+            }
+        }
         return null;
     }
+
     public Card findCardByName(String name) {
         if (hero.getName().equals(name))
             return hero;
@@ -115,18 +120,18 @@ public class Deck {
     }
 
     Card getLastCard() {
-        if(spells.isEmpty())
-            if(minions.isEmpty())
-                return null;
-            if(spells.isEmpty()){
-                Minion minion = minions.get(0);
-                minions.remove(minion);
-                return minion;
-            }else {
-                Spell spell = spells.get(0);
-                spells.remove(spell);
-                return spell;
-            }
+        ArrayList<Card> cards = new ArrayList<>();
+        cards.addAll(spells);
+        cards.addAll(minions);
+        Random random = new Random();
+        int i = Math.abs(random.nextInt() % cards.size());
+        System.out.println(cards.size() + " " + i);
+        Card card = cards.get(i);
+        if (card instanceof Spell)
+            spells.remove(card);
+        if (card instanceof Minion)
+            minions.remove(card);
+        return card;
     }
 
     public static void createDeck(String deckName) {
