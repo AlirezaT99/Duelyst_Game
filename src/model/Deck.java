@@ -11,11 +11,13 @@ public class Deck {
     private Hero hero = null;
     private ArrayList<Minion> minions;
     private ArrayList<Spell> spells;
+    private ArrayList<Card> cards;
     private HashMap<String, UsableItem> itemsHashMap;
     public static final int MAX_CARD_NUMBER = 20;
     public static final int MAX_ITEM_NUMBER = 3;
 
     {
+        cards = new ArrayList<>();
         itemsHashMap = new HashMap<>();
         minions = new ArrayList<>();
         spells = new ArrayList<>();
@@ -68,11 +70,13 @@ public class Deck {
 
     public int addSpellToDeck(Spell spell) { // only used for computer Decks
         this.getSpells().add(spell);
+        cards.add(spell);
         return 0;
     }
 
     public int addMinionToDeck(Minion minion) { // only used for computer Decks
         this.getMinions().add(minion);
+        cards.add(minion);
         return 0;
     }
 
@@ -111,11 +115,10 @@ public class Deck {
     }
 
     Card getLastCard() {
-//        Card card = cards.get(0);
-//        cards.remove(card);
-//        cardsHashMap.remove(card);
-        return new Minion(); // bullshit
-    } //todo
+        Card card = cards.get(0);
+        cards.remove(card);
+        return new Minion();
+    }
 
     public static void createDeck(String deckName) {
         Deck deck = new Deck(deckName);
