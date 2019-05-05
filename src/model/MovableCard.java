@@ -118,6 +118,8 @@ public abstract class MovableCard extends Card {
         return true;
     }
 
+
+
     //attack & counterAttack
 
     public void goThroughTime() {

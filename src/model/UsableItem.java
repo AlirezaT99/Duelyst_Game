@@ -15,7 +15,7 @@ public class UsableItem extends InfluentialItem {
         item.primaryImpact = primaryImpact.copy();
         item.secondaryImpact = secondaryImpact.copy();
         item.cost = cost;
-        item.deck = deck;
+        item.deck = deck.copy();
         item.match = match;
         return item;
     }

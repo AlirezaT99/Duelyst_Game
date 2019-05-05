@@ -35,16 +35,16 @@ public class Account {
             if (card != null) {
                 card.setCardID(createID());
             if(card instanceof Hero){
-                collection.getHeroes().add((Hero)((Hero) card).copy());
-                collection.getHeroHashMap().put(card.getCardID(),(Hero) ((Hero) card).copy());
+                collection.getHeroes().add(((Hero) card).copy());
+                collection.getHeroHashMap().put(card.getCardID(), ((Hero) card).copy());
             }
             if(card instanceof Minion){
-                collection.getMinions().add((Minion) ((Minion) card).copy());
-                collection.getMinionHashMap().put(card.getCardID(),(Minion) ((Minion) card).copy());
+                collection.getMinions().add( ((Minion) card).copy());
+                collection.getMinionHashMap().put(card.getCardID(), ((Minion) card).copy());
             }
             if(card instanceof Spell){
-                collection.getSpells().add((Spell) ((Spell) card).copy());
-                collection.getSpellHashMap().put(card.getCardID(),(Spell) ((Spell) card).copy());
+                collection.getSpells().add( ((Spell) card).copy());
+                collection.getSpellHashMap().put(card.getCardID(), ((Spell) card).copy());
             }
 //            collection.getCardHashMap().put(card.getCardID(),card);
         }
