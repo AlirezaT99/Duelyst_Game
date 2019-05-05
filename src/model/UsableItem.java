@@ -10,8 +10,12 @@ public class UsableItem extends InfluentialItem {
 
     @Override
     public UsableItem copy(){
-        UsableItem item;
-        item = (UsableItem) super.copy();
+        UsableItem item = new UsableItem();
+        item.name = name;
+        item.description = description;
+        item.itemID = itemID;
+        item.dyingWishImpact = dyingWishImpact == null ? null: dyingWishImpact.copy();
+        item.summonImpact = summonImpact == null ? null : summonImpact.copy();
         item.primaryImpact = primaryImpact.copy();
         item.secondaryImpact = secondaryImpact.copy();
         item.cost = cost;

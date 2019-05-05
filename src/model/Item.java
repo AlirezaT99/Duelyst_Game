@@ -11,11 +11,6 @@ public class Item {
 
     public Item copy(){
         Item item = new Item();
-        item.name = name;
-        item.description = description;
-        item.itemID = itemID;
-        item.dyingWishImpact = dyingWishImpact.copy();
-        item.summonImpact = summonImpact.copy();
         return item;
     }
 

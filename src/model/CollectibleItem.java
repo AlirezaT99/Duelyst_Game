@@ -8,15 +8,19 @@ public class CollectibleItem extends InfluentialItem {
     private Match match;
     private Player player;
 
-   public CollectibleItem copy(){
-        CollectibleItem collectibleItem;
-        collectibleItem = (CollectibleItem) super.copy();
-        collectibleItem.cell = cell;
-        collectibleItem.match = match;
-        collectibleItem.player = player;
-        collectibleItem.primaryImpact = primaryImpact.copy();
-        collectibleItem.secondaryImpact = secondaryImpact.copy();
-        return collectibleItem;
+    public CollectibleItem copy() {
+        CollectibleItem item = new CollectibleItem();
+        item.cell = cell;
+        item.name = name;
+        item.itemID = itemID;
+        item.dyingWishImpact = dyingWishImpact == null ? null : dyingWishImpact.copy();
+        item.match = match;
+        item.player = player;
+        item.primaryImpact = primaryImpact.copy();
+        item.description = description;
+        item.summonImpact = summonImpact == null ? null : summonImpact.copy();
+        item.secondaryImpact = secondaryImpact.copy();
+        return item;
     }
 
     //getters
@@ -48,7 +52,9 @@ public class CollectibleItem extends InfluentialItem {
         this.player = player;
     }
 
-    public static void addToCollectibleItems(CollectibleItem collectibleItem){ collectibleItems.add(collectibleItem);}
+    public static void addToCollectibleItems(CollectibleItem collectibleItem) {
+        collectibleItems.add(collectibleItem);
+    }
 
     //setters
 }
