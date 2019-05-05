@@ -5,7 +5,7 @@ import java.util.ArrayList;
 // 10.(0,1)fromWhichTeamAssigned{player1 , player2} |11.isAssignedOnWhichTeam(0,1){player1,player2}
 // 12.deactivatedForThisTurn(0,1) |13.theWayItIsGonnaBeAssigned(0-3){spellWay,attack,defend,don't care}
 // 16.appliedToOnWhichState(state is for card that have isPositiveImpact)(0-3){none,defend,attack}
-class Impact {
+public class Impact {
     private int impactId = 1;
     private ArrayList<Cell> impactArea;
     private Match match;
@@ -596,6 +596,10 @@ class Impact {
 
     boolean doesHaveAntiNegativeImpact() {
         return doesHaveAntiNegativeImpact;
+    }
+
+    public boolean isSelectedCellImportant(){
+        return selectedCellImportant;
     }
 
     Impact copy() {

@@ -173,6 +173,8 @@ public class BattleMenuProcess {
     }
 
     private int insertCard(String[] command) {
+        for (String str : command)
+            System.out.println(str);
         int x = Integer.parseInt(command[command.length - 2]),
                 y = Integer.parseInt(command[command.length - 1]);
         String cardName = "";
@@ -262,20 +264,30 @@ public class BattleMenuProcess {
     }
 
     private boolean isCoordinationValidToInsert(int x, int y) {
-        ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
-        ArrayList<Cell> wantedCells = new ArrayList<>();
-        for (Cell cell : soldiersCells)
-            wantedCells.addAll(cell.getAdjacentCells());
-        //
-        ArrayList<Cell> toRemove = new ArrayList<>();
-        for (Cell cell : wantedCells)
-            if (!cell.isCellFree())
-                toRemove.add(cell);
-        wantedCells.removeAll(toRemove);
-        //
-        for (Cell cell : wantedCells)
-            if (cell.getCellCoordination().equals(new Coordination(x, y)))
-                return true;
+        Card card = match.currentTurnPlayer().getHand().getSelectedCard();
+        if(card instanceof Spell){
+            Spell spell = (Spell) card;
+            if(spell.getPrimaryImpact().isSelectedCellImportant()){
+
+            }else return true;
+        }
+        else {
+            ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
+            ArrayList<Cell> wantedCells = new ArrayList<>();
+            for (Cell cell : soldiersCells)
+                wantedCells.addAll(cell.getAdjacentCells());
+            //
+            ArrayList<Cell> toRemove = new ArrayList<>();
+            for (Cell cell : wantedCells)
+                if (!cell.isCellFree())
+                    toRemove.add(cell);
+            wantedCells.removeAll(toRemove);
+            //
+            for (Cell cell : wantedCells)
+                if (cell.getCellCoordination().equals(new Coordination(x, y)))
+                    return true;
+            return false;
+        }
         return false;
     }
 
