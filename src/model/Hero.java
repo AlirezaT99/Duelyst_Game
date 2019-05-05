@@ -18,7 +18,9 @@ public class Hero extends MovableCard {
     }
 
     public Hero copy() {
-        return new Hero(this.name, this.getHealth(), this.getDamage(), this.heroSpell == null ? null : this.heroSpell.copy(), this.spellCost, this.spellCoolDown);
+        Hero hero =  new Hero(this.name, this.getHealth(), this.getDamage(), this.heroSpell == null ? null : this.heroSpell.copy(), this.spellCost, this.spellCoolDown);
+        hero.setCardCollectionID(this.collectionID);
+        return hero;
     }
 
     public void attack(MovableCard opponent) {

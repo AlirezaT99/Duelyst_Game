@@ -84,6 +84,18 @@ public class Deck {
         //  cardsHashMap.put(card.name,card);
     }
 
+    public Card findCardByCollectionID(String id){
+        if (hero!=null && hero.getCollectionID().equals(id))
+            return hero;
+        for (Spell spell : spells)
+            if (spell.getCollectionID().equals(id))
+                return spell;
+        for (Minion minion : minions){
+            System.out.println(minion.getCollectionID());
+            if (minion.getCollectionID().equals(id)){
+                return minion;}}
+        return null;
+    }
     public Card findCardByName(String name) {
         if (hero.getName().equals(name))
             return hero;

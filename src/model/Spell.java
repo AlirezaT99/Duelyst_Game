@@ -59,6 +59,7 @@ public class Spell extends Card {
         setCardfieldsForCopy(spell);
         spell.primaryImpact = primaryImpact == null? null :primaryImpact.copy();
         spell.secondaryImpact =secondaryImpact  == null? null : secondaryImpact.copy();
+        spell.collectionID = this.collectionID;
         return spell;
     }
 

@@ -21,6 +21,7 @@ public class UsableItem extends InfluentialItem {
         item.cost = cost;
         item.deck = deck == null ?null : deck.copy();
         item.match = match;
+        item.collectionID = this.collectionID;
         return item;
     }
 
