@@ -16,8 +16,8 @@ public class UsableItem extends InfluentialItem {
         item.itemID = itemID;
         item.dyingWishImpact = dyingWishImpact == null ? null: dyingWishImpact.copy();
         item.summonImpact = summonImpact == null ? null : summonImpact.copy();
-        item.primaryImpact = primaryImpact.copy();
-        item.secondaryImpact = secondaryImpact.copy();
+        item.primaryImpact = primaryImpact == null ? null : primaryImpact.copy();
+        item.secondaryImpact = secondaryImpact == null ? null : secondaryImpact.copy();
         item.cost = cost;
         item.deck = deck.copy();
         item.match = match;

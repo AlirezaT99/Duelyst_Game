@@ -155,9 +155,9 @@ public class CollectionMenuProcess {
                 && account.getCollection().findCardByCollectionID(idStr) == null)
             return 3;
         if (deck.getItemsHashMap().containsKey(idStr) ||
-                deck.findCardByID(idStr)!=null)
+                deck.findCardByID(idStr) != null)
             return 4;
-        if ((deck.getMinions().size()+deck.getSpells().size()) == Deck.MAX_CARD_NUMBER
+        if ((deck.getMinions().size() + deck.getSpells().size()) == Deck.MAX_CARD_NUMBER
                 && !account.getCollection().getItemsHashMap().containsKey(idStr))
             if (!(account.getCollection().findCardByCollectionID(idStr) instanceof Hero))
                 return 5;
@@ -211,20 +211,20 @@ public class CollectionMenuProcess {
         if (deck.findCardByID(idStr) == null
                 && !deck.getItemsHashMap().containsKey(idStr))
             return 3;
-        if (account.getCollection().findCardByID(idStr) instanceof Hero
+        if (account.getCollection().findCardByCollectionID(idStr) instanceof Hero
                 && deck.getHero() != null
                 && deck.getHero().getCardID().equals(idStr)) {
             deck.setHero(null);
             return 0;
         }
-        if (account.getCollection().findCardByID(idStr) instanceof Spell
-                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName())!=null) {
-            deck.getSpells().remove(account.getCollection().findCardByID(idStr));
+        if (account.getCollection().findCardByCollectionID(idStr) instanceof Spell
+                && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getName()) != null) {
+            deck.getSpells().remove(account.getCollection().findCardByCollectionID(idStr));
             return 0;
         }
-        if (account.getCollection().findCardByID(idStr) instanceof Minion
-                && deck.findCardByID(account.getCollection().findCardByID(idStr).getName())!=null) {
-            deck.getMinions().remove(account.getCollection().findCardByID(idStr));
+        if (account.getCollection().findCardByCollectionID(idStr) instanceof Minion
+                && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getName()) != null) {
+            deck.getMinions().remove(account.getCollection().findCardByCollectionID(idStr));
             return 0;
         }
         account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().remove(idStr);
@@ -255,8 +255,8 @@ public class CollectionMenuProcess {
     }
 
     private int showDeck(String deckName) {
-        if(account.getCollection().getDeckHashMap().get(deckName)!=null)
-        CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show(false));
+        if (account.getCollection().getDeckHashMap().get(deckName) != null)
+            CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show(false));
         else
             return 8;
         return 0;
@@ -283,6 +283,27 @@ public class CollectionMenuProcess {
         return 0;
     }
 
+    public static String createCardID(String playerName, Deck deck, Card card) {
+        if (card instanceof Hero)
+
+            return playerName + "_" + nameCreator(card.getName()) + "_1";
+        if (card instanceof Spell) {
+            int idx = 1;
+            for (int i = 0; i < deck.getSpells().size(); i++)
+                if (deck.getSpells().get(i).getName().equals(card.getName()))
+                    idx++;
+            return playerName + "_" + nameCreator(card.getName()) + "_" + idx;
+        }
+        if (card instanceof Minion) {
+            int idx = 1;
+            for (int i = 0; i < deck.getMinions().size(); i++)
+                if (deck.getMinions().get(i).getName().equals(card.getName()))
+                    idx++;
+            return playerName + "_" + nameCreator(card.getName()) + "_" + idx;
+        }
+        return "";
+    }
+
     public static int search(String name, Account account) {
         if (account.getCollection().findItemByName(name) == null && account.getCollection().findCardByName(name) == null)
             return 10;
@@ -305,6 +326,15 @@ public class CollectionMenuProcess {
             CollectionMenu.showMessage(result);
         }
         return 0;
+    }
+
+    public static String nameCreator(String name) {
+        String[] names = name.split("[ ]");
+        String result = "";
+        for (int i = 0; i < names.length; i++) {
+            result += names[i];
+        }
+        return result;
     }
 
     public static int findPatternIndex(String command) {
