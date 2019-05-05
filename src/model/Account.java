@@ -39,7 +39,7 @@ public class Account {
                 Hero hero = (Hero) ((Hero) card).copy();
                 hero.setCardCollectionID(createCollectionID());
                 collection.getHeroes().add(hero);
-                collection.getHeroHashMap().put(hero.getCollectionID(),hero);
+                collection.getHeroHashMap().put(hero.getCollectionID(), hero);
             }
             if (card instanceof Minion) {
                 Minion minion = (Minion) ((Minion) card).copy();
@@ -48,7 +48,7 @@ public class Account {
                 collection.getMinionHashMap().put(minion.getCollectionID(), minion);
             }
             if (card instanceof Spell) {
-                Spell spell = (Spell)((Spell) card).copy();
+                Spell spell = (Spell) ((Spell) card).copy();
                 spell.setCardCollectionID(createCollectionID());
                 collection.getSpells().add(spell);
                 collection.getSpellHashMap().put(spell.getCollectionID(), spell);
@@ -68,12 +68,27 @@ public class Account {
         if (item != null)
             collection.getItems().remove(item);
         if (card != null) {
-            if (card instanceof Hero)
-                collection.getHeroes().remove((Hero) card);
-            if (card instanceof Minion)
-                collection.getMinions().remove((Minion) card);
-            if (card instanceof Spell)
-                collection.getSpells().remove((Spell) card);
+            if (card instanceof Hero) {
+                for (int i = 0; i < collection.getHeroes().size(); i++)
+                    if (collection.getHeroes().get(i).getName().equals(card.getName()) &&
+                            collection.getHeroes().get(i).collectionID.equals(card.collectionID))
+                        collection.getHeroes().remove(collection.getHeroes().get(i));
+                collection.getHeroHashMap().remove(collection.getHeroHashMap().get(card.getCollectionID()));
+            }
+            if (card instanceof Minion) {
+                for (int i = 0; i < collection.getMinions().size(); i++)
+                    if (collection.getMinions().get(i).getName().equals(card.getName()) &&
+                            collection.getMinions().get(i).collectionID.equals(card.collectionID))
+                        collection.getMinions().remove(collection.getMinions().get(i));
+                collection.getMinionHashMap().remove(collection.getMinionHashMap().get(card.getCollectionID()));
+            }
+            if (card instanceof Spell) {
+                for (int i = 0; i < collection.getSpells().size(); i++)
+                    if (collection.getSpells().get(i).getName().equals(card.getName()) &&
+                            collection.getSpells().get(i).collectionID.equals(card.collectionID))
+                        collection.getSpells().remove(collection.getSpells().get(i));
+                collection.getSpellHashMap().remove(collection.getSpellHashMap().get(card.getCollectionID()));
+            }
         }
     }
 

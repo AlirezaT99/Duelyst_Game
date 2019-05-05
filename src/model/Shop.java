@@ -42,18 +42,18 @@ public class Shop {
             if(collection.findItemByName(name)!=null){
                 for(int i = 0; i< collection.getItems().size(); i++)
                     if( collection.getItems().get(i).getName().equals(name))
-                        result+=(collection.getItems().get(i).getItemID() + "\n");
+                        result+=(collection.getItems().get(i).getCollectionID() + "\n");
                 return result;}
             else{
                 for(int i = 0; i< collection.getMinions().size(); i++)
                     if( collection.getMinions().get(i).getName().equals(name))
-                        result+=(collection.getMinions().get(i).getCardID() + "\n");
+                        result+=(collection.getMinions().get(i).getCollectionID() + "\n");
                 for(int i = 0; i< collection.getSpells().size(); i++)
                     if( collection.getSpells().get(i).getName().equals(name))
-                        result+=(collection.getSpells().get(i).getCardID() + "\n");
+                        result+=(collection.getSpells().get(i).getCollectionID() + "\n");
                 for(int i = 0; i< collection.getHeroes().size(); i++)
                     if( collection.getHeroes().get(i).getName().equals(name))
-                        result+=(collection.getHeroes().get(i).getCardID() + "\n");
+                        result+=(collection.getHeroes().get(i).getCollectionID() + "\n");
                 return result;}
         }
     }
@@ -99,9 +99,9 @@ public class Shop {
 
     // sell
 
-    public int sell(Account account, String name) {
-        UsableItem item = account.getCollection().findItemByCollectionID(name);
-        Card card = account.getCollection().findCardByCollectionID(name);
+    public int sell(Account account, String id) {
+        UsableItem item = account.getCollection().findItemByCollectionID(id);
+        Card card = account.getCollection().findCardByCollectionID(id);
         int cost;
         if (item == null && card == null) {
             //printMessage("Item/Card not found");
@@ -110,8 +110,9 @@ public class Shop {
         // printMessage("Sell was successful");
         if (item != null) {
             cost = item.getCost();
-        } else
+        } else {
             cost = card.getCost();
+        }
         account.sell(cost, item, card);
         return 0;
     }
