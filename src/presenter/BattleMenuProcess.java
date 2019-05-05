@@ -28,7 +28,7 @@ public class BattleMenuProcess {
 //        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
 //        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
         commandPatterns.add(Pattern.compile("[sS]how hand"));
-        commandPatterns.add(Pattern.compile("[iI]nsert \\w+ in (\\d, \\d)"));
+        commandPatterns.add(Pattern.compile("[iI]nsert [a-zA-Z0-9._ ]+ in (\\d,[ ]*\\d)"));
         commandPatterns.add(Pattern.compile("[eE]nd turn"));
         commandPatterns.add(Pattern.compile("[sS]how collectibles"));
         commandPatterns.add(Pattern.compile("[sS]elect [a-zA-Z0-9._]+"));
@@ -85,7 +85,7 @@ public class BattleMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return insertCard(commandParts[1], commandParts[3], commandParts[4]);
+                    return insertCard(commandParts);
                 }
             },
             this::endTurn,
@@ -172,9 +172,13 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int insertCard(String cardName, String x_str, String y_str) {
-        int x = Integer.parseInt(x_str),
-                y = Integer.parseInt(y_str);
+    private int insertCard(String[] command) {
+        int x = Integer.parseInt(command[command.length - 2]),
+                y = Integer.parseInt(command[command.length - 1]);
+        String cardName = "";
+        for (int i = 1; !command[i].equals("in"); i++)
+            cardName = cardName.concat(command[i] + " ");
+        cardName = cardName.trim();
         if (coordinationInvalid(x, y))
             return 7;
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) != null)
