@@ -35,9 +35,9 @@ public class SinglePlayerMenu {
             if (commandType == -1)
                 showMessage("invalid input");
             else if (singlePlayerMenuProcess.DoCommands[commandType].doIt() == 4) {
-                //todo : show heroes to play against
-                //todo : choose the hero
                 showHeroes();
+                command = scanner.nextLine();
+              //  if ()
                 //show decks
                 showList(account.getCollection().getDeckHashMap());
 
