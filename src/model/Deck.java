@@ -6,10 +6,10 @@ import java.util.HashMap;
 public class Deck {
     private String name;
     private ArrayList<UsableItem> items;
+    private Hero hero = null;
     private ArrayList<Minion> minions;
     private ArrayList<Spell> spells;
     private HashMap<String, UsableItem> itemsHashMap;
-    private Hero hero = null;
     public static final int MAX_CARD_NUMBER = 20;
     public static final int MAX_ITEM_NUMBER = 3;
 
@@ -20,16 +20,16 @@ public class Deck {
         items = new ArrayList<>();
     }
 
-    Deck copy(){
+    Deck copy() {
         Deck deck = new Deck(this.name);
-        for (UsableItem item: this.items) {
+        for (UsableItem item : this.items) {
             deck.items.add(item.copy());
-            deck.itemsHashMap.put(item.name,item.copy());
+            deck.itemsHashMap.put(item.name, item.copy());
         }
-        for (Minion minion:minions ) {
+        for (Minion minion : minions) {
             deck.minions.add(minion.copy());
         }
-        for (Spell spell: spells   ) {
+        for (Spell spell : spells) {
             deck.spells.add(spell);
         }
         deck.hero = hero == null ? null : hero.copy();
@@ -56,20 +56,24 @@ public class Deck {
     public Deck(String name) {
         this.name = name;
     }
+
     public int addItemToDeck(UsableItem item) { // only used for computer Decks
-            this.getItemsHashMap()
-                    .put(item.getItemID(), (UsableItem) item);
-            this.getItems().add((UsableItem) item);
-            return 0;
+        this.getItemsHashMap()
+                .put(item.getItemID(), (UsableItem) item);
+        this.getItems().add((UsableItem) item);
+        return 0;
     }
+
     public int addSpellToDeck(Spell spell) { // only used for computer Decks
         this.getSpells().add(spell);
         return 0;
     }
+
     public int addMinionToDeck(Minion minion) { // only used for computer Decks
         this.getMinions().add(minion);
         return 0;
     }
+
     void putTheCardBackInTheQueue(Card card) {
         if (card instanceof Spell)
             spells.add((Spell) card);
@@ -78,6 +82,18 @@ public class Deck {
         if (card instanceof Hero)
             setHero((Hero) card);
         //  cardsHashMap.put(card.name,card);
+    }
+
+    public Card findCardByName(String name) {
+        if (hero.getName().equals(name))
+            return hero;
+        for (Spell spell : spells)
+            if (spell.getName().equals(name))
+                return spell;
+        for (Minion minion : minions)
+            if (minion.getName().equals(name))
+                return minion;
+        return null;
     }
 
     Card getLastCard() {

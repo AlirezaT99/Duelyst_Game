@@ -111,15 +111,15 @@ public class Collection {
     }
 
     public Card findCardByName(String name) {
-        for (int i = 0; i < heroes.size(); i++)
-            if (heroes.get(i).getName().equals(name))
-                return heroes.get(i);
-        for (int i = 0; i < spells.size(); i++)
-            if (spells.get(i).getName().equals(name))
-                return spells.get(i);
-        for (int i = 0; i < minions.size(); i++)
-            if (minions.get(i).getName().equals(name))
-                return minions.get(i);
+        for (Hero hero : heroes)
+            if (hero.getName().equals(name))
+                return hero;
+        for (Spell spell : spells)
+            if (spell.getName().equals(name))
+                return spell;
+        for (Minion minion : minions)
+            if (minion.getName().equals(name))
+                return minion;
         return null;
     }
 

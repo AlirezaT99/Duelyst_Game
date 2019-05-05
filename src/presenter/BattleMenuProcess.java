@@ -145,19 +145,29 @@ public class BattleMenuProcess {
     }
 
     private int selectCard(String cardID) {
-        if (findCard(cardID) == null)
+        if (findCard(cardID) == null || !(findCard(cardID) instanceof MovableCard)) // what about spell ??
             return 2;
+        match.currentTurnPlayer().getHand().setSelectedCard(findCard(cardID));
         return 5;
     }
 
     public static void showGraveYardCards() {
-
+        if (match.currentTurnPlayer().getUserName().equals(match.getPlayer1().getUserName())) {
+            for (Card card : match.player1_graveyard)
+                showCardInfo(card.getCardID());
+        } else
+            for (Card card : match.player2_graveyard)
+                showCardInfo(card.getCardID());
     }
 
     public static int showGraveYardCardInfo(String cardID) {
         for (Card card : match.player1_graveyard)
             if (cardID.equals(card.getCardID()))
                 if (match.getPlayer1().equals(match.currentTurnPlayer()))
+                    return showCardInfo(cardID);
+        for (Card card : match.player2_graveyard)
+            if (cardID.equals(card.getCardID()))
+                if (match.getPlayer2().equals(match.currentTurnPlayer()))
                     return showCardInfo(cardID);
         return -1;
     }
@@ -170,6 +180,7 @@ public class BattleMenuProcess {
     }
 
     private int battleHelp() {
+        //todo: show possible choices
         return 0;
     }
 
@@ -195,16 +206,25 @@ public class BattleMenuProcess {
     private int insertCard(String cardName, String x_str, String y_str) {
         int x = Integer.parseInt(x_str),
                 y = Integer.parseInt(y_str);
-        if (!coordinationValid(x, y))
+        if (coordinationInvalid(x, y))
             return 7;
+        if (match.currentTurnPlayer().getDeck().findCardByName(cardName)
+                .getManaCost() > match.currentTurnPlayer().getMana())
+            return 11;
+
+
+        BattleMenu.showMessage(cardName + " with "
+                + match.currentTurnPlayer().getDeck().findCardByName(cardName).getCardID()
+                + " inserted to (" + x + "," + y + ")");
         return 0;
     }
 
     public static int useSpecialPower(String x_str, String y_str) {
         int x = Integer.parseInt(x_str),
                 y = Integer.parseInt(y_str);
-        if (!coordinationValid(x, y))
+        if (coordinationInvalid(x, y))
             return 7;
+
         return 0;
     }
 
@@ -240,8 +260,8 @@ public class BattleMenuProcess {
     public static int moveTo(String card_x, String card_y) {
         int x = Integer.parseInt(card_x),
                 y = Integer.parseInt(card_y);
-        if (!coordinationValid(x, y))
-            return 1;
+        if (coordinationInvalid(x, y))
+            return 7;
         //
         int moveValid = 0;
         if (match.currentTurnPlayer().getHand().getSelectedCard() instanceof MovableCard)
@@ -350,8 +370,8 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private static boolean coordinationValid(int x, int y) {
-        return x <= 5 && y <= 9 && x >= 1 && y >= 1;
+    private static boolean coordinationInvalid(int x, int y) {
+        return x > 5 || y > 9 || x < 1 || y < 1;
     }
 
     //setters

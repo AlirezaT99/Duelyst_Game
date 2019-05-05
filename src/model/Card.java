@@ -15,7 +15,7 @@ public abstract class Card {
         card.cost = cost;
         card.match = match;
         card.player = player;
-        card.cardID = cardID+"*";
+        card.cardID = cardID + "*";
         card.description = description;
         card.manaCost = manaCost;
         card.name = name;
@@ -66,7 +66,9 @@ public abstract class Card {
         return description;
     }
 
-    public String getCollectionID() {return  collectionID;}
+    public String getCollectionID() {
+        return collectionID;
+    }
     //getters
 
     //setters
@@ -75,7 +77,7 @@ public abstract class Card {
         this.collectionID = cardID;
     }
 
-    public void setCardID(String cardID){
+    public void setCardID(String cardID) {
         this.cardID = cardID;
     }
 

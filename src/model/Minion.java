@@ -60,7 +60,6 @@ public class Minion extends MovableCard {
         }
     }
 
-
     @Override
     public String toString(boolean showCost) {
         String classType = getClassType(this);

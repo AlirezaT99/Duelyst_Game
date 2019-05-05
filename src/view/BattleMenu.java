@@ -153,6 +153,15 @@ public class BattleMenu {
             case 7:
                 showMessage("invalid coordination");
                 break;
+            case 8:
+                showMessage("Stunned. Can't Move");
+                break;
+            case 9:
+                showMessage("invalid card name");
+                break;
+            case 11:
+                showMessage("You don't have enough mana");
+                break;
         }
     }
 
