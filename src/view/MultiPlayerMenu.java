@@ -87,9 +87,9 @@ public class MultiPlayerMenu {
     }
 
     private int customGameMenu(String command) {
-        if (command.equals("help")) return 1;
-        else if (command.equals("exit")) return 2;
-        else if (command.toLowerCase().matches("start multiplayer game [\\d][ ]*[\\d]*")) return 3;
+        if (command.equals("[hH]elp")) return 1;
+        else if (command.equals("[eE]xit")) return 2;
+        else if (command.toLowerCase().matches("[sS]tart multi[pP]layer game [\\d][ \\d]*")) return 3;
         else return -1;
     }
 

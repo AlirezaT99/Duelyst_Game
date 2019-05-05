@@ -17,31 +17,31 @@ public class BattleMenuProcess {
         this.battleMenu = battleMenu;
     }
 
-    static { // card id format ??
-        commandPatterns.add(Pattern.compile("Game Info"));
-        commandPatterns.add(Pattern.compile("Show my minions"));
-        commandPatterns.add(Pattern.compile("Show opponent minions"));
-        commandPatterns.add(Pattern.compile("Show card info [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
+    static {
+        commandPatterns.add(Pattern.compile("[gG]ame Info"));
+        commandPatterns.add(Pattern.compile("[sS]how my minions"));
+        commandPatterns.add(Pattern.compile("[sS]how opponent minions"));
+        commandPatterns.add(Pattern.compile("[sS]how card info [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("[sS]elect [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
 //        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
 //        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
-        commandPatterns.add(Pattern.compile("Show hand"));
-        commandPatterns.add(Pattern.compile("Insert \\w+ in (\\d, \\d)"));
-        commandPatterns.add(Pattern.compile("End turn"));
-        commandPatterns.add(Pattern.compile("Show collectibles"));
-        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("[sS]how hand"));
+        commandPatterns.add(Pattern.compile("[iI]nsert \\w+ in (\\d, \\d)"));
+        commandPatterns.add(Pattern.compile("[eE]nd turn"));
+        commandPatterns.add(Pattern.compile("[sS]how collectibles"));
+        commandPatterns.add(Pattern.compile("[sS]elect [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Use [location x, y]")); // regex ?
-        commandPatterns.add(Pattern.compile("Show next card"));
-        commandPatterns.add(Pattern.compile("Enter graveyard"));
+        commandPatterns.add(Pattern.compile("[sS]how next card"));
+        commandPatterns.add(Pattern.compile("[eE]nter graveyard"));
 //        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Show cards"));
-        commandPatterns.add(Pattern.compile("Help"));
-        commandPatterns.add(Pattern.compile("End Game"));
-        commandPatterns.add(Pattern.compile("Exit"));
-        commandPatterns.add(Pattern.compile("Show menu"));
+        commandPatterns.add(Pattern.compile("[hH]elp"));
+        commandPatterns.add(Pattern.compile("[eE]nd Game"));
+        commandPatterns.add(Pattern.compile("[eE]xit"));
+        commandPatterns.add(Pattern.compile("[sS]how menu"));
     }
 
     public interface DoCommand {
