@@ -44,6 +44,7 @@ public class MultiPlayerMenu {
                         showMessage("username is invalid");
                         break;
                     case 3:
+                        printGameModes();
                         inner_Loop:
                         while (true) {
                             command = scanner.nextLine();
@@ -56,10 +57,30 @@ public class MultiPlayerMenu {
                                 case 3:
                                     MultiPlayerMenuProcess.customGame(command);
                                     break;
-                                default:
+                                case -1:
                                     showMessage("invalid input");
                             }
                         }
+//                    case 3:
+//                        inner_Loop:
+//                        while (true) {
+//                            command = scanner.nextLine();
+//                            switch (customGameMenu(command)) {
+//                                case 1:
+//                                    customGameHelp();
+//                                    break;
+//                                case 2:
+//                                    break inner_Loop;
+//                                case 3:
+//                                    MultiPlayerMenuProcess.customGame(command);
+//                                    break;
+//                                default:
+//                                    showMessage("invalid input");
+//                            }
+//                        }
+//                        break;
+                    case 4:
+
                 }
         }
         scanner.close();
@@ -68,16 +89,18 @@ public class MultiPlayerMenu {
     private int customGameMenu(String command) {
         if (command.equals("help")) return 1;
         else if (command.equals("exit")) return 2;
-        else if (command.matches("Start multiplayer game [a-zA-Z0-9._]+ \\d \\d+]")) return 3;
+        else if (command.toLowerCase().matches("start multiplayer game [\\d][ ]*[\\d]*")) return 3;
         else return -1;
     }
 
     private void customGameHelp() {
-        showMessage("Start multiPlayer game [deck name] [mode] [number of flags]->(only for the 3rd mode)");
+        showMessage("Start multiPlayer game [mode] [number of flags]->(only for the 3rd mode)");
+        showMessage("Exit");
+        showMessage("Help");
     }
 
     private void printUsers() {
-        showMessage("Choose a user to to start the match:");
+        showMessage("Choose a user to to start the match with :");
         for (Account account : users)
             if (!account.getUserName().equals(this.account.getUserName()))
                 showMessage(" - " + account.getUserName());
@@ -85,7 +108,7 @@ public class MultiPlayerMenu {
 
     public static int help() {
         showMessage("Select user [user name]");
-        showMessage("Start multiPlayer game [mode] [number of flags]->(for the 3rd mode only)");
+        //showMessage("Start multiPlayer game [mode] [number of flags]->(for the 3rd mode only)");
         showMessage("Exit");
         showMessage("Help");
         return 0;
@@ -93,6 +116,12 @@ public class MultiPlayerMenu {
 
     public static void showMessage(String message) {
         System.out.println(message);
+    }
+
+    public static void printGameModes(){
+        showMessage("1. Heroes fight");
+        showMessage("2. Capture the flag");
+        showMessage("3. Capture most flags");
     }
 
     //getters
