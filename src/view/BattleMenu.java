@@ -201,7 +201,6 @@ public class BattleMenu {
         showMessage("Enter graveyard");
         showMessage("Show info [card id]");
         showMessage("Show cards");
-        showMessage("Help");
         showMessage("End Game");
         showMessage("Help");
         showMessage("Show menu");

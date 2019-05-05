@@ -5,13 +5,7 @@ import com.google.gson.*;
 import java.io.FileOutputStream;
 import java.io.*;
 import java.io.OutputStreamWriter;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws IOException {
