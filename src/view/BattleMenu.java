@@ -21,6 +21,7 @@ public class BattleMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        battleSetup();
         while (true) {
             if (!hasRun) {
                 showMenu();
@@ -97,6 +98,11 @@ public class BattleMenu {
             }
         }
         scanner.close();
+    }
+
+    private void battleSetup() {
+        BattleMenuProcess.getMatch().getPlayer1().fillHand();
+        BattleMenuProcess.getMatch().getPlayer2().fillHand();
     }
 
     private void selectCardHelp() {

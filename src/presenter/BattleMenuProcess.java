@@ -373,6 +373,14 @@ public class BattleMenuProcess {
         return x > 5 || y > 9 || x < 1 || y < 1;
     }
 
+    //getters
+
+    public static Match getMatch() {
+        return match;
+    }
+
+    //getters
+
     //setters
     public static void setMatch(Match match) {
         BattleMenuProcess.match = match;
