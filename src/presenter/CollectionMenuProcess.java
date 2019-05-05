@@ -116,6 +116,8 @@ public class CollectionMenuProcess {
                     return CollectionMenu.help();
                 }
             },
+
+            //sdfsafsf
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
