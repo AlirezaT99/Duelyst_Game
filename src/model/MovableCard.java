@@ -93,7 +93,6 @@ public abstract class MovableCard extends Card {
         }
         return true;
     }
-//asdjfl;sadkfj
 
 
 
