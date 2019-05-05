@@ -9,24 +9,18 @@ public class UsableItem extends InfluentialItem {
     private Match match;
 
     @Override
-    public UsableItem copy() {
+    public UsableItem copy(){
         UsableItem item = new UsableItem();
         item.name = name;
         item.description = description;
         item.itemID = itemID;
-        if (dyingWishImpact != null)
-            item.dyingWishImpact = dyingWishImpact.copy();
-        if (summonImpact != null)
-            item.summonImpact = summonImpact.copy();
-        if (primaryImpact != null)
-            item.primaryImpact = primaryImpact.copy();
-        if (secondaryImpact != null)
-            item.secondaryImpact = secondaryImpact.copy();
+        item.dyingWishImpact = dyingWishImpact == null ? null: dyingWishImpact.copy();
+        item.summonImpact = summonImpact == null ? null : summonImpact.copy();
+        item.primaryImpact = primaryImpact.copy();
+        item.secondaryImpact = secondaryImpact.copy();
         item.cost = cost;
-        if(deck!=null)
         item.deck = deck.copy();
         item.match = match;
-        item.collectionID = collectionID;
         return item;
     }
 

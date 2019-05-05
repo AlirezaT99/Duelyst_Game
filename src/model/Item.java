@@ -10,7 +10,7 @@ public class Item {
     Impact dyingWishImpact;
     Impact summonImpact;
 
-    public Item copy() {
+    public Item copy(){
         Item item = new Item();
         item.name = name;
         item.description = description;

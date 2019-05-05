@@ -8,19 +8,17 @@ public class CollectibleItem extends InfluentialItem {
     private Match match;
     private Player player;
 
-   public CollectibleItem copy(){
+    public CollectibleItem copy() {
         CollectibleItem item = new CollectibleItem();
-       item.name = name;
-       item.description = description;
-       item.itemID = itemID;
-       if (dyingWishImpact != null)
-           item.dyingWishImpact = dyingWishImpact.copy();
-       if (summonImpact != null)
-           item.summonImpact = summonImpact.copy();
         item.cell = cell;
-       item.match = match;
+        item.name = name;
+        item.itemID = itemID;
+        item.dyingWishImpact = dyingWishImpact == null ? null : dyingWishImpact.copy();
+        item.match = match;
         item.player = player;
         item.primaryImpact = primaryImpact.copy();
+        item.description = description;
+        item.summonImpact = summonImpact == null ? null : summonImpact.copy();
         item.secondaryImpact = secondaryImpact.copy();
         return item;
     }
