@@ -22,7 +22,7 @@ public class MultiPlayerMenuProcess {
 
     static {
         commandPatterns.add(Pattern.compile("select user [a-zA-Z0-9._]+"));
-        commandPatterns.add(Pattern.compile("start multiPlayer game \\d [\\d+]*")); // format of mode ?
+        //commandPatterns.add(Pattern.compile("start multiplayer game \\d[ ]*[\\d+]*")); // format of mode ?
         commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("help"));
     }
@@ -52,12 +52,12 @@ public class MultiPlayerMenuProcess {
 
     public static void customGame(String command) throws IOException {
         String[] commandParts = command.split("\\s+");
-        String deckName = commandParts[2]; // space ke nadare vasatesh?
+     //   String deckName = commandParts[2];
         int mode = Integer.parseInt(commandParts[3]);
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
         Match match = new Match(false, mode);
-        match.setup(account, opponent, deckName, numberOfFlags);
+        match.setup(account, opponent, account.getCollection().getSelectedDeck().getName(), numberOfFlags);
         BattleMenu battleMenu = new BattleMenu(multiPlayerMenu.getBattleInit(), match);
         enterBattleMenu(battleMenu);
     }
@@ -75,7 +75,7 @@ public class MultiPlayerMenuProcess {
                 if (!account.getCollection().validateDeck(account.getCollection().getSelectedDeck()))
                     return 1;
                 opponent = account;
-                return 0;
+                return 3;
             }
         return 2;
     }
