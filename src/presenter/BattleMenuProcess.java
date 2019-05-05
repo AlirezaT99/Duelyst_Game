@@ -173,8 +173,7 @@ public class BattleMenuProcess {
     }
 
     private int insertCard(String[] command) {
-        for (String str : command)
-            System.out.println(str);
+        command = cleanupArray(command);
         int x = Integer.parseInt(command[command.length - 2]),
                 y = Integer.parseInt(command[command.length - 1]);
         String cardName = "";
@@ -203,6 +202,17 @@ public class BattleMenuProcess {
                 + match.currentTurnPlayer().getDeck().findCardByName(cardName).getCardID()
                 + " inserted to (" + x + "," + y + ")");
         return 0;
+    }
+
+    private String[] cleanupArray(String[] command) {
+        ArrayList<String> output = new ArrayList<>();
+        for (int i = 0; i < command.length; i++)
+            if (!command[i].equals(""))
+                output.add(command[i]);
+        String[] outputArr = new String[output.size()];
+        for (int i = 0; i < output.size(); i++)
+            outputArr[i] = output.get(i);
+        return outputArr;
     }
 
     public static int useSpecialPower(String x_str, String y_str) {
