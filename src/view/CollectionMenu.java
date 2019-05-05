@@ -22,6 +22,7 @@ public class CollectionMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        help();
         while (true) {
             if (!isInCollectionMenu)
                 break;

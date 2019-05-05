@@ -131,7 +131,6 @@ public class CollectionMenuProcess {
 
     private int exit() throws IOException {
         mainMenu.setIsInMainMenu(true);
-        mainMenu.setHasRun(false);
         collectionMenu.setIsInCollectionMenu(false);
         mainMenu.run();
         return 0;

@@ -18,6 +18,7 @@ public class StoryMenu {
     }
 
     public void run() throws IOException {
+        help();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             if (!isInStoryMenu)

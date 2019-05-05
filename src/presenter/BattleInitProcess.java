@@ -64,7 +64,6 @@ public class BattleInitProcess {
 
     public int exit() throws IOException {
         battleInit.setInBattleInit(false);
-        battleInit.getMainMenu().setHasRun(false);
         battleInit.getMainMenu().setIsInMainMenu(true);
         battleInit.getMainMenu().run();
         return 0;

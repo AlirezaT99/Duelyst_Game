@@ -18,6 +18,7 @@ public class LoginMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        help();
         while (true) {
             if (!isInLoginMenu)
                 break;
