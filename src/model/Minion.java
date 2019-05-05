@@ -32,7 +32,7 @@ public class Minion extends MovableCard {
         minion.onTurnImpact = onTurnImpact == null ? null : onTurnImpact.copy();
         minion.onDefendImpact = onDefendImpact == null ? null : onDefendImpact.copy();
         minion.onAttackImpact = onAttackImpact == null ? null : onAttackImpact.copy();
-        this.setCardfieldsForCopy(minion);
+        this.setCardFieldsForCopy(minion);
         return minion;
     }
 

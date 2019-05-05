@@ -56,7 +56,7 @@ public class Spell extends Card {
     public Spell copy(){
         Spell spell = new Spell();
         spell.cell = cell;
-        setCardfieldsForCopy(spell);
+        setCardFieldsForCopy(spell);
         spell.primaryImpact = primaryImpact == null? null :primaryImpact.copy();
         spell.secondaryImpact =secondaryImpact  == null? null : secondaryImpact.copy();
         return spell;

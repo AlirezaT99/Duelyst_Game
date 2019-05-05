@@ -11,7 +11,7 @@ public abstract class Card {
     protected String collectionID = "";
     protected String description = "";
 
-    void setCardfieldsForCopy(Card card) {
+    void setCardFieldsForCopy(Card card) {
         card.cost = cost;
         card.match = match;
         card.player = player;
@@ -21,7 +21,7 @@ public abstract class Card {
         card.name = name;
     }
 
-    boolean isManaSufficient(int playerMana) {
+    public boolean isManaSufficient(int playerMana) {
         return playerMana >= manaCost;
     }
 
