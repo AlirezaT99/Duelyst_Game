@@ -23,8 +23,7 @@ public abstract class MovableCard extends Card {
     protected boolean isComboAttacker;
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
-    private HashMap<String,MovableCard> previousTargets = new HashMap<>();
-
+    private HashMap<String, MovableCard> previousTargets = new HashMap<>();
 
 
     String getClassType(MovableCard movableCard) {
@@ -95,7 +94,6 @@ public abstract class MovableCard extends Card {
     }
 
 
-
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent)) {
             opponent.takeDamage(this.damage);
@@ -120,25 +118,25 @@ public abstract class MovableCard extends Card {
         return true;
     }
 
-    private boolean isComboAttackValid(ArrayList<MovableCard> attackers, MovableCard target){
-        for (MovableCard movableCard: attackers) {
-            if(movableCard == null)
+    private boolean isComboAttackValid(ArrayList<MovableCard> attackers, MovableCard target) {
+        for (MovableCard movableCard : attackers) {
+            if (movableCard == null)
                 return false;
-            if(!movableCard.isComboAttacker)
+            if (!movableCard.isComboAttacker)
                 return false;
-            if(!movableCard.isAttackValid(target))
+            if (!movableCard.isAttackValid(target))
                 return false;
         }
         return true;
     }
 
-    public void comboAttack(ArrayList<MovableCard> attackers, MovableCard target){
-        if(isComboAttackValid(attackers,target)){
+    public void comboAttack(ArrayList<MovableCard> attackers, MovableCard target) {
+        if (isComboAttackValid(attackers, target)) {
             attackers.get(0).attack(target);
             for (int i = 1; i < attackers.size(); i++) {
                 target.health -= attackers.get(i).damage + attackers.get(i).dispelableDamageChange;
-                if(attackers.get(i).onAttackImpact != null)
-                    attackers.get(i).onAttackImpact.doImpact(attackers.get(i).player,target,target.cardCell,attackers.get(i).cardCell);
+                if (attackers.get(i).onAttackImpact != null)
+                    attackers.get(i).onAttackImpact.doImpact(attackers.get(i).player, target, target.cardCell, attackers.get(i).cardCell);
             }
         }
     }
@@ -146,7 +144,7 @@ public abstract class MovableCard extends Card {
 
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact(this.player,this,this.cardCell,this.cardCell);
+            impact.doImpact(this.player, this, this.cardCell, this.cardCell);
             impact.goThroughTime();
 
         }
@@ -217,11 +215,11 @@ public abstract class MovableCard extends Card {
 
     //previous targets manager
 
-    void addToTargetedOnes(MovableCard movableCard){
-        previousTargets.put(movableCard.name,movableCard);
+    void addToTargetedOnes(MovableCard movableCard) {
+        previousTargets.put(movableCard.name, movableCard);
     }
 
-    boolean haveAttackedOnThisBefore(MovableCard movableCard){
+    boolean haveAttackedOnThisBefore(MovableCard movableCard) {
         return previousTargets.containsKey(movableCard.name);
     }
 

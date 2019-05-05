@@ -150,6 +150,9 @@ public class BattleMenu {
             case 6:
                 showMessage("Enemy in the way");
                 break;
+            case 7:
+                showMessage("invalid coordination");
+                break;
         }
     }
 

@@ -188,18 +188,23 @@ public class BattleMenuProcess {
     private int endTurn() {
         match.switchTurn();
         match.currentTurnPlayer().fillHand(); // ?
+        // reset manas
         return 0;
     }
 
     private int insertCard(String cardName, String x_str, String y_str) {
         int x = Integer.parseInt(x_str),
                 y = Integer.parseInt(y_str);
+        if (!coordinationValid(x, y))
+            return 7;
         return 0;
     }
 
     public static int useSpecialPower(String x_str, String y_str) {
         int x = Integer.parseInt(x_str),
                 y = Integer.parseInt(y_str);
+        if (!coordinationValid(x, y))
+            return 7;
         return 0;
     }
 
@@ -235,7 +240,7 @@ public class BattleMenuProcess {
     public static int moveTo(String card_x, String card_y) {
         int x = Integer.parseInt(card_x),
                 y = Integer.parseInt(card_y);
-        if (x > 5 || y > 9 || x < 1 || y < 1)
+        if (!coordinationValid(x, y))
             return 1;
         //
         int moveValid = 0;
@@ -343,6 +348,10 @@ public class BattleMenuProcess {
         battleMenu.getBattleInit().setInBattleInit(true);
         battleMenu.getBattleInit().run();
         return 0;
+    }
+
+    private static boolean coordinationValid(int x, int y) {
+        return x <= 5 && y <= 9 && x >= 1 && y >= 1;
     }
 
     //setters
