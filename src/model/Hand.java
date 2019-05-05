@@ -59,7 +59,7 @@ public class Hand {
     public String showHand() {
         String output = "";
         for (Card card : cards) {
-            output = output.concat(card.toString(false));
+            output = output.concat(card.toString(false) + "\n");
         }
         return output;
     }

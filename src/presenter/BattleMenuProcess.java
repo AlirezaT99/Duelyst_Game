@@ -332,8 +332,8 @@ public class BattleMenuProcess {
 
     private int showSoldiers(Player player) {
         showMinion(player.getDeck().getHero());
-        for (Minion minion : player.getDeck().getMinions())
-            showMinion(minion);
+        for (Cell cell : match.getTable().findAllSoldiers(player))
+            showMinion(cell.getMovableCard());
         return 0;
     }
 
