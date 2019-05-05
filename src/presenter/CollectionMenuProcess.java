@@ -76,6 +76,8 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
+                    if (commandParts.length == 5)
+                        return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3]+" "+commandParts[4], account);
                     if (commandParts.length == 4)
                         return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3], account);
                     if (commandParts.length == 3)
@@ -270,10 +272,10 @@ public class CollectionMenuProcess {
             showDeck(account.getCollection().getSelectedDeck().getName());
             int idx = 2;
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
-                if (!account.getCollection().getDecks().get(idx).getName()
+                if (!account.getCollection().getDecks().get(i).getName()
                         .equals(account.getCollection().getSelectedDeck().getName())) {
-                    CollectionMenu.showMessage(idx + " : " + account.getCollection().getDecks().get(idx).getName() + " :");
-                    showDeck(account.getCollection().getDecks().get(idx).getName());
+                    CollectionMenu.showMessage(idx + " : " + account.getCollection().getDecks().get(i).getName() + " :");
+                    showDeck(account.getCollection().getDecks().get(i).getName());
                     idx++;
                 }
             }
@@ -313,18 +315,18 @@ public class CollectionMenuProcess {
         if (account.getCollection().findItemByName(name) != null) {
             for (int i = 0; i < account.getCollection().getItems().size(); i++)
                 if (account.getCollection().getItems().get(i).getName().equals(name))
-                    result += (account.getCollection().getItems().get(i).getItemID() + "\n");
+                    result += (account.getCollection().getItems().get(i).getCollectionID() + "\n");
             CollectionMenu.showMessage(result);
         } else if (account.getCollection().findCardByName(name) != null) {
             for (int i = 0; i < account.getCollection().getMinions().size(); i++)
                 if (account.getCollection().getMinions().get(i).getName().equals(name))
-                    result += (account.getCollection().getMinions().get(i).getCardID() + "\n");
+                    result += (account.getCollection().getMinions().get(i).getCollectionID() + "\n");
             for (int i = 0; i < account.getCollection().getSpells().size(); i++)
                 if (account.getCollection().getSpells().get(i).getName().equals(name))
-                    result += (account.getCollection().getSpells().get(i).getCardID() + "\n");
+                    result += (account.getCollection().getSpells().get(i).getCollectionID() + "\n");
             for (int i = 0; i < account.getCollection().getHeroes().size(); i++)
                 if (account.getCollection().getHeroes().get(i).getName().equals(name))
-                    result += (account.getCollection().getHeroes().get(i).getCardID() + "\n");
+                    result += (account.getCollection().getHeroes().get(i).getCollectionID() + "\n");
             CollectionMenu.showMessage(result);
         }
         return 0;
