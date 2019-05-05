@@ -29,10 +29,6 @@ public class SinglePlayerMenu {
         while (true) {
             if (!isInSinglePlayerMenu)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             String command = scanner.nextLine();
             singlePlayerMenuProcess.commandParts = command.split("\\s+");
             int commandType = SinglePlayerMenuProcess.findPatternIndex(command);

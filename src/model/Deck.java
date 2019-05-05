@@ -102,6 +102,7 @@ public class Deck {
                 return spells.get(i);
         return null;
     }
+
     //getters
 
     public String getName() {

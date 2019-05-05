@@ -23,10 +23,6 @@ public class StoryMenu {
         while (true) {
             if (!isInStoryMenu)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
             storyMenuProcess.commandParts = command.split("[ ]");

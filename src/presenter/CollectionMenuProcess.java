@@ -174,8 +174,8 @@ public class CollectionMenuProcess {
         //
 
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
-                && account.getCollection().getItemsHashMap().size() == Deck.MAX_ITEM_NUMBER) {
-            return 11;
+                && account.getCollection().getDeckHashMap().get(deckName).getItems().size() == 1) {
+            return 12;
         }
         if (account.getCollection().findCardByCollectionID(idStr) != null)
             if (account.getCollection().findCardByCollectionID(idStr) instanceof Hero) {
@@ -188,7 +188,7 @@ public class CollectionMenuProcess {
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
                 && deck.getItems().size() < 1) {
             Item item = account.getCollection().getItemsHashMap().get(idStr).copy();
-            ((UsableItem) item).setItemID(account.getUserName() + "_" + item.getName() + "_1");
+            ((UsableItem) item).setItemID(account.getUserName() + "_" + nameCreator(item.getName()) + "_1");
             deck.getItemsHashMap()
                     .put(idStr, (UsableItem) item);
             deck.getItems().add((UsableItem) item);
@@ -210,22 +210,22 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private static String createCardID(String playerName, Deck deck, Card card) {
+    public static String createCardID(String playerName, Deck deck, Card card) {
         if (card instanceof Hero)
-            return playerName + "_" + card.getName() + "_1";
+            return playerName + "_" + nameCreator(card.getName()) + "_1";
         if (card instanceof Spell) {
             int idx = 1;
             for (int i = 0; i < deck.getSpells().size(); i++)
                 if (deck.getSpells().get(i).getName().equals(card.getName()))
                     idx++;
-            return playerName + "_" + card.getName() + "_" + idx;
+            return playerName + "_" + nameCreator(card.getName()) + "_" + idx;
         }
         if (card instanceof Minion) {
             int idx = 1;
             for (int i = 0; i < deck.getMinions().size(); i++)
                 if (deck.getMinions().get(i).getName().equals(card.getName()))
                     idx++;
-            return playerName + "_" + card.getName() + "_" + idx;
+            return playerName + "_" + nameCreator(card.getName()) + "_" + idx;
         }
         return "";
     }
@@ -370,4 +370,13 @@ public class CollectionMenuProcess {
         this.collectionMenu = collectionMenu;
     }
     //setters
+
+    public static String nameCreator(String name){
+        String[] names = name.split("[ ]");
+        String result = "";
+        for(int i = 0; i < names.length; i++){
+            result +=names[i];
+        }
+        return result;
+    }
 }

@@ -56,7 +56,7 @@ public class Account {
         }
     }
 
-    private String createCollectionID() {
+    public String createCollectionID() {
         int i = 0;
         while (collection.findCardByCollectionID("" + i) != null || collection.findItemByCollectionID("" + i) != null)
             i++;
