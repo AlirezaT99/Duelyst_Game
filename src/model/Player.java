@@ -10,6 +10,9 @@ public class Player {
     Match match;
     private boolean isAI;
 
+    {
+        hand = new Hand();
+    }
 
     public boolean isAI() {
         return isAI;

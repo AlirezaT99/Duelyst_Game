@@ -115,9 +115,18 @@ public class Deck {
     }
 
     Card getLastCard() {
-        Card card = cards.get(0);
-        cards.remove(card);
-        return new Minion();
+        if(spells.isEmpty())
+            if(minions.isEmpty())
+                return null;
+            if(spells.isEmpty()){
+                Minion minion = minions.get(0);
+                minions.remove(minion);
+                return minion;
+            }else {
+                Spell spell = spells.get(0);
+                spells.remove(spell);
+                return spell;
+            }
     }
 
     public static void createDeck(String deckName) {
