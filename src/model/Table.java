@@ -21,6 +21,7 @@ public class Table {
     private void setAdjacentCells() {
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 9; j++) {
+                cells[i][j].setCellCoordination(new Coordination(i,j));
                 addDesiredCellToAdjacentCells(cells[i][j], i - 1, j - 1);
                 addDesiredCellToAdjacentCells(cells[i][j], i, j - 1);
                 addDesiredCellToAdjacentCells(cells[i][j], i + 1, j - 1);
