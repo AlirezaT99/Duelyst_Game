@@ -133,13 +133,22 @@ public class BattleMenu {
     private void cardHandleErrors(int messageID) {
         switch (messageID) {
             case 1:
-                showMessage("invalid target");
+                showMessage("Invalid target");
                 break;
             case 2:
-                showMessage("opponent minion is unavailable for attack");
+                showMessage("Opponent minion is unavailable for attack");
                 break;
             case 3:
-                showMessage("invalid card id");
+                showMessage("Invalid card id");
+                break;
+            case 4:
+                showMessage("Already moved");
+                break;
+            case 5:
+                showMessage("Out of range");
+                break;
+            case 6:
+                showMessage("Enemy in the way");
                 break;
         }
     }
