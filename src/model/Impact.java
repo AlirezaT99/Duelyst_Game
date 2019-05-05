@@ -89,6 +89,7 @@ class Impact {
     private boolean holyCell;
     private boolean poisonCell;
     private boolean dispel;
+    private boolean isPermanent;
 
     private void setImpactTypeIdVariables() {
         isPositiveImpact = impactTypeId.charAt(0) == '1';
@@ -110,6 +111,7 @@ class Impact {
         poisonCell = impactTypeId.charAt(12) == '1';
         fireCelll = impactTypeId.charAt(12) == '2';
         holyCell = impactTypeId.charAt(12) == '3';
+        isPermanent = impactTypeId.charAt(6) == '2' || !buff;
     }
     //impactTypeVariables
 
@@ -411,14 +413,21 @@ class Impact {
 
     private void healthChange() {
         int impactQuantity = getImpactQuantityWithSign();
-        for (Cell cell : impactArea)
-            cell.getMovableCard().setHealth(cell.getMovableCard().getHealth() + impactQuantity);
+        for (Cell cell : impactArea) {
+            if (isPermanent)
+                cell.getMovableCard().setHealth(cell.getMovableCard().getHealth() + impactQuantity);
+            else
+                cell.getMovableCard().dispelableHealthChange += impactQuantity;
+        }
     }
 
     private void damageChange() {
         int impactQuantity = getImpactQuantityWithSign();
         for (Cell cell : impactArea)
-            cell.getMovableCard().dispelableDamageChange += impactQuantity;
+            if (isPermanent)
+                cell.getMovableCard().setDamage(cell.getMovableCard().getDamage() + impactQuantity);
+            else
+                cell.getMovableCard().dispelableDamageChange += impactQuantity;
     }
 
     private void dispel(Player dispellingPlayer) {
