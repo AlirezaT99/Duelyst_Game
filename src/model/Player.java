@@ -35,8 +35,10 @@ public class Player {
     }
 
     public void fillHand() {
-        // this.hand.fillEmptyPlace(deck);
-        //
+        for (int i = 0; i < 5; i++) {
+            if(hand.getCards().size() < i+1 || hand.getCards().get(i) == null)
+                hand.getCards().add(i,deck.getLastCard());
+        }
     }
 
     public void playAI(Match match) {
