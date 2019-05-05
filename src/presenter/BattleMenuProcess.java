@@ -22,7 +22,7 @@ public class BattleMenuProcess {
         commandPatterns.add(Pattern.compile("Show my minions"));
         commandPatterns.add(Pattern.compile("Show opponent minions"));
         commandPatterns.add(Pattern.compile("Show card info [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
+        commandPatterns.add(Pattern.compile("Select [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
 //        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
@@ -81,12 +81,7 @@ public class BattleMenuProcess {
                     return selectCard(commandParts[1]);
                 }
             },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return showHand(match.currentTurnPlayer());
-                }
-            },
+            this::showHand,
             new DoCommand() {
                 @Override
                 public int doIt() {
@@ -104,7 +99,7 @@ public class BattleMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return showNextCard(match.currentTurnPlayer());
+                    return showNextCard();
                 }
             },
             this::enterGraveyard,
@@ -158,7 +153,7 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int showNextCard(Player currentTurnPlayer) {
+    private int showNextCard() {
         return 0;
     }
 
@@ -237,8 +232,9 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int showHand(Player currentTurnPlayer) {
-        BattleMenu.showMessage(currentTurnPlayer.getHand().showHand());
+    private int showHand() {
+        BattleMenu.showMessage(match.currentTurnPlayer().getHand().showHand());
+        showNextCard();
         return 0;
     }
 
