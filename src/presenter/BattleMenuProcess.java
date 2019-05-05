@@ -28,7 +28,7 @@ public class BattleMenuProcess {
 //        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
 //        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
         commandPatterns.add(Pattern.compile("[sS]how hand"));
-        commandPatterns.add(Pattern.compile("[iI]nsert [a-zA-Z0-9._ ]+ in (\\d,[ ]*\\d)"));
+        commandPatterns.add(Pattern.compile("[iI]nsert [a-zA-Z0-9._ ]+ in \\(\\d,[ ]*\\d\\)"));
         commandPatterns.add(Pattern.compile("[eE]nd turn"));
         commandPatterns.add(Pattern.compile("[sS]how collectibles"));
         commandPatterns.add(Pattern.compile("[sS]elect [a-zA-Z0-9._]+"));
