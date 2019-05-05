@@ -27,7 +27,7 @@ public class SinglePlayerMenuProcess {
         commandPatterns.add(Pattern.compile("help|4"));
     }
 
-    public  int customGame(String command) throws IOException {
+    public  int  customGame(String command) throws IOException {
         String[] commandParts = command.split("\\s+");
         String deckName = commandParts[2]; // space ke nadare vasatesh?
         if (!account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName)))

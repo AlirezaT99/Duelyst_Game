@@ -21,10 +21,10 @@ public class Hero extends MovableCard {
         return new Hero(this.name, this.getHealth(), this.getDamage(), this.heroSpell == null?null: this.heroSpell.copy(), this.spellCost, this.spellCoolDown);
     }
 
-    public void attack(Cell cell) {
-        super.attack(cell);
+    public void attack(MovableCard opponent) {
+        super.attack(opponent);
         if (onAttackImpact != null)
-            onAttackImpact.setImpactArea(this.player, cell, this.cardCell);
+            onAttackImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
     }
 
     public void counterAttack(MovableCard opponent) {
