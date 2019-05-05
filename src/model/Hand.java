@@ -36,7 +36,6 @@ public class Hand {
         cards.set(index, null);
     }
 
-
     //switching
 
     private boolean didSwitchInCurrentTurn() {

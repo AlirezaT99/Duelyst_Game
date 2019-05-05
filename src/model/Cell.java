@@ -69,7 +69,7 @@ public class Cell {
         this.coordination = coordination;
     }
 
-    void setMovableCard(MovableCard movableCard) {
+    public void setMovableCard(MovableCard movableCard) {
         this.movableCard = movableCard;
     }
 

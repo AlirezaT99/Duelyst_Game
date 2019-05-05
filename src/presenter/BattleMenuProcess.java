@@ -45,9 +45,7 @@ public class BattleMenuProcess {
     }
 
     public interface DoCommand {
-
         int doIt() throws IOException;
-
     }
 
     public static int findPatternIndex(String command) {
@@ -121,7 +119,7 @@ public class BattleMenuProcess {
     }
 
     private int selectCard(String cardID) {
-        if (findCard(cardID) == null || !(findCard(cardID) instanceof MovableCard)) // what about spell ??
+        if (findCard(cardID) == null || !(findCard(cardID) instanceof MovableCard)) //todo: what about spell ??
             return 2;
         match.currentTurnPlayer().getHand().setSelectedCard(findCard(cardID));
         return 5;
@@ -175,7 +173,7 @@ public class BattleMenuProcess {
     private int endTurn() {
         match.switchTurn();
         match.currentTurnPlayer().fillHand(); // ?
-        // reset manas
+
         return 0;
     }
 
@@ -187,13 +185,19 @@ public class BattleMenuProcess {
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) != null)
             if (match.currentTurnPlayer().getHand().findCardByName(cardName)
                     .getManaCost() > match.currentTurnPlayer().getMana())
-            if (!match.currentTurnPlayer().getHand().findCardByName(cardName)
-                    .isManaSufficient(match.currentTurnPlayer().getMana()))
-                return 11;
+                if (!match.currentTurnPlayer().getHand().findCardByName(cardName)
+                        .isManaSufficient(match.currentTurnPlayer().getMana()))
+                    return 11;
         if (!isCoordinationValidToInsert(x, y))
             return 12;
-
-
+        //
+        if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
+            match.currentTurnPlayer().getHand().findCardByName(cardName)
+                    .castCard(match.getTable().getCellByCoordination(x, y));
+        if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell)
+            ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
+                    .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
+        //
         BattleMenu.showMessage(cardName + " with "
                 + match.currentTurnPlayer().getDeck().findCardByName(cardName).getCardID()
                 + " inserted to (" + x + "," + y + ")");

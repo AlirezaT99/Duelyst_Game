@@ -30,7 +30,7 @@ public abstract class Card {
         return true;
     }
 
-    void castCard(Cell cell) {
+    public void castCard(Cell cell) {
 
     }
 
