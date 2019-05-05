@@ -25,10 +25,6 @@ public class BattleInit {
         while (true) {
             if (!isInBattleInit)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             // if(scanner.hasNextLine()) {
             String command = scanner.nextLine();
             battleInitProcess.commandParts = command.split("[ ]");

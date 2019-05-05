@@ -52,9 +52,7 @@ public class CollectibleItem extends InfluentialItem {
         this.player = player;
     }
 
-    public static void addToCollectibleItems(CollectibleItem collectibleItem) {
-        collectibleItems.add(collectibleItem);
-    }
+    public static void addToCollectibleItems(CollectibleItem collectibleItem){ collectibleItems.add(collectibleItem);}
 
     //setters
 }

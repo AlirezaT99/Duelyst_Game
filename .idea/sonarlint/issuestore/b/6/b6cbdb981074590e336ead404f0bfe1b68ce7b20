@@ -1,4 +1,5 @@
 
-squid:S13198"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ßş ù8ì•ç£¥-
-squid:S1319H"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¶…É÷8œóê¦-
-“squid:S1319L"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(óäÄªûÿÿÿÿ8ì•ç£¥-
+¦%squid:RedundantThrowsDeclarationCheck"iRemove the declaration of thrown exception 'java.lang.NullPointerException' which is a runtime exception.(´¿Ãşÿÿÿÿ8ïæ¯û¦-
+“squid:S1319k"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(óäÄªûÿÿÿÿ8æ°Á§-
+squid:S1319W"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ßş ù8æ°Á§-
+squid:S1319g"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¶…É÷8æ°Á§-

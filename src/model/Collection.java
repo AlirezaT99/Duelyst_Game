@@ -42,7 +42,7 @@ public class Collection {
     }
 
     public boolean validateDeck(Deck deck) {
-        if (deck == null || (deck.getMinions().size()+deck.getSpells().size()) != 20)
+        if (deck == null || (deck.getMinions().size() + deck.getSpells().size()) != 20)
             return false;
         return deck.getHero() != null;
     }
@@ -84,10 +84,10 @@ public class Collection {
 //
 //    }
 
-    public UsableItem findItemByID(String itemID) {
-        for (UsableItem item : items) {
-            if (item.getItemID() != null && item.getItemID().equals(itemID))
-                return item;
+    public UsableItem findItemByCollectionID(String itemID) {
+        for (int i = 0; i < items.size(); i++) {
+            if(items.get(i).getCollectionID().endsWith(itemID))
+                return items.get(i);
         }
         return null;
     }
@@ -100,25 +100,25 @@ public class Collection {
         return null;
     }
 
-    public Card findCardByID(String cardID) {
-        if(heroHashMap.get(cardID)!=null)
+    public Card findCardByCollectionID(String cardID) {
+        if (heroHashMap.get(cardID) != null)
             return heroHashMap.get(cardID);
-        if(minionHashMap.get(cardID)!=null)
+        if (minionHashMap.get(cardID) != null)
             return minionHashMap.get(cardID);
-        if(spellHashMap.get(cardID)!=null)
+        if (spellHashMap.get(cardID) != null)
             return spellHashMap.get(cardID);
         return null;
     }
 
     public Card findCardByName(String name) {
-        for(int i = 0; i < heroes.size(); i++)
-            if(heroes.get(i).getName().equals(name))
+        for (int i = 0; i < heroes.size(); i++)
+            if (heroes.get(i).getName().equals(name))
                 return heroes.get(i);
-        for(int i = 0; i < spells.size(); i++)
-            if(spells.get(i).getName().equals(name))
+        for (int i = 0; i < spells.size(); i++)
+            if (spells.get(i).getName().equals(name))
                 return spells.get(i);
-        for(int i = 0; i < minions.size(); i++)
-            if(minions.get(i).getName().equals(name))
+        for (int i = 0; i < minions.size(); i++)
+            if (minions.get(i).getName().equals(name))
                 return minions.get(i);
         return null;
     }

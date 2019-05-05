@@ -76,7 +76,7 @@ public class Spell extends Card {
     public static Spell getSpellByName(String name) {
         for (int i = 0; i < spells.size(); i++) {
             if(spells.get(i).getName().equals(name))
-                return spells.get(i);
+                return spells.get(i).copy();
         }
         return null;
     }

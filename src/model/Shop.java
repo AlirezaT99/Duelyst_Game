@@ -1,6 +1,5 @@
 package model;
 
-import jdk.jshell.spi.SPIResolutionException;
 import presenter.CollectionMenuProcess;
 
 import java.util.ArrayList;
@@ -101,8 +100,8 @@ public class Shop {
     // sell
 
     public int sell(Account account, String name) {
-        UsableItem item = account.getCollection().findItemByID(name);
-        Card card = account.getCollection().findCardByID(name);
+        UsableItem item = account.getCollection().findItemByCollectionID(name);
+        Card card = account.getCollection().findCardByCollectionID(name);
         int cost;
         if (item == null && card == null) {
             //printMessage("Item/Card not found");

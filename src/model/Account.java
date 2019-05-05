@@ -25,48 +25,54 @@ public class Account {
         accounts = new ArrayList<>();
     }
 
-    public void buy (int cost, UsableItem item, Card card) throws NullPointerException {
+    public void buy(int cost, UsableItem item, Card card) throws NullPointerException {
         money -= cost;
-        if (item != null){
-            collection.getItems().add(item);
-            item.setItemID(createID());
-            collection.getItemsHashMap().put(item.getItemID(),item);
+        if (item != null) {
+            UsableItem item1 = item.copy();
+            item1.setCollectionID(createCollectionID());
+            collection.getItems().add(item1);
+            collection.getItemsHashMap().put(item1.getCollectionID(), item1);
         }
-            if (card != null) {
-                card.setCardID(createID());
-            if(card instanceof Hero){
-                collection.getHeroes().add(((Hero) card).copy());
-                collection.getHeroHashMap().put(card.getCardID(), ((Hero) card).copy());
+        if (card != null) {
+            card.setCardCollectionID(createCollectionID());
+            if (card instanceof Hero) {
+                Hero hero = (Hero) ((Hero) card).copy();
+                hero.setCardCollectionID(createCollectionID());
+                collection.getHeroes().add(hero);
+                collection.getHeroHashMap().put(hero.getCollectionID(),hero);
             }
-            if(card instanceof Minion){
-                collection.getMinions().add( ((Minion) card).copy());
-                collection.getMinionHashMap().put(card.getCardID(), ((Minion) card).copy());
+            if (card instanceof Minion) {
+                Minion minion = (Minion) ((Minion) card).copy();
+                minion.setCardCollectionID(createCollectionID());
+                collection.getMinions().add(minion);
+                collection.getMinionHashMap().put(minion.getCollectionID(), minion);
             }
-            if(card instanceof Spell){
-                collection.getSpells().add( ((Spell) card).copy());
-                collection.getSpellHashMap().put(card.getCardID(), ((Spell) card).copy());
+            if (card instanceof Spell) {
+                Spell spell = (Spell)((Spell) card).copy();
+                spell.setCardCollectionID(createCollectionID());
+                collection.getSpells().add(spell);
+                collection.getSpellHashMap().put(spell.getCollectionID(), spell);
             }
-//            collection.getCardHashMap().put(card.getCardID(),card);
         }
-        }
-    private String createID(){
+    }
+
+    public String createCollectionID() {
         int i = 0;
-        while(collection.findCardByID(""+i) != null || collection.findItemByID(""+i) != null)
+        while (collection.findCardByCollectionID("" + i) != null || collection.findItemByCollectionID("" + i) != null)
             i++;
-        return ""+i;
+        return "" + i;
     }
 
     public void sell(int cost, UsableItem item, Card card) {
         money += cost;
         if (item != null)
             collection.getItems().remove(item);
-        if (card != null)
-        {
-            if(card instanceof Hero)
-                collection.getHeroes().remove((Hero)card);
-            if(card instanceof Minion)
+        if (card != null) {
+            if (card instanceof Hero)
+                collection.getHeroes().remove((Hero) card);
+            if (card instanceof Minion)
                 collection.getMinions().remove((Minion) card);
-            if(card instanceof Spell)
+            if (card instanceof Spell)
                 collection.getSpells().remove((Spell) card);
         }
     }
