@@ -93,6 +93,10 @@ public abstract class MovableCard extends Card {
         }
         return true;
     }
+//asdjfl;sadkfj
+
+
+
 
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent.cardCell)) {
