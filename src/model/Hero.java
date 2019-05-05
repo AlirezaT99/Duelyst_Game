@@ -61,10 +61,9 @@ public class Hero extends MovableCard {
     }
 
     public static Hero getHeroByName(String name) {
-        for (int i = 0; i < heroes.size(); i++) {
-            if(heroes.get(i).getName().equals(name))
-                return heroes.get(i);
-        }
+        for (Hero hero : heroes)
+            if (hero.getName().equals(name))
+                return hero;
         return null;
     }
     // getters{

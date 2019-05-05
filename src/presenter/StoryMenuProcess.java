@@ -74,6 +74,7 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("Siavash"));
         deck.addMinionToDeck(Minion.getMinionByName("Arzhang Div"));
         deck.addItemToDeck(UsableItem.getUsableItemByName("The Crown of Knowledge"));
+        deck.setHero(Hero.getHeroByName("Div e Sefid"));
         Match match = new Match(true, 1);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
@@ -86,6 +87,40 @@ public class StoryMenuProcess {
 
     private int enterSecondLevel() throws IOException {
         Deck deck = new Deck("computerDeck");
+        deck.addSpellToDeck(Spell.getSpellByName("HellFire"));
+        deck.addSpellToDeck(Spell.getSpellByName("All Disarm"));
+        deck.addSpellToDeck(Spell.getSpellByName("Dispel"));
+        deck.addSpellToDeck(Spell.getSpellByName("Power Up"));
+        deck.addSpellToDeck(Spell.getSpellByName("All power"));
+        deck.addSpellToDeck(Spell.getSpellByName("All Attack"));
+        deck.addSpellToDeck(Spell.getSpellByName("Weakening"));
+        deck.addMinionToDeck(Minion.getMinionByName("Persian WarLord"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani Archer"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani Spy"));
+        deck.addMinionToDeck(Minion.getMinionByName("StoneLauncher Ghoul"));
+        deck.addMinionToDeck(Minion.getMinionByName("HogRider Div"));
+        deck.addMinionToDeck(Minion.getMinionByName("HogRider Div"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Fierce Lion"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Wolf"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Witch"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Wild Swine"));
+        deck.addMinionToDeck(Minion.getMinionByName("Piraan"));
+        deck.addMinionToDeck(Minion.getMinionByName("Bahman"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Great Ghoul"));
+        deck.addItemToDeck(UsableItem.getUsableItemByName("Terror Hood"));
+        deck.setHero(Hero.getHeroByName("Aarash"));
+        Match match = new Match(true, 3);
+        match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
+                storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
+                        .getAccount().getCollection().getSelectedDeck().getName(), 1);
+        match.getPlayer2().setDeck(deck);
+        BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
+        enterBattleMenu(battleMenu);
+        return 0;
+    }
+
+    private int enterThirdLevel() throws IOException{
+        Deck deck = new Deck("computerDeck");
         deck.addSpellToDeck(Spell.getSpellByName("Area Dispel"));
         deck.addSpellToDeck(Spell.getSpellByName("Empower"));
         deck.addSpellToDeck(Spell.getSpellByName("God Strength"));
@@ -95,7 +130,7 @@ public class StoryMenuProcess {
         deck.addSpellToDeck(Spell.getSpellByName("Kings Guard"));
         deck.addMinionToDeck(Minion.getMinionByName("Persian Swordsman"));
         deck.addMinionToDeck(Minion.getMinionByName("Persian Lancer"));
-        deck.addMinionToDeck(Minion.getMinionByName("Persian Pahlevaan"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Persian Pahlevoon"));
         deck.addMinionToDeck(Minion.getMinionByName("Tourani GhollabSangDaar"));
         deck.addMinionToDeck(Minion.getMinionByName("Tourani Prince"));
         deck.addMinionToDeck(Minion.getMinionByName("The Eagle"));
@@ -107,17 +142,14 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("Iraj"));
         deck.addMinionToDeck(Minion.getMinionByName("Shah Ghoul"));
         deck.addItemToDeck(UsableItem.getUsableItemByName("Soul Eater"));
+        deck.setHero(Hero.getHeroByName("Zahhak"));
         Match match = new Match(true, 2);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
-                        .getAccount().getCollection().getSelectedDeck().getName(), 0);
+                        .getAccount().getCollection().getSelectedDeck().getName(), 7);
         match.getPlayer2().setDeck(deck);
         BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
         enterBattleMenu(battleMenu);
-        return 0;
-    }
-
-    private int enterThirdLevel() {
         return 0;
     }
     private  void enterBattleMenu(BattleMenu battleMenu) throws IOException {

@@ -1,8 +1,6 @@
 package model;
 
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Minion extends MovableCard {
     private static ArrayList<Minion> minions = new ArrayList<>();
@@ -96,10 +94,11 @@ public class Minion extends MovableCard {
         }
         onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
     }
+
     //getters
-    public static Minion getMinionByName(String name){
-        for(int i = 0; i < minions.size(); i++){
-            if(minions.get(i).getName().equals(name))
+    public static Minion getMinionByName(String name) {
+        for (int i = 0; i < minions.size(); i++) {
+            if (minions.get(i).getName().equals(name))
                 return minions.get(i);
         }
         return null;
