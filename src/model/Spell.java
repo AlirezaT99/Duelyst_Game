@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Spell extends Card {
-    private static ArrayList<Spell> spells = new ArrayList();
+    private static ArrayList<Spell> spells = new ArrayList<>();
     private Impact impact;
     private Impact primaryImpact;
     private Impact secondaryImpact;
@@ -46,7 +46,7 @@ public class Spell extends Card {
         return false;
     }
 
-    public void castCard(Match match, Cell cell, Player castingPlayer) {
+    public void castCard(Cell cell, Player castingPlayer) {
         if (isCastingValid(castingPlayer, cell, primaryImpact))
             primaryImpact.setImpactArea(castingPlayer, cell, cell);
         if (secondaryImpact != null && isCastingValid(castingPlayer, cell, secondaryImpact))
@@ -56,7 +56,7 @@ public class Spell extends Card {
     public Spell copy(){
         Spell spell = new Spell();
         spell.cell = cell;
-        setCardfieldsForCopy(spell);
+        setCardFieldsForCopy(spell);
         spell.primaryImpact = primaryImpact == null? null :primaryImpact.copy();
         spell.secondaryImpact =secondaryImpact  == null? null : secondaryImpact.copy();
         spell.collectionID = this.collectionID;

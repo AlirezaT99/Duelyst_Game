@@ -45,9 +45,7 @@ public class BattleMenuProcess {
     }
 
     public interface DoCommand {
-
         int doIt() throws IOException;
-
     }
 
     public static int findPatternIndex(String command) {
@@ -83,30 +81,6 @@ public class BattleMenuProcess {
                     return selectCard(commandParts[1]);
                 }
             },
-//            new DoCommand() {
-//                @Override
-//                public int doIt() {
-//                    return moveTo(commandParts[2], commandParts[3]);
-//                }
-//            },
-//            new DoCommand() {
-//                @Override
-//                public int doIt() {
-//                    return attack(commandParts[1]);
-//                }
-//            },
-//            new DoCommand() {
-//                @Override
-//                public int doIt() {
-//                    return attackCombo(commandParts);
-//                }
-//            },
-//            new DoCommand() {
-//                @Override
-//                public int doIt() {
-//                    return useSpecialPower(commandParts[3], commandParts[4]);
-//                }
-//            },
             new DoCommand() {
                 @Override
                 public int doIt() {
@@ -145,7 +119,7 @@ public class BattleMenuProcess {
     }
 
     private int selectCard(String cardID) {
-        if (findCard(cardID) == null || !(findCard(cardID) instanceof MovableCard)) // what about spell ??
+        if (findCard(cardID) == null || !(findCard(cardID) instanceof MovableCard)) //todo: what about spell ??
             return 2;
         match.currentTurnPlayer().getHand().setSelectedCard(findCard(cardID));
         return 5;
@@ -199,7 +173,7 @@ public class BattleMenuProcess {
     private int endTurn() {
         match.switchTurn();
         match.currentTurnPlayer().fillHand(); // ?
-        // reset manas
+
         return 0;
     }
 
@@ -208,11 +182,22 @@ public class BattleMenuProcess {
                 y = Integer.parseInt(y_str);
         if (coordinationInvalid(x, y))
             return 7;
-        if (match.currentTurnPlayer().getDeck().findCardByName(cardName)
-                .getManaCost() > match.currentTurnPlayer().getMana())
-            return 11;
-
-
+        if (match.currentTurnPlayer().getHand().findCardByName(cardName) != null)
+            if (match.currentTurnPlayer().getHand().findCardByName(cardName)
+                    .getManaCost() > match.currentTurnPlayer().getMana())
+                if (!match.currentTurnPlayer().getHand().findCardByName(cardName)
+                        .isManaSufficient(match.currentTurnPlayer().getMana()))
+                    return 11;
+        if (!isCoordinationValidToInsert(x, y))
+            return 12;
+        //
+        if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
+            match.currentTurnPlayer().getHand().findCardByName(cardName)
+                    .castCard(match.getTable().getCellByCoordination(x, y));
+        if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell)
+            ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
+                    .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
+        //
         BattleMenu.showMessage(cardName + " with "
                 + match.currentTurnPlayer().getDeck().findCardByName(cardName).getCardID()
                 + " inserted to (" + x + "," + y + ")");
@@ -274,6 +259,24 @@ public class BattleMenuProcess {
         BattleMenu.showMessage(match.currentTurnPlayer().getHand().getSelectedCard().getCardID()
                 + "moved to [" + x + "][" + y + "]");
         return 0;
+    }
+
+    private boolean isCoordinationValidToInsert(int x, int y) {
+        ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
+        ArrayList<Cell> wantedCells = new ArrayList<>();
+        for (Cell cell : soldiersCells)
+            wantedCells.addAll(cell.getAdjacentCells());
+        //
+        ArrayList<Cell> toRemove = new ArrayList<>();
+        for (Cell cell : wantedCells)
+            if (!cell.isCellFree())
+                toRemove.add(cell);
+        wantedCells.removeAll(toRemove);
+        //
+        for (Cell cell : wantedCells)
+            if (cell.getCellCoordination().equals(new Coordination(x, y)))
+                return true;
+        return false;
     }
 
     private static int showCardInfo(String cardID) {

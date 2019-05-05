@@ -9,6 +9,9 @@ public class Coordination {
         this.y = y;
     }
 
+    public boolean equals(Coordination coordination) {
+        return this.x == coordination.getX() && this.y == coordination.getY();
+    }
 
     //getters
     public int getX() {

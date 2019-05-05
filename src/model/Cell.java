@@ -35,8 +35,12 @@ public class Cell {
         cellImpacts.add(impact);
     }
 
+    public boolean isCellFree() {
+        return movableCard == null && item == null;
+    }
+
     //getters
-    ArrayList<Cell> getAdjacentCells() {
+    public ArrayList<Cell> getAdjacentCells() {
         return adjacentCells;
     }
 
@@ -46,11 +50,11 @@ public class Cell {
         return cellArrayList;
     }
 
-    MovableCard getMovableCard() {
+    public MovableCard getMovableCard() {
         return movableCard;
     }
 
-    Coordination getCellCoordination() {
+    public Coordination getCellCoordination() {
         return coordination;
     }
 
@@ -65,7 +69,7 @@ public class Cell {
         this.coordination = coordination;
     }
 
-    void setMovableCard(MovableCard movableCard) {
+    public void setMovableCard(MovableCard movableCard) {
         this.movableCard = movableCard;
     }
 

@@ -162,6 +162,9 @@ public class BattleMenu {
             case 11:
                 showMessage("You don't have enough mana");
                 break;
+            case 12:
+                showMessage("invalid target");
+                break;
         }
     }
 

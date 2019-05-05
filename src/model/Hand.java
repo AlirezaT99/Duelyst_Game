@@ -13,6 +13,13 @@ public class Hand {
     }
 
 
+    public Card findCardByName(String name) {
+        for (Card card : cards)
+            if (card.getName().equals(name))
+                return card;
+        return null;
+    }
+
     void fillEmptyPlaces(Deck deck) {
 //        for (int i = 0; i < 5; i++)
 //            if (this.cards.get(i) == null)
@@ -28,7 +35,6 @@ public class Hand {
         int index = cards.indexOf(card);
         cards.set(index, null);
     }
-
 
     //switching
 

@@ -76,10 +76,10 @@ public class Table {
 
     public ArrayList<Cell> findAllSoldiers(Player player) {
         ArrayList<Cell> wantedCells = new ArrayList<>();
-        for (int i = 1; i < 5; i++) {
-            for (int j = 1; j < 9; j++) {
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
                 if (cells[i][j].getMovableCard() != null) {
-                    if (player == null)
+                    if (player == null) // todo : u sure about this Sepehr?
                         wantedCells.add(cells[i][j]);
                     else if (player.equals(cells[i][j].getMovableCard().player))
                         wantedCells.add(cells[i][j]);
