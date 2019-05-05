@@ -96,7 +96,6 @@ public abstract class MovableCard extends Card {
 
 
 
-
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent.cardCell)) {
             opponent.takeDamage(this.damage);

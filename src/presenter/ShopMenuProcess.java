@@ -132,6 +132,7 @@ public class ShopMenuProcess {
     }
 
     private int search(String name) {
+
         if (shopMenu.getShop().search(name).equals("-1"))
             return 1;
 

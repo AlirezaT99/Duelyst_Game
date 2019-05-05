@@ -1,5 +1,6 @@
 package model;
 
+import jdk.jshell.spi.SPIResolutionException;
 import presenter.CollectionMenuProcess;
 
 import java.util.ArrayList;
@@ -22,12 +23,12 @@ public class Shop {
     // search
 
     public String search(String name) {
-        Item item = findItemByName(name);
-        if (item != null)
-            return item.getItemID();
-        Card card = findCardByName(name);
-        if (card != null)
-            return card.getCardID();
+        int itemIndex = findItemIndex(name);
+        if (itemIndex != -1)
+            return itemIndex+"";
+        int cardIndex = findCardIndex(name);
+        if (cardIndex != -1)
+            return cardIndex+"";
         return "-1";
     }
 
@@ -126,6 +127,13 @@ public class Shop {
         return null;
     }
 
+    private static  int findItemIndex(String itemName){
+            UsableItem item = findItemByName(itemName);
+            if(item != null)
+                return shopItems.indexOf(item);
+            return -1;
+        }
+
     private static Card findCardByName(String cardName) {
         for (Card card : shopHeroes) {
             if (card.getName().equals(cardName))
@@ -140,6 +148,31 @@ public class Shop {
                 return card;
         }
         return null;
+    }
+
+    private static int findCardIndex(String cardName) {
+        Spell spell = null;
+        Hero hero = null;
+        Minion minion = null;
+        try {
+            spell = (Spell) findCardByName(cardName);
+        } catch (Exception e) {
+            try {
+                hero = (Hero) findCardByName(cardName);
+            } catch (Exception e1) {
+                try {
+                    minion = (Minion) findCardByName(cardName);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+        if(spell != null)
+            return shopSpells.indexOf(spell);
+        if(hero != null)
+            return shopHeroes.indexOf(hero);
+        if(minion != null)
+            return shopMinions.indexOf(minion);
+        return -1;
     }
 
     private void printMessage(String message) {
