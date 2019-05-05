@@ -18,14 +18,11 @@ public class StoryMenu {
     }
 
     public void run() throws IOException {
+        help();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             if (!isInStoryMenu)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             // if(scanner.hasNextLine()){
             String command = scanner.nextLine();
             storyMenuProcess.commandParts = command.split("[ ]");

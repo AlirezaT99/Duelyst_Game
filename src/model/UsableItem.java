@@ -10,10 +10,14 @@ public class UsableItem extends InfluentialItem {
 
     @Override
     public UsableItem copy(){
-        UsableItem item;
-        item = (UsableItem) super.copy();
-        item.primaryImpact = primaryImpact.copy();
-        item.secondaryImpact = secondaryImpact.copy();
+        UsableItem item = new UsableItem();
+        item.name = name;
+        item.description = description;
+        item.itemID = itemID;
+        item.dyingWishImpact = dyingWishImpact == null ? null: dyingWishImpact.copy();
+        item.summonImpact = summonImpact == null ? null : summonImpact.copy();
+        item.primaryImpact = primaryImpact == null ? null : primaryImpact.copy();
+        item.secondaryImpact = secondaryImpact == null ? null : secondaryImpact.copy();
         item.cost = cost;
         item.deck = deck.copy();
         item.match = match;
@@ -52,13 +56,15 @@ public class UsableItem extends InfluentialItem {
         return match;
     }
 
-    public static UsableItem getUsableItemByName(String name){
-        for(int i = 0; i < usableItems.size(); i++)
-            if(usableItems.get(i).getName().equals(name))
-                return usableItems.get(i);
+    public static UsableItem getUsableItemByName(String name) {
+        for (int i = 0; i < usableItems.size(); i++)
+            if (usableItems.get(i).getName().equals(name))
+                return ((UsableItem) usableItems.get(i)).copy();
         return null;
     }
 
-    public static void addToUsableItems(UsableItem usableItem){ usableItems.add(usableItem);}
+    public static void addToUsableItems(UsableItem usableItem) {
+        usableItems.add(usableItem);
+    }
     // setter & getter
 }

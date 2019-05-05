@@ -22,6 +22,7 @@ public class CollectionMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        help();
         while (true) {
             if (!isInCollectionMenu)
                 break;
@@ -69,7 +70,9 @@ public class CollectionMenu {
                 CollectionMenu.showMessage("Card/Item not found");
                 break;
             case 11:
-                CollectionMenu.showMessage("There can not be more than 3 items in the col");
+                CollectionMenu.showMessage("There can not be more than 3 items in the collection");
+            case 12:
+                CollectionMenu.showMessage("There can not be more than an item in the deck.");
         }
     }
 

@@ -84,6 +84,8 @@ public class Player {
     public Account getAccount() {
         return account;
     }
+
+    public Deck getDeck() { return deck; }
     //getters
 
     //setters

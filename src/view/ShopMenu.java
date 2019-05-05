@@ -20,6 +20,7 @@ public class ShopMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        help();
         while (true) {
             if (!isInShopMenu)
                 break;

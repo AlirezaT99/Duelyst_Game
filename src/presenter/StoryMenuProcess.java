@@ -75,6 +75,8 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("Arzhang Div"));
         deck.addItemToDeck(UsableItem.getUsableItemByName("The Crown of Knowledge"));
         deck.setHero(Hero.getHeroByName("Div e Sefid"));
+        deck.getItems().get(0).setItemID("computer_TheCrownOfKnowledge_1");
+        setDeckCardIDs("computer",deck);
         Match match = new Match(true, 1);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
@@ -109,6 +111,8 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("The Great Ghoul"));
         deck.addItemToDeck(UsableItem.getUsableItemByName("Terror Hood"));
         deck.setHero(Hero.getHeroByName("Aarash"));
+        deck.getItems().get(0).setItemID("computer_TerrorHood_1");
+        setDeckCardIDs("computer",deck);
         Match match = new Match(true, 3);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
@@ -143,6 +147,8 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("Shah Ghoul"));
         deck.addItemToDeck(UsableItem.getUsableItemByName("Soul Eater"));
         deck.setHero(Hero.getHeroByName("Zahhak"));
+        deck.getItems().get(0).setItemID("computer_SoulEater_1");
+        setDeckCardIDs("computer",deck);
         Match match = new Match(true, 2);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
@@ -166,5 +172,27 @@ public class StoryMenuProcess {
         storyMenu.getSinglePlayerMenu().setInSinglePlayerMenu(true);
         storyMenu.getSinglePlayerMenu().run();
         return 0;
+    }
+
+    private static void setDeckCardIDs(String playerName, Deck deck){ //only use it for story mode.
+        deck.getHero().setCardID(CollectionMenuProcess.createCardID(playerName,deck,deck.getHero()));
+        for(int i = 0; i < deck.getMinions().size() ; i++){
+            int num = 0;
+            for( int j = 0; j < deck.getMinions().size() ; j++) {
+                if (deck.getMinions().get(j).getName().equals(deck.getMinions().get(i).getName())
+                    && (deck.getMinions().get(j).getCardID() != null && deck.getMinions().get(j).getCardID() != ""))
+                    num++;
+            }
+            deck.getMinions().get(i).setCardID(CollectionMenuProcess.createCardID(playerName,deck,deck.getMinions().get(i)));
+        }
+        for(int i = 0; i < deck.getSpells().size() ; i++){
+            int num = 0;
+            for( int j = 0; j < deck.getSpells().size() ; j++){
+                if (deck.getSpells().get(j).getName().equals(deck.getSpells().get(i).getName())
+                        && (deck.getSpells().get(j).getCardID() != null && deck.getSpells().get(j).getCardID() != ""))
+                    num++;
+            }
+            deck.getSpells().get(i).setCardID(CollectionMenuProcess.createCardID(playerName,deck,deck.getSpells().get(i)));
+        }
     }
 }

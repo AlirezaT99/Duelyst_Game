@@ -25,13 +25,10 @@ public class SinglePlayerMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        help();
         while (true) {
             if (!isInSinglePlayerMenu)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             String command = scanner.nextLine();
             singlePlayerMenuProcess.commandParts = command.split("\\s+");
             int commandType = SinglePlayerMenuProcess.findPatternIndex(command);

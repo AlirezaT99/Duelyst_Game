@@ -1,10 +1,15 @@
 
-|squid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8²ƒÆÇ¥-
-”squid:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(óİÆäüÿÿÿÿ8õ«ôÑ¥-
-”squid:S1319ƒ"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".( “œìıÿÿÿÿ8õ«ôÑ¥-
-squid:S1319‹"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Ï®è8õ«ôÑ¥-
-”squid:S1319‡"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÁíÍ‡üÿÿÿÿ8õ«ôÑ¥-
-]squid:UnusedPrivateMethod~"1Remove this unused private "printMessage" method.(¥Ô±û8‡Ã£Ğ¥-
-squid:S1488"\Immediately return this expression instead of assigning it to the temporary variable "shop".(Å´·Íıÿÿÿÿ8²ƒÆÇ¥-
-[
-squid:S106"9Replace this use of System.out or System.err by a logger.(øºÑûúÿÿÿÿ8²ƒÆÇ¥-
+:squid:S16438"Use a StringBuilder instead.(‹…ã§8ÒçÈÄ§-
+^squid:UnusedPrivateMethod‘"1Remove this unused private "printMessage" method.(¥Ô±û8­÷ÅÄ§-
+?squid:S16435"Use a StringBuilder instead.(ó›çòıÿÿÿÿ8ÒçÈÄ§-
+”squid:S1319–"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(‚±Õ‚úÿÿÿÿ8­÷ÅÄ§-
+\
+squid:S106’"9Replace this use of System.out or System.err by a logger.(øºÑûúÿÿÿÿ8­÷ÅÄ§-
+”squid:S1319¢"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ò¥îåüÿÿÿÿ8­÷ÅÄ§-
+osquid:S3776""RRefactor this method to reduce its Cognitive Complexity from 34 to the 15 allowed.(€™¸Y8Ñ¶ÂÄ§-
+lsquid:UselessImportCheck"<Remove this unused import 'presenter.CollectionMenuProcess'.(ûÕúÛşÿÿÿÿ8ĞÂ§-
+squid:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ï³§w8­÷ÅÄ§-
+squid:S1319š"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ñçĞˆ8­÷ÅÄ§-
+?squid:S16432"Use a StringBuilder instead.(ô°ğäøÿÿÿÿ8ÒçÈÄ§-
+squid:S1488"\Immediately return this expression instead of assigning it to the temporary variable "shop".(Å´·Íıÿÿÿÿ8²ƒÆÇ¥-
+:squid:S1643-"Use a StringBuilder instead.(Ö¸…Ğ8Ì¤ÁÄ§-

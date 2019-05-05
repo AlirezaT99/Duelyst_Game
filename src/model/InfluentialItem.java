@@ -4,7 +4,6 @@ public class InfluentialItem extends Item {
     protected Impact primaryImpact;
     protected Impact secondaryImpact;
 
-
     //getters
 
 

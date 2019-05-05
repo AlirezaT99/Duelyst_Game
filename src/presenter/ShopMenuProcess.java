@@ -120,7 +120,6 @@ public class ShopMenuProcess {
 
     private int exit() throws IOException {
         mainMenu.setIsInMainMenu(true);
-        mainMenu.setHasRun(false);
         shopMenu.setIsInShopMenu(false);
         mainMenu.run();
         return 0;
@@ -132,10 +131,11 @@ public class ShopMenuProcess {
     }
 
     private int search(String name) {
-        if (shopMenu.getShop().search(name).equals("-1"))
+        String s = shopMenu.getShop().search(name);
+        if (s.equals("-1"))
             return 1;
-
-        ShopMenu.showMessage("this item/card exists in the shop.");
+        int i = Integer.parseInt(s)+1;
+        ShopMenu.showMessage(i+"");
         return 0;
     }
 

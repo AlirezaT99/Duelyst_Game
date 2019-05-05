@@ -8,6 +8,7 @@ public abstract class Card {
     protected Match match;
     protected Player player;
     protected String cardID = "";
+    protected String collectionID = "";
     protected String description = "";
 
     void setCardfieldsForCopy(Card card) {
@@ -64,13 +65,20 @@ public abstract class Card {
     public String getDescription() {
         return description;
     }
+
+    public String getCollectionID() {return  collectionID;}
     //getters
 
     //setters
 
-    public void setCardID(String cardID) {
+    public void setCardCollectionID(String cardID) {
+        this.collectionID = cardID;
+    }
+
+    public void setCardID(String cardID){
         this.cardID = cardID;
     }
+
 
     public void setManaCost(int manaCost) {
         this.manaCost = manaCost;

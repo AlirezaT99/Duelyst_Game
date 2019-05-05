@@ -1,8 +1,14 @@
 
+Ÿsquid:S1319"|The type of the "player1_graveyard" object should be an interface such as "List" rather than the implementation "ArrayList".(¥û¥¦üÿÿÿÿ8È’‚ä§-
 ~squid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ8Şæª¢-
+|squid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8´áøƒ£-
+‘"squid:ClassVariableVisibilityCheck"]Make player2_graveyard a static final constant or non-public and provide accessors if needed.(¤Ş $8È’‚ä§-
+Osquid:S1068"1Remove this unused "numberOfFlags" private field.(ü¿éà8¡¶Ì¾§-
+—"squid:ClassVariableVisibilityCheck"]Make player1_graveyard a static final constant or non-public and provide accessors if needed.(¥û¥¦üÿÿÿÿ8È’‚ä§-
+™squid:S1319"|The type of the "player2_graveyard" object should be an interface such as "List" rather than the implementation "ArrayList".(¤Ş $8È’‚ä§-
+€squid:S00116"\Rename this field "player1_graveyard" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¥û¥¦üÿÿÿÿ8È’‚ä§-
 ~squid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ8Şæª¢-
-Hsquid:S1068",Remove this unused "gameMode" private field.(å±€À8÷‡©¢-
-zsquid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8´áøƒ£-
+zsquid:S00116"\Rename this field "player2_graveyard" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¤Ş $8È’‚ä§-
+~squid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ8Şæª¢-
 Qsquid:S1068".Remove this unused "singleMode" private field.(ÒÌº›ùÿÿÿÿ8÷‡©¢-
-~squid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ü®˜áşÿÿÿÿ8Şæª¢-
-osquid:S00116"RRename this field "AILevel" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»…°”8¦•İŸ¥-
+qsquid:S00116"RRename this field "AILevel" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»…°”8¦•İŸ¥-

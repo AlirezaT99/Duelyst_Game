@@ -21,13 +21,10 @@ public class BattleInit {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        help();
         while (true) {
             if (!isInBattleInit)
                 break;
-            if (!hasRun) {
-                help();
-                hasRun = true;
-            }
             // if(scanner.hasNextLine()) {
             String command = scanner.nextLine();
             battleInitProcess.commandParts = command.split("[ ]");

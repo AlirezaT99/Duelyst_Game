@@ -6,6 +6,7 @@ public class Item {
     protected String name;
     protected String description;
     protected String itemID;
+    protected String collectionID;
     Impact dyingWishImpact;
     Impact summonImpact;
 
@@ -14,8 +15,10 @@ public class Item {
         item.name = name;
         item.description = description;
         item.itemID = itemID;
-        item.dyingWishImpact = dyingWishImpact.copy();
-        item.summonImpact = summonImpact.copy();
+        if (dyingWishImpact != null)
+            item.dyingWishImpact = dyingWishImpact.copy();
+        if (summonImpact != null)
+            item.summonImpact = summonImpact.copy();
         return item;
     }
 
@@ -33,6 +36,8 @@ public class Item {
         return description;
     }
 
+    public String getCollectionID() {return collectionID;}
+
     //getters
 
     //setters
@@ -41,6 +46,12 @@ public class Item {
         this.description = description;
     }
 
-    public void setName(String name){this.name = name;}
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCollectionID(String collectionID) {
+        this.collectionID = collectionID;
+    }
     //setters
 }
