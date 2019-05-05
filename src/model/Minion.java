@@ -33,6 +33,14 @@ public class Minion extends MovableCard {
         minion.onDefendImpact = onDefendImpact == null ? null : onDefendImpact.copy();
         minion.onAttackImpact = onAttackImpact == null ? null : onAttackImpact.copy();
         minion.collectionID = this.collectionID;
+        minion.manaCost = manaCost;
+        minion.name = name;
+        minion.cell = cell;
+        minion.cost = cost;
+        minion.match = match;
+        minion.player = player;
+        minion.cardID = cardID;
+        minion.description = description;
         return minion;
     }
 

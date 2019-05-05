@@ -1,5 +1,7 @@
 package model;
 
+import presenter.StoryMenuProcess;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
