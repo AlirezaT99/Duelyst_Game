@@ -154,6 +154,11 @@ public abstract class MovableCard extends Card {
         }
     }
 
+    public void resetFlags() {
+        didMoveInThisTurn = false;
+        didAttackInThisTurn = false;
+    }
+
     protected void manageCasualties() {
         if (this.health + dispelableHealthChange <= 0)
             this.isAlive = false;
