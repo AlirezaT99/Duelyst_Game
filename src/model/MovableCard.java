@@ -83,6 +83,8 @@ public abstract class MovableCard extends Card {
 
     private int counterAttackAndNormalAttackSameParameters(MovableCard opponent) {
         int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
+        if(isMelee)
+            maxAttackRange = 2;
         if (isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
             return 16; // todo : why ??
         else if (distance > maxAttackRange)
