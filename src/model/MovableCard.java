@@ -68,6 +68,7 @@ public abstract class MovableCard extends Card {
     }
 
     boolean isAttackValid(MovableCard opponent) {
+
         if (!counterAttackAndNormalAttackSameParameters(opponent))
             return false;
         if (isHybrid)
@@ -83,6 +84,8 @@ public abstract class MovableCard extends Card {
 
     private boolean counterAttackAndNormalAttackSameParameters(MovableCard opponent) {
         int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
+        if(isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
+            return false;
         if (distance > maxAttackRange || distance < minAttackRange) {
             printMessage("Out of attack range");
             return false;
