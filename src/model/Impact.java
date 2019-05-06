@@ -545,8 +545,20 @@ public class Impact {
 
     void goThroughTime() {
         String s = impactTypeId.substring(0, 7);
+        String s1 = impactTypeId.substring(10);
         char c1 = impactTypeId.charAt(7);
         char c2 = impactTypeId.charAt(8);
+        char c3 = impactTypeId.charAt(9);
+        if(c3 != '0')
+            c3--;
+        else if(c2 != '0'){
+            c2 --;
+            c3 = '9';
+        }else {
+            this.impactTypeId = "00000000000000000000000000";
+            this.targetTypeId = "00000000000000000";
+            this.impactTypeIdComp = "00000000";
+        }
         c1++;
         c2++;
         impactTypeId = s + c1 + c2;

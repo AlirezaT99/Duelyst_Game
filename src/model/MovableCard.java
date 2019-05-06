@@ -68,7 +68,6 @@ public abstract class MovableCard extends Card {
     }
 
     boolean isAttackValid(MovableCard opponent) {
-
         if (!counterAttackAndNormalAttackSameParameters(opponent))
             return false;
         if (isHybrid)
@@ -86,7 +85,8 @@ public abstract class MovableCard extends Card {
         int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
         if(isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
             return false;
-        if (distance > maxAttackRange || distance < minAttackRange) {
+        else
+            if (distance > maxAttackRange ) {
             printMessage("Out of attack range");
             return false;
         }
@@ -116,7 +116,6 @@ public abstract class MovableCard extends Card {
                     printMessage("Disarmed. Can't CounterAttack");
                     return false;
                 }
-
         } else
             return false;
         return true;
@@ -168,7 +167,9 @@ public abstract class MovableCard extends Card {
     public void move(Cell destination) {
         if (isMoveValid(destination) == 0) {
             didMoveInThisTurn = true;
+            this.cardCell.setMovableCard(null);
             this.cardCell = destination;
+            this.cardCell.setMovableCard(this);
             if (!cardCell.cellImpacts.isEmpty()) {
                 this.impactsAppliedToThisOne.addAll(cardCell.cellImpacts);
             }
@@ -177,6 +178,8 @@ public abstract class MovableCard extends Card {
 
     public int isMoveValid(Cell cell) {
         moveRange = 2;
+        if(this.cardCell == cell)
+            return 9999; //unhandled
         if (didMoveInThisTurn)
             return 4;
         if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange)
@@ -190,14 +193,24 @@ public abstract class MovableCard extends Card {
     }
 
     private boolean isOpponentInTheWayOfDesiredDestination(Cell start, Cell destination) {
-        int startX = start.getCellCoordination().getX();
-        int startY = start.getCellCoordination().getY();
-        int destinationX = destination.getCellCoordination().getX();
-        int destinationY = destination.getCellCoordination().getY();
-        Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
-        Cell cell = player.match.table.getCellByCoordination(coordination.getX(), coordination.getY());
-        if (cell != null && cell.getMovableCard() != null)
-            return !cell.getMovableCard().player.equals(this.player);
+        if(start.getCellCoordination().getY() != destination.getCellCoordination().getY() )
+            if(start.getCellCoordination().getX() != destination.getCellCoordination().getX())
+                return false;
+        int x =   destination.getCellCoordination().getX() - start.getCellCoordination().getX();
+        int y =  destination.getCellCoordination().getY()  - start.getCellCoordination().getY();
+        if(x < 0)
+            x = -1;
+        if(x > 0)
+            x= 1;
+        if(y <0)
+            y = -1;
+        if(y>0)
+            y = 1;
+        x+= start.getCellCoordination().getX();
+        y += start.getCellCoordination().getY();
+        MovableCard movableCard = this.player.match.table.getCellByCoordination(x,y).getMovableCard();
+        if(movableCard != null)
+            return !movableCard.player.equals(this.player);
         return false;
     }
     //move

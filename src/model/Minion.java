@@ -65,7 +65,8 @@ public class Minion extends MovableCard {
     public void attack(MovableCard opponent) {
         if (this.isAttackValid(opponent)) {
             super.attack(opponent);
-            onAttackImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
+            if(onAttackImpact != null)
+                onAttackImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
         }
     }
 
@@ -88,6 +89,7 @@ public class Minion extends MovableCard {
             if (this.player.match.table.doesHaveLowestDamage(opponent))
                 this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
         }
+        if(onDefendImpact != null)
         onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
     }
 

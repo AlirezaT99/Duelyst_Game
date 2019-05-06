@@ -287,11 +287,12 @@ public class BattleMenuProcess {
     private boolean isCoordinationValidToInsert(int x, int y) {
         Card card = match.currentTurnPlayer().getHand().getSelectedCard();
         if (card instanceof Spell) {
-            Spell spell = (Spell) card;
-            if (spell.getPrimaryImpact().isSelectedCellImportant()) {
-                ArrayList<Cell> arrayList = spell.getValidCoordination();
-                return arrayList.contains(match.getTable().getCell(x, y));
-            } else return true;
+            return true;
+//            Spell spell = (Spell) card;
+//            if (spell.getPrimaryImpact().isSelectedCellImportant()) {
+//                ArrayList<Cell> arrayList = spell.getValidCoordination();
+//                return arrayList.contains(match.getTable().getCell(x, y));
+//            } else return true;
         } else {
             ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
             ArrayList<Cell> wantedCells = new ArrayList<>();
