@@ -6,6 +6,7 @@ public class Hand {
     private ArrayList<Card> cards;
     private Card selectedCard;
     private boolean switchCardThisTurn;
+
     private Deck deck;
 
     {
@@ -23,7 +24,7 @@ public class Hand {
     void fillEmptyPlaces(Deck deck) {
 //        for (int i = 0; i < 5; i++)
 //            if (this.cards.get(i) == null)
-//                this.cards.add(i, deck.getLastCard());
+//                this.cards.add(i, deck.getNextCard());
     }
 
     private boolean isThereEmptyPlace(Card card) {
@@ -44,7 +45,7 @@ public class Hand {
 
     public void switchCard() {
         deck.putTheCardBackInTheQueue(selectedCard);
-        Card card = deck.getLastCard();
+        Card card = deck.getNextCard();
         for (int i = 0; i < 5; i++) {
             if (cards.get(i).equals(selectedCard)) {
                 deleteCardBySettingNull(cards.get(i));
@@ -79,6 +80,8 @@ public class Hand {
     public Card getSelectedCard() {
         return selectedCard;
     }
+
+
 
     //getters
 
