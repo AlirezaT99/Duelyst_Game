@@ -202,23 +202,14 @@ public class BattleMenu {
             case 7:
                 showMessage("invalid coordination");
                 break;
+            case 9:
+                showMessage("invalid card name");
+                break;
             case 11:
                 showMessage("You don't have enough mana");
                 break;
             case 12:
                 showMessage("invalid target");
-                break;
-            case 13:
-                showMessage("Stunned. Can't Attack");
-                break;
-            case 14:
-                showMessage("Out of attack range");
-                break;
-            case 15:
-                showMessage("Friendly fire not allowed");
-                break;
-            case 16:
-                showMessage("Can't attack");
                 break;
         }
     }
@@ -248,6 +239,18 @@ public class BattleMenu {
                 break;
             case 9:
                 showMessage("invalid card name");
+                break;
+            case 13:
+                showMessage("Stunned. Can't Attack");
+                break;
+            case 14:
+                showMessage("Out of attack range");
+                break;
+            case 15:
+                showMessage("Friendly fire not allowed");
+                break;
+            case 16:
+                showMessage("Can't attack");
                 break;
         }
     }

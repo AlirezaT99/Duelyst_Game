@@ -331,6 +331,8 @@ public class BattleMenuProcess {
             }
         }
         //
+        if (match.currentTurnPlayer().getHand().findCardByName(cardName) == null)
+            return 9;
         String cardID = match.currentTurnPlayer().getHand().findCardByName(cardName).getCardID();
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
             match.currentTurnPlayer().getHand().findCardByName(cardName)
@@ -372,7 +374,7 @@ public class BattleMenuProcess {
         if (attackedCard instanceof MovableCard)
             returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
-        return 0;
+        return returnValue;
     }
 
 
