@@ -15,9 +15,11 @@ public class Hand {
 
 
     public Card findCardByName(String name) {
-        for (Card card : cards)
+        for (Card card : cards){
+            if (card == null)
+                System.out.println("ijdskvm");
             if (card.getName().equals(name))
-                return card;
+                return card;}
         return null;
     }
 

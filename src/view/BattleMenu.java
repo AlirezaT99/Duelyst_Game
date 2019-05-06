@@ -109,11 +109,11 @@ public class BattleMenu {
         BattleMenuProcess.getMatch().getPlayer1().setMana(20);
         BattleMenuProcess.getMatch().getPlayer2().setMana(20); // unused
         //
-
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
         BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 9));
+        System.out.println("+"+BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName());
     }
 
     private void setPlayerToCards(Player player) {

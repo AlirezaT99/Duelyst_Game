@@ -332,7 +332,7 @@ public class CollectionMenuProcess {
     }
 
     public static String nameCreator(String name) {
-        String[] names = name.split("[ ]");
+        String[] names = name.split("\\s+");
         String result = "";
         for (int i = 0; i < names.length; i++) {
             result += names[i];
