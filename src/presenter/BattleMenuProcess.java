@@ -31,7 +31,6 @@ public class BattleMenuProcess {
         commandPatterns.add(Pattern.compile("[iI]nsert [a-zA-Z0-9._ ]+ in \\(\\d,[ ]*\\d\\)"));
         commandPatterns.add(Pattern.compile("[eE]nd turn"));
         commandPatterns.add(Pattern.compile("[sS]how collectibles"));
-        commandPatterns.add(Pattern.compile("[sS]elect [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Use [location x, y]")); // regex ?
         commandPatterns.add(Pattern.compile("[sS]how next card"));
@@ -93,12 +92,6 @@ public class BattleMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return selectCollectible(commandParts[1]);
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
                     return showNextCard();
                 }
             },
@@ -118,6 +111,9 @@ public class BattleMenuProcess {
             return 2;
         match.currentTurnPlayer().getHand().setSelectedCard(findCard(cardID));
         return 5;
+
+        // should go in the collectible subMenu from here
+        // todo : check the id to see if is a card or a collectible
     }
 
     public static void showGraveYardCards() {
@@ -161,11 +157,15 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int selectCollectible(String commandPart) {
+    private int showCollectibles() {
         return 0;
     }
 
-    private int showCollectibles() {
+    public static int showCollectibleInfo() {
+        return 0;
+    }
+
+    public static int useCollectible() {
         return 0;
     }
 
@@ -243,6 +243,8 @@ public class BattleMenuProcess {
                     .attack((MovableCard) attackedCard);
         return 0;
     }
+
+
 
     public static int attackCombo(String[] commandParts) {
 //        Attack combo [opponent card id] [my card id] [my card id] [...]

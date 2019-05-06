@@ -91,7 +91,28 @@ public class BattleMenu {
                             }
                         }
                         break;
-
+                    case 15:
+                        //collectible menu
+                        collectible_loop:
+                        while (true) {
+                            command = scanner.nextLine();
+                            switch (collectibleMenu(command)) {
+                                case 1:
+                                    break collectible_loop;
+                                case 2:
+                                    collectibleMenuHelp();
+                                    break;
+                                case 3:
+                                    BattleMenuProcess.showCollectibleInfo();
+                                    break;
+                                case 4:
+                                    BattleMenuProcess.useCollectible();
+                                    break;
+                                default:
+                                    showMessage("invalid command");
+                            }
+                        }
+                        break;
                     default:
                         handleErrors(returnedValue);
                         break;
@@ -101,15 +122,30 @@ public class BattleMenu {
         scanner.close();
     }
 
+    private void collectibleMenuHelp() {
+        showMessage("Use (x, y)");
+        showMessage("Show info");
+        showMessage("Help");
+        showMessage("Cancel");
+    }
+
+    private int collectibleMenu(String command) {
+        if (command.matches("[cC]ancel")) return 1;
+        if (command.matches("[hH]elp")) return 2;
+        if (command.matches("[sS]how info")) return 3;
+        if (command.matches("[uU]se \\(\\d,[ ]*\\d\\)")) return 4;
+        return -1;
+    }
+
     private void battleSetup() {
         setPlayerToCards(BattleMenuProcess.getMatch().getPlayer1());
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero().setCardID(
-                BattleMenuProcess.getMatch().getPlayer1().getAccount().getUserName()+"_"+
-                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero().getName())+"_1");
+                BattleMenuProcess.getMatch().getPlayer1().getAccount().getUserName() + "_" +
+                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero().getName()) + "_1");
         setPlayerToCards(BattleMenuProcess.getMatch().getPlayer2());
         BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().setCardID(
-                BattleMenuProcess.getMatch().getPlayer2().getAccount().getUserName()+"_"+
-                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName())+"_1");
+                BattleMenuProcess.getMatch().getPlayer2().getAccount().getUserName() + "_" +
+                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName()) + "_1");
 
         BattleMenuProcess.getMatch().getPlayer1().fillHand();
         BattleMenuProcess.getMatch().getPlayer2().fillHand();
@@ -121,7 +157,7 @@ public class BattleMenu {
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
         BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 9));
-        System.out.println("+"+BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName());
+        System.out.println("+" + BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName());
     }
 
     private void setPlayerToCards(Player player) {
