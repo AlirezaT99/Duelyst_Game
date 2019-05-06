@@ -173,8 +173,29 @@ public class BattleMenuProcess {
         match.currentTurnPlayer().fillHand();
         resetFlags();
         match.switchTurn();
+        impactGoThroughTime();
         // didMoveInThisTurn --> false
         return 0;
+    }
+
+    private void impactGoThroughTime() {
+        for (int i = 1; i < 5; i++) {
+            for (int j = 1; j < 9; j++) {
+                Cell cell = match.getTable().getCellByCoordination(i, j);
+                MovableCard movableCard = cell.getMovableCard();
+                for (Impact impact : cell.cellImpacts) {
+                    System.out.println("joon");
+                    System.out.println(impact.getImpactTypeId());
+                    impact.goThroughTime(movableCard);
+                }
+                if (movableCard != null)
+                    for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
+                        System.out.println("boon");
+                        System.out.println(impact.getImpactTypeId());
+                        impact.goThroughTime(movableCard);
+                    }
+            }
+        }
     }
 
     private void resetFlags() {
@@ -243,7 +264,6 @@ public class BattleMenuProcess {
                     .attack((MovableCard) attackedCard);
         return 0;
     }
-
 
 
     public static int attackCombo(String[] commandParts) {
@@ -386,10 +406,10 @@ public class BattleMenuProcess {
     }
 
     private void showMinion(MovableCard soldier) {
-        BattleMenu.showMessage(soldier.getCardID() + " : " + soldier.getName() + ", health : " + soldier.getHealth()
+        BattleMenu.showMessage(soldier.getCardID() + " : " + soldier.getName() + ", health : " + (soldier.getHealth()+soldier.dispelableHealthChange)
                 + ", location : (" + soldier.getCardCell().getCellCoordination().getX() + ","
                 + soldier.getCardCell().getCellCoordination().getY()
-                + "), power : " + soldier.getDamage());
+                + "), power : " + (soldier.getDamage()+soldier.dispelableDamageChange));
     }
 
     private int gameInfo() {

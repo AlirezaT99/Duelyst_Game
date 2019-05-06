@@ -9,7 +9,7 @@ public class Cell {
     private MovableCard movableCard;
     private CollectibleItem item;
     private ArrayList<Cell> adjacentCells;
-    ArrayList<Impact> cellImpacts;
+    public ArrayList<Impact> cellImpacts;
 
     {
         adjacentCells = new ArrayList<>();
