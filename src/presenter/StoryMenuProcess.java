@@ -76,11 +76,11 @@ public class StoryMenuProcess {
         deck.addItemToDeck(UsableItem.getUsableItemByName("The Crown of Knowledge"));
         deck.setHero(Hero.getHeroByName("Div e Sefid"));
         deck.getItems().get(0).setItemID("computer_TheCrownOfKnowledge_1");
-        setDeckCardIDs("computer",deck);
+        setDeckCardIDs("computer", deck);
         Match match = new Match(true, 1);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
-                        .getAccount().getCollection().getSelectedDeck().getName(), 0);
+                        .getAccount().getCollection().getSelectedDeck().getName(), 0, deck);
         match.getPlayer2().setDeck(deck);
         BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
         enterBattleMenu(battleMenu);
@@ -112,18 +112,18 @@ public class StoryMenuProcess {
         deck.addItemToDeck(UsableItem.getUsableItemByName("Terror Hood"));
         deck.setHero(Hero.getHeroByName("Aarash"));
         deck.getItems().get(0).setItemID("computer_TerrorHood_1");
-        setDeckCardIDs("computer",deck);
+        setDeckCardIDs("computer", deck);
         Match match = new Match(true, 3);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
-                        .getAccount().getCollection().getSelectedDeck().getName(), 1);
+                        .getAccount().getCollection().getSelectedDeck().getName(), 1, deck);
         match.getPlayer2().setDeck(deck);
         BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
         enterBattleMenu(battleMenu);
         return 0;
     }
 
-    private int enterThirdLevel() throws IOException{
+    private int enterThirdLevel() throws IOException {
         Deck deck = new Deck("computerDeck");
         deck.addSpellToDeck(Spell.getSpellByName("Area Dispel"));
         deck.addSpellToDeck(Spell.getSpellByName("Empower"));
@@ -148,17 +148,18 @@ public class StoryMenuProcess {
         deck.addItemToDeck(UsableItem.getUsableItemByName("Soul Eater"));
         deck.setHero(Hero.getHeroByName("Zahhak"));
         deck.getItems().get(0).setItemID("computer_SoulEater_1");
-        setDeckCardIDs("computer",deck);
+        setDeckCardIDs("computer", deck);
         Match match = new Match(true, 2);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
-                        .getAccount().getCollection().getSelectedDeck().getName(), 7);
+                        .getAccount().getCollection().getSelectedDeck().getName(), 7, deck);
         match.getPlayer2().setDeck(deck);
         BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
         enterBattleMenu(battleMenu);
         return 0;
     }
-    private  void enterBattleMenu(BattleMenu battleMenu) throws IOException {
+
+    private void enterBattleMenu(BattleMenu battleMenu) throws IOException {
         storyMenu.setHasRun(false);
         storyMenu.setInStoryMenu(false);
         battleMenu.setInBattleMenu(true);
@@ -174,25 +175,26 @@ public class StoryMenuProcess {
         return 0;
     }
 
-    public static void setDeckCardIDs(String playerName, Deck deck){ //only use it for story mode.
-        deck.getHero().setCardID(CollectionMenuProcess.createCardID(playerName,deck,deck.getHero()));
-        for(int i = 0; i < deck.getMinions().size() ; i++){
+    public static void setDeckCardIDs(String playerName, Deck deck) { //only use it for story mode.
+        if (deck.getHero() != null)
+            deck.getHero().setCardID(CollectionMenuProcess.createCardID(playerName, deck, deck.getHero()));
+        for (int i = 0; i < deck.getMinions().size(); i++) {
             int num = 0;
-            for( int j = 0; j < deck.getMinions().size() ; j++) {
+            for (int j = 0; j < deck.getMinions().size(); j++) {
                 if (deck.getMinions().get(j).getName().equals(deck.getMinions().get(i).getName())
-                    && (deck.getMinions().get(j).getCardID() != null && deck.getMinions().get(j).getCardID() != ""))
+                        && (deck.getMinions().get(j).getCardID() != null && deck.getMinions().get(j).getCardID() != ""))
                     num++;
             }
-            deck.getMinions().get(i).setCardID(CollectionMenuProcess.createCardID(playerName,deck,deck.getMinions().get(i)));
+            deck.getMinions().get(i).setCardID(CollectionMenuProcess.createCardID(playerName, deck, deck.getMinions().get(i)));
         }
-        for(int i = 0; i < deck.getSpells().size() ; i++){
+        for (int i = 0; i < deck.getSpells().size(); i++) {
             int num = 0;
-            for( int j = 0; j < deck.getSpells().size() ; j++){
+            for (int j = 0; j < deck.getSpells().size(); j++) {
                 if (deck.getSpells().get(j).getName().equals(deck.getSpells().get(i).getName())
                         && (deck.getSpells().get(j).getCardID() != null && deck.getSpells().get(j).getCardID() != ""))
                     num++;
             }
-            deck.getSpells().get(i).setCardID(CollectionMenuProcess.createCardID(playerName,deck,deck.getSpells().get(i)));
+            deck.getSpells().get(i).setCardID(CollectionMenuProcess.createCardID(playerName, deck, deck.getSpells().get(i)));
         }
     }
 }

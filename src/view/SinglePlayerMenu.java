@@ -52,12 +52,13 @@ public class SinglePlayerMenu {
                 if (hero != null)
                     inSelectUserLoop = true;
                 boolean deckChosen = false;
+                Deck deck = new Deck("");
                 if(hero!=null)
                 {
                     CollectionMenuProcess.showAllDecks(account);
                     showMessage("Choose a deck to fight with, by typing its name : ");
                     command = scanner.nextLine();
-                    Deck deck = account.getCollection().getDeckHashMap().get(command);
+                     deck = account.getCollection().getDeckHashMap().get(command);
                     while (deck == null){
                         showMessage("invalid deck. please just type the desired deck's name.");
                     if (command.toLowerCase().matches("help"))
@@ -84,7 +85,7 @@ public class SinglePlayerMenu {
                         case 2:
                             break inner_Loop;
                         case 3:
-                            if (singlePlayerMenuProcess.customGame(command) == 4)
+                            if (singlePlayerMenuProcess.customGame(command,hero) == 4)
                                 showMessage("invalid deck");
                             break;
                         default:

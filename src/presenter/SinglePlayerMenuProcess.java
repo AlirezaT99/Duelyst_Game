@@ -26,7 +26,7 @@ public class SinglePlayerMenuProcess {
         commandPatterns.add(Pattern.compile("help|4"));
     }
 
-    public  int  customGame(String command) throws IOException {
+    public  int  customGame(String command, Hero hero) throws IOException {
         String[] commandParts = command.split("\\s+");
         String deckName = commandParts[2]; // space ke nadare vasatesh?
         if (!account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName)))
@@ -35,7 +35,10 @@ public class SinglePlayerMenuProcess {
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
         Match match = new Match(true, mode);
-        match.setup(account, deckName, numberOfFlags);
+        Deck deck = getSampleDecks().get(0).copy();
+        deck.setHero(hero);
+        deck.getHero().setCardID("computer_"+deck.getHero().getName()+"_1");
+        match.setup(account, deckName, numberOfFlags, deck);
         BattleMenu battleMenu = new BattleMenu(singlePlayerMenu.getBattleInit(), match);
         enterBattleMenu(battleMenu);
         return 0;
