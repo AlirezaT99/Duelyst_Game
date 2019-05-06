@@ -16,8 +16,7 @@ public class ShopMenuProcess {
     private ShopMenu shopMenu;
     private MainMenu mainMenu;
 
-    static {
-        commandPatterns.add(Pattern.compile("exit"));
+    static { commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("show collection"));
         commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]* [a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
@@ -26,7 +25,6 @@ public class ShopMenuProcess {
         commandPatterns.add(Pattern.compile("show"));
         commandPatterns.add(Pattern.compile("help"));
     }
-
 
     public interface DoCommand {
         int doIt() throws IOException;

@@ -7,7 +7,7 @@ public class Cell {
 
     private Coordination coordination;
     private MovableCard movableCard;
-    private CollectibleItem item;
+    private Item item;
     private ArrayList<Cell> adjacentCells;
     ArrayList<Impact> cellImpacts;
 
@@ -59,7 +59,7 @@ public class Cell {
         return coordination;
     }
 
-    public CollectibleItem getItem() {
+    public Item getItem() {
         return item;
     }
     //getters
@@ -74,6 +74,9 @@ public class Cell {
         this.movableCard = movableCard;
     }
 
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
     //setters
 
