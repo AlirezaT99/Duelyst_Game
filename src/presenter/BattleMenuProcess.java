@@ -18,7 +18,7 @@ public class BattleMenuProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("[gG]ame Info"));
+        commandPatterns.add(Pattern.compile("[gG]ame info"));
         commandPatterns.add(Pattern.compile("[sS]how my minions"));
         commandPatterns.add(Pattern.compile("[sS]how opponent minions"));
         commandPatterns.add(Pattern.compile("[sS]how card info [a-zA-Z0-9._]+"));
@@ -195,16 +195,15 @@ public class BattleMenuProcess {
         if (!isCoordinationValidToInsert(x, y))
             return 12;
         //
+        String cardID = match.currentTurnPlayer().getHand().findCardByName(cardName).getCardID();
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
             match.currentTurnPlayer().getHand().findCardByName(cardName)
                     .castCard(match.getTable().getCellByCoordination(x, y));
-        if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell)
+        else if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell) // ok?
             ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
                     .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
         //
-        BattleMenu.showMessage(cardName + " with "
-                + match.currentTurnPlayer().getDeck().findCardByName(cardName).getCardID()
-                + " inserted to (" + x + "," + y + ")");
+        BattleMenu.showMessage(cardName + " with " + cardID + " inserted to (" + x + "," + y + ")");
         return 0;
     }
 
@@ -306,22 +305,23 @@ public class BattleMenuProcess {
     }
 
     private static int showCardInfo(String cardID) {
-        if (match.getPlayer1().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
-            showInfo(match.getPlayer1().getCollection().getSelectedDeck().getHero());
-        if (match.getPlayer2().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
-            showInfo(match.getPlayer2().getCollection().getSelectedDeck().getHero());
-        for (Card minion : match.getPlayer1().getCollection().getSelectedDeck().getMinions())
+        if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID))
+            showInfo(match.getPlayer1().getDeck().getHero());
+        if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
+            showInfo(match.getPlayer2().getDeck().getHero());
+        for (Card minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 showInfo(minion);
-        for (Card minion : match.getPlayer2().getCollection().getSelectedDeck().getMinions())
+        for (Card minion : match.getPlayer2().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 showInfo(minion);
-        for (Card spell : match.getPlayer1().getCollection().getSelectedDeck().getSpells())
+        for (Card spell : match.getPlayer1().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 showInfo(spell);
-        for (Card spell : match.getPlayer2().getCollection().getSelectedDeck().getSpells())
+        for (Card spell : match.getPlayer2().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 showInfo(spell);
+        System.out.println("wtf");
         return 0;
     }
 
@@ -341,20 +341,20 @@ public class BattleMenuProcess {
     }
 
     private static Card findCard(String cardID) {
-        if (match.getPlayer1().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
-            return match.getPlayer1().getCollection().getSelectedDeck().getHero();
-        if (match.getPlayer2().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
-            return match.getPlayer2().getCollection().getSelectedDeck().getHero();
-        for (Minion minion : match.getPlayer1().getCollection().getSelectedDeck().getMinions())
+        if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID))
+            return match.getPlayer1().getDeck().getHero();
+        if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
+            return match.getPlayer2().getDeck().getHero();
+        for (Minion minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 return minion;
-        for (Minion minion : match.getPlayer2().getCollection().getSelectedDeck().getMinions())
+        for (Minion minion : match.getPlayer2().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 return minion;
-        for (Spell spell : match.getPlayer1().getCollection().getSelectedDeck().getSpells())
+        for (Spell spell : match.getPlayer1().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 return spell;
-        for (Spell spell : match.getPlayer2().getCollection().getSelectedDeck().getSpells())
+        for (Spell spell : match.getPlayer2().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 return spell;
         return null;
@@ -365,7 +365,7 @@ public class BattleMenuProcess {
 //            if (cell.getMovableCard() instanceof Hero)
 //                System.out.print("Hero");
 //            if (cell.getMovableCard() instanceof Minion)
-//                System.out.print("Minion"); // todo: cardID not shown ?
+//                System.out.print("Minion");
             showMinion(cell.getMovableCard());
         }
         return 0;
@@ -382,9 +382,13 @@ public class BattleMenuProcess {
         switch (match.getGameMode()) {
             case 1:
                 System.out.println("Player1 Hero Health = "
-                        + match.getPlayer1().getCollection().getSelectedDeck().getHero());
+                        + match.getPlayer1().getDeck().getHero().getHealth());
+                System.out.println("Player1 MP = "
+                        + match.getPlayer1().getMana());
                 System.out.println("Player2 Hero Health = "
-                        + match.getPlayer2().getCollection().getSelectedDeck().getHero());
+                        + match.getPlayer2().getDeck().getHero().getHealth());
+                System.out.println("Player2 MP = "
+                        + match.getPlayer2().getMana());
                 break;
             case 2:
                 // location & holder of flag

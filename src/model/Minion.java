@@ -56,7 +56,8 @@ public class Minion extends MovableCard {
     @Override
     public void castCard(Cell cell) {
         super.castCard(cell);
-        summonImpact.doImpact(this.player, this, this.cardCell, this.cardCell);
+        if (summonImpact != null) // just saying
+            summonImpact.doImpact(this.player, this, this.cardCell, this.cardCell);
         // do summonImpact
     }
 
