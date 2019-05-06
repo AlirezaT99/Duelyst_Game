@@ -154,6 +154,10 @@ public class BattleMenuProcess {
     }
 
     private int showNextCard() {
+        Card card = match.currentTurnPlayer().getDeck().getNextCard();
+        if(card == null)
+            return -1;
+        System.out.println(card.toString(false)+"\n");
         return 0;
     }
 
@@ -167,7 +171,7 @@ public class BattleMenuProcess {
 
     private int endTurn() {
         match.switchTurn();
-        match.currentTurnPlayer().fillHand(); // ?
+        match.currentTurnPlayer().fillHand();
 
         return 0;
     }
