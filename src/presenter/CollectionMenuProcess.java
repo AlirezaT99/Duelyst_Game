@@ -214,25 +214,40 @@ public class CollectionMenuProcess {
 
     private int removeFromDeck(String idStr, String deckName) {
         Deck deck = account.getCollection().getDeckHashMap().get(deckName);
+        if(deck == null)
+            return 9;
         if (deck.findCardByID(idStr) == null
-                && !deck.getItemsHashMap().containsKey(idStr))
+                && !deck.getItems().get(0).getCollectionID().equals(idStr))
             return 3;
         if (account.getCollection().findCardByCollectionID(idStr) instanceof Hero
                 && deck.getHero() != null
-                && deck.getHero().getCardID().equals(idStr)) {
+                && deck.getHero().getCollectionID().equals(idStr)) {
             deck.setHero(null);
             return 0;
         }
         if (account.getCollection().findCardByCollectionID(idStr) instanceof Spell
-                && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getName()) != null) {
-            deck.getSpells().remove(account.getCollection().findCardByCollectionID(idStr));
+                && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getCollectionID()) != null) {
+            for( int i = 0 ; i < deck.getSpells().size(); i++){
+                if(deck.getSpells().get(i).getCollectionID().equals(idStr)){
+                    deck.getSpells().remove(deck.getSpells().get(i));
+                    break;
+                }
+            }
             return 0;
         }
         if (account.getCollection().findCardByCollectionID(idStr) instanceof Minion
-                && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getName()) != null) {
-            deck.getMinions().remove(account.getCollection().findCardByCollectionID(idStr));
+                && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getCollectionID()) != null) {
+            for( int i = 0 ; i < deck.getMinions().size(); i++){
+                if(deck.getMinions().get(i).getCollectionID().equals(idStr)){
+                    deck.getMinions().remove(deck.getMinions().get(i));
+                    break;
+                }
+            }
             return 0;
         }
+
+        if((deck.getItems().size()>0) && deck.getItems().get(0).getCollectionID().equals(idStr))
+            account.getCollection().getDeckHashMap().get(deckName).getItems().remove(0);
         account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().remove(idStr);
         return 0;
     }
