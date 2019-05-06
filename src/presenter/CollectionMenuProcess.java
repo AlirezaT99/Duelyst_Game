@@ -188,10 +188,12 @@ public class CollectionMenuProcess {
                 return 0;
             }
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
-                && account.getCollection().getItemsHashMap().size() < Deck.MAX_ITEM_NUMBER) {
+                && account.getCollection().getItemsHashMap().size() < 1) {
+            UsableItem item = account.getCollection().getItemsHashMap().get(idStr).copy();
+            item.setItemID(account.getUserName()+"_"+nameCreator(item.getName())+"_1");
             deck.getItemsHashMap()
-                    .put(idStr, account.getCollection().getItemsHashMap().get(idStr).copy());
-            deck.getItems().add(account.getCollection().getItemsHashMap().get(idStr).copy());
+                    .put(idStr, item);
+            deck.getItems().add(item);
             return 0;
         }
         if (account.getCollection().findCardByCollectionID(idStr) != null) {
