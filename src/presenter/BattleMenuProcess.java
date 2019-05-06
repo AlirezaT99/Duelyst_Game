@@ -341,20 +341,20 @@ public class BattleMenuProcess {
     }
 
     private static Card findCard(String cardID) {
-        if (match.getPlayer1().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
-            return match.getPlayer1().getCollection().getSelectedDeck().getHero();
-        if (match.getPlayer2().getCollection().getSelectedDeck().getHero().getCardID().equals(cardID))
-            return match.getPlayer2().getCollection().getSelectedDeck().getHero();
-        for (Minion minion : match.getPlayer1().getCollection().getSelectedDeck().getMinions())
+        if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID))
+            return match.getPlayer1().getDeck().getHero();
+        if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
+            return match.getPlayer2().getDeck().getHero();
+        for (Minion minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 return minion;
-        for (Minion minion : match.getPlayer2().getCollection().getSelectedDeck().getMinions())
+        for (Minion minion : match.getPlayer2().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 return minion;
-        for (Spell spell : match.getPlayer1().getCollection().getSelectedDeck().getSpells())
+        for (Spell spell : match.getPlayer1().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 return spell;
-        for (Spell spell : match.getPlayer2().getCollection().getSelectedDeck().getSpells())
+        for (Spell spell : match.getPlayer2().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 return spell;
         return null;
