@@ -103,10 +103,14 @@ public class BattleMenu {
     }
 
     private void battleSetup() {
+        setPlayerToCards(BattleMenuProcess.getMatch().getPlayer1());
+        setPlayerToCards(BattleMenuProcess.getMatch().getPlayer2());
         BattleMenuProcess.getMatch().getPlayer1().fillHand();
-        setPlayerToMovableCards(BattleMenuProcess.getMatch().getPlayer1());
         BattleMenuProcess.getMatch().getPlayer2().fillHand();
-        setPlayerToMovableCards(BattleMenuProcess.getMatch().getPlayer2());
+        //
+        BattleMenuProcess.getMatch().getPlayer1().setMana(20);
+        BattleMenuProcess.getMatch().getPlayer2().setMana(20); // unused
+        //
 
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
@@ -114,14 +118,13 @@ public class BattleMenu {
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 9));
     }
 
-    private void setPlayerToMovableCards(Player player){
+    private void setPlayerToCards(Player player) {
         Deck deck = player.getDeck();
-        for(int i = 0; i < deck.getItems().size(); i++)
+        for (int i = 0; i < deck.getItems().size(); i++)
             deck.getItems().get(i).setPlayer(player);
-        for(int i = 0; i< deck.getMinions().size(); i++){
+        for (int i = 0; i < deck.getMinions().size(); i++)
             deck.getMinions().get(i).setPlayer(player);
-        }
-        for(int i = 0; i < deck.getSpells().size(); i++)
+        for (int i = 0; i < deck.getSpells().size(); i++)
             deck.getSpells().get(i).setPlayer(player);
         deck.getHero().setPlayer(player);
     }

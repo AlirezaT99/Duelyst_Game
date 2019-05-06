@@ -45,6 +45,8 @@ public class MultiPlayerMenu {
                         break;
                     case 3:
                         printGameModes();
+                        System.out.print("\n");
+                        customGameHelp();
                         inner_Loop:
                         while (true) {
                             command = scanner.nextLine();
