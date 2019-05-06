@@ -294,6 +294,8 @@ public class BattleMenuProcess {
     }
 
     private boolean isCoordinationValidToInsert(int x, int y) {
+        if(match.getTable().getCellByCoordination(x,y).getItem()!=null)
+            return false;
         ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
         ArrayList<Cell> wantedCells = new ArrayList<>();
         for (Cell cell : soldiersCells)

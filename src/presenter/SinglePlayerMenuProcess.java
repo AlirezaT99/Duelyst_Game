@@ -35,6 +35,10 @@ public class SinglePlayerMenuProcess {
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
         Match match = new Match(true, mode);
+        if(mode == 2){
+            Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
+            match.getTable().getCellByCoordination(3,5).setItem(flag);
+        }
         Deck deck = getSampleDecks().get(0).copy();
         deck.setHero(hero);
         deck.getHero().setCardID("computer_"+deck.getHero().getName()+"_1");

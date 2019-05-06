@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import model.Account;
+import model.Flag;
 import model.Match;
 import view.BattleMenu;
 import view.MultiPlayerMenu;
@@ -57,6 +58,10 @@ public class MultiPlayerMenuProcess {
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
         Match match = new Match(false, mode);
+        if(mode == 2){
+            Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
+            match.getTable().getCellByCoordination(3,5).setItem(flag);
+        }
         match.setup(account, opponent, account.getCollection().getSelectedDeck().getName(), numberOfFlags);
         BattleMenu battleMenu = new BattleMenu(multiPlayerMenu.getBattleInit(), match);
         enterBattleMenu(battleMenu);

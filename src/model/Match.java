@@ -66,6 +66,11 @@ public class Match {
         this.numberOfFlags = numberOfFlags;
     }
 
+    public void setFlags(int numberOfFlags){
+        if(numberOfFlags == -1 || numberOfFlags == 0)
+            return;
+        //todo : set flags for third mode
+    }
     //turn based manager
     public Player currentTurnPlayer() {
         if (turn == 0)

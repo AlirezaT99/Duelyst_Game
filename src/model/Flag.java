@@ -1,6 +1,6 @@
 package model;
 
-class Flag extends Item {
+public class Flag extends Item {
     Cell cell;
     Match match;
 
