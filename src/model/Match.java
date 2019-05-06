@@ -115,6 +115,11 @@ public class Match {
     public int getGameMode() {
         return gameMode;
     }
+
+    public int getNumberOfFlags() {
+        return numberOfFlags;
+    }
+
     //getters
 
 }

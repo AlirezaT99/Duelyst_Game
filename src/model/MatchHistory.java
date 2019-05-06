@@ -8,6 +8,7 @@ public class MatchHistory {
     private boolean result;
     private LocalDateTime now;
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    private String timeOfNow;
 
     public void setMatchHistory(Player player, Match match, boolean result){
         now = LocalDateTime.now();
@@ -19,6 +20,8 @@ public class MatchHistory {
                 opponentName = match.getPlayer2().getUserName();
             else
                 opponentName = match.getPlayer1().getUserName();
+        now = LocalDateTime.now();
+        timeOfNow = dtf.format(now);
         player.getAccount().getMatchHistory().add(0,this);
     }
 }
