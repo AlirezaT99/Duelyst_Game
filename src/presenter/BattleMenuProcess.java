@@ -247,6 +247,8 @@ public class BattleMenuProcess {
             }
         }
         //
+        if (match.currentTurnPlayer().getHand().findCardByName(cardName) == null)
+            return 9;
         String cardID = match.currentTurnPlayer().getHand().findCardByName(cardName).getCardID();
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
             match.currentTurnPlayer().getHand().findCardByName(cardName)
