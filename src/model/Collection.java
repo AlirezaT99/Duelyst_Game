@@ -28,6 +28,10 @@ public class Collection {
         selectedDeck = deckHashMap.get(name);
     }
 
+    public void setSelectedDeck(Deck deck){
+        selectedDeck = deck;
+    }
+
     public void addDeck(Deck deck) {
         decks.add(deck);
         deckHashMap.put(deck.getName(), deck);
