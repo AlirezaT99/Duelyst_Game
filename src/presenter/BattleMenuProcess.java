@@ -290,9 +290,8 @@ public class BattleMenuProcess {
         if (attackedCard instanceof MovableCard)
             returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
-        return 0;
+        return returnValue;
     }
-
 
 
     public static int attackCombo(String[] commandParts) {
@@ -425,10 +424,10 @@ public class BattleMenuProcess {
     }
 
     private void showMinion(MovableCard soldier) {
-        BattleMenu.showMessage(soldier.getCardID() + " : " + soldier.getName() + ", health : " + (soldier.getHealth()+soldier.dispelableHealthChange)
+        BattleMenu.showMessage(soldier.getCardID() + " : " + soldier.getName() + ", health : " + (soldier.getHealth() + soldier.dispelableHealthChange)
                 + ", location : (" + soldier.getCardCell().getCellCoordination().getX() + ","
                 + soldier.getCardCell().getCellCoordination().getY()
-                + "), power : " + (soldier.getDamage()+soldier.dispelableDamageChange));
+                + "), power : " + (soldier.getDamage() + soldier.dispelableDamageChange));
     }
 
     private int gameInfo() {
