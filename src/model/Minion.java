@@ -62,12 +62,13 @@ public class Minion extends MovableCard {
     }
 
     @Override
-    public void attack(MovableCard opponent) {
-        if (this.isAttackValid(opponent)) {
-            super.attack(opponent);
+    public int attack(MovableCard opponent) {
+        if (this.isAttackValid(opponent) == 0) {
             if(onAttackImpact != null)
                 onAttackImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
+            return super.attack(opponent);
         }
+        return 999;//idk
     }
 
     @Override
