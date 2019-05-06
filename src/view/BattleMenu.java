@@ -137,6 +137,15 @@ public class BattleMenu {
             case 2:
                 showMessage("invalid card id");
                 break;
+            case 7:
+                showMessage("invalid coordination");
+                break;
+            case 11:
+                showMessage("You don't have enough mana");
+                break;
+            case 12:
+                showMessage("invalid target");
+                break;
         }
     }
 
@@ -160,20 +169,11 @@ public class BattleMenu {
             case 6:
                 showMessage("Enemy in the way");
                 break;
-            case 7:
-                showMessage("invalid coordination");
-                break;
             case 8:
                 showMessage("Stunned. Can't Move");
                 break;
             case 9:
                 showMessage("invalid card name");
-                break;
-            case 11:
-                showMessage("You don't have enough mana");
-                break;
-            case 12:
-                showMessage("invalid target");
                 break;
         }
     }
