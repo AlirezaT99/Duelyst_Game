@@ -1,6 +1,8 @@
 package view;
 
+import model.Deck;
 import model.Match;
+import model.Player;
 import presenter.BattleMenuProcess;
 
 import java.io.IOException;
@@ -102,11 +104,26 @@ public class BattleMenu {
 
     private void battleSetup() {
         BattleMenuProcess.getMatch().getPlayer1().fillHand();
+        setPlayerToMovableCards(BattleMenuProcess.getMatch().getPlayer1());
         BattleMenuProcess.getMatch().getPlayer2().fillHand();
+        setPlayerToMovableCards(BattleMenuProcess.getMatch().getPlayer2());
+
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
         BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 9));
+    }
+
+    private void setPlayerToMovableCards(Player player){
+        Deck deck = player.getDeck();
+        for(int i = 0; i < deck.getItems().size(); i++)
+            deck.getItems().get(i).setPlayer(player);
+        for(int i = 0; i< deck.getMinions().size(); i++){
+            deck.getMinions().get(i).setPlayer(player);
+        }
+        for(int i = 0; i < deck.getSpells().size(); i++)
+            deck.getSpells().get(i).setPlayer(player);
+        deck.getHero().setPlayer(player);
     }
 
     private void selectCardHelp() {

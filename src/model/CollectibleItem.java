@@ -6,7 +6,7 @@ public class CollectibleItem extends InfluentialItem {
     private static ArrayList<CollectibleItem> collectibleItems = new ArrayList<>();
     private Cell cell;
     private Match match;
-    private Player player;
+    //private Player player;
 
     public CollectibleItem copy() {
         CollectibleItem item = new CollectibleItem();

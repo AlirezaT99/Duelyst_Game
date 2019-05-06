@@ -9,6 +9,7 @@ public class Item {
     protected String collectionID;
     Impact dyingWishImpact;
     Impact summonImpact;
+    Player player;
 
     public Item copy(){
         Item item = new Item();
@@ -52,6 +53,10 @@ public class Item {
 
     public void setCollectionID(String collectionID) {
         this.collectionID = collectionID;
+    }
+
+    public void setPlayer(Player player){
+        this.player = player;
     }
     //setters
 }

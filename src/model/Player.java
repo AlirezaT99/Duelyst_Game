@@ -58,7 +58,7 @@ public class Player {
     }
 
     public boolean equals(Player player) {
-        return player.getUserName().equals(this.getUserName());
+        return player.getAccount().getUserName().equals(this.getAccount().getUserName());
     }
 
     Hero findPlayerHero() {

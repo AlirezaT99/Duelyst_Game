@@ -105,6 +105,11 @@ public abstract class Card {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     //setters
 
 }

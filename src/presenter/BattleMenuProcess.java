@@ -155,9 +155,9 @@ public class BattleMenuProcess {
 
     private int showNextCard() {
         Card card = match.currentTurnPlayer().getDeck().getNextCard();
-        if(card == null)
+        if (card == null)
             return -1;
-        System.out.println(card.toString(false)+"\n");
+        System.out.println(card.toString(false) + "\n");
         return 0;
     }
 
@@ -254,6 +254,7 @@ public class BattleMenuProcess {
 
     private int showHand() {
         BattleMenu.showMessage(match.currentTurnPlayer().getHand().showHand());
+        BattleMenu.showMessage("Next Card:");
         showNextCard();
         return 0;
     }
@@ -279,14 +280,13 @@ public class BattleMenuProcess {
 
     private boolean isCoordinationValidToInsert(int x, int y) {
         Card card = match.currentTurnPlayer().getHand().getSelectedCard();
-        if(card instanceof Spell){
+        if (card instanceof Spell) {
             Spell spell = (Spell) card;
-            if(spell.getPrimaryImpact().isSelectedCellImportant()){
+            if (spell.getPrimaryImpact().isSelectedCellImportant()) {
                 ArrayList<Cell> arrayList = spell.getValidCoordination();
                 return arrayList.contains(match.getTable().getCell(x, y));
-            }else return true;
-        }
-        else {
+            } else return true;
+        } else {
             ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
             ArrayList<Cell> wantedCells = new ArrayList<>();
             for (Cell cell : soldiersCells)
@@ -368,7 +368,8 @@ public class BattleMenuProcess {
 
     private void showMinion(MovableCard soldier) {
         BattleMenu.showMessage(soldier.getCardID() + " : " + soldier.getName() + ", health : " + soldier.getHealth()
-                + ", location : (" + soldier.getCoordination().getX() + "," + soldier.getCoordination().getY()
+                + ", location : (" + soldier.getCardCell().getCellCoordination().getX() + ","
+                + soldier.getCardCell().getCellCoordination().getX()
                 + "), power : " + soldier.getDamage());
     }
 

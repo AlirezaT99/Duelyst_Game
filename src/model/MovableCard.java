@@ -41,7 +41,8 @@ public abstract class MovableCard extends Card {
     public void castCard(Cell cell) {
         cell.setMovableCard(this);
         this.cardCell = cell;
-        player.getHand().deleteCardBySettingNull(this);
+        if (!(this instanceof Hero))
+            player.getHand().deleteCardBySettingNull(this);
         if (!(this instanceof Hero))
             player.setMana(player.getMana() - this.manaCost);
     }
@@ -266,7 +267,10 @@ public abstract class MovableCard extends Card {
         this.onAttackImpact = onAttackImpact;
     }
 
-    //getters
+    public Cell getCardCell() {
+        return cardCell;
+    }
+//getters
 
     //setters
     public void setCardCell(Cell cardCell) {
