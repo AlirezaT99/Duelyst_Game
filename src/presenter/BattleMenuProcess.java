@@ -207,7 +207,7 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private String[] cleanupArray(String[] command) {
+    private static String[] cleanupArray(String[] command) {
         ArrayList<String> output = new ArrayList<>();
         for (int i = 0; i < command.length; i++)
             if (!command[i].equals(""))
@@ -258,9 +258,10 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    public static int moveTo(String card_x, String card_y) {
-        int x = Integer.parseInt(card_x),
-                y = Integer.parseInt(card_y);
+    public static int moveTo(String[] command) {
+        command = cleanupArray(command);
+        int x = Integer.parseInt(command[command.length - 2]),
+                y = Integer.parseInt(command[command.length - 1]);
         if (coordinationInvalid(x, y))
             return 7;
         //
@@ -271,7 +272,6 @@ public class BattleMenuProcess {
         if (moveValid != 0) return moveValid;
         //
         ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard()).move(match.getTable().getCell(x, y));
-//        match.currentTurnPlayer().getHand().getSelectedCard().setCoordination(new Coordination(x, y));
         BattleMenu.showMessage(match.currentTurnPlayer().getHand().getSelectedCard().getCardID()
                 + "moved to [" + x + "][" + y + "]");
         return 0;
@@ -345,6 +345,14 @@ public class BattleMenuProcess {
             return match.getPlayer1().getDeck().getHero();
         if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
             return match.getPlayer2().getDeck().getHero();
+        //
+        for (Cell cell : match.getTable().findAllSoldiers(match.getPlayer1()))
+            if (cell.getMovableCard().getCardID().equals(cardID))
+                return cell.getMovableCard();
+        for (Cell cell : match.getTable().findAllSoldiers(match.getPlayer2()))
+            if (cell.getMovableCard().getCardID().equals(cardID))
+                return cell.getMovableCard();
+        //
         for (Minion minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 return minion;

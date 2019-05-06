@@ -55,8 +55,7 @@ public class BattleMenu {
                                             , command.split("[), (]")[4]));
                                     break;
                                 case 4:
-                                    cardHandleErrors(BattleMenuProcess.moveTo(command.split("[), (]")[2]
-                                            , command.split("[), (]")[3]));
+                                    cardHandleErrors(BattleMenuProcess.moveTo(command.split("[), (]")));
                                     break;
                                 case 5:
                                     cardHandleErrors(BattleMenuProcess.attack(command.split("\\s+")[1]));
@@ -142,7 +141,7 @@ public class BattleMenu {
         if (command.matches("[cC]ancel")) return 1;
         if (command.matches("[hH]elp")) return 2;
         if (command.matches("[uU]se special power (\\d, \\d)")) return 3;
-        if (command.matches("[mM]ove to (\\d, \\d)")) return 4;
+        if (command.matches("[mM]ove to \\(\\d,[ ]*\\d\\)")) return 4;
         if (command.matches("[aA]ttack [a-zA-Z0-9._]+")) return 5;
         if (command.matches("[aA]ttack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*")) return 6;
 

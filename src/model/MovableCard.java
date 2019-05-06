@@ -11,7 +11,7 @@ public abstract class MovableCard extends Card {
     private ArrayList<Impact> impactsAppliedToThisOne;
     protected boolean didMoveInThisTurn;
     protected boolean didAttackInThisTurn;
-    protected int moveRange;
+    protected int moveRange = 2;
     protected int minAttackRange;
     protected int maxAttackRange;
     protected boolean isMelee;
