@@ -83,10 +83,9 @@ public abstract class MovableCard extends Card {
 
     private boolean counterAttackAndNormalAttackSameParameters(MovableCard opponent) {
         int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
-        if(isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
+        if (isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
             return false;
-        else
-            if (distance > maxAttackRange ) {
+        else if (distance > maxAttackRange) {
             printMessage("Out of attack range");
             return false;
         }
@@ -178,7 +177,7 @@ public abstract class MovableCard extends Card {
 
     public int isMoveValid(Cell cell) {
         moveRange = 2;
-        if(this.cardCell == cell)
+        if (this.cardCell == cell)
             return 9999; //unhandled
         if (didMoveInThisTurn)
             return 4;
@@ -193,23 +192,23 @@ public abstract class MovableCard extends Card {
     }
 
     private boolean isOpponentInTheWayOfDesiredDestination(Cell start, Cell destination) {
-        if(start.getCellCoordination().getY() != destination.getCellCoordination().getY() )
-            if(start.getCellCoordination().getX() != destination.getCellCoordination().getX())
+        if (start.getCellCoordination().getY() != destination.getCellCoordination().getY())
+            if (start.getCellCoordination().getX() != destination.getCellCoordination().getX())
                 return false;
-        int x =   destination.getCellCoordination().getX() - start.getCellCoordination().getX();
-        int y =  destination.getCellCoordination().getY()  - start.getCellCoordination().getY();
-        if(x < 0)
+        int x = destination.getCellCoordination().getX() - start.getCellCoordination().getX();
+        int y = destination.getCellCoordination().getY() - start.getCellCoordination().getY();
+        if (x < 0)
             x = -1;
-        if(x > 0)
-            x= 1;
-        if(y <0)
+        if (x > 0)
+            x = 1;
+        if (y < 0)
             y = -1;
-        if(y>0)
+        if (y > 0)
             y = 1;
-        x+= start.getCellCoordination().getX();
+        x += start.getCellCoordination().getX();
         y += start.getCellCoordination().getY();
-        MovableCard movableCard = this.player.match.table.getCellByCoordination(x,y).getMovableCard();
-        if(movableCard != null)
+        MovableCard movableCard = this.player.match.table.getCellByCoordination(x, y).getMovableCard();
+        if (movableCard != null)
             return !movableCard.player.equals(this.player);
         return false;
     }
