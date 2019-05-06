@@ -28,6 +28,9 @@ public class Hero extends MovableCard {
         hero.player = player;
         hero.cardID = cardID;
         hero.description = description;
+        hero.moveRange = 2;
+        hero.maxAttackRange = 2;
+        hero.minAttackRange = 1;
         return hero;
     }
 
