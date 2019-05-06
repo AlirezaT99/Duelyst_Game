@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Player {
     private Account account;
     private Deck deck; // playing deck
@@ -9,7 +11,8 @@ public class Player {
     private int mana;
     Match match;
     private boolean isAI;
-
+    private ArrayList<CollectibleItem> collectibleItems = new ArrayList<>();
+    private ArrayList<Flag> flags = new ArrayList<>();
     {
         hand = new Hand();
     }
@@ -97,6 +100,15 @@ public class Player {
     public Deck getDeck() {
         return deck;
     }
+
+    public ArrayList<CollectibleItem> getCollectibleItems() {
+        return collectibleItems;
+    }
+
+    public ArrayList<Flag> getFlags() {
+        return flags;
+    }
+
     //getters
 
     //setters
