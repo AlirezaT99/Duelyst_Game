@@ -8,7 +8,7 @@ public abstract class MovableCard extends Card {
     protected boolean isAlive = false;
     protected Cell cardCell;
     private int damage;
-    private ArrayList<Impact> impactsAppliedToThisOne;
+    private ArrayList<Impact> impactsAppliedToThisOne = new ArrayList<>();
     protected boolean didMoveInThisTurn;
     protected boolean didAttackInThisTurn;
     protected int moveRange = 2;
@@ -17,8 +17,8 @@ public abstract class MovableCard extends Card {
     protected boolean isMelee;
     protected boolean isRanged;
     protected boolean isHybrid;
-    protected Impact onDefendImpact;
-    protected Impact onAttackImpact;
+    protected Impact onDefendImpact = null;
+    protected Impact onAttackImpact = null;
     protected boolean isComboAttacker;
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
@@ -42,7 +42,7 @@ public abstract class MovableCard extends Card {
         cell.setMovableCard(this);
         this.cardCell = cell;
         if (!(this instanceof Hero))
-            player.getHand().deleteCardBySettingNull(this);
+            player.getHand().removeCardFromHand(this);
         if (!(this instanceof Hero))
             player.setMana(player.getMana() - this.manaCost);
     }
@@ -68,6 +68,7 @@ public abstract class MovableCard extends Card {
     }
 
     boolean isAttackValid(MovableCard opponent) {
+
         if (!counterAttackAndNormalAttackSameParameters(opponent))
             return false;
         if (isHybrid)
@@ -83,6 +84,8 @@ public abstract class MovableCard extends Card {
 
     private boolean counterAttackAndNormalAttackSameParameters(MovableCard opponent) {
         int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
+        if(isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
+            return false;
         if (distance > maxAttackRange || distance < minAttackRange) {
             printMessage("Out of attack range");
             return false;
@@ -168,6 +171,7 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
+        moveRange = 2;
         if (didMoveInThisTurn)
             return 4;
         if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange)

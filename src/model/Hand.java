@@ -34,9 +34,8 @@ public class Hand {
         return false;
     }
 
-    void deleteCardBySettingNull(Card card) {
-        int index = cards.indexOf(card);
-        cards.set(index, null);
+    void removeCardFromHand(Card card) {
+        cards.remove(card);
     }
 
     //switching
@@ -50,7 +49,7 @@ public class Hand {
         Card card = deck.getNextCard();
         for (int i = 0; i < 5; i++) {
             if (cards.get(i).equals(selectedCard)) {
-                deleteCardBySettingNull(cards.get(i));
+                removeCardFromHand(cards.get(i));
                 cards.set(i, card);
             }
         }

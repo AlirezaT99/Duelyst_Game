@@ -41,9 +41,9 @@ public class Player {
         if (deck.getNextCard() == null)
             deck.refreshNextCard();
         for (int i = 0; i < 5; i++) {
-            if (hand.getCards().size() < i + 1 || hand.getCards().get(i) == null) {
+            if (hand.getCards().size() < 5) {
                 Card card = deck.getNextCard();
-                hand.getCards().add(i, card);
+                hand.getCards().add(card);
                 deck.refreshNextCard();
                 if (card instanceof Spell)
                     deck.getSpells().remove(card);

@@ -13,6 +13,7 @@ public class Cell {
 
     {
         adjacentCells = new ArrayList<>();
+        cellImpacts = new ArrayList<>();
     }
 
     int findDistanceBetweenCells(Cell cell) {
