@@ -8,7 +8,7 @@ public abstract class MovableCard extends Card {
     protected boolean isAlive = false;
     protected Cell cardCell;
     private int damage;
-    private ArrayList<Impact> impactsAppliedToThisOne;
+    private ArrayList<Impact> impactsAppliedToThisOne = new ArrayList<>();
     protected boolean didMoveInThisTurn;
     protected boolean didAttackInThisTurn;
     protected int moveRange = 2;
@@ -17,8 +17,8 @@ public abstract class MovableCard extends Card {
     protected boolean isMelee;
     protected boolean isRanged;
     protected boolean isHybrid;
-    protected Impact onDefendImpact;
-    protected Impact onAttackImpact;
+    protected Impact onDefendImpact = null;
+    protected Impact onAttackImpact = null;
     protected boolean isComboAttacker;
     int dispelableHealthChange = 0;
     int dispelableDamageChange = 0;
@@ -171,7 +171,6 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
-        System.out.println("minion moveRange :" + moveRange);
         moveRange = 2;
         if (didMoveInThisTurn)
             return 4;

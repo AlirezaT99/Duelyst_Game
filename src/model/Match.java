@@ -46,19 +46,23 @@ public class Match {
     public void setup(Account account, String deckName, int numberOfFlags, Deck deck) {
         player1.setAccount(account);
         player1.setDeck(player1.getAccount().getCollection().getDeckHashMap().get(deckName));
+        player1.match = this;
         player2.setAccount(new Account("Computer","Computer"));
         player2.getAccount().setCollection(new Collection());
         player2.getAccount().getCollection().setSelectedDeck(deck);
         player2.setDeck(deck.copy());
         player2.setAI(true);
+        player2.match = this;
         this.numberOfFlags = numberOfFlags;
     }
 
     public void setup(Account account1, Account account2, String deckName, int numberOfFlags) {
         player1.setAccount(account1);
+        player1.match = this;
         player2.setAccount(account2);
         player1.setDeck(account1.getCollection().getDeckHashMap().get(deckName));
         player2.setDeck(account2.getCollection().getSelectedDeck());
+        player2.match = this;
         this.numberOfFlags = numberOfFlags;
     }
 
