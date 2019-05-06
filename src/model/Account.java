@@ -134,5 +134,9 @@ public class Account {
     public void setMoney(long money) {
         this.money = money;
     }
+
+    public void setCollection(Collection collection){
+        this.collection = collection;
+    }
     //setters
 }
