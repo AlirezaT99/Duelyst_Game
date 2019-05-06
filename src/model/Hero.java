@@ -76,6 +76,11 @@ public class Hero extends MovableCard {
                 return hero.copy();
         return null;
     }
+
+    public static ArrayList<Hero> getHeroes() {
+        return heroes;
+    }
+
     // getters{
 
 

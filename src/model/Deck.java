@@ -99,7 +99,6 @@ public class Deck {
             if (spell.getCollectionID().equals(id))
                 return spell;
         for (Minion minion : minions) {
-            System.out.println(minion.getCollectionID());
             if (minion.getCollectionID().equals(id)) {
                 return minion;
             }

@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import model.Account;
-import model.Match;
+import model.*;
 import view.BattleMenu;
 import view.SinglePlayerMenu;
 import view.StoryMenu;
@@ -49,7 +48,6 @@ public class SinglePlayerMenuProcess {
         battleMenu.run();
     }
 
-
     public interface DoCommand {
         int doIt() throws IOException;
     }
@@ -89,6 +87,61 @@ public class SinglePlayerMenuProcess {
         return 0;
     }
 
+    public ArrayList<Deck> getSampleDecks(){
+        ArrayList<Deck> decks= new ArrayList<>();
+        Deck deck1 = new Deck("deck1");
+        deck1.addSpellToDeck(Spell.getSpellByName("Area Dispel"));
+        deck1.addSpellToDeck(Spell.getSpellByName("Empower"));
+        deck1.addSpellToDeck(Spell.getSpellByName("God Strength"));
+        deck1.addSpellToDeck(Spell.getSpellByName("Madness"));
+        deck1.addSpellToDeck(Spell.getSpellByName("Poison Lake"));
+        deck1.addSpellToDeck(Spell.getSpellByName("Health with Profit"));
+        deck1.addSpellToDeck(Spell.getSpellByName("Kings Guard"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Persian Swordsman"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Persian Lancer"));
+        deck1.addMinionToDeck(Minion.getMinionByName("The Persian Pahlevoon"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Tourani GhollabSangDaar"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Tourani Prince"));
+        deck1.addMinionToDeck(Minion.getMinionByName("The Eagle"));
+        deck1.addMinionToDeck(Minion.getMinionByName("The Eagle"));
+        deck1.addMinionToDeck(Minion.getMinionByName("FireBreathing Dragon"));
+        deck1.addMinionToDeck(Minion.getMinionByName("The Leopard"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Goblin"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Giiv"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Iraj"));
+        deck1.addMinionToDeck(Minion.getMinionByName("Shah Ghoul"));
+        deck1.addItemToDeck(UsableItem.getUsableItemByName("Soul Eater"));
+        deck1.getItems().get(0).setItemID("computer_SoulEater_1");
+        StoryMenuProcess.setDeckCardIDs("computer",deck1);
+        decks.add(deck1);
+        ////
+        Deck deck = new Deck("deck2");
+        deck.addSpellToDeck(Spell.getSpellByName("HellFire"));
+        deck.addSpellToDeck(Spell.getSpellByName("All Disarm"));
+        deck.addSpellToDeck(Spell.getSpellByName("Dispel"));
+        deck.addSpellToDeck(Spell.getSpellByName("Power Up"));
+        deck.addSpellToDeck(Spell.getSpellByName("All power"));
+        deck.addSpellToDeck(Spell.getSpellByName("All Attack"));
+        deck.addSpellToDeck(Spell.getSpellByName("Weakening"));
+        deck.addMinionToDeck(Minion.getMinionByName("Persian WarLord"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani Archer"));
+        deck.addMinionToDeck(Minion.getMinionByName("Tourani Spy"));
+        deck.addMinionToDeck(Minion.getMinionByName("StoneLauncher Ghoul"));
+        deck.addMinionToDeck(Minion.getMinionByName("HogRider Div"));
+        deck.addMinionToDeck(Minion.getMinionByName("HogRider Div"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Fierce Lion"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Wolf"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Witch"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Wild Swine"));
+        deck.addMinionToDeck(Minion.getMinionByName("Piraan"));
+        deck.addMinionToDeck(Minion.getMinionByName("Bahman"));
+        deck.addMinionToDeck(Minion.getMinionByName("The Great Ghoul"));
+        deck.addItemToDeck(UsableItem.getUsableItemByName("Terror Hood"));
+        deck.setHero(Hero.getHeroByName("Aarash"));
+        deck.getItems().get(0).setItemID("computer_TerrorHood_1");
+        StoryMenuProcess.setDeckCardIDs("computer",deck);
+        return decks;
+    }
     //getters
     public Account getAccount() {
         return account;

@@ -90,13 +90,13 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return showAllDecks();
+                    return showAllDecks(account);
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return showDeck(commandParts[2]);
+                    return showDeck(commandParts[2],account);
                 }
             },
             new DoCommand() {
@@ -258,7 +258,7 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private int showDeck(String deckName) {
+    private static int showDeck(String deckName, Account account) {
         if (account.getCollection().getDeckHashMap().get(deckName) != null)
             CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show(false));
         else
@@ -266,23 +266,23 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private int showAllDecks() {
+    public static int showAllDecks(Account account) {
         if (account.getCollection().getSelectedDeck() != null) {
             CollectionMenu.showMessage("1 : " + account.getCollection().getSelectedDeck().getName() + " :");
-            showDeck(account.getCollection().getSelectedDeck().getName());
+            showDeck(account.getCollection().getSelectedDeck().getName(),account);
             int idx = 2;
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
                 if (!account.getCollection().getDecks().get(i).getName()
                         .equals(account.getCollection().getSelectedDeck().getName())) {
                     CollectionMenu.showMessage(idx + " : " + account.getCollection().getDecks().get(i).getName() + " :");
-                    showDeck(account.getCollection().getDecks().get(i).getName());
+                    showDeck(account.getCollection().getDecks().get(i).getName(),account);
                     idx++;
                 }
             }
         } else
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
                 CollectionMenu.showMessage((i + 1) + " : " + account.getCollection().getDecks().get(i).getName() + " :");
-                showDeck(account.getCollection().getDecks().get(i).getName());
+                showDeck(account.getCollection().getDecks().get(i).getName(),account);
             }
         return 0;
     }
