@@ -17,6 +17,7 @@ public class Deck {
     private HashMap<String, UsableItem> itemsHashMap;
     public static final int MAX_CARD_NUMBER = 20;
     public static final int MAX_ITEM_NUMBER = 3;
+    private Card nextCard = null;
 
     {
         cards = new ArrayList<>();
@@ -35,9 +36,7 @@ public class Deck {
         for (Minion minion : minions) {
             deck.minions.add(minion.copy());
         }
-        for (Spell spell : spells) {
-            deck.spells.add(spell);
-        }
+        deck.spells.addAll(spells);
         deck.hero = hero == null ? null : hero.copy();
         return deck;
     }
@@ -118,19 +117,22 @@ public class Deck {
         return null;
     }
 
-    Card getLastCard() {
-        ArrayList<Card> cards = new ArrayList<>();
-        cards.addAll(spells);
-        cards.addAll(minions);
+    public Card getNextCard() {
+        return nextCard;
+
+    }
+    public void refreshNextCard(){
+        ArrayList<Card> possibleCards = new ArrayList<>();
+        possibleCards.addAll(spells);
+        possibleCards.addAll(minions);
+        if(possibleCards.size() == 0){
+            nextCard = null;
+            return;
+        }
         Random random = new Random();
-        int i = Math.abs(random.nextInt() % cards.size());
-        System.out.println(cards.size() + " " + i);
-        Card card = cards.get(i);
-        if (card instanceof Spell)
-            spells.remove(card);
-        if (card instanceof Minion)
-            minions.remove(card);
-        return card;
+        int i = Math.abs(random.nextInt() % possibleCards.size());
+        nextCard = possibleCards.get(i);
+
     }
 
     public static void createDeck(String deckName) {

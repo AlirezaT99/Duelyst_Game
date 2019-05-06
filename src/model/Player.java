@@ -38,9 +38,18 @@ public class Player {
     }
 
     public void fillHand() {
+        if(deck.getNextCard() ==null)
+            deck.refreshNextCard();
         for (int i = 0; i < 5; i++) {
-            if(hand.getCards().size() < i+1 || hand.getCards().get(i) == null)
-                hand.getCards().add(i,deck.getLastCard());
+            if(hand.getCards().size() < i+1 || hand.getCards().get(i) == null) {
+                Card card =deck.getNextCard();
+                hand.getCards().add(i, card);
+                deck.refreshNextCard();
+                if (card instanceof Spell)
+                    deck.getSpells().remove(card);
+                if (card instanceof Minion)
+                    deck.getMinions().remove(card);
+            }
         }
     }
 

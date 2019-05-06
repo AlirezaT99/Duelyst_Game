@@ -71,6 +71,9 @@ public class Spell extends Card {
         return spell;
     }
 
+    public ArrayList<Cell> getValidCoordination(){
+        return primaryImpact.getValidCells(player);
+    }
 
 
     //getters

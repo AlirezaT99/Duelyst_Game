@@ -154,6 +154,10 @@ public class BattleMenuProcess {
     }
 
     private int showNextCard() {
+        Card card = match.currentTurnPlayer().getDeck().getNextCard();
+        if(card == null)
+            return -1;
+        System.out.println(card.toString(false)+"\n");
         return 0;
     }
 
@@ -167,7 +171,7 @@ public class BattleMenuProcess {
 
     private int endTurn() {
         match.switchTurn();
-        match.currentTurnPlayer().fillHand(); // ?
+        match.currentTurnPlayer().fillHand();
 
         return 0;
     }
@@ -278,7 +282,8 @@ public class BattleMenuProcess {
         if(card instanceof Spell){
             Spell spell = (Spell) card;
             if(spell.getPrimaryImpact().isSelectedCellImportant()){
-
+                ArrayList<Cell> arrayList = spell.getValidCoordination();
+                return arrayList.contains(match.getTable().getCell(x, y));
             }else return true;
         }
         else {
@@ -298,7 +303,6 @@ public class BattleMenuProcess {
                     return true;
             return false;
         }
-        return false;
     }
 
     private static int showCardInfo(String cardID) {

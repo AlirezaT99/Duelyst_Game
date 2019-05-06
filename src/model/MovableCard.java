@@ -42,7 +42,8 @@ public abstract class MovableCard extends Card {
         cell.setMovableCard(this);
         this.cardCell = cell;
         player.getHand().deleteCardBySettingNull(this);
-        player.setMana(player.getMana() - this.manaCost);
+        if (!(this instanceof Hero))
+            player.setMana(player.getMana() - this.manaCost);
     }
 
     @Override
