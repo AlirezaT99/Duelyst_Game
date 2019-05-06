@@ -42,7 +42,7 @@ public abstract class MovableCard extends Card {
         cell.setMovableCard(this);
         this.cardCell = cell;
         if (!(this instanceof Hero))
-            player.getHand().deleteCardBySettingNull(this);
+            player.getHand().removeCardFromHand(this);
         if (!(this instanceof Hero))
             player.setMana(player.getMana() - this.manaCost);
     }
@@ -171,6 +171,8 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
+        System.out.println("minion moveRange :" + moveRange);
+        moveRange = 2;
         if (didMoveInThisTurn)
             return 4;
         if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange)

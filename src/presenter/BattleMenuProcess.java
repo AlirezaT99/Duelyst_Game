@@ -203,6 +203,7 @@ public class BattleMenuProcess {
             ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
                     .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
         //
+        match.currentTurnPlayer().fillHand();
         BattleMenu.showMessage(cardName + " with " + cardID + " inserted to (" + x + "," + y + ")");
         return 0;
     }
