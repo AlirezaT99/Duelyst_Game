@@ -361,15 +361,20 @@ public class BattleMenuProcess {
     }
 
     private int showSoldiers(Player player) {
-        for (Cell cell : match.getTable().findAllSoldiers(player))
+        for (Cell cell : match.getTable().findAllSoldiers(player)) {
+//            if (cell.getMovableCard() instanceof Hero)
+//                System.out.print("Hero");
+//            if (cell.getMovableCard() instanceof Minion)
+//                System.out.print("Minion"); // todo: cardID not shown ?
             showMinion(cell.getMovableCard());
+        }
         return 0;
     }
 
     private void showMinion(MovableCard soldier) {
         BattleMenu.showMessage(soldier.getCardID() + " : " + soldier.getName() + ", health : " + soldier.getHealth()
                 + ", location : (" + soldier.getCardCell().getCellCoordination().getX() + ","
-                + soldier.getCardCell().getCellCoordination().getX()
+                + soldier.getCardCell().getCellCoordination().getY()
                 + "), power : " + soldier.getDamage());
     }
 
