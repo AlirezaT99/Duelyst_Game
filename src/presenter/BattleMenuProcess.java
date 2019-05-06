@@ -170,10 +170,16 @@ public class BattleMenuProcess {
     }
 
     private int endTurn() {
-        match.switchTurn();
         match.currentTurnPlayer().fillHand();
-
+        resetFlags();
+        match.switchTurn();
+        // didMoveInThisTurn --> false
         return 0;
+    }
+
+    private void resetFlags() {
+        for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
+            cell.getMovableCard().resetFlags();
     }
 
     private int insertCard(String[] command) {
@@ -274,7 +280,7 @@ public class BattleMenuProcess {
         //
         ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard()).move(match.getTable().getCell(x, y));
         BattleMenu.showMessage(match.currentTurnPlayer().getHand().getSelectedCard().getCardID()
-                + "moved to [" + x + "][" + y + "]");
+                + " moved to (" + x + "," + y + ")");
         return 0;
     }
 
