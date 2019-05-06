@@ -103,10 +103,10 @@ public class BattleMenu {
     }
 
     private void battleSetup() {
-        BattleMenuProcess.getMatch().getPlayer1().fillHand();
         setPlayerToMovableCards(BattleMenuProcess.getMatch().getPlayer1());
-        BattleMenuProcess.getMatch().getPlayer2().fillHand();
         setPlayerToMovableCards(BattleMenuProcess.getMatch().getPlayer2());
+        BattleMenuProcess.getMatch().getPlayer1().fillHand();
+        BattleMenuProcess.getMatch().getPlayer2().fillHand();
 
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
