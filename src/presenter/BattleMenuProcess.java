@@ -173,8 +173,24 @@ public class BattleMenuProcess {
         match.currentTurnPlayer().fillHand();
         resetFlags();
         match.switchTurn();
-        // didMoveInThisTurn --> false
+        if (endGameReached()) {
+            //todo : give reward to the winner / create matchHistory / goto mainMenu
+        }
         return 0;
+    }
+
+    private boolean endGameReached() {
+        switch (match.getGameMode()) {
+            case 1:
+                if (!match.currentTurnPlayer().getDeck().getHero().isAlive() ||
+                        !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
+                    return true;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+        return false;
     }
 
     private void resetFlags() {
@@ -246,8 +262,9 @@ public class BattleMenuProcess {
         if (findCard(cardID) == null)
             return 3;
         Card attackedCard = findCard(cardID);
+        int returnValue = 0;
         if (attackedCard instanceof MovableCard)
-            ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
+            returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
         return 0;
     }
