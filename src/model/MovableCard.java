@@ -20,8 +20,8 @@ public abstract class MovableCard extends Card {
     protected Impact onDefendImpact = null;
     protected Impact onAttackImpact = null;
     protected boolean isComboAttacker;
-    int dispelableHealthChange = 0;
-    int dispelableDamageChange = 0;
+    public int dispelableHealthChange = 0;
+    public int dispelableDamageChange = 0;
     private HashMap<String, MovableCard> previousTargets = new HashMap<>();
     private Item item;
 
@@ -143,7 +143,7 @@ public abstract class MovableCard extends Card {
     public void goThroughTime() {
         for (Impact impact : impactsAppliedToThisOne) {
             impact.doImpact(this.player, this, this.cardCell, this.cardCell);
-            impact.goThroughTime();
+            impact.goThroughTime(this);
 
         }
     }

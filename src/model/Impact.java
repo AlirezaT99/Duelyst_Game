@@ -7,7 +7,7 @@ import java.util.ArrayList;
 // 16.appliedToOnWhichState(state is for card that have isPositiveImpact)(0-3){none,defend,attack}
 public class Impact {
     private int impactId = 1;
-    private ArrayList<Cell> impactArea;
+    private ArrayList<Cell> impactArea = new ArrayList<>();
     private Match match;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
     // 3.(0-2)"onWhichTeam"{friendly, hostile, both}|4.(0-2)"targetSoldierType"{hero,minion,both}|
@@ -155,6 +155,7 @@ public class Impact {
 
     //setImpact main methods
     void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
+        match = friendlyPlayer.match;
         Player opponentPlayer = match.getOtherPlayer(friendlyPlayer);
         impactArea.clear();
         teamOrHeroSets(friendlyPlayer, opponentPlayer);
@@ -163,9 +164,16 @@ public class Impact {
         geometricSets(friendlyPlayer, targetCell, opponentPlayer, castingCell);
         addToCardsImpact();
         setImpactAreaComp(targetCell);
+        System.out.println("begin of impact Area");
+        for (Cell cell : impactArea) {
+            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
+        }
+        System.out.println("end of impact Area");
     }
 
     private void setImpactAreaComp(Cell targetCell) {
+        if (impactAdderTypes.length() < 2)
+            return;
         boolean addToDefend = impactAdderTypes.charAt(0) == '1';
         boolean addToAttack = impactAdderTypes.charAt(1) == '2';
         if (addToDefend) {
@@ -391,6 +399,8 @@ public class Impact {
             kill();
         else if (powerBuff)
             powerBuff();
+        else if (poisonBuff)
+            setPoisonBuff();
         else if (weaknessBuff)
             weaknessBuff();
         else if (cellImpact)
@@ -464,6 +474,15 @@ public class Impact {
 
     //buff manager
 
+    private void setPoisonBuff() {
+        for (Cell cell : impactArea) {
+            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
+            MovableCard movableCard = cell.getMovableCard();
+            if (movableCard != null)
+                movableCard.getImpactsAppliedToThisOne().add(this);
+        }
+    }
+
     static void holyBuff(MovableCard movableCard, int damageTaken) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.holyBuff) {
@@ -474,6 +493,8 @@ public class Impact {
     }
 
     void poisonBuff(MovableCard movableCard) {
+        System.out.println("joon");
+        System.out.println(getImpactQuantityWithSign());
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3') //is poisonBuff
                 movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
@@ -543,49 +564,58 @@ public class Impact {
     //special impacts manager
 
 
-    void goThroughTime() {
+    public void goThroughTime(MovableCard movableCard) {
+        if (impactTypeId.length() < 10)
+            return;
         String s = impactTypeId.substring(0, 7);
         String s1 = impactTypeId.substring(10);
-        char c1 = impactTypeId.charAt(7);
-        char c2 = impactTypeId.charAt(8);
-        char c3 = impactTypeId.charAt(9);
-        if(c3 != '0')
-            c3--;
-        else if(c2 != '0'){
-            c2 --;
-            c3 = '9';
-        }else {
+
+        int x1 = Integer.parseInt(impactTypeId.substring(7, 8));
+        int x2 = Integer.parseInt(impactTypeId.substring(8, 9));
+        int x3 = Integer.parseInt(impactTypeId.substring(9, 10));
+
+
+        if (x3 != 0)
+            x3--;
+        else if (x2 != 0) {
+            x2--;
+            x3 = 9;
+        } else {
             this.impactTypeId = "00000000000000000000000000";
             this.targetTypeId = "00000000000000000";
             this.impactTypeIdComp = "00000000";
         }
-        c1++;
-        c2++;
-        impactTypeId = s + c1 + c2;
+        if (x1 != 0)
+            x1--;
+        x2--;
+        impactTypeId = s + (x1 + "") + (x2 + "") + (x3 + "") + s1;
+        if (this.isPoisonBuff())
+            poisonBuff(movableCard);
+
     }
 
     private String changeCharAtDesiredIndex(int index, char newChar, String string) {
         return string.substring(0, index) + newChar + string.substring(index + 1);
     }
 
-    public ArrayList<Cell> getValidCells(Player friendlyPlayer){
+    public ArrayList<Cell> getValidCells(Player friendlyPlayer) {
         ArrayList<Cell> cellArrayList = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
             for (int j = 1; j < 9; j++) {
-                Cell cell = match.table.getCell(i,j);
-                if(oneColumn || oneRow || isImpactAreaSquare) {
+                Cell cell = match.table.getCell(i, j);
+                if (oneColumn || oneRow || isImpactAreaSquare) {
                     cellArrayList.add(cell);
                     continue;
                 }
-                if(cell.getMovableCard() == null)
+                if (cell.getMovableCard() == null)
                     continue;
                 MovableCard movableCard = cell.getMovableCard();
-                if(validOnHostileTeamOnly && movableCard.player.equals(friendlyPlayer))
+                if (validOnHostileTeamOnly && movableCard.player.equals(friendlyPlayer))
                     continue;
-                if(validOnFriendlyTeamOnly && !movableCard.player.equals(friendlyPlayer))
+                if (validOnFriendlyTeamOnly && !movableCard.player.equals(friendlyPlayer))
                     continue;
-                if(minionSoldierTypeOnly && movableCard instanceof Minion)
-                        continue;
+                if (minionSoldierTypeOnly && movableCard instanceof Minion)
+                    continue;
                 cellArrayList.add(cell);
             }
         }
@@ -634,7 +664,7 @@ public class Impact {
         return doesHaveAntiNegativeImpact;
     }
 
-    public boolean isSelectedCellImportant(){
+    public boolean isSelectedCellImportant() {
         return selectedCellImportant;
     }
 
