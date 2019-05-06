@@ -58,6 +58,8 @@ public class Player {
     }
 
     public boolean equals(Player player) {
+        if(player.isAI())
+            return false;
         return player.getAccount().getUserName().equals(this.getAccount().getUserName());
     }
 
@@ -117,6 +119,10 @@ public class Player {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public void setAI(boolean AI) {
+        isAI = AI;
     }
 
     //setters

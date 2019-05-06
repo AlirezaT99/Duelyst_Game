@@ -27,7 +27,7 @@ public class Deck {
         items = new ArrayList<>();
     }
 
-    Deck copy() {
+    public Deck copy() {
         Deck deck = new Deck(this.name);
         for (UsableItem item : this.items) {
             deck.items.add(item.copy());
