@@ -77,7 +77,7 @@ public class CollectionMenuProcess {
                 @Override
                 public int doIt() {
                     if (commandParts.length == 5)
-                        return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3]+" "+commandParts[4], account);
+                        return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3] + " " + commandParts[4], account);
                     if (commandParts.length == 4)
                         return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3], account);
                     if (commandParts.length == 3)
@@ -96,7 +96,7 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return showDeck(commandParts[2],account);
+                    return showDeck(commandParts[2], account);
                 }
             },
             new DoCommand() {
@@ -269,27 +269,26 @@ public class CollectionMenuProcess {
     public static int showAllDecks(Account account) {
         if (account.getCollection().getSelectedDeck() != null) {
             CollectionMenu.showMessage("1 : " + account.getCollection().getSelectedDeck().getName() + " :");
-            showDeck(account.getCollection().getSelectedDeck().getName(),account);
+            showDeck(account.getCollection().getSelectedDeck().getName(), account);
             int idx = 2;
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
                 if (!account.getCollection().getDecks().get(i).getName()
                         .equals(account.getCollection().getSelectedDeck().getName())) {
                     CollectionMenu.showMessage(idx + " : " + account.getCollection().getDecks().get(i).getName() + " :");
-                    showDeck(account.getCollection().getDecks().get(i).getName(),account);
+                    showDeck(account.getCollection().getDecks().get(i).getName(), account);
                     idx++;
                 }
             }
         } else
             for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
                 CollectionMenu.showMessage((i + 1) + " : " + account.getCollection().getDecks().get(i).getName() + " :");
-                showDeck(account.getCollection().getDecks().get(i).getName(),account);
+                showDeck(account.getCollection().getDecks().get(i).getName(), account);
             }
         return 0;
     }
 
     public static String createCardID(String playerName, Deck deck, Card card) {
         if (card instanceof Hero)
-
             return playerName + "_" + nameCreator(card.getName()) + "_1";
         if (card instanceof Spell) {
             int idx = 1;
