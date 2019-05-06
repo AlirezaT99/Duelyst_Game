@@ -278,7 +278,8 @@ public class BattleMenuProcess {
         if(card instanceof Spell){
             Spell spell = (Spell) card;
             if(spell.getPrimaryImpact().isSelectedCellImportant()){
-
+                ArrayList<Cell> arrayList = spell.getValidCoordination();
+                return arrayList.contains(match.getTable().getCell(x, y));
             }else return true;
         }
         else {
@@ -298,7 +299,6 @@ public class BattleMenuProcess {
                     return true;
             return false;
         }
-        return false;
     }
 
     private static int showCardInfo(String cardID) {

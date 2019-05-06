@@ -29,21 +29,21 @@ public class Impact {
     private String impactAdderTypes = "";//0.addToWhichState{none, defend, attack}|
     //needed id variables
     //targetTypeId variables
-    private boolean validOnAll;
+    private boolean validOnAll; //ok
     private boolean targetAttackTypeMatters;
-    private boolean validOnAWholeTeam;
+    private boolean validOnAWholeTeam; //ok
     private boolean validOnFriendlyTeamOnly;
     private boolean validOnHostileTeamOnly;
-    private boolean selectedCellImportant;
+    private boolean selectedCellImportant; //ok
     private boolean isImpactAreaSquare;
-    private boolean oneColumn;
+    private boolean oneColumn; //ok
     private boolean oneMinionBeside;
     private boolean allMinionsBeside;
     private boolean allSoldierType;
     private boolean minionSoldierTypeOnly;
     private boolean oneRandomClosest;
     private boolean isRandom;
-    private boolean oneRow;
+    private boolean oneRow; //ok
     private boolean isRangedSetting;
     private boolean plusItSelf;
 
@@ -554,6 +554,30 @@ public class Impact {
 
     private String changeCharAtDesiredIndex(int index, char newChar, String string) {
         return string.substring(0, index) + newChar + string.substring(index + 1);
+    }
+
+    public ArrayList<Cell> getValidCells(Player friendlyPlayer){
+        ArrayList<Cell> cellArrayList = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            for (int j = 1; j < 9; j++) {
+                Cell cell = match.table.getCell(i,j);
+                if(oneColumn || oneRow || isImpactAreaSquare) {
+                    cellArrayList.add(cell);
+                    continue;
+                }
+                if(cell.getMovableCard() == null)
+                    continue;
+                MovableCard movableCard = cell.getMovableCard();
+                if(validOnHostileTeamOnly && movableCard.player.equals(friendlyPlayer))
+                    continue;
+                if(validOnFriendlyTeamOnly && !movableCard.player.equals(friendlyPlayer))
+                    continue;
+                if(minionSoldierTypeOnly && movableCard instanceof Minion)
+                        continue;
+                cellArrayList.add(cell);
+            }
+        }
+        return cellArrayList;
     }
 
     //getters
