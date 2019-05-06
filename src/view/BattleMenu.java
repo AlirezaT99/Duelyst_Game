@@ -2,6 +2,7 @@ package view;
 
 import model.*;
 import presenter.BattleMenuProcess;
+import presenter.CollectionMenuProcess;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,7 +103,14 @@ public class BattleMenu {
 
     private void battleSetup() {
         setPlayerToCards(BattleMenuProcess.getMatch().getPlayer1());
+        BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero().setCardID(
+                BattleMenuProcess.getMatch().getPlayer1().getAccount().getUserName()+"_"+
+                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero().getName())+"_1");
         setPlayerToCards(BattleMenuProcess.getMatch().getPlayer2());
+        BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().setCardID(
+                BattleMenuProcess.getMatch().getPlayer2().getAccount().getUserName()+"_"+
+                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName())+"_1");
+
         BattleMenuProcess.getMatch().getPlayer1().fillHand();
         BattleMenuProcess.getMatch().getPlayer2().fillHand();
         //
@@ -118,8 +126,6 @@ public class BattleMenu {
 
     private void setPlayerToCards(Player player) {
         Deck deck = player.getDeck();
-        if(deck == null)
-            System.out.println("jooon");
         for (int i = 0; i < deck.getItems().size(); i++)
             deck.getItems().get(i).setPlayer(player);
         for (int i = 0; i < deck.getMinions().size(); i++)

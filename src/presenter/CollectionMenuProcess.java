@@ -183,12 +183,12 @@ public class CollectionMenuProcess {
             if (account.getCollection().findCardByCollectionID(idStr) instanceof Hero) {
                 Hero hero = ((Hero) account.getCollection().findCardByCollectionID(idStr));
                 Hero heroCopy = hero.copy();
-                heroCopy.setCardID(createCardID(account.getUserName(), deck, heroCopy));
+                heroCopy.setCardID(account.getUserName()+"_"+nameCreator(heroCopy.getName())+"_1");
                 deck.setHero(hero.copy());
                 return 0;
             }
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
-                && account.getCollection().getItemsHashMap().size() < 1) {
+                && deck.getItemsHashMap().size() < 1) {
             UsableItem item = account.getCollection().getItemsHashMap().get(idStr).copy();
             item.setItemID(account.getUserName()+"_"+nameCreator(item.getName())+"_1");
             deck.getItemsHashMap()
@@ -290,8 +290,9 @@ public class CollectionMenuProcess {
     }
 
     public static String createCardID(String playerName, Deck deck, Card card) {
-        if (card instanceof Hero)
-            return playerName + "_" + nameCreator(card.getName()) + "_1";
+        if (card instanceof Hero){
+            System.out.println();
+            return playerName + "_" + nameCreator(card.getName()) + "_1";}
         if (card instanceof Spell) {
             int idx = 1;
             for (int i = 0; i < deck.getSpells().size(); i++)

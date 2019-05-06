@@ -377,7 +377,6 @@ public class BattleMenuProcess {
 
     private int showSoldiers(Player player) {
         for (Cell cell : match.getTable().findAllSoldiers(player)) {
-            System.out.println("fuck");
             showMinion(cell.getMovableCard());
         }
         return 0;

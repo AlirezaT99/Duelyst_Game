@@ -196,7 +196,7 @@ public abstract class MovableCard extends Card {
         int destinationY = destination.getCellCoordination().getY();
         Coordination coordination = new Coordination((startX + destinationX) / 2, (startY + destinationY) / 2);
         Cell cell = player.match.table.getCellByCoordination(coordination.getX(), coordination.getY());
-        if (cell != null)
+        if (cell != null && cell.getMovableCard() != null)
             return !cell.getMovableCard().player.equals(this.player);
         return false;
     }
