@@ -17,7 +17,7 @@ public class Minion extends MovableCard {
         minion.setDamage(this.getDamage());
         minion.didMoveInThisTurn = didMoveInThisTurn;
         minion.didAttackInThisTurn = didAttackInThisTurn;
-        minion.moveRange = moveRange;
+        minion.moveRange = 2;
         minion.minAttackRange = minAttackRange;
         minion.maxAttackRange = maxAttackRange;
         minion.isMelee = this.isMelee;

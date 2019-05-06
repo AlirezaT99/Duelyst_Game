@@ -49,6 +49,7 @@ public class Match {
         player2.setAccount(new Account("Computer","Computer"));
         player2.getAccount().setCollection(new Collection());
         player2.getAccount().getCollection().setSelectedDeck(deck);
+        player2.setDeck(deck.copy());
         player2.setAI(true);
         this.numberOfFlags = numberOfFlags;
     }
