@@ -1,11 +1,10 @@
 package view;
 
-import model.Deck;
-import model.Match;
-import model.Player;
+import model.*;
 import presenter.BattleMenuProcess;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BattleMenu {
@@ -120,6 +119,8 @@ public class BattleMenu {
 
     private void setPlayerToCards(Player player) {
         Deck deck = player.getDeck();
+        if(deck == null)
+            System.out.println("jooon");
         for (int i = 0; i < deck.getItems().size(); i++)
             deck.getItems().get(i).setPlayer(player);
         for (int i = 0; i < deck.getMinions().size(); i++)
