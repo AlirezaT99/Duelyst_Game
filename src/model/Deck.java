@@ -140,13 +140,13 @@ public class Deck {
     } //shouldn't it be added to collection decks
 
     public Card findCardByID(String id) {
-        if (hero != null && hero.getCardID().equals(id))
+        if (hero != null && hero.getCollectionID().equals(id))
             return hero;
         for (int i = 0; i < minions.size(); i++)
-            if (minions.get(i).getCardID().equals(id))
+            if (minions.get(i).getCollectionID().equals(id))
                 return minions.get(i);
         for (int i = 0; i < spells.size(); i++)
-            if (spells.get(i).getCardID().equals(id))
+            if (spells.get(i).getCollectionID().equals(id))
                 return spells.get(i);
         return null;
     }
