@@ -151,6 +151,7 @@ public class BattleMenu {
         BattleMenuProcess.getMatch().getPlayer2().fillHand();
         //
         BattleMenuProcess.getMatch().getPlayer1().setMana(20);
+//        BattleMenuProcess.getMatch().getPlayer1().setMana(2);
         BattleMenuProcess.getMatch().getPlayer2().setMana(20); // unused
         //
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
