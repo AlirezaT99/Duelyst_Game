@@ -344,8 +344,6 @@ public class BattleMenuProcess {
                      toRemove = new ArrayList<>();
                      int x = 1;
                     for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
-                        System.out.println("x = "+x);
-                        System.out.println(movableCard.getName());
                         impact.goThroughTime(movableCard);
                         if (impact.isImpactOver()) {
                             impact.doAntiImpact(movableCard);

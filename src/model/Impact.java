@@ -268,7 +268,6 @@ public class Impact {
     //setImpact  main methods
 
     private void oneHero(Player player) {
-        System.out.println("one Hero");
         if (oneRow) {
             oneRow(player.findPlayerHero().cardCell);
         } else if (!targetAttackTypeMatters) {
@@ -281,7 +280,6 @@ public class Impact {
     }
 
     private void oneTeam(Player player, boolean targetAttackTypeMatters) {
-        System.out.println("one team");
         if (!targetAttackTypeMatters) {
             impactArea.addAll(match.table.findAllSoldiers(player));
         } else {
