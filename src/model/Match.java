@@ -18,8 +18,8 @@ public class Match {
     private int mana_basedOnTurn = 2;
     private int numberOfFlags = -1;
     private Integer AILevel = 0;
-    public int player1_heroSpellCoolDownCounter = 0;
-    public int player2_heroSpellCoolDownCounter = 0;
+    private int player1_heroSpellCoolDownCounter = 100; // until the first time it's used
+    private int player2_heroSpellCoolDownCounter = 100;
 
     {
         player1_graveyard = new ArrayList<>();
@@ -141,6 +141,11 @@ public class Match {
         if (currentTurnPlayer().equals(player1))
             player1_heroSpellCoolDownCounter = 0;
         else player2_heroSpellCoolDownCounter = 0;
+    }
+
+    public void coolDownIncrease() {
+        player1_heroSpellCoolDownCounter++;
+        player2_heroSpellCoolDownCounter++;
     }
 
     //getters

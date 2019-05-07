@@ -174,8 +174,9 @@ public class BattleMenuProcess {
         if (endGameReached())
             endingProcedure();
         match.switchTurn();
-        match.handleMana();
+//        match.handleMana();
         impactGoThroughTime();
+        match.coolDownIncrease(); // ok ?
         return 0;
     }
 
