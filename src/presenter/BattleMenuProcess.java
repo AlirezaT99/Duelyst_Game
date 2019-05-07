@@ -173,6 +173,7 @@ public class BattleMenuProcess {
         match.currentTurnPlayer().fillHand();
         secondModePrecedure(match);
         resetFlags();
+        buryTheDead();
         if (endGameReached()) {
             endingPrecedure();
         }
@@ -263,8 +264,17 @@ public class BattleMenuProcess {
         battleMenu.getBattleInit().getMainMenu().run();
     }
 
+    private void buryTheDead() {
+        for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
+            if (!cell.getMovableCard().isAlive())
+                match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
+        for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
+            if (!cell.getMovableCard().isAlive())
+                match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
+    }
+
     private void impactGoThroughTime() {
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 5; i++) { // todo : <5 or <= 5 ??
             for (int j = 1; j < 9; j++) {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
@@ -300,8 +310,6 @@ public class BattleMenuProcess {
                         !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
                     return true;
             case 2:
-                if(match.currentTurnPlayer().getHeldTheFlagNumberOfTurns()>=8 ||
-                        match.notCurrentTurnPlayer().getHeldTheFlagNumberOfTurns() >=8)
                 return false;
             case 3:
                 return false;
@@ -314,6 +322,22 @@ public class BattleMenuProcess {
         for (Cell allFlag : match.getTable().findAllFlags()) {
             allFlag.getMovableCard().getPlayer().increaseHeldFlag();
         }}
+    }
+
+    public static int useSpecialPower(String[] command) { // todo : test beshe
+        command = cleanupArray(command);
+        int x = Integer.parseInt(command[1]),
+                y = Integer.parseInt(command[2]);
+        if (coordinationInvalid(x, y))
+            return 7;
+        if (match.currentTurnPlayer().getDeck().getHero().getSpellCost() > match.currentTurnPlayer().getMana())
+            return 11;
+        if (match.currentTurnPlayer().getDeck().getHero().getSpellCoolDown() > match.getCurrentPlayerHeroCoolDownCounter())
+            return 13;
+        if (!spellCastCheck(match.currentTurnPlayer().getDeck().getHero().getHeroSpell(), x, y))
+            return 12;
+        match.currentTurnPlayer().getDeck().getHero().castSpell(match.getTable().getCellByCoordination(x, y));
+        return 0;
     }
 
     private void resetFlags() {
@@ -340,11 +364,7 @@ public class BattleMenuProcess {
                     return 12;
             } else {
                 Spell spell = (Spell) match.currentTurnPlayer().getHand().findCardByName(cardName);
-                if (spell.getPrimaryImpact().isSelectedCellImportant()) {
-                    ArrayList<Cell> arrayList = spell.getValidCoordination();
-                    if (arrayList.contains(match.getTable().getCell(x, y)))
-                        return 12;
-                }
+                if (!spellCastCheck(spell, x, y)) return 12;
             }
         }
         //
@@ -361,6 +381,14 @@ public class BattleMenuProcess {
 //        match.currentTurnPlayer().fillHand();
         BattleMenu.showMessage(cardName + " with " + cardID + " inserted to (" + x + "," + y + ")");
         return 0;
+    }
+
+    private static boolean spellCastCheck(Spell spell, int x, int y) {
+        if (spell.getPrimaryImpact().isSelectedCellImportant()) {
+            ArrayList<Cell> arrayList = spell.getValidCoordination();
+            return !arrayList.contains(match.getTable().getCell(x, y));
+        }
+        return true;
     }
 
     private static String[] cleanupArray(String[] command) {
