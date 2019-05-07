@@ -63,6 +63,7 @@ public abstract class MovableCard extends Card {
             didAttackInThisTurn = true;
             if (!Impact.doesHaveAntiHolyBuff(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
+            System.out.println(this.damage+this.dispelableDamageChange);
             //do attack
             opponent.counterAttack(this); // gonna need to change it
             manageCasualties();
@@ -259,6 +260,8 @@ public abstract class MovableCard extends Card {
     //previous targets manager
 
     //getters
+
+
 
     public String getName() {
         return name;

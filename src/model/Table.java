@@ -95,6 +95,17 @@ public class Table {
         return wantedCells;
     }
 
+    public ArrayList<Cell> findAllFlags(){
+        ArrayList<Cell> wantedCells = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
+                if (cells[i][j].getItem() != null && cells[i][j].getItem() instanceof Flag) {
+                    wantedCells.add(cells[i][j]);
+                }
+            }
+        }
+        return wantedCells;
+    }
     ArrayList<Cell> findAllSpecificSoldiers(Player player, boolean isHybrid, boolean isMelee, boolean isRanged) {
         ArrayList<Cell> candidateCells = findAllSoldiers(player);
         Iterator<Cell> cellIterator = candidateCells.iterator();
