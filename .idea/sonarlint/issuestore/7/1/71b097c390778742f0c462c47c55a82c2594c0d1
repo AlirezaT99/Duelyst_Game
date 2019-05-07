@@ -1,9 +1,8 @@
 
-ssquid:S1450"URemove the "result" field and declare it as a local variable in the relevant methods.(Öà¦«8Ù¤ ¥-
-Hsquid:S1068"*Remove this unused "result" private field.(Öà¦«8³—üŸ¥-
-Esquid:S1068
-"'Remove this unused "dtf" private field.(ËÊò8Ï€ ¥-
-Esquid:S1068	"'Remove this unused "now" private field.(ÔêÿĞ8ôª” ¥-
 psquid:S1450	"RRemove the "now" field and declare it as a local variable in the relevant methods.(ÔêÿĞ8ôª” ¥-
-Nsquid:S1068"0Remove this unused "opponentName" private field.(» ÆË8¤¶Ì¾§-
+ssquid:S1450"URemove the "result" field and declare it as a local variable in the relevant methods.(Öà¦«8Ù¤ ¥-
 ysquid:S1450"[Remove the "opponentName" field and declare it as a local variable in the relevant methods.(» ÆË8¤¶Ì¾§-
+Ksquid:S1068"-Remove this unused "timeOfNow" private field.(–øæ8€¼Çò¨-
+Nsquid:S1068"0Remove this unused "opponentName" private field.(» ÆË8¤¶Ì¾§-
+Hsquid:S1068"*Remove this unused "result" private field.(Öà¦«8³—üŸ¥-
+vsquid:S1450"XRemove the "timeOfNow" field and declare it as a local variable in the relevant methods.(–øæ8»Éò¨-
