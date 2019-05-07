@@ -3,6 +3,8 @@ package model;
 import presenter.StoryMenuProcess;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.jar.JarEntry;
 
 enum GameMode {HeroesFight, CaptureTheFlag, CaptureMostFlags}
 
@@ -20,18 +22,53 @@ public class Match {
     private int mana_basedOnTurn = 2;
     private int numberOfFlags = -1;
     private Integer AILevel = 0;
-    private int player1_heroSpellCoolDownCounter = 100; // until the first time it's used
-    private int player2_heroSpellCoolDownCounter = 100;
+    private int player1_heroSpellCoolDownCounter = 1000; // until the first time it's used
+    private int player2_heroSpellCoolDownCounter = 1000;
 
     {
         player1_graveyard = new ArrayList<>();
         player2_graveyard = new ArrayList<>();
     }
 
-    public Match(boolean singleMode, int gameMode) {
+    public Match(boolean singleMode, int gameMode, int numberOfFlags) {
         this.singleMode = singleMode;
         this.gameMode = gameMode;
         this.table = new Table();
+
+        spawnFlags(gameMode, numberOfFlags);
+    }
+
+    private void spawnFlags(int gameMode, int numberOfFlags) {
+        if (gameMode == 2) {
+            Flag flag = new Flag(this, table.getCellByCoordination(3, 5));
+            this.getTable().getCellByCoordination(3, 5).setItem(flag);
+        }
+        if (gameMode == 3) {
+            if (numberOfFlags < 1 || numberOfFlags > 30) numberOfFlags = 7;
+            spawnRandomFlags(numberOfFlags);
+        }
+    }
+
+    private void spawnRandomFlags(int numberOfFlags) {
+        Boolean[][] cells = new Boolean[5][9];
+        for (int i = 0; i < 5; i++)
+            java.util.Arrays.fill(cells[i], false);
+        cells[3][1] = cells[3][9] = true;
+        for (int i = 0; i < numberOfFlags; i++) {
+            Random random = new Random();
+            int rnd = Math.abs(random.nextInt() % 45);
+            if (!cells[rnd / 9][rnd % 9]) {
+                cells[rnd / 9][rnd % 9] = true;
+                continue;
+            } else while (cells[rnd / 9][rnd % 9])
+                rnd = Math.abs(random.nextInt() % 45);
+            cells[rnd / 9][rnd % 9] = true;
+        }
+        for (int i = 0; i < 5; i++)
+            for (int j = 0; j < 9; j++) {
+                Flag flag = new Flag(this, table.getCellByCoordination(i + 1, j + 9));
+                this.table.getCellByCoordination(i + 1, j + 1).setItem(flag);
+            }
     }
 
     public void moveToGraveYard(MovableCard card, Player player) {
@@ -79,9 +116,8 @@ public class Match {
     }
 
     public void setFlags(int numberOfFlags) {
-        if (numberOfFlags == -1 || numberOfFlags == 0)
-            return;
-        //todo : set flags for third mode
+        if (numberOfFlags == -1 || numberOfFlags == 0) {
+        }
     }
 
     //turn based manager
@@ -101,6 +137,7 @@ public class Match {
         turn ^= 1;
         turn_number++;
     }
+
     public void handleMana() {
         if (turn_number % 2 == 0)
             mana_basedOnTurn++;
@@ -157,6 +194,9 @@ public class Match {
         player1_heroSpellCoolDownCounter++;
         player2_heroSpellCoolDownCounter++;
     }
+
+
+    //getters
 
     //getters
 

@@ -136,7 +136,6 @@ public class BattleMenuProcess {
     private int endGame() throws IOException {
         //todo: give rewards
         exit();
-
         // must be called when another functions has found the winner and given out the rewards
         return 0;
     }
@@ -174,6 +173,8 @@ public class BattleMenuProcess {
         if (endGameReached()) {
             endingProcedure();
         }
+        if (match.getGameMode() == 2)
+            match.setFlagCounters();
         if (!match.currentTurnPlayer().isAI() && match.notCurrentTurnPlayer().isAI()) {
             match.switchTurn();
             impactGoThroughTime();
@@ -188,7 +189,6 @@ public class BattleMenuProcess {
             match.switchTurn();
             impactGoThroughTime();
         }
-        // didMoveInThisTurn --> false
         return 0;
     }
 
@@ -206,11 +206,11 @@ public class BattleMenuProcess {
                         match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 500);
                     }
                     matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                 }
                 BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
-                LoginMenuProcess.save(match.getPlayer1().getAccount());
             } else {
                 MatchHistory matchHistory = new MatchHistory();
                 if (!match.getPlayer2().isAI()) {
@@ -225,9 +225,11 @@ public class BattleMenuProcess {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, true);
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
                 }
                 BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
-                LoginMenuProcess.save(match.getPlayer2().getAccount());
+                if (!match.getPlayer2().isAI())
+                    LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         } else if (match.getGameMode() != 1) {
             if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() > (match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
@@ -249,21 +251,23 @@ public class BattleMenuProcess {
                 BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
             } else {
                 MatchHistory matchHistory = new MatchHistory();
-                if (match.getPlayer2().isAI()) {
-                    matchHistory.setMatchHistory(match.getPlayer1(), match, false);
-                    LoginMenuProcess.save(match.getPlayer1().getAccount());
-                } else {
-                    if (match.getPlayer1().isAI()) {
-                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                        LoginMenuProcess.save(match.getPlayer2().getAccount());
-                    } else {
-                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                        LoginMenuProcess.save(match.getPlayer2().getAccount());
+                if (!match.getPlayer2().isAI()) {
+                    if (!match.getPlayer1().isAI()) {
+                        match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
                         matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
                     }
+                    if (match.getPlayer1().isAI()) {
+                        match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 500);
+                    }
+                    matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                } else {
+                    matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
                 }
                 BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
+                if (!match.getPlayer2().isAI())
+                    LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         }
         battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
@@ -274,13 +278,17 @@ public class BattleMenuProcess {
 
     public static void buryTheDead() {
         for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive())
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
+                if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
+                    cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
+            }
         for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive())
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
+                if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
+                    cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
-
-        // todo : drop the flag
+            }
     }
 
     private void playAI(Player player) {
@@ -288,41 +296,45 @@ public class BattleMenuProcess {
         Card card = player.getHand().getSelectedCard();
         //
 
-            outer:
-            for (int i = 0; i < player.getHand().getCards().size(); i++) {
-                if (player.getHand().getCards().get(i) instanceof Spell) {
-                    ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
-                    if (arrayList != null)
-                        if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
-                                arrayList.get(0).getCellCoordination().getY())) {
-                            ((Spell) card).castCard(arrayList.get(0), player);
+        outer:
+        for (int i = 0; i < player.getHand().getCards().size(); i++) {
+            if (player.getHand().getCards().get(i) instanceof Spell) {
+                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
+                if (arrayList != null && arrayList.size() >= 1)
+                    if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
+                            arrayList.get(0).getCellCoordination().getY())) {
+                        ((Spell) card).castCard(arrayList.get(0), player);
+                        BattleMenu.showMessage(card.getCardID() + " inserted to ("
+                                + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
+                        break outer;
+                    }
+            } else {
+                String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
+                for (int j = 1; j <= 5; j++) {
+                    for (int k = 1; k <= 9; k++) {
+                        if (isCoordinationValidToInsert(j, k)) {
+                            match.currentTurnPlayer().getHand().findCardByName(card.getName())
+                                    .castCard(match.getTable().getCellByCoordination(j, k));
                             BattleMenu.showMessage(card.getCardID() + " inserted to ("
-                                    + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
+                                    + j + "," + k + ")");
                             break outer;
                         }
-                } else {
-                    String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
-                    for (int j = 1; j <= 5; j++) {
-                        for (int k = 1; k <= 9; k++) {
-                            if (isCoordinationValidToInsert(j, k)) {
-                                match.currentTurnPlayer().getHand().findCardByName(card.getName())
-                                        .castCard(match.getTable().getCellByCoordination(j, k));
-                                BattleMenu.showMessage(card.getCardID() + " inserted to ("
-                                        + j + "," + k + ")");
-                                break outer;
-                            }
-                        }
-                    }
-                }
-                for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
-                    for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
-                        MovableCard movableCard = allSoldier.getMovableCard();
-                        int result = movableCard.attack(soldier.getMovableCard());
-                        if (result == 0)
-                            BattleMenu.showMessage(movableCard.getCardID() + " has attacked " + soldier.getMovableCard().getCardID() + ".");
                     }
                 }
             }
+            for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
+                for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
+                    MovableCard movableCard = allSoldier.getMovableCard();
+                    if (soldier.getMovableCard() != null) {
+                        int result = movableCard.attack(soldier.getMovableCard());
+                        if (result == 0) {
+                            if (movableCard != null && soldier.getMovableCard() != null)
+                                BattleMenu.showMessage(movableCard.getCardID() + " has attacked " + soldier.getMovableCard().getCardID() + ".");
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
@@ -332,7 +344,7 @@ public class BattleMenuProcess {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
                 ArrayList<Impact> toRemove = new ArrayList<>();
-                for (Impact impact:cell.cellImpacts) {
+                for (Impact impact : cell.cellImpacts) {
                     impact.goThroughTime(movableCard);
                     if (impact.isImpactOver()) {
                         impact.doAntiImpact(movableCard);
@@ -341,8 +353,8 @@ public class BattleMenuProcess {
                 }
                 cell.cellImpacts.removeAll(toRemove);
                 if (movableCard != null) {
-                     toRemove = new ArrayList<>();
-                     int x = 1;
+                    toRemove = new ArrayList<>();
+                    int x = 1;
                     for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
                         impact.goThroughTime(movableCard);
                         if (impact.isImpactOver()) {
@@ -367,8 +379,11 @@ public class BattleMenuProcess {
                         !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
                     return true;
             case 2:
-                return false;
+                if(match.getPlayer1().getHeldTheFlagNumberOfTurns()>=8 ||
+                match.getPlayer2().getHeldTheFlagNumberOfTurns()>=8)
+                return true;
             case 3:
+
                 return false;
         }
         return false;
@@ -396,6 +411,7 @@ public class BattleMenuProcess {
             return 12;
         match.currentTurnPlayer().getDeck().getHero().castSpell(match.getTable().getCellByCoordination(x, y));
         match.setCoolDownCounter();
+        BattleMenuProcess.buryTheDead();
         return 0;
     }
 
@@ -470,7 +486,7 @@ public class BattleMenuProcess {
         if (attackedCard instanceof MovableCard)
             returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
-        if (returnValue == 0) return 17; // successfully attacked
+        if (returnValue == 0) return 17;
         return returnValue;
     }
 

@@ -375,6 +375,7 @@ public class Impact {
     private void findAndAddRandomCellFromGivenCells(ArrayList<Cell> soldiersCells) {
         double i = Math.random() % soldiersCells.size();
         int j = (int) i;
+        if(soldiersCells!=null && soldiersCells.size()>=1)
         impactArea.add(soldiersCells.get(j));
     }
 
@@ -542,7 +543,8 @@ public class Impact {
     }
 
     private void antiSomeThingOnDefend(int indexOfThatThingInImpactId, MovableCard movableCard) {
-        movableCard.getImpactsAppliedToThisOne().removeIf(impact -> impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == (char) 1);
+            movableCard.getImpactsAppliedToThisOne().removeIf
+                    (impact -> impact.impactWayOfAssigning != null & impact.impactWayOfAssigning.length() >= 2 && impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == (char) 1);
     }
 
     private void antiNegativeImpactOnDefend(MovableCard movableCard) {
