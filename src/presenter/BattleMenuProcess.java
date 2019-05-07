@@ -174,6 +174,8 @@ public class BattleMenuProcess {
         if (endGameReached()) {
             endingProcedure();
         }
+        if (match.getGameMode() == 2)
+            match.setFlagCounters();
         if (!match.currentTurnPlayer().isAI() && match.notCurrentTurnPlayer().isAI()) {
             match.switchTurn();
             impactGoThroughTime();
@@ -188,7 +190,6 @@ public class BattleMenuProcess {
             match.switchTurn();
             impactGoThroughTime();
         }
-        // didMoveInThisTurn --> false
         return 0;
     }
 
@@ -274,13 +275,17 @@ public class BattleMenuProcess {
 
     public static void buryTheDead() {
         for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0)
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
+                if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
+                    cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
+            }
         for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0)
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
+                if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
+                    cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
-
-        // todo : drop the flag
+            }
     }
 
     private void playAI(Player player) {
@@ -292,7 +297,7 @@ public class BattleMenuProcess {
         for (int i = 0; i < player.getHand().getCards().size(); i++) {
             if (player.getHand().getCards().get(i) instanceof Spell) {
                 ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
-                if (arrayList != null && arrayList.size()>=1)
+                if (arrayList != null && arrayList.size() >= 1)
                     if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
                             arrayList.get(0).getCellCoordination().getY())) {
                         ((Spell) card).castCard(arrayList.get(0), player);
@@ -343,10 +348,10 @@ public class BattleMenuProcess {
                 }
                 cell.cellImpacts.removeAll(toRemove);
                 if (movableCard != null) {
-                     toRemove = new ArrayList<>();
-                     int x = 1;
+                    toRemove = new ArrayList<>();
+                    int x = 1;
                     for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
-                        System.out.println("x = "+x);
+                        System.out.println("x = " + x);
                         System.out.println(movableCard.getName());
                         impact.goThroughTime(movableCard);
                         if (impact.isImpactOver()) {
