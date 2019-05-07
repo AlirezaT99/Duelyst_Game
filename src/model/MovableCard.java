@@ -1,5 +1,7 @@
 package model;
 
+import presenter.BattleMenuProcess;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -59,13 +61,17 @@ public abstract class MovableCard extends Card {
         int returnValue = isAttackValid(opponent);
         if (returnValue == 0) {
             // do attack
-            opponent.takeDamage(this.damage);
+            opponent.takeDamage(this.damage+this.dispelableDamageChange);
             didAttackInThisTurn = true;
             if (!Impact.doesHaveAntiHolyBuff(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
+            System.out.println(dispelableDamageChange);
             //do attack
             opponent.counterAttack(this); // gonna need to change it
-            manageCasualties();
+            //
+            this.manageCasualties();
+            opponent.manageCasualties();
+            BattleMenuProcess.buryTheDead();
         }
         return returnValue;
     }
@@ -95,13 +101,14 @@ public abstract class MovableCard extends Card {
         return 0;
     }
 
-
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent)) {
             opponent.takeDamage(this.damage);
             if (!Impact.doesHaveAntiHolyBuff(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
-            manageCasualties();
+            this.manageCasualties();
+            opponent.manageCasualties();
+            BattleMenuProcess.buryTheDead();
         }
     }
 
@@ -186,15 +193,19 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
+        if(cell == null)
+            return 18;
         moveRange = 2;
         if (this.cardCell == cell)
-            return 9999; //unhandled
+            return 10;
         if (didMoveInThisTurn || didAttackInThisTurn)
             return 4;
         if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange)
             return 5;
         if (isOpponentInTheWayOfDesiredDestination(this.cardCell, cell))
             return 6;
+        if (cell.getMovableCard() != null)
+            return 11;
         for (Impact impact : impactsAppliedToThisOne)
             if (impact.isStunBuff())
                 return 8;

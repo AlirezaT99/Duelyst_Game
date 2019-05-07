@@ -19,7 +19,7 @@ public class MainProcess {
         File folder;
         File[] listOfFiles;
 
-        // reading accounts
+//         reading accounts
 
         //reading Cards
         //reading Heroes

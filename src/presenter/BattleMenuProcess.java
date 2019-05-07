@@ -3,7 +3,6 @@ package presenter;
 import model.*;
 import view.BattleMenu;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,21 +19,16 @@ public class BattleMenuProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("[gG]ame info"));
         commandPatterns.add(Pattern.compile("[sS]how my minions"));
         commandPatterns.add(Pattern.compile("[sS]how opponent minions"));
         commandPatterns.add(Pattern.compile("[sS]how card info [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("[sS]elect [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
-//        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
-//        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
-        commandPatterns.add(Pattern.compile("[sS]how hand"));
+        commandPatterns.add(Pattern.compile("[uU]se special power \\(\\d,[ ]*\\d\\)"));
         commandPatterns.add(Pattern.compile("[iI]nsert [a-zA-Z0-9._ ]+ in \\(\\d,[ ]*\\d\\)"));
+        commandPatterns.add(Pattern.compile("[sS]how hand"));
+        commandPatterns.add(Pattern.compile("[gG]ame info"));
         commandPatterns.add(Pattern.compile("[eE]nd turn"));
         commandPatterns.add(Pattern.compile("[sS]how collectibles"));
-//        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Use [location x, y]")); // regex ?
         commandPatterns.add(Pattern.compile("[sS]how next card"));
         commandPatterns.add(Pattern.compile("[eE]nter graveyard"));
 //        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
@@ -57,7 +51,6 @@ public class BattleMenuProcess {
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
-            this::gameInfo,
             new DoCommand() {
                 @Override
                 public int doIt() {
@@ -82,21 +75,23 @@ public class BattleMenuProcess {
                     return selectCard(commandParts[1]);
                 }
             },
-            this::showHand,
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return useSpecialPower(commandParts);
+                }
+            },
             new DoCommand() {
                 @Override
                 public int doIt() {
                     return insertCard(commandParts);
                 }
             },
+            this::showHand,
+            this::gameInfo,
             this::endTurn,
             this::showCollectibles,
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return showNextCard();
-                }
-            },
+            this::showNextCard,
             this::enterGraveyard,
             this::battleHelp,
             this::endGame,
@@ -120,21 +115,23 @@ public class BattleMenuProcess {
     public static void showGraveYardCards() {
         if (match.currentTurnPlayer().getUserName().equals(match.getPlayer1().getUserName())) {
             for (Card card : match.player1_graveyard)
-                showCardInfo(card.getCardID());
+                BattleMenu.showMessage(card.getCardID());
         } else
             for (Card card : match.player2_graveyard)
-                showCardInfo(card.getCardID());
+                BattleMenu.showMessage(card.getCardID());
     }
 
     public static int showGraveYardCardInfo(String cardID) {
         for (Card card : match.player1_graveyard)
-            if (cardID.equals(card.getCardID()))
-                if (match.getPlayer1().equals(match.currentTurnPlayer()))
-                    return showCardInfo(cardID);
+            if (cardID.equals(card.getCardID())) {
+                showInfo(card, false);
+                return 0;
+            }
         for (Card card : match.player2_graveyard)
-            if (cardID.equals(card.getCardID()))
-                if (match.getPlayer2().equals(match.currentTurnPlayer()))
-                    return showCardInfo(cardID);
+            if (cardID.equals(card.getCardID())) {
+                showInfo(card, false);
+                return 0;
+            }
         return -1;
     }
 
@@ -172,7 +169,7 @@ public class BattleMenuProcess {
 
     private int endTurn() throws IOException {
         match.currentTurnPlayer().fillHand();
-        secondModePrecedure(match);
+        secondModeProcedure(match);
         resetFlags();
         buryTheDead();
         if (endGameReached()) {
@@ -183,7 +180,7 @@ public class BattleMenuProcess {
             impactGoThroughTime();
             playAI(match.currentTurnPlayer());
             match.currentTurnPlayer().fillHand();
-            secondModePrecedure(match);
+            secondModeProcedure(match);
             resetFlags();
             buryTheDead();
             match.switchTurn();
@@ -276,13 +273,15 @@ public class BattleMenuProcess {
         battleMenu.getBattleInit().getMainMenu().run();
     }
 
-    private void buryTheDead() {
+    public static void buryTheDead() {
         for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
             if (!cell.getMovableCard().isAlive())
                 match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
         for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
             if (!cell.getMovableCard().isAlive())
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
+
+        // todo : drop the flag
     }
 
     private void playAI(Player player) {
@@ -329,33 +328,35 @@ public class BattleMenuProcess {
     }
 
     private void impactGoThroughTime() {
-        for (int i = 1; i < 5; i++) { // todo : <5 or <= 5 ??
-            for (int j = 1; j < 9; j++) {
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
-                Iterator<Impact> impactIterator = cell.cellImpacts.iterator();
-                while (impactIterator.hasNext()) {
-                    Impact impact = impactIterator.next();
-                    System.out.println("joon");
-                    System.out.println(impact.getImpactTypeId());
+                ArrayList<Impact> toRemove = new ArrayList<>();
+                for (Impact impact:cell.cellImpacts) {
                     impact.goThroughTime(movableCard);
-                    if (impact.isImpactOver())
-                        impactIterator.remove();
-                }
-                if (movableCard != null) {
-                    Iterator<Impact> impactIterator1 = movableCard.getImpactsAppliedToThisOne().iterator();
-                    while (impactIterator1.hasNext()) {
-                        Impact impact = impactIterator1.next();
-                        System.out.println("boon");
-                        System.out.println(impact.getImpactTypeId());
-                        impact.goThroughTime(movableCard);
-                        if (impact.isImpactOver())
-                            impactIterator1.remove();
+                    if (impact.isImpactOver()) {
+                        impact.doAntiImpact(movableCard);
+                        toRemove.add(impact);
                     }
                 }
+                cell.cellImpacts.removeAll(toRemove);
+                if (movableCard != null) {
+                     toRemove = new ArrayList<>();
+                    for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
+                        impact.goThroughTime(movableCard);
+                        if (impact.isImpactOver()) {
+                            impact.doAntiImpact(movableCard);
+                            toRemove.add(impact);
+                        }
 
+                    }
+                    movableCard.getImpactsAppliedToThisOne().removeAll(toRemove);
+                }
             }
+
         }
+
     }
 
     private boolean endGameReached() {
@@ -372,7 +373,7 @@ public class BattleMenuProcess {
         return false;
     }
 
-    private void secondModePrecedure(Match match) {
+    private void secondModeProcedure(Match match) {
         if (match.getGameMode() == 2) {
             for (Cell allFlag : match.getTable().findAllFlags()) {
                 allFlag.getMovableCard().getPlayer().increaseHeldFlag();
@@ -380,10 +381,10 @@ public class BattleMenuProcess {
         }
     }
 
-    public static int useSpecialPower(String[] command) { // todo : test beshe
+    private static int useSpecialPower(String[] command) { // todo : test beshe
         command = cleanupArray(command);
-        int x = Integer.parseInt(command[1]),
-                y = Integer.parseInt(command[2]);
+        int x = Integer.parseInt(command[3]),
+                y = Integer.parseInt(command[4]);
         if (coordinationInvalid(x, y))
             return 7;
         if (match.currentTurnPlayer().getDeck().getHero().getSpellCost() > match.currentTurnPlayer().getMana())
@@ -393,6 +394,7 @@ public class BattleMenuProcess {
         if (!spellCastCheck(match.currentTurnPlayer().getDeck().getHero().getHeroSpell(), x, y))
             return 12;
         match.currentTurnPlayer().getDeck().getHero().castSpell(match.getTable().getCellByCoordination(x, y));
+        match.setCoolDownCounter();
         return 0;
     }
 
@@ -458,15 +460,6 @@ public class BattleMenuProcess {
         return outputArr;
     }
 
-    public static int useSpecialPower(String x_str, String y_str) {
-        int x = Integer.parseInt(x_str),
-                y = Integer.parseInt(y_str);
-        if (coordinationInvalid(x, y))
-            return 7;
-
-        return 0;
-    }
-
     public static int attack(String cardID) {
         if (findCard(cardID) == null)
             return 3;
@@ -475,6 +468,7 @@ public class BattleMenuProcess {
         if (attackedCard instanceof MovableCard)
             returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
+        if (returnValue == 0) return 17; // successfully attacked
         return returnValue;
     }
 
@@ -540,35 +534,37 @@ public class BattleMenuProcess {
 
     private static int showCardInfo(String cardID) {
         if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID))
-            showInfo(match.getPlayer1().getDeck().getHero());
+            showInfo(match.getPlayer1().getDeck().getHero(), true);
         if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
-            showInfo(match.getPlayer2().getDeck().getHero());
+            showInfo(match.getPlayer2().getDeck().getHero(), true);
         for (Card minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
-                showInfo(minion);
+                showInfo(minion, true);
         for (Card minion : match.getPlayer2().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
-                showInfo(minion);
+                showInfo(minion, true);
         for (Card spell : match.getPlayer1().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
-                showInfo(spell);
+                showInfo(spell, true);
         for (Card spell : match.getPlayer2().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
-                showInfo(spell);
-        System.out.println("wtf");
+                showInfo(spell, true);
         return 0;
     }
 
-    private static void showInfo(Card card) {
-        if (card instanceof Hero)
-            System.out.println("Hero:\nName: " + card.getName() + "\nHP: " + ((Hero) card).getHealth()
+    private static void showInfo(Card card, boolean showHealth) {
+        String health = "";
+        if (card instanceof Hero) {
+            if (showHealth) health = "\nHP: " + ((Hero) card).getHealth();
+            System.out.println("Hero:\nName: " + card.getName() + health
                     + "\nAP: " + ((Hero) card).getDamage() + "\nMP: " + card.getManaCost()
                     + "\nCost: " + card.getCost() + "\nDesc: " + card.getDescription());
-        else if (card instanceof Minion)
-            System.out.println("Minion:\nName: " + card.getName() + "\nHP: " + ((Minion) card).getHealth()
+        } else if (card instanceof Minion) {
+            if (showHealth) health = "\nHP: " + ((Minion) card).getHealth();
+            System.out.println("Minion:\nName: " + card.getName() + health
                     + "\nAP: " + ((Minion) card).getDamage() + "\nMP: " + card.getManaCost()
                     + "\nCost: " + card.getCost() + "\nDesc: " + card.getDescription());
-        else if (card instanceof Spell)
+        } else if (card instanceof Spell)
             System.out.println("Spell:\nName: " + card.getName()
                     + "\nMP: " + card.getManaCost() + "\nCost: " + card.getCost()
                     + "\nDesc: " + card.getDescription());

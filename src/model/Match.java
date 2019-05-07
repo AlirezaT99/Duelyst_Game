@@ -1,5 +1,7 @@
 package model;
 
+import presenter.StoryMenuProcess;
+
 import java.util.ArrayList;
 
 enum GameMode {HeroesFight, CaptureTheFlag, CaptureMostFlags}
@@ -44,25 +46,33 @@ public class Match {
 
 
     public void setup(Account account, String deckName, int numberOfFlags, Deck deck) {
+        Deck playerDeck = account.getCollection().getDeckHashMap().get(deckName).copy();
+        StoryMenuProcess.setDeckCardIDs(account.getUserName(),playerDeck);
         player1.setAccount(account);
         player1.match = this;
-        player1.setDeck(player1.getAccount().getCollection().getDeckHashMap().get(deckName).copy());
-        player2.setAccount(new Account("Computer", "Computer"));
+        player1.setDeck(playerDeck);
+        player2.setAccount(new Account("computer", "computer"));
         player2.getAccount().setCollection(new Collection());
         player2.getAccount().getCollection().setSelectedDeck(deck);
-        player2.setDeck(deck.copy());
+        Deck deck1 = deck.copy();
+        StoryMenuProcess.setDeckCardIDs("computer",deck1);
+        player2.setDeck(deck1.copy());
         player2.setAI(true);
         player2.match = this;
         this.numberOfFlags = numberOfFlags;
     }
 
-    public void setup(Account account1, Account account2, String deckName, int numberOfFlags) {
+    public void setup(Account account1, Account account2, int numberOfFlags) {
         player1.setAccount(account1);
         player1.match = this;
         player2.setAccount(account2);
         player2.match = this;
-        player1.setDeck(account1.getCollection().getDeckHashMap().get(deckName).copy());
-        player2.setDeck(account2.getCollection().getSelectedDeck().copy());
+        Deck deck = account1.getCollection().getSelectedDeck().copy();
+        StoryMenuProcess.setDeckCardIDs(account1.getUserName(),deck);
+        player1.setDeck(deck);
+        Deck deck2 = account2.getCollection().getSelectedDeck().copy();
+        StoryMenuProcess.setDeckCardIDs(account2.getUserName(),deck2);
+        player2.setDeck(deck2);
         this.numberOfFlags = numberOfFlags;
     }
 
@@ -125,6 +135,12 @@ public class Match {
         if (currentTurnPlayer().equals(player1))
             return player1_heroSpellCoolDownCounter;
         return player2_heroSpellCoolDownCounter;
+    }
+
+    public void setCoolDownCounter() {
+        if (currentTurnPlayer().equals(player1))
+            player1_heroSpellCoolDownCounter = 0;
+        else player2_heroSpellCoolDownCounter = 0;
     }
 
     //getters
