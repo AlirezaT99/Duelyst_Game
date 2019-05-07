@@ -602,9 +602,10 @@ public class Impact {
 
     public ArrayList<Cell> getValidCells(Player friendlyPlayer) {
         ArrayList<Cell> cellArrayList = new ArrayList<>();
-        for (int i = 1; i < 5; i++) {
-            for (int j = 1; j < 9; j++) {
-                Cell cell = match.table.getCell(i, j);
+        match = friendlyPlayer.match;
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
+                Cell cell = match.getTable().getCell(i, j);
                 if (oneColumn || oneRow || isImpactAreaSquare) {
                     cellArrayList.add(cell);
                     continue;

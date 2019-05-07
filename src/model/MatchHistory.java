@@ -7,7 +7,7 @@ public class MatchHistory {
     private String opponentName;
     private boolean result;
     private LocalDateTime now;
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
     private String timeOfNow;
 
     public void setMatchHistory(Player player, Match match, boolean result){
