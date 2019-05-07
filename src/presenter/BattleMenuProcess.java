@@ -277,10 +277,10 @@ public class BattleMenuProcess {
 
     public static void buryTheDead() {
         for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive())
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0)
                 match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
         for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive())
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0)
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
 
         // todo : drop the flag
@@ -408,6 +408,7 @@ public class BattleMenuProcess {
             return 12;
         match.currentTurnPlayer().getDeck().getHero().castSpell(match.getTable().getCellByCoordination(x, y));
         match.setCoolDownCounter();
+        BattleMenuProcess.buryTheDead();
         return 0;
     }
 
@@ -482,7 +483,7 @@ public class BattleMenuProcess {
         if (attackedCard instanceof MovableCard)
             returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
-        if (returnValue == 0) return 17; // successfully attacked
+        if (returnValue == 0) return 17;
         return returnValue;
     }
 

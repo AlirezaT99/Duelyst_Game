@@ -292,6 +292,7 @@ public class BattleMenu {
         showMessage("Select [card id]");
         showMessage("Show hand");
         showMessage("Insert [card name] in (x, y)");
+        showMessage("use special power (x,y)");
         showMessage("End turn");
         showMessage("Show collectibles");
         showMessage("Select [collectible id]");

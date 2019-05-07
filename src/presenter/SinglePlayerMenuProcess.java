@@ -13,7 +13,7 @@ public class SinglePlayerMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private static SinglePlayerMenu singlePlayerMenu;
     public String[] commandParts;
-    private  Account account;
+    private Account account;
 
     public SinglePlayerMenuProcess(SinglePlayerMenu singlePlayerMenu) {
         SinglePlayerMenuProcess.singlePlayerMenu = singlePlayerMenu;
@@ -26,7 +26,7 @@ public class SinglePlayerMenuProcess {
         commandPatterns.add(Pattern.compile("help|4"));
     }
 
-    public  int  customGame(String command, Hero hero) throws IOException {
+    public int customGame(String command, Hero hero) throws IOException {
         String[] commandParts = command.split("\\s+");
         String deckName = commandParts[2]; // space ke nadare vasatesh?
         if (!account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName)))
@@ -34,14 +34,10 @@ public class SinglePlayerMenuProcess {
         int mode = Integer.parseInt(commandParts[3]);
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
-        Match match = new Match(true, mode);
-        if(mode == 2){
-            Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
-            match.getTable().getCellByCoordination(3,5).setItem(flag);
-        }
+        Match match = new Match(true, mode, numberOfFlags);
         Deck deck = getSampleDecks().get(0).copy();
         deck.setHero(hero.copy());
-        deck.getHero().setCardID("computer_"+deck.getHero().getName()+"_1");
+        deck.getHero().setCardID("computer_" + deck.getHero().getName() + "_1");
         match.setup(account, deckName, numberOfFlags, deck);
         BattleMenu battleMenu = new BattleMenu(singlePlayerMenu.getBattleInit(), match);
         enterBattleMenu(battleMenu);
@@ -94,8 +90,8 @@ public class SinglePlayerMenuProcess {
         return 0;
     }
 
-    public ArrayList<Deck> getSampleDecks(){
-        ArrayList<Deck> decks= new ArrayList<>();
+    public ArrayList<Deck> getSampleDecks() {
+        ArrayList<Deck> decks = new ArrayList<>();
         Deck deck1 = new Deck("deck1");
         deck1.addSpellToDeck(Spell.getSpellByName("Area Dispel"));
         deck1.addSpellToDeck(Spell.getSpellByName("Empower"));
@@ -119,7 +115,7 @@ public class SinglePlayerMenuProcess {
         deck1.addMinionToDeck(Minion.getMinionByName("Shah Ghoul"));
         deck1.addItemToDeck(UsableItem.getUsableItemByName("Soul Eater"));
         deck1.getItems().get(0).setItemID("computer_SoulEater_1");
-        StoryMenuProcess.setDeckCardIDs("computer",deck1);
+        StoryMenuProcess.setDeckCardIDs("computer", deck1);
         decks.add(deck1);
         ////
         Deck deck = new Deck("deck2");
@@ -146,9 +142,10 @@ public class SinglePlayerMenuProcess {
         deck.addItemToDeck(UsableItem.getUsableItemByName("Terror Hood"));
         deck.setHero(Hero.getHeroByName("Aarash"));
         deck.getItems().get(0).setItemID("computer_TerrorHood_1");
-        StoryMenuProcess.setDeckCardIDs("computer",deck);
+        StoryMenuProcess.setDeckCardIDs("computer", deck);
         return decks;
     }
+
     //getters
     public Account getAccount() {
         return account;

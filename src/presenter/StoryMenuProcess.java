@@ -77,7 +77,7 @@ public class StoryMenuProcess {
         deck.setHero(Hero.getHeroByName("Div e Sefid"));
         deck.getItems().get(0).setItemID("computer_TheCrownOfKnowledge_1");
         setDeckCardIDs("computer", deck);
-        Match match = new Match(true, 1);
+        Match match = new Match(true, 1, -1);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
                         .getAccount().getCollection().getSelectedDeck().getName(), 0, deck);
@@ -113,7 +113,7 @@ public class StoryMenuProcess {
         deck.setHero(Hero.getHeroByName("Aarash"));
         deck.getItems().get(0).setItemID("computer_TerrorHood_1");
         setDeckCardIDs("computer", deck);
-        Match match = new Match(true, 3);
+        Match match = new Match(true, 3, -1);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
                         .getAccount().getCollection().getSelectedDeck().getName(), 1, deck);
@@ -151,7 +151,7 @@ public class StoryMenuProcess {
         deck.setHero(Hero.getHeroByName("Zahhak"));
         deck.getItems().get(0).setItemID("computer_SoulEater_1");
         setDeckCardIDs("computer", deck);
-        Match match = new Match(true, 2);
+        Match match = new Match(true, 2, -1);
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
                         .getAccount().getCollection().getSelectedDeck().getName(), 7, deck);
