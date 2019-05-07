@@ -139,5 +139,9 @@ public class Account {
         this.collection = collection;
     }
 
+    public void increaseNumberOfWins(){
+        numberOfWins++;
+    }
+
     //setters
 }

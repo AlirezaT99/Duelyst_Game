@@ -240,3 +240,7 @@ I
 src/model/accounts/h.json,e\6\e6bd84c377ae9d656b52507f4ce0f950831a32d3
 Z
 *src/model/minions/thepersianpahlevoon.json,2\6\26093a2f907f40b7dca9c94dee2795f74eed0c48
+K
+src/model/accounts/got.json,e\d\ed4920dba9b476f9890d856ae21e4725c7c382f0
+O
+src/model/accounts/alireza.json,0\4\04e15634908760d1879a9d579bedda04caa03d0c

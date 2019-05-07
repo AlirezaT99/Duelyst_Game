@@ -13,6 +13,8 @@ public class MatchHistory {
     public void setMatchHistory(Player player, Match match, boolean result){
         now = LocalDateTime.now();
         this.result = result;
+        if (result)
+            player.getAccount().increaseNumberOfWins();
         if(match.getAILevel()!=0)
             opponentName = match.getAILevel().toString();
         else
