@@ -115,10 +115,6 @@ public class Match {
         this.numberOfFlags = numberOfFlags;
     }
 
-    public void setFlags(int numberOfFlags) {
-        if (numberOfFlags == -1 || numberOfFlags == 0) {
-        }
-    }
 
     //turn based manager
     public Player currentTurnPlayer() {
@@ -157,6 +153,7 @@ public class Match {
     public Table getTable() {
         return table;
     }
+
 
     public Player getPlayer1() {
         return player1;
