@@ -27,7 +27,7 @@ public class BattleMenuProcess {
 //        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
 //        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
 //        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
-//        commandPatterns.add(Pattern.compile("Use special power (\\d, \\d)"));
+        commandPatterns.add(Pattern.compile("[uU]se special power \\(\\d,[ ]*\\d\\)"));
         commandPatterns.add(Pattern.compile("[sS]how hand"));
         commandPatterns.add(Pattern.compile("[iI]nsert [a-zA-Z0-9._ ]+ in \\(\\d,[ ]*\\d\\)"));
         commandPatterns.add(Pattern.compile("[eE]nd turn"));
@@ -79,6 +79,12 @@ public class BattleMenuProcess {
                 @Override
                 public int doIt() {
                     return selectCard(commandParts[1]);
+                }
+            },
+            new DoCommand() {
+                @Override
+                public int doIt() {
+                    return useSpecialPower(commandParts);
                 }
             },
             this::showHand,
@@ -171,20 +177,17 @@ public class BattleMenuProcess {
 
     private int endTurn() throws IOException {
         match.currentTurnPlayer().fillHand();
-        secondModePrecedure(match);
+        secondModeProcedure(match);
         resetFlags();
         buryTheDead();
-        if (endGameReached()) {
-            endingPrecedure();
-        }
+        if (endGameReached())
+            endingProcedure();
         match.switchTurn();
         impactGoThroughTime();
-
-        // didMoveInThisTurn --> false
         return 0;
     }
 
-    private void endingPrecedure() throws IOException {
+    private void endingProcedure() throws IOException {
         if (match.getGameMode() == 1) {
             if (match.getPlayer1().getDeck().getHero().isAlive()) {
                 MatchHistory matchHistory = new MatchHistory();
@@ -201,7 +204,7 @@ public class BattleMenuProcess {
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                 }
-                BattleMenu.showMessage(match.getPlayer1().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
                 LoginMenuProcess.save(match.getPlayer1().getAccount());
             } else {
                 MatchHistory matchHistory = new MatchHistory();
@@ -218,7 +221,7 @@ public class BattleMenuProcess {
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                 }
-                BattleMenu.showMessage(match.getPlayer2().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
                 LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         } else if (match.getGameMode() != 1) {
@@ -238,7 +241,7 @@ public class BattleMenuProcess {
                         LoginMenuProcess.save(match.getPlayer2().getAccount());
                     }
                 }
-                BattleMenu.showMessage(match.getPlayer1().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
             } else {
                 MatchHistory matchHistory = new MatchHistory();
                 if (match.getPlayer2().isAI()) {
@@ -255,7 +258,7 @@ public class BattleMenuProcess {
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
                     }
                 }
-                BattleMenu.showMessage(match.getPlayer2().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
             }
         }
         battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
@@ -271,6 +274,8 @@ public class BattleMenuProcess {
         for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
             if (!cell.getMovableCard().isAlive())
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
+
+        // todo : drop the flag
     }
 
     private void impactGoThroughTime() {
@@ -284,19 +289,19 @@ public class BattleMenuProcess {
                     System.out.println("joon");
                     System.out.println(impact.getImpactTypeId());
                     impact.goThroughTime(movableCard);
-                    if(impact.isImpactOver()) {
+                    if (impact.isImpactOver()) {
                         impact.doAntiImpact(movableCard);
                         impactIterator.remove();
                     }
                 }
-                if (movableCard != null){
+                if (movableCard != null) {
                     Iterator<Impact> impactIterator1 = movableCard.getImpactsAppliedToThisOne().iterator();
-                    while (impactIterator1.hasNext()){
+                    while (impactIterator1.hasNext()) {
                         Impact impact = impactIterator1.next();
                         System.out.println("boon");
                         System.out.println(impact.getImpactTypeId());
                         impact.goThroughTime(movableCard);
-                        if(impact.isImpactOver()) {
+                        if (impact.isImpactOver()) {
                             impact.doAntiImpact(movableCard);
                             impactIterator1.remove();
                         }
@@ -321,17 +326,18 @@ public class BattleMenuProcess {
         return false;
     }
 
-    private void secondModePrecedure(Match match){
-        if(match.getGameMode() == 2){
-        for (Cell allFlag : match.getTable().findAllFlags()) {
-            allFlag.getMovableCard().getPlayer().increaseHeldFlag();
-        }}
+    private void secondModeProcedure(Match match) {
+        if (match.getGameMode() == 2) {
+            for (Cell allFlag : match.getTable().findAllFlags()) {
+                allFlag.getMovableCard().getPlayer().increaseHeldFlag();
+            }
+        }
     }
 
-    public static int useSpecialPower(String[] command) { // todo : test beshe
+    private static int useSpecialPower(String[] command) { // todo : test beshe
         command = cleanupArray(command);
-        int x = Integer.parseInt(command[1]),
-                y = Integer.parseInt(command[2]);
+        int x = Integer.parseInt(command[3]),
+                y = Integer.parseInt(command[4]);
         if (coordinationInvalid(x, y))
             return 7;
         if (match.currentTurnPlayer().getDeck().getHero().getSpellCost() > match.currentTurnPlayer().getMana())
@@ -407,15 +413,6 @@ public class BattleMenuProcess {
         return outputArr;
     }
 
-    public static int useSpecialPower(String x_str, String y_str) {
-        int x = Integer.parseInt(x_str),
-                y = Integer.parseInt(y_str);
-        if (coordinationInvalid(x, y))
-            return 7;
-
-        return 0;
-    }
-
     public static int attack(String cardID) {
         if (findCard(cardID) == null)
             return 3;
@@ -426,7 +423,6 @@ public class BattleMenuProcess {
                     .attack((MovableCard) attackedCard);
         return returnValue;
     }
-
 
     public static int attackCombo(String[] commandParts) {
 //        Attack combo [opponent card id] [my card id] [my card id] [...]
