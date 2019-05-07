@@ -250,6 +250,8 @@ public class BattleMenuProcess {
         }
         match.switchTurn();
         impactGoThroughTime();
+        match.player1_heroSpellCoolDownCounter++;
+        match.player2_heroSpellCoolDownCounter++;
         return 0;
     }
 
@@ -306,12 +308,19 @@ public class BattleMenuProcess {
         return false;
     }
 
-    public static int useSpecialPower(String x_str, String y_str) {
-        int x = Integer.parseInt(x_str),
-                y = Integer.parseInt(y_str);
+    public static int useSpecialPower(String[] command) { // todo : test beshe
+        command = cleanupArray(command);
+        int x = Integer.parseInt(command[1]),
+                y = Integer.parseInt(command[2]);
         if (coordinationInvalid(x, y))
             return 7;
-
+        if (match.currentTurnPlayer().getDeck().getHero().getSpellCost() > match.currentTurnPlayer().getMana())
+            return 11;
+        if (match.currentTurnPlayer().getDeck().getHero().getSpellCoolDown() > match.getCurrentPlayerHeroCoolDownCounter())
+            return 13;
+        if (!spellCastCheck(match.currentTurnPlayer().getDeck().getHero().getHeroSpell(), x, y))
+            return 12;
+        match.currentTurnPlayer().getDeck().getHero().castSpell(match.getTable().getCellByCoordination(x, y));
         return 0;
     }
 
@@ -339,11 +348,7 @@ public class BattleMenuProcess {
                     return 12;
             } else {
                 Spell spell = (Spell) match.currentTurnPlayer().getHand().findCardByName(cardName);
-                if (spell.getPrimaryImpact().isSelectedCellImportant()) {
-                    ArrayList<Cell> arrayList = spell.getValidCoordination();
-                    if (arrayList.contains(match.getTable().getCell(x, y)))
-                        return 12;
-                }
+                if (!spellCastCheck(spell, x, y)) return 12;
             }
         }
         //
@@ -360,6 +365,14 @@ public class BattleMenuProcess {
 //        match.currentTurnPlayer().fillHand();
         BattleMenu.showMessage(cardName + " with " + cardID + " inserted to (" + x + "," + y + ")");
         return 0;
+    }
+
+    private static boolean spellCastCheck(Spell spell, int x, int y) {
+        if (spell.getPrimaryImpact().isSelectedCellImportant()) {
+            ArrayList<Cell> arrayList = spell.getValidCoordination();
+            return !arrayList.contains(match.getTable().getCell(x, y));
+        }
+        return true;
     }
 
     private static String[] cleanupArray(String[] command) {

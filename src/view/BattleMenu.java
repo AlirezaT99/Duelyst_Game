@@ -51,8 +51,7 @@ public class BattleMenu {
                                     selectCardHelp();
                                     break;
                                 case 3:
-                                    cardHandleErrors(BattleMenuProcess.useSpecialPower(command.split("[), (]")[3]
-                                            , command.split("[), (]")[4]));
+                                    cardHandleErrors(BattleMenuProcess.useSpecialPower(command.split("[), (]")));
                                     break;
                                 case 4:
                                     cardHandleErrors(BattleMenuProcess.moveTo(command.split("[), (]")));
@@ -210,6 +209,9 @@ public class BattleMenu {
                 break;
             case 12:
                 showMessage("invalid target");
+                break;
+            case 13:
+                showMessage("Hero spell hasn't cooled down yet");
                 break;
         }
     }

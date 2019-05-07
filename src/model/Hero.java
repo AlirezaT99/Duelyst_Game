@@ -60,12 +60,14 @@ public class Hero extends MovableCard {
     }
 
     public void castSpell(Cell cell) {
-//            heroSpell.castCard(this.getMatch(), cell);
+        //heroSpell.castCard(this.getMatch(), cell);
         // check should be in spell class
         // if check
         // cast spell
         // put the impact of spell in all targets impacts applied to this one
+         this.heroSpell.castCard(cell, this.player);
     }
+
     // getters
 
     public int getSpellCost() {
@@ -87,8 +89,11 @@ public class Hero extends MovableCard {
         return heroes;
     }
 
-    // getters{
+    public Spell getHeroSpell() {
+        return heroSpell;
+    }
 
+    // getters
 
     public static void addToHeroes(Hero hero) {
         heroes.add(hero);

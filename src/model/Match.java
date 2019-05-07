@@ -16,6 +16,8 @@ public class Match {
     private int turn = 0;
     private int numberOfFlags = -1;
     private Integer AILevel = 0;
+    public int player1_heroSpellCoolDownCounter = 0;
+    public int player2_heroSpellCoolDownCounter = 0;
 
     {
         player1_graveyard = new ArrayList<>();
@@ -117,6 +119,12 @@ public class Match {
 
     public int getNumberOfFlags() {
         return numberOfFlags;
+    }
+
+    public int getCurrentPlayerHeroCoolDownCounter() {
+        if (currentTurnPlayer().equals(player1))
+            return player1_heroSpellCoolDownCounter;
+        return player2_heroSpellCoolDownCounter;
     }
 
     //getters
