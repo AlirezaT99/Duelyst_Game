@@ -278,8 +278,10 @@ public class BattleMenuProcess {
                     System.out.println("joon");
                     System.out.println(impact.getImpactTypeId());
                     impact.goThroughTime(movableCard);
-                    if(impact.isImpactOver())
+                    if(impact.isImpactOver()) {
+                        impact.doAntiImpact(movableCard);
                         impactIterator.remove();
+                    }
                 }
                 if (movableCard != null){
                     Iterator<Impact> impactIterator1 = movableCard.getImpactsAppliedToThisOne().iterator();
@@ -288,8 +290,10 @@ public class BattleMenuProcess {
                         System.out.println("boon");
                         System.out.println(impact.getImpactTypeId());
                         impact.goThroughTime(movableCard);
-                        if(impact.isImpactOver())
+                        if(impact.isImpactOver()) {
+                            impact.doAntiImpact(movableCard);
                             impactIterator1.remove();
+                        }
                     }
                 }
 

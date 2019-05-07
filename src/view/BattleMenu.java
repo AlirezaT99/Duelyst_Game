@@ -25,98 +25,102 @@ public class BattleMenu {
         Scanner scanner = new Scanner(System.in);
         battleSetup();
         while (true) {
-            if (!hasRun) {
-                showMenu();
-                hasRun = true;
-            }
-            if (!isInBattleMenu)
-                break;
-            String command = scanner.nextLine();
-            battleMenuProcess.commandParts = command.split("[) ,(]");
-            int commandType = BattleMenuProcess.findPatternIndex(command);
-            if (commandType == -1)
-                System.out.println("invalid input");
-            else {
-                int returnedValue = battleMenuProcess.DoCommands[commandType].doIt();
-                switch (returnedValue) {
-                    case 5:
-                        //select card
-                        selectCard_loop:
-                        while (true) {
-                            command = scanner.nextLine();
-                            switch (selectCardMenu(command)) {
-                                case 1:
-                                    break selectCard_loop;
-                                case 2:
-                                    selectCardHelp();
-                                    break;
-                                case 3:
-                                    cardHandleErrors(BattleMenuProcess.useSpecialPower(command.split("[), (]")[3]
-                                            , command.split("[), (]")[4]));
-                                    break;
-                                case 4:
-                                    cardHandleErrors(BattleMenuProcess.moveTo(command.split("[), (]")));
-                                    break;
-                                case 5:
-                                    cardHandleErrors(BattleMenuProcess.attack(command.split("\\s+")[1]));
-                                    break;
-                                case 6:
-                                    cardHandleErrors(BattleMenuProcess.attackCombo(command.split("\\s+")));
-                                    break;
-                                default:
-                                    showMessage("invalid command");
-                            }
-                        }
-                        break;
-                    case 10:
-                        // graveyard
-                        graveYard_loop:
-                        while (true) {
-                            command = scanner.nextLine();
-                            switch (graveYardMenu(command)) {
-                                case 1:
-                                    break graveYard_loop;
-                                case 2:
-                                    graveYardHelp();
-                                    break;
-                                case 3:
-                                    BattleMenuProcess.showGraveYardCards();
-                                    break;
-                                case 4:
-                                    if (BattleMenuProcess.showGraveYardCardInfo(command.split("\\s+")[2]) == -1)
-                                        showMessage("invalid cardID");
-                                    break;
-                                default:
-                                    showMessage("invalid command");
-                            }
-                        }
-                        break;
-                    case 15:
-                        //collectible menu
-                        collectible_loop:
-                        while (true) {
-                            command = scanner.nextLine();
-                            switch (collectibleMenu(command)) {
-                                case 1:
-                                    break collectible_loop;
-                                case 2:
-                                    collectibleMenuHelp();
-                                    break;
-                                case 3:
-                                    BattleMenuProcess.showCollectibleInfo();
-                                    break;
-                                case 4:
-                                    BattleMenuProcess.useCollectible();
-                                    break;
-                                default:
-                                    showMessage("invalid command");
-                            }
-                        }
-                        break;
-                    default:
-                        handleErrors(returnedValue);
-                        break;
+            try {
+                if (!hasRun) {
+                    showMenu();
+                    hasRun = true;
                 }
+                if (!isInBattleMenu)
+                    break;
+                String command = scanner.nextLine();
+                battleMenuProcess.commandParts = command.split("[) ,(]");
+                int commandType = BattleMenuProcess.findPatternIndex(command);
+                if (commandType == -1)
+                    System.out.println("invalid input");
+                else {
+                    int returnedValue = battleMenuProcess.DoCommands[commandType].doIt();
+                    switch (returnedValue) {
+                        case 5:
+                            //select card
+                            selectCard_loop:
+                            while (true) {
+                                command = scanner.nextLine();
+                                switch (selectCardMenu(command)) {
+                                    case 1:
+                                        break selectCard_loop;
+                                    case 2:
+                                        selectCardHelp();
+                                        break;
+                                    case 3:
+                                        cardHandleErrors(BattleMenuProcess.useSpecialPower(command.split("[), (]")[3]
+                                                , command.split("[), (]")[4]));
+                                        break;
+                                    case 4:
+                                        cardHandleErrors(BattleMenuProcess.moveTo(command.split("[), (]")));
+                                        break;
+                                    case 5:
+                                        cardHandleErrors(BattleMenuProcess.attack(command.split("\\s+")[1]));
+                                        break;
+                                    case 6:
+                                        cardHandleErrors(BattleMenuProcess.attackCombo(command.split("\\s+")));
+                                        break;
+                                    default:
+                                        showMessage("invalid command");
+                                }
+                            }
+                            break;
+                        case 10:
+                            // graveyard
+                            graveYard_loop:
+                            while (true) {
+                                command = scanner.nextLine();
+                                switch (graveYardMenu(command)) {
+                                    case 1:
+                                        break graveYard_loop;
+                                    case 2:
+                                        graveYardHelp();
+                                        break;
+                                    case 3:
+                                        BattleMenuProcess.showGraveYardCards();
+                                        break;
+                                    case 4:
+                                        if (BattleMenuProcess.showGraveYardCardInfo(command.split("\\s+")[2]) == -1)
+                                            showMessage("invalid cardID");
+                                        break;
+                                    default:
+                                        showMessage("invalid command");
+                                }
+                            }
+                            break;
+                        case 15:
+                            //collectible menu
+                            collectible_loop:
+                            while (true) {
+                                command = scanner.nextLine();
+                                switch (collectibleMenu(command)) {
+                                    case 1:
+                                        break collectible_loop;
+                                    case 2:
+                                        collectibleMenuHelp();
+                                        break;
+                                    case 3:
+                                        BattleMenuProcess.showCollectibleInfo();
+                                        break;
+                                    case 4:
+                                        BattleMenuProcess.useCollectible();
+                                        break;
+                                    default:
+                                        showMessage("invalid command");
+                                }
+                            }
+                            break;
+                        default:
+                            handleErrors(returnedValue);
+                            break;
+                    }
+                }
+            }catch (Throwable e){
+                e.printStackTrace();
             }
         }
         scanner.close();

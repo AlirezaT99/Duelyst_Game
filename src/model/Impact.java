@@ -29,6 +29,10 @@ public class Impact {
     private String impactAdderTypes = "";//0.addToWhichState{none, defend, attack}|
     //needed id variables
     //targetTypeId variables
+
+    private int turnsToBeActivated;
+    private int turnsActive;
+
     private boolean validOnAll; //ok
     private boolean targetAttackTypeMatters;
     private boolean validOnAWholeTeam; //ok
@@ -106,6 +110,8 @@ public class Impact {
         passive = impactTypeId.charAt(6) == '1';
         permanent = impactTypeId.charAt(6) == '2';
         continuos = impactTypeId.charAt(6) == '3';
+        turnsToBeActivated = Integer.parseInt(impactTypeId.substring(7,8));
+        turnsActive = Integer.parseInt(impactTypeId.substring(8,10));
         dispel = impactTypeId.charAt(10) != '0';
         cellImpact = impactTypeId.charAt(11) == '1';
         poisonCell = impactTypeId.charAt(12) == '1';
@@ -309,8 +315,11 @@ public class Impact {
     }
 
     private void oneSoldierFromOneTeam(Cell cell, Player player) {
+        MovableCard movableCard =cell.getMovableCard();
         if (!targetAttackTypeMatters) {
             if (!isRandom) {
+                if(movableCard == null)
+                    return;
                 if (player != null) {
                     if (cell.getMovableCard().player.getUserName().equals(player.getUserName()))
                         impactArea.add(cell);
@@ -388,6 +397,8 @@ public class Impact {
     void doImpact(Player friendlyPlayer, MovableCard target, Cell targetCell, Cell castingCell) {
         setAllVariablesNeeded();
         setImpactArea(friendlyPlayer, targetCell, castingCell);
+        if(turnsToBeActivated !=0 )
+            return;
         if (doesHaveAntiNegativeImpact)
             antiNegativeImpactOnDefend(target);
         else if (doesHaveAntiPoison)
@@ -425,8 +436,12 @@ public class Impact {
     private void healthChange() {
         int impactQuantity = getImpactQuantityWithSign();
         for (Cell cell : impactArea) {
-            if (isPermanent)
+            MovableCard movableCard = cell.getMovableCard();
+            if(movableCard == null)
+                continue;
+            if (isPermanent) {
                 cell.getMovableCard().setHealth(cell.getMovableCard().getHealth() + impactQuantity);
+            }
             else
                 cell.getMovableCard().dispelableHealthChange += impactQuantity;
         }
@@ -567,30 +582,11 @@ public class Impact {
 
 
     public void goThroughTime(MovableCard movableCard) {
-        if (impactTypeId.length() < 10)
-            return;
-        String s = impactTypeId.substring(0, 7);
-        String s1 = impactTypeId.substring(10);
-
-        int x1 = Integer.parseInt(impactTypeId.substring(7, 8));
-        int x2 = Integer.parseInt(impactTypeId.substring(8, 9));
-        int x3 = Integer.parseInt(impactTypeId.substring(9, 10));
-
-
-        if (x3 != 0)
-            x3--;
-        else if (x2 != 0) {
-            x2--;
-            x3 = 9;
-        } else {
-            this.impactTypeId = "00000000000000000000000000";
-            this.targetTypeId = "00000000000000000";
-            this.impactTypeIdComp = "00000000";
-        }
-        if (x1 != 0)
-            x1--;
-
-        impactTypeId = s + (x1 + "") + (x2 + "") + (x3 + "") + s1;
+        turnsActive--;
+        turnsToBeActivated--;
+        System.out.println("turns " +turnsActive+ " "+turnsToBeActivated);
+        if(turnsToBeActivated == 0)
+            doImpact(movableCard.player,movableCard,movableCard.cardCell,movableCard.cardCell);
         if (this.isPoisonBuff())
             poisonBuff(movableCard);
 
@@ -627,7 +623,15 @@ public class Impact {
     public boolean isImpactOver(){
         if(passive || permanent)
             return false;
-        return impactTypeId.charAt(8) == '0' && impactTypeId.charAt(9) == '0';
+        return turnsActive <= 0;
+    }
+
+    public void doAntiImpact(MovableCard movableCard){
+        int x = getImpactQuantityWithSign();
+        if(healthChange)
+            movableCard.dispelableHealthChange -= x;
+        if(damageChange)
+            movableCard.dispelableDamageChange -= x;
     }
     //getters
 
