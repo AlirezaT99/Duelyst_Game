@@ -86,7 +86,7 @@ public abstract class MovableCard extends Card {
         if(isMelee)
             maxAttackRange = 2;
         if (isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
-            return 16; // todo : why ??
+            return 14;
         else if (distance > maxAttackRange)
             return 14;
         if (this.player.equals(opponent.player))
@@ -188,7 +188,7 @@ public abstract class MovableCard extends Card {
         moveRange = 2;
         if (this.cardCell == cell)
             return 9999; //unhandled
-        if (didMoveInThisTurn)
+        if (didMoveInThisTurn || didAttackInThisTurn)
             return 4;
         if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange)
             return 5;

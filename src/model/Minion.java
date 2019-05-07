@@ -48,6 +48,7 @@ public class Minion extends MovableCard {
     protected void manageCasualties() {
         if (this.getHealth() + this.dispelableHealthChange <= 0) {
             this.isAlive = false;
+            if(dyingWishImpact != null)
             dyingWishImpact.doImpact(this.player, this, this.cardCell, this.cardCell);
             //do dyingWish
         }
@@ -85,13 +86,14 @@ public class Minion extends MovableCard {
     @Override
     protected void counterAttack(MovableCard opponent) {
         super.counterAttack(opponent);
+        if(onDefendImpact == null)
+            return;
         if (onDefendImpact.doesHaveAntiNegativeImpact())
             this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
         if (onDefendImpact.isImmuneToMinDamage()) {
             if (this.player.match.table.doesHaveLowestDamage(opponent))
                 this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
         }
-        if(onDefendImpact != null)
         onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
     }
 

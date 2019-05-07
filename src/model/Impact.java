@@ -64,7 +64,7 @@ public class Impact {
         targetAttackTypeMatters = targetTypeId.charAt(11) != '0';
         oneRow = targetTypeId.charAt(12) == '1';
         oneRandomClosest = targetTypeId.charAt(13) == '1';
-        isRangedSetting = targetTypeId.charAt(13) != 0;
+        isRangedSetting = targetTypeId.charAt(13) != '0';
     }
     //targetTypeIdVariables
 
@@ -130,7 +130,8 @@ public class Impact {
         doesHaveAntiPoison = impactTypeIdComp.charAt(2) == '1';
         killIt = impactTypeIdComp.charAt(3) == '1';
         doesHaveRisingDamage = impactTypeIdComp.charAt(4) != '0';
-        doesHaveAntiDisarm = impactTypeIdComp.charAt(6) == '1';
+        if (impactTypeIdComp.length() >= 7)
+            doesHaveAntiDisarm = impactTypeIdComp.charAt(6) == '1';
         doesHaveRisingDamage = targetTypeId.charAt(10) != '0';
     }
 
@@ -457,10 +458,12 @@ public class Impact {
     private void buffDispel(Player dispellingPlayer) {
         if (impactTypeId.charAt(14) == '1') {
             for (Cell cell : impactArea) {
-                if (cell.getMovableCard().player.equals(dispellingPlayer)) {
-                    cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> !impact.isPositiveImpact && impact.buff);
-                } else
-                    cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> impact.isPositiveImpact && impact.buff);
+                if (cell.getMovableCard() != null) {
+                    if (cell.getMovableCard().player.equals(dispellingPlayer)) {
+                        cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> !impact.isPositiveImpact && impact.buff);
+                    } else
+                        cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> impact.isPositiveImpact && impact.buff);
+                }
             }
         }
     }
@@ -493,7 +496,6 @@ public class Impact {
     }
 
     void poisonBuff(MovableCard movableCard) {
-        System.out.println("joon");
         System.out.println(getImpactQuantityWithSign());
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3') //is poisonBuff
@@ -587,7 +589,7 @@ public class Impact {
         }
         if (x1 != 0)
             x1--;
-        x2--;
+
         impactTypeId = s + (x1 + "") + (x2 + "") + (x3 + "") + s1;
         if (this.isPoisonBuff())
             poisonBuff(movableCard);
@@ -622,7 +624,46 @@ public class Impact {
         return cellArrayList;
     }
 
+    public boolean isImpactOver(){
+        if(passive || permanent)
+            return false;
+        return impactTypeId.charAt(8) == '0' && impactTypeId.charAt(9) == '0';
+    }
     //getters
+
+
+    public boolean isTargetAttackTypeMatters() {
+        return targetAttackTypeMatters;
+    }
+
+    public boolean isPassive() {
+        return passive;
+    }
+
+    public boolean isContinuos() {
+        return continuos;
+    }
+
+    public boolean isPermanent() {
+        return permanent;
+    }
+
+    public boolean isCellImpact() {
+        return cellImpact;
+    }
+
+    public boolean isFireCelll() {
+        return fireCelll;
+    }
+
+    public boolean isHolyCell() {
+        return holyCell;
+    }
+
+    public boolean isPoisonCell() {
+        return poisonCell;
+    }
+
     boolean isStunBuff() {
         return stunBuff;
     }
