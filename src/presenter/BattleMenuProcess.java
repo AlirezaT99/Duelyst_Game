@@ -177,76 +177,63 @@ public class BattleMenuProcess {
                 if (match.getPlayer1().getDeck().getHero().isAlive()) {
                     MatchHistory matchHistory = new MatchHistory();
                     if (!match.getPlayer1().isAI()) {
-                        if(!match.getPlayer2().isAI()){
-                             match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney()+1500);
+                        if (!match.getPlayer2().isAI()) {
+                            match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 1500);
                             matchHistory.setMatchHistory(match.getPlayer2(), match, false);
-                             LoginMenuProcess.save(match.getPlayer2().getAccount());
+                            LoginMenuProcess.save(match.getPlayer2().getAccount());
                         }
-                        if(match.getPlayer2().isAI()){
-                            match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney()+500);}
+                        if (match.getPlayer2().isAI()) {
+                            match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 500);
+                        }
                         matchHistory.setMatchHistory(match.getPlayer1(), match, true);
-                    }
-                    else {
+                    } else {
                         matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                     }
                     LoginMenuProcess.save(match.getPlayer1().getAccount());
-                }
-                else
-                {
+                } else {
                     MatchHistory matchHistory = new MatchHistory();
                     if (!match.getPlayer2().isAI()) {
-                        if(!match.getPlayer1().isAI()){
-                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney()+1500);
+                        if (!match.getPlayer1().isAI()) {
+                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
                             matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                             LoginMenuProcess.save(match.getPlayer1().getAccount());
                         }
-                        if(match.getPlayer1().isAI()){
-                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney()+500);}
+                        if (match.getPlayer1().isAI()) {
+                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 500);
+                        }
                         matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                    }
-                    else {
+                    } else {
                         matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                     }
                     LoginMenuProcess.save(match.getPlayer2().getAccount());
                 }
-            }
-            else if (match.getGameMode() !=1)
-            {
-                if(match.getPlayer1().getFlags()!=null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size()>(match.getNumberOfFlags()/2) && match.getGameMode() == 3)
-                {
+            } else if (match.getGameMode() != 1) {
+                if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() > (match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
                     MatchHistory matchHistory = new MatchHistory();
-                    if(match.getPlayer1().isAI()){
-                        matchHistory.setMatchHistory(match.getPlayer2(),match,false);
+                    if (match.getPlayer1().isAI()) {
+                        matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                         LoginMenuProcess.save(match.getPlayer2().getAccount());
-                    }
-                    else {
-                        if(match.getPlayer2().isAI()){
+                    } else {
+                        if (match.getPlayer2().isAI()) {
                             matchHistory.setMatchHistory(match.getPlayer1(), match, true);
                             LoginMenuProcess.save(match.getPlayer1().getAccount());
-                        }
-                        else
-                        {
+                        } else {
                             matchHistory.setMatchHistory(match.getPlayer1(), match, true);
                             LoginMenuProcess.save(match.getPlayer1().getAccount());
                             matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                             LoginMenuProcess.save(match.getPlayer2().getAccount());
                         }
                     }
-                }
-                else
-                {
+                } else {
                     MatchHistory matchHistory = new MatchHistory();
-                    if(match.getPlayer2().isAI()){
-                        matchHistory.setMatchHistory(match.getPlayer1(),match,false);
+                    if (match.getPlayer2().isAI()) {
+                        matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
-                    }
-                    else {
-                        if(match.getPlayer1().isAI()){
+                    } else {
+                        if (match.getPlayer1().isAI()) {
                             matchHistory.setMatchHistory(match.getPlayer2(), match, true);
                             LoginMenuProcess.save(match.getPlayer2().getAccount());
-                        }
-                        else
-                        {
+                        } else {
                             matchHistory.setMatchHistory(match.getPlayer2(), match, true);
                             LoginMenuProcess.save(match.getPlayer2().getAccount());
                             matchHistory.setMatchHistory(match.getPlayer1(), match, false);
@@ -273,22 +260,22 @@ public class BattleMenuProcess {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
                 Iterator<Impact> impactIterator = cell.cellImpacts.iterator();
-                while (impactIterator.hasNext()){
+                while (impactIterator.hasNext()) {
                     Impact impact = impactIterator.next();
                     System.out.println("joon");
                     System.out.println(impact.getImpactTypeId());
                     impact.goThroughTime(movableCard);
-                    if(impact.isImpactOver())
+                    if (impact.isImpactOver())
                         impactIterator.remove();
                 }
-                if (movableCard != null){
+                if (movableCard != null) {
                     Iterator<Impact> impactIterator1 = movableCard.getImpactsAppliedToThisOne().iterator();
-                    while (impactIterator1.hasNext()){
+                    while (impactIterator1.hasNext()) {
                         Impact impact = impactIterator1.next();
                         System.out.println("boon");
                         System.out.println(impact.getImpactTypeId());
                         impact.goThroughTime(movableCard);
-                        if(impact.isImpactOver())
+                        if (impact.isImpactOver())
                             impactIterator1.remove();
                     }
                 }
@@ -298,17 +285,16 @@ public class BattleMenuProcess {
     }
 
     private boolean endGameReached() {
-//        switch (match.getGameMode()) {
-//            case 1:
-//                if (!match.currentTurnPlayer().getDeck().getHero().isAlive() ||
-//                        !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
-//                    return true;
-//            case 2:
-//                return false;
-//            case 3:
-//                return false;
-//        }
-//        return false;
+        switch (match.getGameMode()) {
+            case 1:
+                if (!match.currentTurnPlayer().getDeck().getHero().isAlive() ||
+                        !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
+                    return true;
+            case 2:
+                return false;
+            case 3:
+                return false;
+        }
         return false;
     }
 
