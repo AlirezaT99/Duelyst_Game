@@ -595,13 +595,12 @@ public class Impact {
         impactTypeId = changeCharAtDesiredIndex(8, c2, impactTypeId);
         impactTypeId = changeCharAtDesiredIndex(9, c3, impactTypeId);
         System.out.println("turns " + turnsActive + " " + turnsToBeActivated);
-        if (turnsToBeActivated == 0) {
-            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
-        }
+//        if (turnsToBeActivated == 0)
+//            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
         if (this.isPoisonBuff())
             poisonBuff(movableCard);
-        if (this.passive)
-            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
+//        if (this.passive)
+//            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
 
     }
 

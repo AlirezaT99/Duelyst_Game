@@ -297,7 +297,7 @@ public class CollectionMenuProcess {
                 }
             }
         } else
-            for (int i = 0; i < account.getCollection().getDecks().size(); i++) {
+            for (int i = 0; i < account.getCollection().getDeckHashMap().values().size(); i++) {
                 CollectionMenu.showMessage((i + 1) + " : " + account.getCollection().getDecks().get(i).getName() + " :");
                 showDeck(account.getCollection().getDecks().get(i).getName(), account);
             }
