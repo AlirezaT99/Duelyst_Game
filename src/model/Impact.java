@@ -97,7 +97,6 @@ public class Impact {
     private boolean isPermanent;
 
     private void setImpactTypeIdVariables() {
-        System.out.println(impactTypeId);
         isPositiveImpact = impactTypeId.charAt(0) == '1';
         buff = impactTypeId.charAt(1) != '0';
         holyBuff = impactTypeId.charAt(1) == '1';
@@ -155,8 +154,11 @@ public class Impact {
     //set ImpactArea
 
     private void addToCardsImpact() {
+        ArrayList<Cell> arrayList = new ArrayList<>(); // todo kasif kari
         for (Cell cell : impactArea) {
-            if (cell.getMovableCard() != null) {
+            if (arrayList.indexOf(cell) == -1)
+                arrayList.add(cell);
+            else if (cell.getMovableCard() != null) {
                 cell.getMovableCard().getImpactsAppliedToThisOne().add(this);
             }
         }
@@ -166,6 +168,7 @@ public class Impact {
     void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
         match = friendlyPlayer.match;
         Player opponentPlayer = match.getOtherPlayer(friendlyPlayer);
+        impactArea.clear();
         teamOrHeroSets(friendlyPlayer, opponentPlayer);
         oneTargetSets(friendlyPlayer, targetCell, opponentPlayer);
         specialSets(friendlyPlayer, targetCell, castingCell, opponentPlayer);
@@ -265,6 +268,7 @@ public class Impact {
     //setImpact  main methods
 
     private void oneHero(Player player) {
+        System.out.println("one Hero");
         if (oneRow) {
             oneRow(player.findPlayerHero().cardCell);
         } else if (!targetAttackTypeMatters) {
@@ -277,6 +281,7 @@ public class Impact {
     }
 
     private void oneTeam(Player player, boolean targetAttackTypeMatters) {
+        System.out.println("one team");
         if (!targetAttackTypeMatters) {
             impactArea.addAll(match.table.findAllSoldiers(player));
         } else {
@@ -294,12 +299,11 @@ public class Impact {
 
     private void oneColumnFromOneTeam(Cell cell, Player player) {
         int y = cell.getCellCoordination().getY();
-        for (int i = 1; i <= 5; i++)
-            try {
+        for (int i = 1; i <= 5; i++) {
+            if (cell.getMovableCard() != null)
                 if (cell.getMovableCard().player.getUserName().compareTo(player.getUserName()) == 0)
                     impactArea.add(match.table.getCellByCoordination(i, y));
-            } catch (NullPointerException ignored) {
-            }
+        }
     }
 
     private void oneRow(Cell cell) {
@@ -395,7 +399,7 @@ public class Impact {
         setImpactArea(friendlyPlayer, targetCell, castingCell);
         if (turnsToBeActivated != 0)
             return;
-         if (killIt)
+        if (killIt)
             kill();
         else if (doesHaveAntiNegativeImpact)
             antiNegativeImpactOnDefend(target);
@@ -489,7 +493,6 @@ public class Impact {
 
     private void setPoisonBuff() {
         for (Cell cell : impactArea) {
-            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
             MovableCard movableCard = cell.getMovableCard();
             if (movableCard != null)
                 movableCard.getImpactsAppliedToThisOne().add(this);
@@ -506,13 +509,11 @@ public class Impact {
     }
 
     void poisonBuff(MovableCard movableCard) {
-        System.out.println(getImpactQuantityWithSign());
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3')
                 movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
         }
-        }
-
+    }
 
 
     private void powerBuffOrWeaknessBuff() {
@@ -624,7 +625,7 @@ public class Impact {
                     continue;
                 if (validOnFriendlyTeamOnly && !movableCard.player.equals(friendlyPlayer))
                     continue;
-                if (minionSoldierTypeOnly &&!( movableCard instanceof Minion))
+                if (minionSoldierTypeOnly && !(movableCard instanceof Minion))
                     continue;
                 cellArrayList.add(cell);
             }
@@ -724,7 +725,6 @@ public class Impact {
     public boolean isSelectedCellImportant() {
         return selectedCellImportant;
     }
-
 
 
     Impact copy() {
