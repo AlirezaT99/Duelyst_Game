@@ -57,7 +57,7 @@ public class MultiPlayerMenuProcess {
         int mode = Integer.parseInt(commandParts[3]);
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
-        Match match = new Match(false, mode);
+        Match match = new Match(true, mode, numberOfFlags);
         if(mode == 2){
             Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
             match.getTable().getCellByCoordination(3,5).setItem(flag);
