@@ -45,7 +45,7 @@ public class Minion extends MovableCard {
     }
 
     @Override
-    protected void manageCasualties() {
+    public void manageCasualties() {
         if (this.getHealth() + this.dispelableHealthChange <= 0) {
             this.isAlive = false;
             if(dyingWishImpact != null)

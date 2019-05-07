@@ -155,7 +155,7 @@ public abstract class MovableCard extends Card {
         didAttackInThisTurn = false;
     }
 
-    protected void manageCasualties() {
+    public void manageCasualties() {
         if (this.health + dispelableHealthChange <= 0)
             this.isAlive = false;
     }
