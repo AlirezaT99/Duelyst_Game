@@ -11,6 +11,7 @@ public class Player {
     private int mana;
     Match match;
     private boolean isAI;
+    private int heldTheFlagNumberOfTurns = 0;
     private ArrayList<CollectibleItem> collectibleItems = new ArrayList<>();
     private ArrayList<Flag> flags = new ArrayList<>();
     {
@@ -109,6 +110,10 @@ public class Player {
         return flags;
     }
 
+    public int getHeldTheFlagNumberOfTurns() {
+        return heldTheFlagNumberOfTurns;
+    }
+
     //getters
 
     //setters
@@ -130,6 +135,10 @@ public class Player {
 
     public void setAI(boolean AI) {
         isAI = AI;
+    }
+
+    public void increaseHeldFlag(){
+        heldTheFlagNumberOfTurns++;
     }
 
     //setters

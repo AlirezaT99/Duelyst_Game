@@ -258,6 +258,8 @@ public abstract class MovableCard extends Card {
 
     //getters
 
+
+
     public String getName() {
         return name;
     }

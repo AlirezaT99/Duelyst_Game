@@ -62,6 +62,8 @@ public class Cell {
     public Item getItem() {
         return item;
     }
+
+
     //getters
 
     //setters

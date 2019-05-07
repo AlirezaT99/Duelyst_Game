@@ -69,6 +69,11 @@ public abstract class Card {
     public String getCollectionID() {
         return collectionID;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
     //getters
 
     //setters

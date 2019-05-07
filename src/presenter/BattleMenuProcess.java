@@ -171,87 +171,96 @@ public class BattleMenuProcess {
 
     private int endTurn() throws IOException {
         match.currentTurnPlayer().fillHand();
+        secondModePrecedure(match);
         resetFlags();
         if (endGameReached()) {
-            if (match.getGameMode() == 1) {
-                if (match.getPlayer1().getDeck().getHero().isAlive()) {
-                    MatchHistory matchHistory = new MatchHistory();
-                    if (!match.getPlayer1().isAI()) {
-                        if (!match.getPlayer2().isAI()) {
-                            match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 1500);
-                            matchHistory.setMatchHistory(match.getPlayer2(), match, false);
-                            LoginMenuProcess.save(match.getPlayer2().getAccount());
-                        }
-                        if (match.getPlayer2().isAI()) {
-                            match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 500);
-                        }
-                        matchHistory.setMatchHistory(match.getPlayer1(), match, true);
-                    } else {
-                        matchHistory.setMatchHistory(match.getPlayer2(), match, false);
-                    }
-                    LoginMenuProcess.save(match.getPlayer1().getAccount());
-                } else {
-                    MatchHistory matchHistory = new MatchHistory();
-                    if (!match.getPlayer2().isAI()) {
-                        if (!match.getPlayer1().isAI()) {
-                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
-                            matchHistory.setMatchHistory(match.getPlayer1(), match, false);
-                            LoginMenuProcess.save(match.getPlayer1().getAccount());
-                        }
-                        if (match.getPlayer1().isAI()) {
-                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 500);
-                        }
-                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                    } else {
-                        matchHistory.setMatchHistory(match.getPlayer1(), match, false);
-                    }
-                    LoginMenuProcess.save(match.getPlayer2().getAccount());
-                }
-            } else if (match.getGameMode() != 1) {
-                if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() > (match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
-                    MatchHistory matchHistory = new MatchHistory();
-                    if (match.getPlayer1().isAI()) {
-                        matchHistory.setMatchHistory(match.getPlayer2(), match, false);
-                        LoginMenuProcess.save(match.getPlayer2().getAccount());
-                    } else {
-                        if (match.getPlayer2().isAI()) {
-                            matchHistory.setMatchHistory(match.getPlayer1(), match, true);
-                            LoginMenuProcess.save(match.getPlayer1().getAccount());
-                        } else {
-                            matchHistory.setMatchHistory(match.getPlayer1(), match, true);
-                            LoginMenuProcess.save(match.getPlayer1().getAccount());
-                            matchHistory.setMatchHistory(match.getPlayer2(), match, false);
-                            LoginMenuProcess.save(match.getPlayer2().getAccount());
-                        }
-                    }
-                } else {
-                    MatchHistory matchHistory = new MatchHistory();
-                    if (match.getPlayer2().isAI()) {
-                        matchHistory.setMatchHistory(match.getPlayer1(), match, false);
-                        LoginMenuProcess.save(match.getPlayer1().getAccount());
-                    } else {
-                        if (match.getPlayer1().isAI()) {
-                            matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                            LoginMenuProcess.save(match.getPlayer2().getAccount());
-                        } else {
-                            matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                            LoginMenuProcess.save(match.getPlayer2().getAccount());
-                            matchHistory.setMatchHistory(match.getPlayer1(), match, false);
-                            LoginMenuProcess.save(match.getPlayer1().getAccount());
-                        }
-                    }
-                }
-            }
-            battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
-            battleMenu.getBattleInit().setInBattleInit(false);
-            battleMenu.setInBattleMenu(false);
-            battleMenu.getBattleInit().getMainMenu().run();
+            endingPrecedure();
         }
         match.switchTurn();
         impactGoThroughTime();
 
         // didMoveInThisTurn --> false
         return 0;
+    }
+
+    private void endingPrecedure() throws IOException {
+        if (match.getGameMode() == 1) {
+            if (match.getPlayer1().getDeck().getHero().isAlive()) {
+                MatchHistory matchHistory = new MatchHistory();
+                if (!match.getPlayer1().isAI()) {
+                    if (!match.getPlayer2().isAI()) {
+                        match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 1500);
+                        matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                        LoginMenuProcess.save(match.getPlayer2().getAccount());
+                    }
+                    if (match.getPlayer2().isAI()) {
+                        match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 500);
+                    }
+                    matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                } else {
+                    matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                }
+                BattleMenu.showMessage(match.getPlayer1().getUserName()+" has won.");
+                LoginMenuProcess.save(match.getPlayer1().getAccount());
+            } else {
+                MatchHistory matchHistory = new MatchHistory();
+                if (!match.getPlayer2().isAI()) {
+                    if (!match.getPlayer1().isAI()) {
+                        match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
+                        matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                        LoginMenuProcess.save(match.getPlayer1().getAccount());
+                    }
+                    if (match.getPlayer1().isAI()) {
+                        match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 500);
+                    }
+                    matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                } else {
+                    matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                }
+                BattleMenu.showMessage(match.getPlayer2().getUserName()+" has won.");
+                LoginMenuProcess.save(match.getPlayer2().getAccount());
+            }
+        } else if (match.getGameMode() != 1) {
+            if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() > (match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
+                MatchHistory matchHistory = new MatchHistory();
+                if (match.getPlayer1().isAI()) {
+                    matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                    LoginMenuProcess.save(match.getPlayer2().getAccount());
+                } else {
+                    if (match.getPlayer2().isAI()) {
+                        matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                        LoginMenuProcess.save(match.getPlayer1().getAccount());
+                    } else {
+                        matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                        LoginMenuProcess.save(match.getPlayer1().getAccount());
+                        matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                        LoginMenuProcess.save(match.getPlayer2().getAccount());
+                    }
+                }
+                BattleMenu.showMessage(match.getPlayer1().getUserName()+" has won.");
+            } else {
+                MatchHistory matchHistory = new MatchHistory();
+                if (match.getPlayer2().isAI()) {
+                    matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
+                } else {
+                    if (match.getPlayer1().isAI()) {
+                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                        LoginMenuProcess.save(match.getPlayer2().getAccount());
+                    } else {
+                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                        LoginMenuProcess.save(match.getPlayer2().getAccount());
+                        matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                        LoginMenuProcess.save(match.getPlayer1().getAccount());
+                    }
+                }
+                BattleMenu.showMessage(match.getPlayer2().getUserName()+" has won.");
+            }
+        }
+        battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
+        battleMenu.getBattleInit().setInBattleInit(false);
+        battleMenu.setInBattleMenu(false);
+        battleMenu.getBattleInit().getMainMenu().run();
     }
 
     private void impactGoThroughTime() {
@@ -291,11 +300,20 @@ public class BattleMenuProcess {
                         !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
                     return true;
             case 2:
+                if(match.currentTurnPlayer().getHeldTheFlagNumberOfTurns()>=8 ||
+                        match.notCurrentTurnPlayer().getHeldTheFlagNumberOfTurns() >=8)
                 return false;
             case 3:
                 return false;
         }
         return false;
+    }
+
+    private void secondModePrecedure(Match match){
+        if(match.getGameMode() == 2){
+        for (Cell allFlag : match.getTable().findAllFlags()) {
+            allFlag.getMovableCard().getPlayer().increaseHeldFlag();
+        }}
     }
 
     private void resetFlags() {
