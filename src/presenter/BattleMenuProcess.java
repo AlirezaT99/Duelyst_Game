@@ -158,10 +158,12 @@ public class BattleMenuProcess {
     }
 
     public static int showCollectibleInfo() {
+
         return 0;
     }
 
     public static int useCollectible() {
+
         return 0;
     }
 
@@ -170,6 +172,7 @@ public class BattleMenuProcess {
         secondModeProcedure(match);
         resetFlags();
         buryTheDead();
+        match.coolDownIncrease();
         if (endGameReached()) {
             endingProcedure();
         }

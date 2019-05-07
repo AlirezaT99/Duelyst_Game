@@ -4,7 +4,6 @@ import presenter.StoryMenuProcess;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.jar.JarEntry;
 
 enum GameMode {HeroesFight, CaptureTheFlag, CaptureMostFlags}
 
@@ -86,7 +85,7 @@ public class Match {
 
     public void setup(Account account, String deckName, int numberOfFlags, Deck deck) {
         Deck playerDeck = account.getCollection().getDeckHashMap().get(deckName).copy();
-        StoryMenuProcess.setDeckCardIDs(account.getUserName(),playerDeck);
+        StoryMenuProcess.setDeckCardIDs(account.getUserName(), playerDeck);
         player1.setAccount(account);
         player1.match = this;
         player1.setDeck(playerDeck);
@@ -94,7 +93,7 @@ public class Match {
         player2.getAccount().setCollection(new Collection());
         player2.getAccount().getCollection().setSelectedDeck(deck);
         Deck deck1 = deck.copy();
-        StoryMenuProcess.setDeckCardIDs("computer",deck1);
+        StoryMenuProcess.setDeckCardIDs("computer", deck1);
         player2.setDeck(deck1.copy());
         player2.setAI(true);
         player2.match = this;
@@ -107,10 +106,10 @@ public class Match {
         player2.setAccount(account2);
         player2.match = this;
         Deck deck = account1.getCollection().getSelectedDeck().copy();
-        StoryMenuProcess.setDeckCardIDs(account1.getUserName(),deck);
+        StoryMenuProcess.setDeckCardIDs(account1.getUserName(), deck);
         player1.setDeck(deck);
         Deck deck2 = account2.getCollection().getSelectedDeck().copy();
-        StoryMenuProcess.setDeckCardIDs(account2.getUserName(),deck2);
+        StoryMenuProcess.setDeckCardIDs(account2.getUserName(), deck2);
         player2.setDeck(deck2);
         this.numberOfFlags = numberOfFlags;
     }
