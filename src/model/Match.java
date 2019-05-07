@@ -195,6 +195,9 @@ public class Match {
         player2_heroSpellCoolDownCounter++;
     }
 
+
+    //getters
+
     //getters
 
 }
