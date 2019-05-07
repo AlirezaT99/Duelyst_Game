@@ -6,7 +6,7 @@ import java.util.ArrayList;
 // 12.deactivatedForThisTurn(0,1) |13.theWayItIsGonnaBeAssigned(0-3){spellWay,attack,defend,don't care}
 // 16.appliedToOnWhichState(state is for card that have isPositiveImpact)(0-3){none,defend,attack}
 public class Impact {
-    private int impactId = 1;
+    private int impactId = 1;//hghj
     private ArrayList<Cell> impactArea = new ArrayList<>();
     private Match match;
     private String targetTypeId = ""; //0.(0,1)"ValidOnAll"|1.(0,1)"SelectedCellImportance"|2.(0,1)"ValidOnAWholeTeam"|
