@@ -117,7 +117,6 @@ public class BattleMenu {
                     }
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
             }
         }
         scanner.close();
@@ -168,12 +167,10 @@ public class BattleMenu {
     private void doSumKasifJob(Hero hero1) {
         if(hero1.getHeroSpell().getName().equals("Esfandiar")) {
             hero1.getHeroSpell().castCard(hero1.getCardCell(), hero1.getPlayer());
-            System.out.println("esfandiar");
 
         }
         if(hero1.getHeroSpell().getName().equals("Zahhak")) {
             hero1.setOnAttackImpact(hero1.getHeroSpell().getPrimaryImpact());
-            System.out.println("Zahhak");
         }
     }
 

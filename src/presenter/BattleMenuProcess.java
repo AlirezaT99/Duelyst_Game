@@ -173,8 +173,6 @@ public class BattleMenuProcess {
         if (endGameReached()) {
             endingProcedure();
         }
-        if (match.getGameMode() == 2)
-            match.setFlagCounters();
         if (!match.currentTurnPlayer().isAI() && match.notCurrentTurnPlayer().isAI()) {
             match.switchTurn();
             impactGoThroughTime();
