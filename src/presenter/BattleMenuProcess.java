@@ -296,6 +296,7 @@ public class BattleMenuProcess {
                     }
                     movableCard.getImpactsAppliedToThisOne().removeAll(toRemove);
                 }
+
             }
 
         }
@@ -316,7 +317,7 @@ public class BattleMenuProcess {
         return false;
     }
 
-    private void secondModePrecedure(Match match) {
+    private void secondModeProcedure(Match match) {
         if (match.getGameMode() == 2) {
             for (Cell allFlag : match.getTable().findAllFlags()) {
                 allFlag.getMovableCard().getPlayer().increaseHeldFlag();
@@ -385,9 +386,10 @@ public class BattleMenuProcess {
     }
 
     private static boolean spellCastCheck(Spell spell, int x, int y) {
+        spell.getPrimaryImpact().setAllVariablesNeeded();
         if (spell.getPrimaryImpact().isSelectedCellImportant()) {
             ArrayList<Cell> arrayList = spell.getValidCoordination();
-            return !arrayList.contains(match.getTable().getCell(x, y));
+            return arrayList.contains(match.getTable().getCell(x, y));
         }
         return true;
     }

@@ -145,7 +145,7 @@ public class Impact {
 
     //impactTypeComp variables
 
-    void setAllVariablesNeeded() {
+    public void setAllVariablesNeeded() {
         setAllTargetTypeIdVariables();
         setImpactTypeIdVariables();
         setAllImpactTypeCompVariables();
@@ -611,6 +611,7 @@ public class Impact {
 
     public ArrayList<Cell> getValidCells(Player friendlyPlayer) {
         ArrayList<Cell> cellArrayList = new ArrayList<>();
+        match = friendlyPlayer.match;
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 9; j++) {
                 Cell cell = match.table.getCell(i, j);
@@ -697,7 +698,7 @@ public class Impact {
         return impactArea;
     }
 
-    String getTargetTypeId() {
+    public String getTargetTypeId() {
         return targetTypeId;
     }
 
@@ -725,6 +726,8 @@ public class Impact {
     public boolean isSelectedCellImportant() {
         return selectedCellImportant;
     }
+
+
 
     Impact copy() {
         Impact impact = new Impact();
