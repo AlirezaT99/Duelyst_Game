@@ -154,8 +154,11 @@ public class Impact {
     //set ImpactArea
 
     private void addToCardsImpact() {
+        ArrayList<Cell> arrayList = new ArrayList<>(); // todo kasif kari
         for (Cell cell : impactArea) {
-            if (cell.getMovableCard() != null) {
+            if (arrayList.indexOf(cell) == -1)
+                arrayList.add(cell);
+            else if (cell.getMovableCard() != null) {
                 cell.getMovableCard().getImpactsAppliedToThisOne().add(this);
             }
         }
@@ -265,6 +268,7 @@ public class Impact {
     //setImpact  main methods
 
     private void oneHero(Player player) {
+        System.out.println("one Hero");
         if (oneRow) {
             oneRow(player.findPlayerHero().cardCell);
         } else if (!targetAttackTypeMatters) {
@@ -277,6 +281,7 @@ public class Impact {
     }
 
     private void oneTeam(Player player, boolean targetAttackTypeMatters) {
+        System.out.println("one team");
         if (!targetAttackTypeMatters) {
             impactArea.addAll(match.table.findAllSoldiers(player));
         } else {
@@ -294,12 +299,11 @@ public class Impact {
 
     private void oneColumnFromOneTeam(Cell cell, Player player) {
         int y = cell.getCellCoordination().getY();
-        for (int i = 1; i <= 5; i++)
-            try {
+        for (int i = 1; i <= 5; i++) {
+            if (cell.getMovableCard() != null)
                 if (cell.getMovableCard().player.getUserName().compareTo(player.getUserName()) == 0)
                     impactArea.add(match.table.getCellByCoordination(i, y));
-            } catch (NullPointerException ignored) {
-            }
+        }
     }
 
     private void oneRow(Cell cell) {
@@ -490,7 +494,6 @@ public class Impact {
 
     private void setPoisonBuff() {
         for (Cell cell : impactArea) {
-            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
             MovableCard movableCard = cell.getMovableCard();
             if (movableCard != null)
                 movableCard.getImpactsAppliedToThisOne().add(this);
@@ -507,7 +510,6 @@ public class Impact {
     }
 
     void poisonBuff(MovableCard movableCard) {
-        System.out.println(getImpactQuantityWithSign());
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3')
                 movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());

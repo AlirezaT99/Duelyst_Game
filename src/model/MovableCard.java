@@ -149,13 +149,6 @@ public abstract class MovableCard extends Card {
     }
     //attack & counterAttack
 
-    public void goThroughTime() {
-        for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact(this.player, this, this.cardCell, this.cardCell);
-            impact.goThroughTime(this);
-
-        }
-    }
 
     public void resetFlags() {
         didMoveInThisTurn = false;

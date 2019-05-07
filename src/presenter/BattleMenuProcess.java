@@ -343,14 +343,17 @@ public class BattleMenuProcess {
                 }
                 cell.cellImpacts.removeAll(toRemove);
                 if (movableCard != null) {
-                    toRemove = new ArrayList<>();
+                     toRemove = new ArrayList<>();
+                     int x = 1;
                     for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
+                        System.out.println("x = "+x);
+                        System.out.println(movableCard.getName());
                         impact.goThroughTime(movableCard);
                         if (impact.isImpactOver()) {
                             impact.doAntiImpact(movableCard);
                             toRemove.add(impact);
                         }
-
+                        x++;
                     }
                     movableCard.getImpactsAppliedToThisOne().removeAll(toRemove);
                 }
