@@ -40,7 +40,7 @@ public class SinglePlayerMenuProcess {
             match.getTable().getCellByCoordination(3,5).setItem(flag);
         }
         Deck deck = getSampleDecks().get(0).copy();
-        deck.setHero(hero);
+        deck.setHero(hero.copy());
         deck.getHero().setCardID("computer_"+deck.getHero().getName()+"_1");
         match.setup(account, deckName, numberOfFlags, deck);
         BattleMenu battleMenu = new BattleMenu(singlePlayerMenu.getBattleInit(), match);

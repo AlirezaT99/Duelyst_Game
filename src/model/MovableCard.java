@@ -45,7 +45,7 @@ public abstract class MovableCard extends Card {
             player.getHand().removeCardFromHand(this);
         if (!(this instanceof Hero))
             player.setMana(player.getMana() - this.manaCost);
-        isAlive = true;
+        this.isAlive = true;
     }
 
     @Override

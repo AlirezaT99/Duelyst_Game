@@ -293,17 +293,16 @@ public class BattleMenuProcess {
     }
 
     private boolean endGameReached() {
-//        switch (match.getGameMode()) {
-//            case 1:
-//                if (!match.currentTurnPlayer().getDeck().getHero().isAlive() ||
-//                        !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
-//                    return true;
-//            case 2:
-//                return false;
-//            case 3:
-//                return false;
-//        }
-//        return false;
+        switch (match.getGameMode()) {
+            case 1:
+                if (!match.currentTurnPlayer().getDeck().getHero().isAlive() ||
+                        !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
+                    return true;
+            case 2:
+                return false;
+            case 3:
+                return false;
+        }
         return false;
     }
 

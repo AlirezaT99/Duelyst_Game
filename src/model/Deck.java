@@ -36,7 +36,9 @@ public class Deck {
         for (Minion minion : minions) {
             deck.minions.add(minion.copy());
         }
-        deck.spells.addAll(spells);
+        for (Spell spell : spells){
+            deck.spells.add(spell.copy());
+        }
         deck.hero = hero == null ? null : hero.copy();
         return deck;
     }
