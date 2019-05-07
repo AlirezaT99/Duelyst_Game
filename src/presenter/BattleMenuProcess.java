@@ -562,12 +562,8 @@ public class BattleMenuProcess {
             case 1:
                 System.out.println("Player1 Hero Health = "
                         + match.getPlayer1().getDeck().getHero().getHealth());
-                System.out.println("Player1 MP = "
-                        + match.getPlayer1().getMana());
                 System.out.println("Player2 Hero Health = "
                         + match.getPlayer2().getDeck().getHero().getHealth());
-                System.out.println("Player2 MP = "
-                        + match.getPlayer2().getMana());
                 break;
             case 2:
                 // location & holder of flag
