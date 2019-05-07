@@ -259,7 +259,7 @@ public class BattleMenuProcess {
         battleMenu.getBattleInit().getMainMenu().run();
     }
 
-    private void buryTheDead() {
+    public static void buryTheDead() {
         for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
             if (!cell.getMovableCard().isAlive())
                 match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
@@ -413,6 +413,7 @@ public class BattleMenuProcess {
         if (attackedCard instanceof MovableCard)
             returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
+        if (returnValue == 0) return 17; // successfully attacked
         return returnValue;
     }
 

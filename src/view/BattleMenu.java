@@ -260,6 +260,9 @@ public class BattleMenu {
             case 16:
                 showMessage("Can't attack");
                 break;
+            case 17:
+                showMessage("successfully attacked");
+                break;
         }
     }
 

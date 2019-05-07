@@ -1,5 +1,7 @@
 package model;
 
+import presenter.BattleMenuProcess;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -66,7 +68,10 @@ public abstract class MovableCard extends Card {
             System.out.println(this.damage+this.dispelableDamageChange);
             //do attack
             opponent.counterAttack(this); // gonna need to change it
-            manageCasualties();
+            //
+            this.manageCasualties();
+            opponent.manageCasualties();
+            BattleMenuProcess.buryTheDead();
         }
         return returnValue;
     }
@@ -102,7 +107,9 @@ public abstract class MovableCard extends Card {
             opponent.takeDamage(this.damage);
             if (!Impact.doesHaveAntiHolyBuff(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
-            manageCasualties();
+            this.manageCasualties();
+            opponent.manageCasualties();
+            BattleMenuProcess.buryTheDead();
         }
     }
 
