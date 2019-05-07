@@ -117,6 +117,8 @@ public class StoryMenuProcess {
         match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
                 storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
                         .getAccount().getCollection().getSelectedDeck().getName(), 1, deck);
+        Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
+        match.getTable().getCellByCoordination(3,5).setItem(flag);
         match.getPlayer2().setDeck(deck);
         BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
         enterBattleMenu(battleMenu);

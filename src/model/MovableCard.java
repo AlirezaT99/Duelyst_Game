@@ -166,8 +166,10 @@ public abstract class MovableCard extends Card {
             didMoveInThisTurn = true;
             this.cardCell.setMovableCard(null);
             if (destination.getItem() != null) {
-                if (destination.getItem() instanceof CollectibleItem)
+                if (destination.getItem() instanceof CollectibleItem){
                     this.player.getCollectibleItems().add((CollectibleItem) destination.getItem());
+                    destination.getItem().setItemID(createIdForItem((CollectibleItem) destination.getItem()));
+                }
                 else
                     if(destination.getItem() instanceof Flag)
                         this.player.getFlags().add((Flag) destination.getItem());
@@ -243,6 +245,14 @@ public abstract class MovableCard extends Card {
         return previousTargets.containsKey(movableCard.name);
     }
 
+    private String createIdForItem(CollectibleItem collectibleItem){
+        int index = 1;
+        for( int i = 0; i < this.player.getCollectibleItems().size(); i++){
+            if(this.player.getCollectibleItems().get(i).getName().equals(collectibleItem.getName()))
+                index++;
+        }
+        return this.player.getAccount().getUserName()+"_"+collectibleItem.getName()+"_"+index;
+    }
     //previous targets manager
 
     //getters

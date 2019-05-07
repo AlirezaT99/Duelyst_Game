@@ -58,5 +58,10 @@ public class Item {
     public void setPlayer(Player player){
         this.player = player;
     }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
     //setters
 }

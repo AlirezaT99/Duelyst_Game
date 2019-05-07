@@ -112,7 +112,6 @@ public class BattleMenuProcess {
             return 2;
         match.currentTurnPlayer().getHand().setSelectedCard(findCard(cardID));
         return 5;
-
         // should go in the collectible subMenu from here
         // todo : check the id to see if is a card or a collectible
     }
@@ -170,13 +169,98 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int endTurn() {
+    private int endTurn() throws IOException {
         match.currentTurnPlayer().fillHand();
         resetFlags();
-        match.switchTurn();
         if (endGameReached()) {
-            //todo : give reward to the winner / create matchHistory / goto mainMenu
+            if (match.getGameMode() == 1) {
+                if (match.getPlayer1().getDeck().getHero().isAlive()) {
+                    MatchHistory matchHistory = new MatchHistory();
+                    if (!match.getPlayer1().isAI()) {
+                        if(!match.getPlayer2().isAI()){
+                             match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney()+1500);
+                            matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                             LoginMenuProcess.save(match.getPlayer2().getAccount());
+                        }
+                        if(match.getPlayer2().isAI()){
+                            match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney()+500);}
+                        matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                    }
+                    else {
+                        matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                    }
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
+                }
+                else
+                {
+                    MatchHistory matchHistory = new MatchHistory();
+                    if (!match.getPlayer2().isAI()) {
+                        if(!match.getPlayer1().isAI()){
+                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney()+1500);
+                            matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                            LoginMenuProcess.save(match.getPlayer1().getAccount());
+                        }
+                        if(match.getPlayer1().isAI()){
+                            match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney()+500);}
+                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                    }
+                    else {
+                        matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                    }
+                    LoginMenuProcess.save(match.getPlayer2().getAccount());
+                }
+            }
+            else if (match.getGameMode() !=1)
+            {
+                if(match.getPlayer1().getFlags()!=null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size()>(match.getNumberOfFlags()/2) && match.getGameMode() == 3)
+                {
+                    MatchHistory matchHistory = new MatchHistory();
+                    if(match.getPlayer1().isAI()){
+                        matchHistory.setMatchHistory(match.getPlayer2(),match,false);
+                        LoginMenuProcess.save(match.getPlayer2().getAccount());
+                    }
+                    else {
+                        if(match.getPlayer2().isAI()){
+                            matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                            LoginMenuProcess.save(match.getPlayer1().getAccount());
+                        }
+                        else
+                        {
+                            matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                            LoginMenuProcess.save(match.getPlayer1().getAccount());
+                            matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                            LoginMenuProcess.save(match.getPlayer2().getAccount());
+                        }
+                    }
+                }
+                else
+                {
+                    MatchHistory matchHistory = new MatchHistory();
+                    if(match.getPlayer2().isAI()){
+                        matchHistory.setMatchHistory(match.getPlayer1(),match,false);
+                        LoginMenuProcess.save(match.getPlayer1().getAccount());
+                    }
+                    else {
+                        if(match.getPlayer1().isAI()){
+                            matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                            LoginMenuProcess.save(match.getPlayer2().getAccount());
+                        }
+                        else
+                        {
+                            matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                            LoginMenuProcess.save(match.getPlayer2().getAccount());
+                            matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                            LoginMenuProcess.save(match.getPlayer1().getAccount());
+                        }
+                    }
+                }
+            }
+            battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
+            battleMenu.getBattleInit().setInBattleInit(false);
+            battleMenu.setInBattleMenu(false);
+            battleMenu.getBattleInit().getMainMenu().run();
         }
+        match.switchTurn();
         impactGoThroughTime();
 
         // didMoveInThisTurn --> false
@@ -347,6 +431,8 @@ public class BattleMenuProcess {
     }
 
     private boolean isCoordinationValidToInsert(int x, int y) {
+        if (match.getTable().getCellByCoordination(x, y).getItem() != null)
+            return false;
         ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
         ArrayList<Cell> wantedCells = new ArrayList<>();
         for (Cell cell : soldiersCells)

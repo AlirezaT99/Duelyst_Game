@@ -138,5 +138,6 @@ public class Account {
     public void setCollection(Collection collection){
         this.collection = collection;
     }
+
     //setters
 }
