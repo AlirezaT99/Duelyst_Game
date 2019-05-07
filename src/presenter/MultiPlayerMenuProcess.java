@@ -62,7 +62,7 @@ public class MultiPlayerMenuProcess {
             Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
             match.getTable().getCellByCoordination(3,5).setItem(flag);
         }
-        match.setup(account, opponent, account.getCollection().getSelectedDeck().getName(), numberOfFlags);
+        match.setup(account, opponent, numberOfFlags);
         BattleMenu battleMenu = new BattleMenu(multiPlayerMenu.getBattleInit(), match);
         enterBattleMenu(battleMenu);
     }

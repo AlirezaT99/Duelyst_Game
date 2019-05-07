@@ -263,6 +263,8 @@ public class BattleMenu {
             case 17:
                 showMessage("successfully attacked");
                 break;
+            case 18:
+                showMessage("cell is invalid.");
         }
     }
 

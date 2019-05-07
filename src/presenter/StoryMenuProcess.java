@@ -179,24 +179,32 @@ public class StoryMenuProcess {
 
     public static void setDeckCardIDs(String playerName, Deck deck) { //only use it for story mode.
         if (deck.getHero() != null)
-            deck.getHero().setCardID(CollectionMenuProcess.createCardID(playerName, deck, deck.getHero()));
+            deck.getHero().setCardID(playerName+"_"+deck.getHero().getName()+"_1");
+        if(deck.getItems()!= null && deck.getItems().size()>=1)
+            deck.getItems().get(0).setItemID(playerName+"_"+deck.getItems().get(0).getName()+"_1");
+        for (int i = 0; i < deck.getMinions().size(); i++) {
+            deck.getMinions().get(i).setCardID("");
+        }
         for (int i = 0; i < deck.getMinions().size(); i++) {
             int num = 0;
             for (int j = 0; j < deck.getMinions().size(); j++) {
                 if (deck.getMinions().get(j).getName().equals(deck.getMinions().get(i).getName())
-                        && (deck.getMinions().get(j).getCardID() != null && deck.getMinions().get(j).getCardID() != ""))
+                        && deck.getMinions().get(j).getCardID()!="")
                     num++;
             }
-            deck.getMinions().get(i).setCardID(CollectionMenuProcess.createCardID(playerName, deck, deck.getMinions().get(i)));
+            deck.getMinions().get(i).setCardID(playerName+"_"+deck.getMinions().get(i).getName()+"_"+num);
+        }
+        for (int i = 0; i < deck.getSpells().size(); i++) {
+            deck.getSpells().get(i).setCardID("");
         }
         for (int i = 0; i < deck.getSpells().size(); i++) {
             int num = 0;
             for (int j = 0; j < deck.getSpells().size(); j++) {
                 if (deck.getSpells().get(j).getName().equals(deck.getSpells().get(i).getName())
-                        && (deck.getSpells().get(j).getCardID() != null && deck.getSpells().get(j).getCardID() != ""))
+                && deck.getSpells().get(j).getCardID()!="")
                     num++;
             }
-            deck.getSpells().get(i).setCardID(CollectionMenuProcess.createCardID(playerName, deck, deck.getSpells().get(i)));
+            deck.getSpells().get(i).setCardID(playerName+"_"+deck.getSpells().get(i).getName()+"_"+num);
         }
     }
 }

@@ -6,19 +6,15 @@ public class Hand {
     private ArrayList<Card> cards;
     private Card selectedCard;
     private boolean switchCardThisTurn;
-
     private Deck deck;
 
     {
         cards = new ArrayList<>();
     }
 
-
     public Card findCardByName(String name) {
         for (Card card : cards){
-            if (card == null)
-                System.out.println("ijdskvm");
-            if (card.getName().equals(name))
+            if (card != null && card.getName().equals(name))
                 return card;}
         return null;
     }
@@ -74,15 +70,13 @@ public class Hand {
 
     //getters
 
-    ArrayList<Card> getCards() {
+    public ArrayList<Card> getCards() {
         return cards;
     }
 
     public Card getSelectedCard() {
         return selectedCard;
     }
-
-
 
     //getters
 

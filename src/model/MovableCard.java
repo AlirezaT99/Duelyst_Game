@@ -100,7 +100,6 @@ public abstract class MovableCard extends Card {
         return 0;
     }
 
-
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent)) {
             opponent.takeDamage(this.damage);
@@ -186,6 +185,8 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
+        if(cell == null)
+            return 18;
         moveRange = 2;
         if (this.cardCell == cell)
             return 10;
