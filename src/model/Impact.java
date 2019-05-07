@@ -509,7 +509,6 @@ public class Impact {
         System.out.println(getImpactQuantityWithSign());
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.impactTypeId.charAt(1) == '3')
-                System.out.println("s");
                 movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
         }
         }
@@ -579,7 +578,6 @@ public class Impact {
 
 
     public void goThroughTime(MovableCard movableCard) {
-        setAllVariablesNeeded();
         if (turnsToBeActivated != 0)
             turnsToBeActivated--;
         char c1 = (char) (turnsToBeActivated + 48);
@@ -593,6 +591,8 @@ public class Impact {
         impactTypeId = changeCharAtDesiredIndex(8, c2, impactTypeId);
         impactTypeId = changeCharAtDesiredIndex(9, c3, impactTypeId);
         System.out.println("turns " + turnsActive + " " + turnsToBeActivated);
+//        if (turnsToBeActivated == 0)
+//            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
 //        if (turnsToBeActivated == 0) {
 //            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
 //        }

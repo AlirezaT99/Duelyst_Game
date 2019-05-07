@@ -31,8 +31,6 @@ public class BattleMenuProcess {
         commandPatterns.add(Pattern.compile("[sS]how collectibles"));
         commandPatterns.add(Pattern.compile("[sS]how next card"));
         commandPatterns.add(Pattern.compile("[eE]nter graveyard"));
-//        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Show cards"));
         commandPatterns.add(Pattern.compile("[hH]elp"));
         commandPatterns.add(Pattern.compile("[eE]nd Game"));
         commandPatterns.add(Pattern.compile("[eE]xit"));
@@ -135,8 +133,9 @@ public class BattleMenuProcess {
         return -1;
     }
 
-    private int endGame() {
-        //todo: move to Main Menu
+    private int endGame() throws IOException {
+        //todo: give rewards
+        exit();
 
         // must be called when another functions has found the winner and given out the rewards
         return 0;
@@ -175,7 +174,9 @@ public class BattleMenuProcess {
         if (endGameReached())
             endingProcedure();
         match.switchTurn();
+//        match.handleMana();
         impactGoThroughTime();
+        match.coolDownIncrease(); // ok ?
         return 0;
     }
 
@@ -562,12 +563,8 @@ public class BattleMenuProcess {
             case 1:
                 System.out.println("Player1 Hero Health = "
                         + match.getPlayer1().getDeck().getHero().getHealth());
-                System.out.println("Player1 MP = "
-                        + match.getPlayer1().getMana());
                 System.out.println("Player2 Hero Health = "
                         + match.getPlayer2().getDeck().getHero().getHealth());
-                System.out.println("Player2 MP = "
-                        + match.getPlayer2().getMana());
                 break;
             case 2:
                 // location & holder of flag
