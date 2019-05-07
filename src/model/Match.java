@@ -16,10 +16,12 @@ public class Match {
     public ArrayList<Card> player1_graveyard;
     public ArrayList<Card> player2_graveyard;
     private int turn = 0;
+    private int turn_number = 1;
+    private int mana_basedOnTurn = 2;
     private int numberOfFlags = -1;
     private Integer AILevel = 0;
-    public int player1_heroSpellCoolDownCounter = 0;
-    public int player2_heroSpellCoolDownCounter = 0;
+    private int player1_heroSpellCoolDownCounter = 100; // until the first time it's used
+    private int player2_heroSpellCoolDownCounter = 100;
 
     {
         player1_graveyard = new ArrayList<>();
@@ -97,10 +99,18 @@ public class Match {
 
     public void switchTurn() {
         turn ^= 1;
+        turn_number++;
+    }
+    public void handleMana() {
+        if (turn_number % 2 == 0)
+            mana_basedOnTurn++;
+        if (turn_number >= 14) mana_basedOnTurn = 9;
+        currentTurnPlayer().setMana(mana_basedOnTurn);
     }
     //turn based manager
 
     //getters
+
     Player getOtherPlayer(Player player) {
         if (player.equals(player1))
             return player2;
@@ -141,6 +151,11 @@ public class Match {
         if (currentTurnPlayer().equals(player1))
             player1_heroSpellCoolDownCounter = 0;
         else player2_heroSpellCoolDownCounter = 0;
+    }
+
+    public void coolDownIncrease() {
+        player1_heroSpellCoolDownCounter++;
+        player2_heroSpellCoolDownCounter++;
     }
 
     //getters

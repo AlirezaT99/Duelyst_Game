@@ -151,13 +151,13 @@ public class BattleMenu {
         BattleMenuProcess.getMatch().getPlayer2().fillHand();
         //
         BattleMenuProcess.getMatch().getPlayer1().setMana(20);
+//        BattleMenuProcess.getMatch().getPlayer1().setMana(2);
         BattleMenuProcess.getMatch().getPlayer2().setMana(20); // unused
         //
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
         BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 9));
-        System.out.println("+" + BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName());
     }
 
     private void setPlayerToCards(Player player) {
@@ -169,13 +169,13 @@ public class BattleMenu {
         for (int i = 0; i < deck.getSpells().size(); i++)
             deck.getSpells().get(i).setPlayer(player);
         deck.getHero().setPlayer(player);
+        deck.getHero().getHeroSpell().setPlayer(player);
     }
 
     private void selectCardHelp() {
         showMessage("Move to (x, y)");
         showMessage("Attack [opponent card id]");
         showMessage("Attack combo [opponent card id] [my card id] [my card id] [...]");
-        showMessage("Use special power (x, y)");
         showMessage("Help");
         showMessage("Cancel");
     }
@@ -295,12 +295,8 @@ public class BattleMenu {
         showMessage("End turn");
         showMessage("Show collectibles");
         showMessage("Select [collectible id]");
-        showMessage("Show info");
-        showMessage("Use [location x, y]");
         showMessage("Show next card");
         showMessage("Enter graveyard");
-        showMessage("Show info [card id]");
-        showMessage("Show cards");
         showMessage("End Game");
         showMessage("Help");
         showMessage("Show menu");

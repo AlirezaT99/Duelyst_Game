@@ -144,7 +144,7 @@ public class Impact {
 
     //impactTypeComp variables
 
-    void setAllVariablesNeeded() {
+    public void setAllVariablesNeeded() {
         setAllTargetTypeIdVariables();
         setImpactTypeIdVariables();
         setAllImpactTypeCompVariables();
@@ -172,11 +172,6 @@ public class Impact {
         geometricSets(friendlyPlayer, targetCell, opponentPlayer, castingCell);
         addToCardsImpact();
         setImpactAreaComp(targetCell);
-        System.out.println("begin of impact Area");
-        for (Cell cell : impactArea) {
-            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
-        }
-        System.out.println("end of impact Area");
     }
 
     private void setImpactAreaComp(Cell targetCell) {
@@ -400,7 +395,9 @@ public class Impact {
         setImpactArea(friendlyPlayer, targetCell, castingCell);
         if (turnsToBeActivated != 0)
             return;
-        if (doesHaveAntiNegativeImpact)
+         if (killIt)
+            kill();
+        else if (doesHaveAntiNegativeImpact)
             antiNegativeImpactOnDefend(target);
         else if (doesHaveAntiPoison)
             antiPoisonOnDefend(target);
@@ -408,8 +405,6 @@ public class Impact {
             antiDisarmOnDefend(target);
         else if (doesHaveRisingDamage)
             attackOnPreviousTargets(target, castingCell.getMovableCard());
-        else if (killIt)
-            kill();
         else if (powerBuff)
             powerBuff();
         else if (poisonBuff)
@@ -504,7 +499,7 @@ public class Impact {
     static void holyBuff(MovableCard movableCard, int damageTaken) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.holyBuff) {
-                int maxHeal = Math.max(impact.getImpactQuantityWithSign(), damageTaken);
+                int maxHeal = Math.min(impact.getImpactQuantityWithSign(), damageTaken);
                 movableCard.setHealth(movableCard.getHealth() + maxHeal);
             }
         }
@@ -513,11 +508,12 @@ public class Impact {
     void poisonBuff(MovableCard movableCard) {
         System.out.println(getImpactQuantityWithSign());
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
-            if (impact.impactTypeId.charAt(1) == '3') //is poisonBuff
+            if (impact.impactTypeId.charAt(1) == '3')
                 movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
-
         }
-    }
+        }
+
+
 
     private void powerBuffOrWeaknessBuff() {
         for (Cell cell : this.impactArea) {
@@ -595,13 +591,15 @@ public class Impact {
         impactTypeId = changeCharAtDesiredIndex(8, c2, impactTypeId);
         impactTypeId = changeCharAtDesiredIndex(9, c3, impactTypeId);
         System.out.println("turns " + turnsActive + " " + turnsToBeActivated);
-        if (turnsToBeActivated == 0) {
-            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
-        }
+//        if (turnsToBeActivated == 0)
+//            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
+//        if (turnsToBeActivated == 0) {
+//            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
+//        }
         if (this.isPoisonBuff())
             poisonBuff(movableCard);
-        if (this.passive)
-            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
+//        if (this.passive)
+//            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
 
     }
 
@@ -698,7 +696,7 @@ public class Impact {
         return impactArea;
     }
 
-    String getTargetTypeId() {
+    public String getTargetTypeId() {
         return targetTypeId;
     }
 
@@ -726,6 +724,8 @@ public class Impact {
     public boolean isSelectedCellImportant() {
         return selectedCellImportant;
     }
+
+
 
     Impact copy() {
         Impact impact = new Impact();
