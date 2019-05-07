@@ -51,10 +51,6 @@ public class BattleMenu {
                                     case 2:
                                         selectCardHelp();
                                         break;
-                                    case 3:
-                                        cardHandleErrors(BattleMenuProcess.useSpecialPower(command.split("[), (]")[3]
-                                                , command.split("[), (]")[4]));
-                                        break;
                                     case 4:
                                         cardHandleErrors(BattleMenuProcess.moveTo(command.split("[), (]")));
                                         break;
@@ -119,7 +115,7 @@ public class BattleMenu {
                             break;
                     }
                 }
-            }catch (Throwable e){
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
@@ -187,10 +183,9 @@ public class BattleMenu {
     private int selectCardMenu(String command) {
         if (command.matches("[cC]ancel")) return 1;
         if (command.matches("[hH]elp")) return 2;
-        if (command.matches("[uU]se special power (\\d, \\d)")) return 3;
         if (command.matches("[mM]ove to \\(\\d,[ ]*\\d\\)")) return 4;
         if (command.matches("[aA]ttack [a-zA-Z0-9._]+")) return 5;
-        if (command.matches("[aA]ttack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*")) return 6;
+        if (command.matches("[aA]ttack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+[ [a-zA-Z0-9._]+]*")) return 6;
 
         return -1;
     }
@@ -214,6 +209,9 @@ public class BattleMenu {
                 break;
             case 12:
                 showMessage("invalid target");
+                break;
+            case 13:
+                showMessage("hero spell hasn't cooled down yet");
                 break;
         }
     }
@@ -244,6 +242,12 @@ public class BattleMenu {
             case 9:
                 showMessage("invalid card name");
                 break;
+            case 10:
+                showMessage("the card is already there");
+                break;
+            case 11:
+                showMessage("the cell is occupied by another card");
+                break;
             case 13:
                 showMessage("Stunned. Can't Attack");
                 break;
@@ -255,6 +259,9 @@ public class BattleMenu {
                 break;
             case 16:
                 showMessage("Can't attack");
+                break;
+            case 17:
+                showMessage("successfully attacked");
                 break;
         }
     }
