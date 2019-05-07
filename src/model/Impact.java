@@ -28,6 +28,7 @@ public class Impact {
     //3.impactGiverTeam(0-3)|4.impactGetterTeam(0-3)|
     private String impactAdderTypes = "";//0.addToWhichState{none, defend, attack}|
     //needed id variables
+
     //targetTypeId variables
 
     private int turnsToBeActivated;
@@ -96,6 +97,7 @@ public class Impact {
     private boolean isPermanent;
 
     private void setImpactTypeIdVariables() {
+        System.out.println(impactTypeId);
         isPositiveImpact = impactTypeId.charAt(0) == '1';
         buff = impactTypeId.charAt(1) != '0';
         holyBuff = impactTypeId.charAt(1) == '1';
@@ -110,8 +112,8 @@ public class Impact {
         passive = impactTypeId.charAt(6) == '1';
         permanent = impactTypeId.charAt(6) == '2';
         continuos = impactTypeId.charAt(6) == '3';
-        turnsToBeActivated = Integer.parseInt(impactTypeId.substring(7,8));
-        turnsActive = Integer.parseInt(impactTypeId.substring(8,10));
+        turnsToBeActivated = Integer.parseInt(impactTypeId.substring(7, 8));
+        turnsActive = Integer.parseInt(impactTypeId.substring(8, 10));
         dispel = impactTypeId.charAt(10) != '0';
         cellImpact = impactTypeId.charAt(11) == '1';
         poisonCell = impactTypeId.charAt(12) == '1';
@@ -164,7 +166,6 @@ public class Impact {
     void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
         match = friendlyPlayer.match;
         Player opponentPlayer = match.getOtherPlayer(friendlyPlayer);
-        impactArea.clear();
         teamOrHeroSets(friendlyPlayer, opponentPlayer);
         oneTargetSets(friendlyPlayer, targetCell, opponentPlayer);
         specialSets(friendlyPlayer, targetCell, castingCell, opponentPlayer);
@@ -315,10 +316,10 @@ public class Impact {
     }
 
     private void oneSoldierFromOneTeam(Cell cell, Player player) {
-        MovableCard movableCard =cell.getMovableCard();
+        MovableCard movableCard = cell.getMovableCard();
         if (!targetAttackTypeMatters) {
             if (!isRandom) {
-                if(movableCard == null)
+                if (movableCard == null)
                     return;
                 if (player != null) {
                     if (cell.getMovableCard().player.getUserName().equals(player.getUserName()))
@@ -397,7 +398,7 @@ public class Impact {
     void doImpact(Player friendlyPlayer, MovableCard target, Cell targetCell, Cell castingCell) {
         setAllVariablesNeeded();
         setImpactArea(friendlyPlayer, targetCell, castingCell);
-        if(turnsToBeActivated !=0 )
+        if (turnsToBeActivated != 0)
             return;
         if (doesHaveAntiNegativeImpact)
             antiNegativeImpactOnDefend(target);
@@ -437,12 +438,11 @@ public class Impact {
         int impactQuantity = getImpactQuantityWithSign();
         for (Cell cell : impactArea) {
             MovableCard movableCard = cell.getMovableCard();
-            if(movableCard == null)
+            if (movableCard == null)
                 continue;
             if (isPermanent) {
                 cell.getMovableCard().setHealth(cell.getMovableCard().getHealth() + impactQuantity);
-            }
-            else
+            } else
                 cell.getMovableCard().dispelableHealthChange += impactQuantity;
         }
     }
@@ -582,13 +582,26 @@ public class Impact {
 
 
     public void goThroughTime(MovableCard movableCard) {
-        turnsActive--;
-        turnsToBeActivated--;
-        System.out.println("turns " +turnsActive+ " "+turnsToBeActivated);
-        if(turnsToBeActivated == 0)
-            doImpact(movableCard.player,movableCard,movableCard.cardCell,movableCard.cardCell);
+        if (turnsToBeActivated != 0)
+            turnsToBeActivated--;
+        char c1 = (char) (turnsToBeActivated + 48);
+        impactTypeId = changeCharAtDesiredIndex(7, c1, impactTypeId);
+        if (isPermanent || isPassive())
+            return;
+        if (turnsActive != 0)
+            turnsActive--;
+        char c2 = (char) (turnsActive / 10 + 48);
+        char c3 = (char) (turnsActive % 10 + 48);
+        impactTypeId = changeCharAtDesiredIndex(8, c2, impactTypeId);
+        impactTypeId = changeCharAtDesiredIndex(9, c3, impactTypeId);
+        System.out.println("turns " + turnsActive + " " + turnsToBeActivated);
+        if (turnsToBeActivated == 0) {
+            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
+        }
         if (this.isPoisonBuff())
             poisonBuff(movableCard);
+        if (this.passive)
+            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
 
     }
 
@@ -598,10 +611,10 @@ public class Impact {
 
     public ArrayList<Cell> getValidCells(Player friendlyPlayer) {
         ArrayList<Cell> cellArrayList = new ArrayList<>();
-        for (int i = 1; i < 5; i++) {
-            for (int j = 1; j < 9; j++) {
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
                 Cell cell = match.table.getCell(i, j);
-                if (oneColumn || oneRow || isImpactAreaSquare) {
+                if (!selectedCellImportant || oneColumn || oneRow || isImpactAreaSquare || validOnAll || validOnAWholeTeam) {
                     cellArrayList.add(cell);
                     continue;
                 }
@@ -612,7 +625,7 @@ public class Impact {
                     continue;
                 if (validOnFriendlyTeamOnly && !movableCard.player.equals(friendlyPlayer))
                     continue;
-                if (minionSoldierTypeOnly && movableCard instanceof Minion)
+                if (minionSoldierTypeOnly &&!( movableCard instanceof Minion))
                     continue;
                 cellArrayList.add(cell);
             }
@@ -620,17 +633,17 @@ public class Impact {
         return cellArrayList;
     }
 
-    public boolean isImpactOver(){
-        if(passive || permanent)
+    public boolean isImpactOver() {
+        if (passive || permanent)
             return false;
         return turnsActive <= 0;
     }
 
-    public void doAntiImpact(MovableCard movableCard){
+    public void doAntiImpact(MovableCard movableCard) {
         int x = getImpactQuantityWithSign();
-        if(healthChange)
+        if (healthChange)
             movableCard.dispelableHealthChange -= x;
-        if(damageChange)
+        if (damageChange)
             movableCard.dispelableDamageChange -= x;
     }
     //getters

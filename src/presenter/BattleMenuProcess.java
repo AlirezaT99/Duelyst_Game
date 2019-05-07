@@ -201,7 +201,7 @@ public class BattleMenuProcess {
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                 }
-                BattleMenu.showMessage(match.getPlayer1().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
                 LoginMenuProcess.save(match.getPlayer1().getAccount());
             } else {
                 MatchHistory matchHistory = new MatchHistory();
@@ -218,7 +218,7 @@ public class BattleMenuProcess {
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                 }
-                BattleMenu.showMessage(match.getPlayer2().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
                 LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         } else if (match.getGameMode() != 1) {
@@ -238,7 +238,7 @@ public class BattleMenuProcess {
                         LoginMenuProcess.save(match.getPlayer2().getAccount());
                     }
                 }
-                BattleMenu.showMessage(match.getPlayer1().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
             } else {
                 MatchHistory matchHistory = new MatchHistory();
                 if (match.getPlayer2().isAI()) {
@@ -255,7 +255,7 @@ public class BattleMenuProcess {
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
                     }
                 }
-                BattleMenu.showMessage(match.getPlayer2().getUserName()+" has won.");
+                BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
             }
         }
         battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
@@ -274,37 +274,35 @@ public class BattleMenuProcess {
     }
 
     private void impactGoThroughTime() {
-        for (int i = 1; i < 5; i++) { // todo : <5 or <= 5 ??
-            for (int j = 1; j < 9; j++) {
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
-                Iterator<Impact> impactIterator = cell.cellImpacts.iterator();
-                while (impactIterator.hasNext()) {
-                    Impact impact = impactIterator.next();
-                    System.out.println("joon");
-                    System.out.println(impact.getImpactTypeId());
+                ArrayList<Impact> toRemove = new ArrayList<>();
+                for (Impact impact:cell.cellImpacts) {
                     impact.goThroughTime(movableCard);
-                    if(impact.isImpactOver()) {
+                    if (impact.isImpactOver()) {
                         impact.doAntiImpact(movableCard);
-                        impactIterator.remove();
+                        toRemove.add(impact);
                     }
                 }
-                if (movableCard != null){
-                    Iterator<Impact> impactIterator1 = movableCard.getImpactsAppliedToThisOne().iterator();
-                    while (impactIterator1.hasNext()){
-                        Impact impact = impactIterator1.next();
-                        System.out.println("boon");
-                        System.out.println(impact.getImpactTypeId());
+                cell.cellImpacts.removeAll(toRemove);
+                if (movableCard != null) {
+                     toRemove = new ArrayList<>();
+                    for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
                         impact.goThroughTime(movableCard);
-                        if(impact.isImpactOver()) {
+                        if (impact.isImpactOver()) {
                             impact.doAntiImpact(movableCard);
-                            impactIterator1.remove();
+                            toRemove.add(impact);
                         }
-                    }
-                }
 
+                    }
+                    movableCard.getImpactsAppliedToThisOne().removeAll(toRemove);
+                }
             }
+
         }
+
     }
 
     private boolean endGameReached() {
@@ -321,11 +319,12 @@ public class BattleMenuProcess {
         return false;
     }
 
-    private void secondModePrecedure(Match match){
-        if(match.getGameMode() == 2){
-        for (Cell allFlag : match.getTable().findAllFlags()) {
-            allFlag.getMovableCard().getPlayer().increaseHeldFlag();
-        }}
+    private void secondModePrecedure(Match match) {
+        if (match.getGameMode() == 2) {
+            for (Cell allFlag : match.getTable().findAllFlags()) {
+                allFlag.getMovableCard().getPlayer().increaseHeldFlag();
+            }
+        }
     }
 
     public static int useSpecialPower(String[] command) { // todo : test beshe
