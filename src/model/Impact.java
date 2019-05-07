@@ -373,6 +373,7 @@ public class Impact {
     private void findAndAddRandomCellFromGivenCells(ArrayList<Cell> soldiersCells) {
         double i = Math.random() % soldiersCells.size();
         int j = (int) i;
+        if(soldiersCells!=null && soldiersCells.size()>=1)
         impactArea.add(soldiersCells.get(j));
     }
 
@@ -395,7 +396,7 @@ public class Impact {
         setImpactArea(friendlyPlayer, targetCell, castingCell);
         if (turnsToBeActivated != 0)
             return;
-         if (killIt)
+        if (killIt)
             kill();
         else if (doesHaveAntiNegativeImpact)
             antiNegativeImpactOnDefend(target);
@@ -511,8 +512,7 @@ public class Impact {
             if (impact.impactTypeId.charAt(1) == '3')
                 movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
         }
-        }
-
+    }
 
 
     private void powerBuffOrWeaknessBuff() {
@@ -543,7 +543,8 @@ public class Impact {
     }
 
     private void antiSomeThingOnDefend(int indexOfThatThingInImpactId, MovableCard movableCard) {
-        movableCard.getImpactsAppliedToThisOne().removeIf(impact -> impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == (char) 1);
+            movableCard.getImpactsAppliedToThisOne().removeIf
+                    (impact -> impact.impactWayOfAssigning != null & impact.impactWayOfAssigning.length() >= 2 && impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == (char) 1);
     }
 
     private void antiNegativeImpactOnDefend(MovableCard movableCard) {
@@ -624,7 +625,7 @@ public class Impact {
                     continue;
                 if (validOnFriendlyTeamOnly && !movableCard.player.equals(friendlyPlayer))
                     continue;
-                if (minionSoldierTypeOnly &&!( movableCard instanceof Minion))
+                if (minionSoldierTypeOnly && !(movableCard instanceof Minion))
                     continue;
                 cellArrayList.add(cell);
             }
@@ -724,7 +725,6 @@ public class Impact {
     public boolean isSelectedCellImportant() {
         return selectedCellImportant;
     }
-
 
 
     Impact copy() {

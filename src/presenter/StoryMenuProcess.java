@@ -179,9 +179,9 @@ public class StoryMenuProcess {
 
     public static void setDeckCardIDs(String playerName, Deck deck) { //only use it for story mode.
         if (deck.getHero() != null)
-            deck.getHero().setCardID(playerName+"_"+deck.getHero().getName()+"_1");
+            deck.getHero().setCardID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getHero().getName())+"_1");
         if(deck.getItems()!= null && deck.getItems().size()>=1)
-            deck.getItems().get(0).setItemID(playerName+"_"+deck.getItems().get(0).getName()+"_1");
+            deck.getItems().get(0).setItemID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getItems().get(0).getName())+"_1");
         for (int i = 0; i < deck.getMinions().size(); i++) {
             deck.getMinions().get(i).setCardID("");
         }
@@ -192,7 +192,7 @@ public class StoryMenuProcess {
                         && deck.getMinions().get(j).getCardID()!="")
                     num++;
             }
-            deck.getMinions().get(i).setCardID(playerName+"_"+deck.getMinions().get(i).getName()+"_"+num);
+            deck.getMinions().get(i).setCardID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getMinions().get(i).getName())+"_"+(num+1));
         }
         for (int i = 0; i < deck.getSpells().size(); i++) {
             deck.getSpells().get(i).setCardID("");
@@ -204,7 +204,7 @@ public class StoryMenuProcess {
                 && deck.getSpells().get(j).getCardID()!="")
                     num++;
             }
-            deck.getSpells().get(i).setCardID(playerName+"_"+deck.getSpells().get(i).getName()+"_"+num);
+            deck.getSpells().get(i).setCardID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getSpells().get(i).getName())+"_"+(num+1));
         }
     }
 }
