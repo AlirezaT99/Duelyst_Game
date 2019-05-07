@@ -19,21 +19,16 @@ public class BattleMenuProcess {
     }
 
     static {
-        commandPatterns.add(Pattern.compile("[gG]ame info"));
         commandPatterns.add(Pattern.compile("[sS]how my minions"));
         commandPatterns.add(Pattern.compile("[sS]how opponent minions"));
         commandPatterns.add(Pattern.compile("[sS]how card info [a-zA-Z0-9._]+"));
         commandPatterns.add(Pattern.compile("[sS]elect [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Move to (\\d, \\d)"));
-//        commandPatterns.add(Pattern.compile("Attack [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Attack combo [a-zA-Z0-9._]+ [a-zA-Z0-9._]+ [[a-zA-Z0-9._]+]*"));
         commandPatterns.add(Pattern.compile("[uU]se special power \\(\\d,[ ]*\\d\\)"));
-        commandPatterns.add(Pattern.compile("[sS]how hand"));
         commandPatterns.add(Pattern.compile("[iI]nsert [a-zA-Z0-9._ ]+ in \\(\\d,[ ]*\\d\\)"));
+        commandPatterns.add(Pattern.compile("[sS]how hand"));
+        commandPatterns.add(Pattern.compile("[gG]ame info"));
         commandPatterns.add(Pattern.compile("[eE]nd turn"));
         commandPatterns.add(Pattern.compile("[sS]how collectibles"));
-//        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
-//        commandPatterns.add(Pattern.compile("Use [location x, y]")); // regex ?
         commandPatterns.add(Pattern.compile("[sS]how next card"));
         commandPatterns.add(Pattern.compile("[eE]nter graveyard"));
 //        commandPatterns.add(Pattern.compile("Show info [a-zA-Z0-9._]+"));
@@ -56,7 +51,6 @@ public class BattleMenuProcess {
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
-            this::gameInfo,
             new DoCommand() {
                 @Override
                 public int doIt() {
@@ -87,21 +81,17 @@ public class BattleMenuProcess {
                     return useSpecialPower(commandParts);
                 }
             },
-            this::showHand,
             new DoCommand() {
                 @Override
                 public int doIt() {
                     return insertCard(commandParts);
                 }
             },
+            this::showHand,
+            this::gameInfo,
             this::endTurn,
             this::showCollectibles,
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return showNextCard();
-                }
-            },
+            this::showNextCard,
             this::enterGraveyard,
             this::battleHelp,
             this::endGame,
@@ -125,21 +115,23 @@ public class BattleMenuProcess {
     public static void showGraveYardCards() {
         if (match.currentTurnPlayer().getUserName().equals(match.getPlayer1().getUserName())) {
             for (Card card : match.player1_graveyard)
-                showCardInfo(card.getCardID());
+                BattleMenu.showMessage(card.getCardID());
         } else
             for (Card card : match.player2_graveyard)
-                showCardInfo(card.getCardID());
+                BattleMenu.showMessage(card.getCardID());
     }
 
     public static int showGraveYardCardInfo(String cardID) {
         for (Card card : match.player1_graveyard)
-            if (cardID.equals(card.getCardID()))
-                if (match.getPlayer1().equals(match.currentTurnPlayer()))
-                    return showCardInfo(cardID);
+            if (cardID.equals(card.getCardID())) {
+                showInfo(card, false);
+                return 0;
+            }
         for (Card card : match.player2_graveyard)
-            if (cardID.equals(card.getCardID()))
-                if (match.getPlayer2().equals(match.currentTurnPlayer()))
-                    return showCardInfo(cardID);
+            if (cardID.equals(card.getCardID())) {
+                showInfo(card, false);
+                return 0;
+            }
         return -1;
     }
 
@@ -486,35 +478,37 @@ public class BattleMenuProcess {
 
     private static int showCardInfo(String cardID) {
         if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID))
-            showInfo(match.getPlayer1().getDeck().getHero());
+            showInfo(match.getPlayer1().getDeck().getHero(), true);
         if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
-            showInfo(match.getPlayer2().getDeck().getHero());
+            showInfo(match.getPlayer2().getDeck().getHero(), true);
         for (Card minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
-                showInfo(minion);
+                showInfo(minion, true);
         for (Card minion : match.getPlayer2().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
-                showInfo(minion);
+                showInfo(minion, true);
         for (Card spell : match.getPlayer1().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
-                showInfo(spell);
+                showInfo(spell, true);
         for (Card spell : match.getPlayer2().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
-                showInfo(spell);
-        System.out.println("wtf");
+                showInfo(spell, true);
         return 0;
     }
 
-    private static void showInfo(Card card) {
-        if (card instanceof Hero)
-            System.out.println("Hero:\nName: " + card.getName() + "\nHP: " + ((Hero) card).getHealth()
+    private static void showInfo(Card card, boolean showHealth) {
+        String health = "";
+        if (card instanceof Hero) {
+            if (showHealth) health = "\nHP: " + ((Hero) card).getHealth();
+            System.out.println("Hero:\nName: " + card.getName() + health
                     + "\nAP: " + ((Hero) card).getDamage() + "\nMP: " + card.getManaCost()
                     + "\nCost: " + card.getCost() + "\nDesc: " + card.getDescription());
-        else if (card instanceof Minion)
-            System.out.println("Minion:\nName: " + card.getName() + "\nHP: " + ((Minion) card).getHealth()
+        } else if (card instanceof Minion) {
+            if (showHealth) health = "\nHP: " + ((Minion) card).getHealth();
+            System.out.println("Minion:\nName: " + card.getName() + health
                     + "\nAP: " + ((Minion) card).getDamage() + "\nMP: " + card.getManaCost()
                     + "\nCost: " + card.getCost() + "\nDesc: " + card.getDescription());
-        else if (card instanceof Spell)
+        } else if (card instanceof Spell)
             System.out.println("Spell:\nName: " + card.getName()
                     + "\nMP: " + card.getManaCost() + "\nCost: " + card.getCost()
                     + "\nDesc: " + card.getDescription());
