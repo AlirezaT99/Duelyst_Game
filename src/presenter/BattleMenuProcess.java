@@ -173,20 +173,21 @@ public class BattleMenuProcess {
         if (endGameReached()) {
             endingProcedure();
         }
-        if (!match.currentTurnPlayer().isAI() && match.notCurrentTurnPlayer().isAI()) {
-            match.switchTurn();
-            impactGoThroughTime();
-            playAI(match.currentTurnPlayer());
-            match.currentTurnPlayer().fillHand();
-            secondModeProcedure(match);
-            resetFlags();
-            buryTheDead();
-            match.switchTurn();
-            impactGoThroughTime();
-        } else {
-            match.switchTurn();
-            impactGoThroughTime();
-        }
+        if (match.getGameMode() == 2)
+            if (!match.currentTurnPlayer().isAI() && match.notCurrentTurnPlayer().isAI()) {
+                match.switchTurn();
+                impactGoThroughTime();
+                playAI(match.currentTurnPlayer());
+                match.currentTurnPlayer().fillHand();
+                secondModeProcedure(match);
+                resetFlags();
+                buryTheDead();
+                match.switchTurn();
+                impactGoThroughTime();
+            } else {
+                match.switchTurn();
+                impactGoThroughTime();
+            }
         return 0;
     }
 
@@ -230,7 +231,7 @@ public class BattleMenuProcess {
                     LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         } else if (match.getGameMode() != 1) {
-            if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() > (match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
+            if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() >=(match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
                 MatchHistory matchHistory = new MatchHistory();
                 if (match.getPlayer1().isAI()) {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, false);
@@ -377,9 +378,9 @@ public class BattleMenuProcess {
                         !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
                     return true;
             case 2:
-                if(match.getPlayer1().getHeldTheFlagNumberOfTurns()>=8 ||
-                match.getPlayer2().getHeldTheFlagNumberOfTurns()>=8)
-                return true;
+                if (match.getPlayer1().getHeldTheFlagNumberOfTurns() >= 8 ||
+                        match.getPlayer2().getHeldTheFlagNumberOfTurns() >= 8)
+                    return true;
             case 3:
 
                 return false;
@@ -637,10 +638,27 @@ public class BattleMenuProcess {
                         + match.getPlayer2().getDeck().getHero().getHealth());
                 break;
             case 2:
+                for(int i = 1; i <= 5; i++)
+                    for( int j = 1; j <=9; j++)
+                        if(match.getTable().getCellByCoordination(i,j).getItem() instanceof Flag)
+                        {
+                            if(match.getTable().getCellByCoordination(i,j).getMovableCard()!= null){
+                                System.out.println("holder : "+match.getTable().getCellByCoordination(i,j).getMovableCard().getPlayer().getAccount().getUserName());
+                        }
+                            System.out.println("location : "+i+" "+j);
+                        }
                 // location & holder of flag
                 break;
             case 3:
-                // soldiers' names who hold flags + their team names
+                for(int i = 1; i <= 5; i++)
+                    for( int j = 1; j <=9; j++)
+                        if(match.getTable().getCellByCoordination(i,j).getItem() instanceof Flag)
+                        {
+                            if(match.getTable().getCellByCoordination(i,j).getMovableCard()!= null){
+                                System.out.println("holder : "+match.getTable().getCellByCoordination(i,j).getMovableCard().getPlayer().getAccount().getUserName());
+                            }
+                            System.out.println("location : "+i+" "+j);
+                        }
                 break;
         }
         return 0;
