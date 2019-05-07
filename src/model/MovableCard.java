@@ -188,13 +188,15 @@ public abstract class MovableCard extends Card {
     public int isMoveValid(Cell cell) {
         moveRange = 2;
         if (this.cardCell == cell)
-            return 9999; //unhandled
+            return 10;
         if (didMoveInThisTurn || didAttackInThisTurn)
             return 4;
         if (findDistanceBetweenTwoCells(this.cardCell, cell) > this.moveRange)
             return 5;
         if (isOpponentInTheWayOfDesiredDestination(this.cardCell, cell))
             return 6;
+        if (cell.getMovableCard() != null)
+            return 11;
         for (Impact impact : impactsAppliedToThisOne)
             if (impact.isStunBuff())
                 return 8;

@@ -127,6 +127,12 @@ public class Match {
         return player2_heroSpellCoolDownCounter;
     }
 
+    public void setCoolDownCounter() {
+        if (currentTurnPlayer().equals(player1))
+            player1_heroSpellCoolDownCounter = 0;
+        else player2_heroSpellCoolDownCounter = 0;
+    }
+
     //getters
 
 }

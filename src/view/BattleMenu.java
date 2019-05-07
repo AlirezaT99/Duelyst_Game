@@ -242,6 +242,12 @@ public class BattleMenu {
             case 9:
                 showMessage("invalid card name");
                 break;
+            case 10:
+                showMessage("the card is already there");
+                break;
+            case 11:
+                showMessage("the cell is occupied");
+                break;
             case 13:
                 showMessage("Stunned. Can't Attack");
                 break;

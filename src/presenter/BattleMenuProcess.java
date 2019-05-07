@@ -321,6 +321,7 @@ public class BattleMenuProcess {
         if (!spellCastCheck(match.currentTurnPlayer().getDeck().getHero().getHeroSpell(), x, y))
             return 12;
         match.currentTurnPlayer().getDeck().getHero().castSpell(match.getTable().getCellByCoordination(x, y));
+        match.setCoolDownCounter();
         return 0;
     }
 
