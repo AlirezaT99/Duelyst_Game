@@ -97,7 +97,6 @@ public class Impact {
     private boolean isPermanent;
 
     private void setImpactTypeIdVariables() {
-        System.out.println(impactTypeId);
         isPositiveImpact = impactTypeId.charAt(0) == '1';
         buff = impactTypeId.charAt(1) != '0';
         holyBuff = impactTypeId.charAt(1) == '1';
@@ -155,8 +154,11 @@ public class Impact {
     //set ImpactArea
 
     private void addToCardsImpact() {
+        ArrayList<Cell> arrayList = new ArrayList<>(); // todo kasif kari
         for (Cell cell : impactArea) {
-            if (cell.getMovableCard() != null) {
+            if (arrayList.indexOf(cell) == -1)
+                arrayList.add(cell);
+            else if (cell.getMovableCard() != null) {
                 cell.getMovableCard().getImpactsAppliedToThisOne().add(this);
             }
         }
@@ -166,17 +168,13 @@ public class Impact {
     void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
         match = friendlyPlayer.match;
         Player opponentPlayer = match.getOtherPlayer(friendlyPlayer);
+        impactArea.clear();
         teamOrHeroSets(friendlyPlayer, opponentPlayer);
         oneTargetSets(friendlyPlayer, targetCell, opponentPlayer);
         specialSets(friendlyPlayer, targetCell, castingCell, opponentPlayer);
         geometricSets(friendlyPlayer, targetCell, opponentPlayer, castingCell);
         addToCardsImpact();
         setImpactAreaComp(targetCell);
-        System.out.println("begin of impact Area");
-        for (Cell cell : impactArea) {
-            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
-        }
-        System.out.println("end of impact Area");
     }
 
     private void setImpactAreaComp(Cell targetCell) {
@@ -270,6 +268,7 @@ public class Impact {
     //setImpact  main methods
 
     private void oneHero(Player player) {
+        System.out.println("one Hero");
         if (oneRow) {
             oneRow(player.findPlayerHero().cardCell);
         } else if (!targetAttackTypeMatters) {
@@ -282,6 +281,7 @@ public class Impact {
     }
 
     private void oneTeam(Player player, boolean targetAttackTypeMatters) {
+        System.out.println("one team");
         if (!targetAttackTypeMatters) {
             impactArea.addAll(match.table.findAllSoldiers(player));
         } else {
@@ -299,12 +299,11 @@ public class Impact {
 
     private void oneColumnFromOneTeam(Cell cell, Player player) {
         int y = cell.getCellCoordination().getY();
-        for (int i = 1; i <= 5; i++)
-            try {
+        for (int i = 1; i <= 5; i++) {
+            if (cell.getMovableCard() != null)
                 if (cell.getMovableCard().player.getUserName().compareTo(player.getUserName()) == 0)
                     impactArea.add(match.table.getCellByCoordination(i, y));
-            } catch (NullPointerException ignored) {
-            }
+        }
     }
 
     private void oneRow(Cell cell) {
@@ -378,6 +377,7 @@ public class Impact {
     private void findAndAddRandomCellFromGivenCells(ArrayList<Cell> soldiersCells) {
         double i = Math.random() % soldiersCells.size();
         int j = (int) i;
+        if(soldiersCells!=null && soldiersCells.size()>=1)
         impactArea.add(soldiersCells.get(j));
     }
 
@@ -400,7 +400,9 @@ public class Impact {
         setImpactArea(friendlyPlayer, targetCell, castingCell);
         if (turnsToBeActivated != 0)
             return;
-        if (doesHaveAntiNegativeImpact)
+        if (killIt)
+            kill();
+        else if (doesHaveAntiNegativeImpact)
             antiNegativeImpactOnDefend(target);
         else if (doesHaveAntiPoison)
             antiPoisonOnDefend(target);
@@ -408,8 +410,6 @@ public class Impact {
             antiDisarmOnDefend(target);
         else if (doesHaveRisingDamage)
             attackOnPreviousTargets(target, castingCell.getMovableCard());
-        else if (killIt)
-            kill();
         else if (powerBuff)
             powerBuff();
         else if (poisonBuff)
@@ -494,7 +494,6 @@ public class Impact {
 
     private void setPoisonBuff() {
         for (Cell cell : impactArea) {
-            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
             MovableCard movableCard = cell.getMovableCard();
             if (movableCard != null)
                 movableCard.getImpactsAppliedToThisOne().add(this);
@@ -504,20 +503,19 @@ public class Impact {
     static void holyBuff(MovableCard movableCard, int damageTaken) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
             if (impact.holyBuff) {
-                int maxHeal = Math.max(impact.getImpactQuantityWithSign(), damageTaken);
+                int maxHeal = Math.min(impact.getImpactQuantityWithSign(), damageTaken);
                 movableCard.setHealth(movableCard.getHealth() + maxHeal);
             }
         }
     }
 
     void poisonBuff(MovableCard movableCard) {
-        System.out.println(getImpactQuantityWithSign());
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
-            if (impact.impactTypeId.charAt(1) == '3') //is poisonBuff
+            if (impact.impactTypeId.charAt(1) == '3')
                 movableCard.setHealth(movableCard.getHealth() + getImpactQuantityWithSign());
-
         }
     }
+
 
     private void powerBuffOrWeaknessBuff() {
         for (Cell cell : this.impactArea) {
@@ -547,7 +545,8 @@ public class Impact {
     }
 
     private void antiSomeThingOnDefend(int indexOfThatThingInImpactId, MovableCard movableCard) {
-        movableCard.getImpactsAppliedToThisOne().removeIf(impact -> impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == (char) 1);
+            movableCard.getImpactsAppliedToThisOne().removeIf
+                    (impact -> impact.impactWayOfAssigning != null & impact.impactWayOfAssigning.length() >= 2 && impact.impactWayOfAssigning.charAt(1) == '2' && impact.impactTypeId.charAt(indexOfThatThingInImpactId) == (char) 1);
     }
 
     private void antiNegativeImpactOnDefend(MovableCard movableCard) {
@@ -597,6 +596,9 @@ public class Impact {
         System.out.println("turns " + turnsActive + " " + turnsToBeActivated);
 //        if (turnsToBeActivated == 0)
 //            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
+//        if (turnsToBeActivated == 0) {
+//            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
+//        }
         if (this.isPoisonBuff())
             poisonBuff(movableCard);
 //        if (this.passive)
@@ -625,7 +627,7 @@ public class Impact {
                     continue;
                 if (validOnFriendlyTeamOnly && !movableCard.player.equals(friendlyPlayer))
                     continue;
-                if (minionSoldierTypeOnly &&!( movableCard instanceof Minion))
+                if (minionSoldierTypeOnly && !(movableCard instanceof Minion))
                     continue;
                 cellArrayList.add(cell);
             }
@@ -725,7 +727,6 @@ public class Impact {
     public boolean isSelectedCellImportant() {
         return selectedCellImportant;
     }
-
 
 
     Impact copy() {

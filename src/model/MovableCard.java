@@ -65,7 +65,6 @@ public abstract class MovableCard extends Card {
             didAttackInThisTurn = true;
             if (!Impact.doesHaveAntiHolyBuff(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
-            System.out.println(dispelableDamageChange);
             //do attack
             opponent.counterAttack(this); // gonna need to change it
             //
@@ -100,7 +99,6 @@ public abstract class MovableCard extends Card {
             return 15;
         return 0;
     }
-
 
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent)) {
@@ -151,13 +149,6 @@ public abstract class MovableCard extends Card {
     }
     //attack & counterAttack
 
-    public void goThroughTime() {
-        for (Impact impact : impactsAppliedToThisOne) {
-            impact.doImpact(this.player, this, this.cardCell, this.cardCell);
-            impact.goThroughTime(this);
-
-        }
-    }
 
     public void resetFlags() {
         didMoveInThisTurn = false;
@@ -194,6 +185,8 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
+        if(cell == null)
+            return 18;
         moveRange = 2;
         if (this.cardCell == cell)
             return 10;

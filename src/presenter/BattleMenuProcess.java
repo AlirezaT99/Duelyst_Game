@@ -171,12 +171,24 @@ public class BattleMenuProcess {
         secondModeProcedure(match);
         resetFlags();
         buryTheDead();
-        if (endGameReached())
+        if (endGameReached()) {
             endingProcedure();
-        match.switchTurn();
-//        match.handleMana();
-        impactGoThroughTime();
-        match.coolDownIncrease(); // ok ?
+        }
+        if (!match.currentTurnPlayer().isAI() && match.notCurrentTurnPlayer().isAI()) {
+            match.switchTurn();
+            impactGoThroughTime();
+            playAI(match.currentTurnPlayer());
+            match.currentTurnPlayer().fillHand();
+            secondModeProcedure(match);
+            resetFlags();
+            buryTheDead();
+            match.switchTurn();
+            impactGoThroughTime();
+        } else {
+            match.switchTurn();
+            impactGoThroughTime();
+        }
+        // didMoveInThisTurn --> false
         return 0;
     }
 
@@ -271,13 +283,58 @@ public class BattleMenuProcess {
         // todo : drop the flag
     }
 
+    private void playAI(Player player) {
+        player.getHand().selectCard(0);
+        Card card = player.getHand().getSelectedCard();
+        //
+
+        outer:
+        for (int i = 0; i < player.getHand().getCards().size(); i++) {
+            if (player.getHand().getCards().get(i) instanceof Spell) {
+                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
+                if (arrayList != null && arrayList.size()>=1)
+                    if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
+                            arrayList.get(0).getCellCoordination().getY())) {
+                        ((Spell) card).castCard(arrayList.get(0), player);
+                        BattleMenu.showMessage(card.getCardID() + " inserted to ("
+                                + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
+                        break outer;
+                    }
+            } else {
+                String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
+                for (int j = 1; j <= 5; j++) {
+                    for (int k = 1; k <= 9; k++) {
+                        if (isCoordinationValidToInsert(j, k)) {
+                            match.currentTurnPlayer().getHand().findCardByName(card.getName())
+                                    .castCard(match.getTable().getCellByCoordination(j, k));
+                            BattleMenu.showMessage(card.getCardID() + " inserted to ("
+                                    + j + "," + k + ")");
+                            break outer;
+                        }
+                    }
+                }
+            }
+            for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
+                for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
+                    MovableCard movableCard = allSoldier.getMovableCard();
+                    int result = movableCard.attack(soldier.getMovableCard());
+                    if (result == 0) {
+                        if (movableCard != null && soldier.getMovableCard() != null)
+                            BattleMenu.showMessage(movableCard.getCardID() + " has attacked " + soldier.getMovableCard().getCardID() + ".");
+                    }
+                }
+            }
+        }
+
+    }
+
     private void impactGoThroughTime() {
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 9; j++) {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
                 ArrayList<Impact> toRemove = new ArrayList<>();
-                for (Impact impact:cell.cellImpacts) {
+                for (Impact impact : cell.cellImpacts) {
                     impact.goThroughTime(movableCard);
                     if (impact.isImpactOver()) {
                         impact.doAntiImpact(movableCard);
@@ -287,13 +344,16 @@ public class BattleMenuProcess {
                 cell.cellImpacts.removeAll(toRemove);
                 if (movableCard != null) {
                      toRemove = new ArrayList<>();
+                     int x = 1;
                     for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
+                        System.out.println("x = "+x);
+                        System.out.println(movableCard.getName());
                         impact.goThroughTime(movableCard);
                         if (impact.isImpactOver()) {
                             impact.doAntiImpact(movableCard);
                             toRemove.add(impact);
                         }
-
+                        x++;
                     }
                     movableCard.getImpactsAppliedToThisOne().removeAll(toRemove);
                 }

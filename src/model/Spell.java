@@ -49,10 +49,9 @@ public class Spell extends Card {
     public void castCard(Cell cell, Player castingPlayer) {
         if (isCastingValid(castingPlayer, cell, primaryImpact))
             primaryImpact.doImpact(this.player,cell.getMovableCard(),cell,cell);
-        if (secondaryImpact != null && isCastingValid(castingPlayer, cell, secondaryImpact))
+        if (secondaryImpact != null )
             secondaryImpact.doImpact(this.player,cell.getMovableCard(),cell,cell);
         player.getHand().removeCardFromHand(this);
-
     }
 
     public Spell copy(){
