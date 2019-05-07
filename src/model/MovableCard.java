@@ -61,11 +61,11 @@ public abstract class MovableCard extends Card {
         int returnValue = isAttackValid(opponent);
         if (returnValue == 0) {
             // do attack
-            opponent.takeDamage(this.damage);
+            opponent.takeDamage(this.damage+this.dispelableDamageChange);
             didAttackInThisTurn = true;
             if (!Impact.doesHaveAntiHolyBuff(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
-            System.out.println(this.damage+this.dispelableDamageChange);
+            System.out.println(dispelableDamageChange);
             //do attack
             opponent.counterAttack(this); // gonna need to change it
             //

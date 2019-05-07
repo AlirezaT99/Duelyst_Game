@@ -271,37 +271,36 @@ public class BattleMenuProcess {
     }
 
     private void impactGoThroughTime() {
-        for (int i = 1; i < 5; i++) { // todo : <5 or <= 5 ??
-            for (int j = 1; j < 9; j++) {
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
-                Iterator<Impact> impactIterator = cell.cellImpacts.iterator();
-                while (impactIterator.hasNext()) {
-                    Impact impact = impactIterator.next();
-                    System.out.println("joon");
-                    System.out.println(impact.getImpactTypeId());
+                ArrayList<Impact> toRemove = new ArrayList<>();
+                for (Impact impact:cell.cellImpacts) {
                     impact.goThroughTime(movableCard);
                     if (impact.isImpactOver()) {
                         impact.doAntiImpact(movableCard);
-                        impactIterator.remove();
+                        toRemove.add(impact);
                     }
                 }
+                cell.cellImpacts.removeAll(toRemove);
                 if (movableCard != null) {
-                    Iterator<Impact> impactIterator1 = movableCard.getImpactsAppliedToThisOne().iterator();
-                    while (impactIterator1.hasNext()) {
-                        Impact impact = impactIterator1.next();
-                        System.out.println("boon");
-                        System.out.println(impact.getImpactTypeId());
+                     toRemove = new ArrayList<>();
+                    for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
                         impact.goThroughTime(movableCard);
                         if (impact.isImpactOver()) {
                             impact.doAntiImpact(movableCard);
-                            impactIterator1.remove();
+                            toRemove.add(impact);
                         }
+
                     }
+                    movableCard.getImpactsAppliedToThisOne().removeAll(toRemove);
                 }
 
             }
+
         }
+
     }
 
     private boolean endGameReached() {
@@ -387,9 +386,10 @@ public class BattleMenuProcess {
     }
 
     private static boolean spellCastCheck(Spell spell, int x, int y) {
+        spell.getPrimaryImpact().setAllVariablesNeeded();
         if (spell.getPrimaryImpact().isSelectedCellImportant()) {
             ArrayList<Cell> arrayList = spell.getValidCoordination();
-            return !arrayList.contains(match.getTable().getCell(x, y));
+            return arrayList.contains(match.getTable().getCell(x, y));
         }
         return true;
     }
