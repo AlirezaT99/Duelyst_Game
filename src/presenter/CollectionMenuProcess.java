@@ -216,7 +216,7 @@ public class CollectionMenuProcess {
         Deck deck = account.getCollection().getDeckHashMap().get(deckName);
         if(deck == null)
             return 9;
-        if (deck.findCardByID(idStr) == null
+        if (deck.findCardByID(idStr) == null && !deck.getItems().isEmpty()
                 && !deck.getItems().get(0).getCollectionID().equals(idStr))
             return 3;
         if (account.getCollection().findCardByCollectionID(idStr) instanceof Hero

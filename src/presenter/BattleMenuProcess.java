@@ -5,6 +5,7 @@ import view.BattleMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 public class BattleMenuProcess {
@@ -177,6 +178,7 @@ public class BattleMenuProcess {
             //todo : give reward to the winner / create matchHistory / goto mainMenu
         }
         impactGoThroughTime();
+
         // didMoveInThisTurn --> false
         return 0;
     }
@@ -186,17 +188,27 @@ public class BattleMenuProcess {
             for (int j = 1; j < 9; j++) {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
                 MovableCard movableCard = cell.getMovableCard();
-                for (Impact impact : cell.cellImpacts) {
+                Iterator<Impact> impactIterator = cell.cellImpacts.iterator();
+                while (impactIterator.hasNext()){
+                    Impact impact = impactIterator.next();
                     System.out.println("joon");
                     System.out.println(impact.getImpactTypeId());
                     impact.goThroughTime(movableCard);
+                    if(impact.isImpactOver())
+                        impactIterator.remove();
                 }
-                if (movableCard != null)
-                    for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
+                if (movableCard != null){
+                    Iterator<Impact> impactIterator1 = movableCard.getImpactsAppliedToThisOne().iterator();
+                    while (impactIterator1.hasNext()){
+                        Impact impact = impactIterator1.next();
                         System.out.println("boon");
                         System.out.println(impact.getImpactTypeId());
                         impact.goThroughTime(movableCard);
+                        if(impact.isImpactOver())
+                            impactIterator1.remove();
                     }
+                }
+
             }
         }
     }
@@ -257,7 +269,7 @@ public class BattleMenuProcess {
             ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
                     .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
         //
-        match.currentTurnPlayer().fillHand();
+//        match.currentTurnPlayer().fillHand();
         BattleMenu.showMessage(cardName + " with " + cardID + " inserted to (" + x + "," + y + ")");
         return 0;
     }

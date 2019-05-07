@@ -9,7 +9,7 @@
     "match": null,
     "targetTypeId": "01012000000000",
     "impactTypeId": "0020040001000",
-    "impactTypeIdComp": "000000"
+    "impactTypeIdComp": "00000000"
   },
   "secondaryImpact": null,
   "manaCost": 1,
