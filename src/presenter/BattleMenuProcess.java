@@ -136,7 +136,6 @@ public class BattleMenuProcess {
     private int endGame() throws IOException {
         //todo: give rewards
         exit();
-
         // must be called when another functions has found the winner and given out the rewards
         return 0;
     }
@@ -206,11 +205,11 @@ public class BattleMenuProcess {
                         match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 500);
                     }
                     matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                 }
                 BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
-                LoginMenuProcess.save(match.getPlayer1().getAccount());
             } else {
                 MatchHistory matchHistory = new MatchHistory();
                 if (!match.getPlayer2().isAI()) {
@@ -225,9 +224,11 @@ public class BattleMenuProcess {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, true);
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
                 }
                 BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
-                LoginMenuProcess.save(match.getPlayer2().getAccount());
+                if (!match.getPlayer2().isAI())
+                    LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         } else if (match.getGameMode() != 1) {
             if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() > (match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
@@ -249,21 +250,23 @@ public class BattleMenuProcess {
                 BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
             } else {
                 MatchHistory matchHistory = new MatchHistory();
-                if (match.getPlayer2().isAI()) {
-                    matchHistory.setMatchHistory(match.getPlayer1(), match, false);
-                    LoginMenuProcess.save(match.getPlayer1().getAccount());
-                } else {
-                    if (match.getPlayer1().isAI()) {
-                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                        LoginMenuProcess.save(match.getPlayer2().getAccount());
-                    } else {
-                        matchHistory.setMatchHistory(match.getPlayer2(), match, true);
-                        LoginMenuProcess.save(match.getPlayer2().getAccount());
+                if (!match.getPlayer2().isAI()) {
+                    if (!match.getPlayer1().isAI()) {
+                        match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
                         matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
                     }
+                    if (match.getPlayer1().isAI()) {
+                        match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 500);
+                    }
+                    matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                } else {
+                    matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
                 }
                 BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
+                if (!match.getPlayer2().isAI())
+                    LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         }
         battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
@@ -292,7 +295,7 @@ public class BattleMenuProcess {
         for (int i = 0; i < player.getHand().getCards().size(); i++) {
             if (player.getHand().getCards().get(i) instanceof Spell) {
                 ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
-                if (arrayList != null && arrayList.size()>=1)
+                if (arrayList != null && arrayList.size() >= 1)
                     if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
                             arrayList.get(0).getCellCoordination().getY())) {
                         ((Spell) card).castCard(arrayList.get(0), player);
@@ -317,10 +320,12 @@ public class BattleMenuProcess {
             for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
                 for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
                     MovableCard movableCard = allSoldier.getMovableCard();
-                    int result = movableCard.attack(soldier.getMovableCard());
-                    if (result == 0) {
-                        if (movableCard != null && soldier.getMovableCard() != null)
-                            BattleMenu.showMessage(movableCard.getCardID() + " has attacked " + soldier.getMovableCard().getCardID() + ".");
+                    if (soldier.getMovableCard() != null) {
+                        int result = movableCard.attack(soldier.getMovableCard());
+                        if (result == 0) {
+                            if (movableCard != null && soldier.getMovableCard() != null)
+                                BattleMenu.showMessage(movableCard.getCardID() + " has attacked " + soldier.getMovableCard().getCardID() + ".");
+                        }
                     }
                 }
             }
@@ -343,10 +348,10 @@ public class BattleMenuProcess {
                 }
                 cell.cellImpacts.removeAll(toRemove);
                 if (movableCard != null) {
-                     toRemove = new ArrayList<>();
-                     int x = 1;
+                    toRemove = new ArrayList<>();
+                    int x = 1;
                     for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
-                        System.out.println("x = "+x);
+                        System.out.println("x = " + x);
                         System.out.println(movableCard.getName());
                         impact.goThroughTime(movableCard);
                         if (impact.isImpactOver()) {
@@ -371,8 +376,11 @@ public class BattleMenuProcess {
                         !match.notCurrentTurnPlayer().getDeck().getHero().isAlive())
                     return true;
             case 2:
-                return false;
+                if(match.getPlayer1().getHeldTheFlagNumberOfTurns()>=8 ||
+                match.getPlayer2().getHeldTheFlagNumberOfTurns()>=8)
+                return true;
             case 3:
+
                 return false;
         }
         return false;
