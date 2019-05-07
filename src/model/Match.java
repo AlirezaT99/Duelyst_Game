@@ -28,14 +28,12 @@ public class Match {
         this.table = new Table();
     }
 
-    public void moveToGraveYard(Card card, Player player) {
-        if (player.getUserName().equals(player1.getUserName())) {
+    public void moveToGraveYard(MovableCard card, Player player) {
+        if (player.getUserName().equals(player1.getUserName()))
             player1_graveyard.add(card);
-            //
-        } else {
+        else
             player2_graveyard.add(card);
-            //
-        }
+        card.cardCell.setMovableCard(null);
     }
 
     public void play(Player player) {
@@ -47,7 +45,7 @@ public class Match {
         player1.setAccount(account);
         player1.match = this;
         player1.setDeck(player1.getAccount().getCollection().getDeckHashMap().get(deckName).copy());
-        player2.setAccount(new Account("Computer","Computer"));
+        player2.setAccount(new Account("Computer", "Computer"));
         player2.getAccount().setCollection(new Collection());
         player2.getAccount().getCollection().setSelectedDeck(deck);
         player2.setDeck(deck.copy());
@@ -66,11 +64,12 @@ public class Match {
         this.numberOfFlags = numberOfFlags;
     }
 
-    public void setFlags(int numberOfFlags){
-        if(numberOfFlags == -1 || numberOfFlags == 0)
+    public void setFlags(int numberOfFlags) {
+        if (numberOfFlags == -1 || numberOfFlags == 0)
             return;
         //todo : set flags for third mode
     }
+
     //turn based manager
     public Player currentTurnPlayer() {
         if (turn == 0)
