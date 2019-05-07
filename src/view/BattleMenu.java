@@ -24,6 +24,7 @@ public class BattleMenu {
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         battleSetup();
+
         while (true) {
             try {
                 if (!hasRun) {
@@ -159,6 +160,22 @@ public class BattleMenu {
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
         BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 9));
+        Hero hero1 = BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero();
+        Hero hero2 = BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero();
+        doSumKasifJob(hero1);
+        doSumKasifJob(hero2);
+    }
+
+    private void doSumKasifJob(Hero hero1) {
+        if(hero1.getHeroSpell().getName().equals("Esfandiar")) {
+            hero1.getHeroSpell().castCard(hero1.getCardCell(), hero1.getPlayer());
+            System.out.println("esfandiar");
+
+        }
+        if(hero1.getHeroSpell().getName().equals("Zahhak")) {
+            hero1.setOnAttackImpact(hero1.getHeroSpell().getPrimaryImpact());
+            System.out.println("Zahhak");
+        }
     }
 
     private void setPlayerToCards(Player player) {
@@ -171,6 +188,7 @@ public class BattleMenu {
             deck.getSpells().get(i).setPlayer(player);
         deck.getHero().setPlayer(player);
         deck.getHero().getHeroSpell().setPlayer(player);
+
     }
 
     private void selectCardHelp() {
