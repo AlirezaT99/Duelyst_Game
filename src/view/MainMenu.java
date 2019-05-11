@@ -18,10 +18,11 @@ public class MainMenu {
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         help();
+        String command;
         while (true) {
             if (!isInMainMenu)
                 break;
-            String command = scanner.nextLine();
+             command = scanner.nextLine();
             MainMenuProcess.commandParts = command.split("[ ]");
             int commandType = presenter.MainMenuProcess.findPatternIndex(command);
             if (commandType == -1)

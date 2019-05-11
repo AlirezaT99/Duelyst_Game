@@ -52,21 +52,23 @@ public class Match {
         Boolean[][] cells = new Boolean[5][9];
         for (int i = 0; i < 5; i++)
             java.util.Arrays.fill(cells[i], false);
-        cells[3][1] = cells[3][9] = true;
+        cells[2][0] = cells[2][8] = true;
         for (int i = 0; i < numberOfFlags; i++) {
             Random random = new Random();
             int rnd = Math.abs(random.nextInt() % 45);
-            if (!cells[rnd / 9][rnd % 9]) {
+            if (!cells[rnd / 9][rnd % 9])
                 cells[rnd / 9][rnd % 9] = true;
-                continue;
-            } else while (cells[rnd / 9][rnd % 9])
+            else while (cells[rnd / 9][rnd % 9])
                 rnd = Math.abs(random.nextInt() % 45);
             cells[rnd / 9][rnd % 9] = true;
         }
+        cells[2][0] = cells[2][8] = false;
         for (int i = 0; i < 5; i++)
             for (int j = 0; j < 9; j++) {
-                Flag flag = new Flag(this, table.getCellByCoordination(i + 1, j + 9));
-                this.table.getCellByCoordination(i + 1, j + 1).setItem(flag);
+                if (cells[i][j]) {
+                    Flag flag = new Flag(this, table.getCellByCoordination(i + 1, j + 9));
+                    this.table.getCellByCoordination(i + 1, j + 1).setItem(flag);
+                }
             }
     }
 
@@ -89,6 +91,7 @@ public class Match {
         player1.setAccount(account);
         player1.match = this;
         player1.setDeck(playerDeck);
+        player1.setAI(false);
         player2.setAccount(new Account("computer", "computer"));
         player2.getAccount().setCollection(new Collection());
         player2.getAccount().getCollection().setSelectedDeck(deck);
@@ -191,6 +194,9 @@ public class Match {
         player2_heroSpellCoolDownCounter++;
     }
 
+    public void setGameMode(int gameMode) {
+        this.gameMode = gameMode;
+    }
 
     //getters
 
