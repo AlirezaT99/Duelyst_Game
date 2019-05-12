@@ -34,11 +34,17 @@ public class SinglePlayerMenuProcess {
         int mode = Integer.parseInt(commandParts[3]);
         int numberOfFlags = -1;
         if (commandParts.length == 5) numberOfFlags = Integer.parseInt(commandParts[4]);
+        if(mode == 2)
+            numberOfFlags = 1;
         Match match = new Match(true, mode, numberOfFlags);
         Deck deck = getSampleDecks().get(0).copy();
         deck.setHero(hero.copy());
         deck.getHero().setCardID("computer_" + deck.getHero().getName() + "_1");
         match.setup(account, deckName, numberOfFlags, deck);
+        if(mode == 2){
+            Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
+            match.getTable().getCellByCoordination(3,5).setItem(flag);
+        }
         BattleMenu battleMenu = new BattleMenu(singlePlayerMenu.getBattleInit(), match);
         enterBattleMenu(battleMenu);
         return 0;
