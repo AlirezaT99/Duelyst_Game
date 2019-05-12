@@ -328,6 +328,8 @@ public class BattleMenuProcess {
                 for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
                     MovableCard movableCard = allSoldier.getMovableCard();
                     if (soldier.getMovableCard() != null) {
+                        Cell destination = match.getTable().getCellByCoordination(soldier.getCellCoordination().getX(),soldier.getCellCoordination().getY()-2);
+                        movableCard.move(destination);
                         int result = movableCard.attack(soldier.getMovableCard());
                         if (result == 0) {
                             if (movableCard != null && soldier.getMovableCard() != null)

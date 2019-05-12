@@ -57,9 +57,6 @@ public class Player {
         }
     }
 
-    public void playAI(Match match) {
-
-    }
 
     public boolean equals(Player player) {
         return player.getAccount().getUserName().equals(this.getAccount().getUserName());

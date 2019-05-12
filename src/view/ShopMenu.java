@@ -62,6 +62,8 @@ public class ShopMenu {
             case 6:
                 showMessage("You don't have this card/item.");
                 break;
+            case 10:
+                CollectionMenu.showMessage("Card/Item not found");
         }
     }
 

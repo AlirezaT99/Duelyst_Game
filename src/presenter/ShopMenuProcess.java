@@ -61,13 +61,13 @@ public class ShopMenuProcess {
                 @Override
                 public int doIt() {
                     if(commandParts.length == 6)
-                        return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4]+" "+commandParts[5]);
+                        return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4]+" "+commandParts[5],shopMenu,currentAccount);
                     if(commandParts.length == 5)
-                        return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4]);
+                        return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4],shopMenu,currentAccount);
                     if(commandParts.length == 4)
-                        return searchCollection(commandParts[2]+" "+commandParts[3]);
+                        return searchCollection(commandParts[2]+" "+commandParts[3],shopMenu,currentAccount);
                     if(commandParts.length == 3)
-                        return searchCollection(commandParts[2]);
+                        return searchCollection(commandParts[2],shopMenu,currentAccount);
                     return 0;
                 }
             },
@@ -143,11 +143,12 @@ public class ShopMenuProcess {
         return 0;
     }
 
-    private int searchCollection(String name) {
+    private static int searchCollection(String name, ShopMenu shopMenu, Account currentAccount) {
         if (shopMenu.getShop().searchCollection(name, currentAccount).equals("Item/Card not found in collection"))
             return 2;
-        ShopMenu.showMessage(shopMenu.getShop().searchCollection(name, currentAccount));
-        return 0;
+        return CollectionMenuProcess.search(name,currentAccount);
+//        ShopMenu.showMessage(shopMenu.getShop().searchCollection(name, currentAccount));
+//        return 0;
     }
 
     private int buy(String name) {

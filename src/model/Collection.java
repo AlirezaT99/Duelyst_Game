@@ -42,7 +42,7 @@ public class Collection {
             return 9;
         getDecks().remove(getDeckHashMap().get(deckName));
         getDeckHashMap().remove(deckName);
-        if (selectedDeck.getName().equals(deckName)) selectedDeck = null;
+        if (selectedDeck != null && selectedDeck.getName().equals(deckName)) selectedDeck = null;
         return 0;
     }
 
