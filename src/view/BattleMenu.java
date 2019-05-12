@@ -150,9 +150,9 @@ public class BattleMenu {
         BattleMenuProcess.getMatch().getPlayer1().fillHand();
         BattleMenuProcess.getMatch().getPlayer2().fillHand();
         //
-        BattleMenuProcess.getMatch().getPlayer1().setMana(20);
-//        BattleMenuProcess.getMatch().getPlayer1().setMana(2);
-        BattleMenuProcess.getMatch().getPlayer2().setMana(20); // unused
+//        BattleMenuProcess.getMatch().getPlayer1().setMana(20);
+        BattleMenuProcess.getMatch().getPlayer1().setMana(2);
+//        BattleMenuProcess.getMatch().getPlayer2().setMana(20); // unused
         //
         BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
                 .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));

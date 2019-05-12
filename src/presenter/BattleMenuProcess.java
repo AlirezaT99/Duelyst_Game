@@ -171,7 +171,6 @@ public class BattleMenuProcess {
         secondModeProcedure(match);
         resetFlags();
         buryTheDead();
-        match.handleMana(); // <-- added 5/11
         match.coolDownIncrease();
         if (endGameReached()) {
             endingProcedure();
@@ -190,6 +189,7 @@ public class BattleMenuProcess {
             match.switchTurn();
             impactGoThroughTime();
         }
+        match.handleMana();
         return 0;
     }
 
@@ -326,7 +326,7 @@ public class BattleMenuProcess {
                 for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
                     MovableCard movableCard = allSoldier.getMovableCard();
                     if (soldier.getMovableCard() != null) {
-                        Cell destination = match.getTable().getCellByCoordination(soldier.getCellCoordination().getX(),soldier.getCellCoordination().getY()-2);
+                        Cell destination = match.getTable().getCellByCoordination(soldier.getCellCoordination().getX(), soldier.getCellCoordination().getY() - 2);
                         movableCard.move(destination);
                         int result = movableCard.attack(soldier.getMovableCard());
                         if (result == 0) {
@@ -554,10 +554,14 @@ public class BattleMenuProcess {
     }
 
     private static int showCardInfo(String cardID) {
-        if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID))
+        if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID)) {
             showInfo(match.getPlayer1().getDeck().getHero(), true);
-        if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
+            return 0;
+        }
+        if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID)) {
             showInfo(match.getPlayer2().getDeck().getHero(), true);
+            return 0;
+        }
         for (Card minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 showInfo(minion, true);
@@ -570,6 +574,16 @@ public class BattleMenuProcess {
         for (Card spell : match.getPlayer2().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 showInfo(spell, true);
+        for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
+            if (cell.getMovableCard().getCardID().equals(cardID)) {
+                showInfo(cell.getMovableCard(), true);
+                return 0;
+            }
+        for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
+            if (cell.getMovableCard().getCardID().equals(cardID)) {
+                showInfo(cell.getMovableCard(), true);
+                return 0;
+            }
         return 0;
     }
 
@@ -636,10 +650,12 @@ public class BattleMenuProcess {
     private int gameInfo() {
         switch (match.getGameMode()) {
             case 1:
-                System.out.println("Player1 Hero Health = "
-                        + match.getPlayer1().getDeck().getHero().getHealth());
-                System.out.println("Player2 Hero Health = "
-                        + match.getPlayer2().getDeck().getHero().getHealth());
+                System.out.println("Player1: Hero Health = "
+                        + match.getPlayer1().getDeck().getHero().getHealth()
+                        + ", Mana : " + match.getPlayer1().getMana());
+                System.out.println("Player2: Hero Health = "
+                        + match.getPlayer2().getDeck().getHero().getHealth()
+                        + ", Mana : " + match.getPlayer2().getMana());
                 break;
             case 2:
                 for (int i = 1; i <= 5; i++)
