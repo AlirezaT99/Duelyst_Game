@@ -39,13 +39,13 @@ public class LoginMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return createAccount(commandParts[2]);
+                    return createAccount(commandParts[2],"");
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return login(commandParts[1]);
+                    return login(commandParts[1],"");
                 }
             },
             new DoCommand() {
@@ -93,13 +93,11 @@ public class LoginMenuProcess {
         users.addAll(Account.getAccounts());
     }
 
-    private static int createAccount(String userName) throws IOException {
+    public static int createAccount(String userName, String passWord) throws IOException {
         readUsers();
         for (Account user : users)
             if (user.getUserName().equals(userName))
                 return 1; //message id : 1
-        LoginMenu.showMessage("Enter password:");
-        String passWord = LoginMenu.scan();
         Account account = new Account(userName, passWord);
         Account.addAccount(account);
         users.add(account);
@@ -110,7 +108,6 @@ public class LoginMenuProcess {
             Gson gson = new Gson();
             gson.toJson(account, isr);
         }
-        LoginMenu.showMessage("Account created");
         return 0;
 //        users.add(account);
 //        String fileName = "src/model/accounts/" + userName + ".json";
@@ -122,18 +119,16 @@ public class LoginMenuProcess {
 //        }
     }
 
-    private int login(String userName) throws IOException {
+    public  int login(String userName, String password) throws IOException {
         readUsers();
         for (Account user : users) {
             if (user.getUserName().equals(userName)) {
-                LoginMenu.showMessage("Enter your password:");
-                String passWord = LoginMenu.scan();
-                if (user.getPassword().equals(passWord)) {
+                if (user.getPassword().equals(password)) {
                     currentAccount = user;
-                    loginMenu.setIsInLoginMenu(false);
-                    MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
-                    mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
-                    mainMenu.run();
+//                    loginMenu.setIsInLoginMenu(false);
+//                    MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
+//                    mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
+//                    mainMenu.run();
                     return 0;
                 } else
                     return 2; // message id : 2
