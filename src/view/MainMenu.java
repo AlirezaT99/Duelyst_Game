@@ -9,15 +9,19 @@ import java.util.Scanner;
 public class MainMenu {
     private boolean isInMainMenu = true;
     private MainMenuProcess mainMenuProcess = new MainMenuProcess();
+    private Account account;
 
     public MainMenu(Account account) {
         mainMenuProcess.setCurrentAccount(account);
         mainMenuProcess.setMainMenu(this);
+        this.account = account;
+        account.setMoney(1500);
     }
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         help();
+        System.out.println("// current money: " + account.getMoney());
         String command;
         while (true) {
             if (!isInMainMenu)

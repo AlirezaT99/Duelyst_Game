@@ -174,8 +174,10 @@ public abstract class MovableCard extends Card {
                     if(destination.getItem() instanceof Flag)
                         this.player.getFlags().add((Flag) destination.getItem());
                 this.item = destination.getItem();
-                destination.setItem(null);
+//                destination.setItem(null);
             }
+            if (this.cardCell.getItem() != null) destination.setItem(this.cardCell.getItem());
+            this.cardCell.setItem(null);
             this.cardCell = destination;
             this.cardCell.setMovableCard(this);
             if (!cardCell.cellImpacts.isEmpty()) {

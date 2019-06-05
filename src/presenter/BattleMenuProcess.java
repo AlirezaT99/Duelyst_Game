@@ -10,12 +10,12 @@ import java.util.regex.Pattern;
 
 public class BattleMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
-    private BattleMenu battleMenu;
+    private static BattleMenu battleMenu;
     public String[] commandParts;
     private static Match match;
 
     public BattleMenuProcess(BattleMenu battleMenu) {
-        this.battleMenu = battleMenu;
+        BattleMenuProcess.battleMenu = battleMenu;
     }
 
     static {
@@ -172,9 +172,8 @@ public class BattleMenuProcess {
         resetFlags();
         buryTheDead();
         match.coolDownIncrease();
-        if (endGameReached()) {
+        if (endGameReached())
             endingProcedure();
-        }
         if (match.notCurrentTurnPlayer().isAI()) {
             match.switchTurn();
             impactGoThroughTime();
@@ -183,6 +182,8 @@ public class BattleMenuProcess {
             secondModeProcedure(match);
             resetFlags();
             buryTheDead();
+            if (endGameReached())
+                endingProcedure();
             match.switchTurn();
             impactGoThroughTime();
         } else {
@@ -193,7 +194,7 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private void endingProcedure() throws IOException {
+    private static void endingProcedure() throws IOException {
         if (match.getGameMode() == 1) {
             if (match.getPlayer1().getDeck().getHero().isAlive()) {
                 MatchHistory matchHistory = new MatchHistory();
@@ -254,7 +255,7 @@ public class BattleMenuProcess {
                 MatchHistory matchHistory = new MatchHistory();
                 if (!match.getPlayer2().isAI()) {
                     if (!match.getPlayer1().isAI()) {
-                        match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
+                        match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 1500); // just changed
                         matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
                     }
@@ -292,7 +293,7 @@ public class BattleMenuProcess {
             }
     }
 
-    private void playAI(Player player) {
+    private void playAI(Player player) throws IOException {
         player.getHand().selectCard(0);
         Card card = player.getHand().getSelectedCard();
         //
@@ -337,7 +338,8 @@ public class BattleMenuProcess {
                 }
             }
         }
-
+        if (endGameReached())
+            endingProcedure();
     }
 
     private void impactGoThroughTime() {
@@ -374,7 +376,7 @@ public class BattleMenuProcess {
 
     }
 
-    private boolean endGameReached() {
+    private static boolean endGameReached() {
         switch (match.getGameMode()) {
             case 1:
                 if (!match.currentTurnPlayer().getDeck().getHero().isAlive() ||
@@ -481,7 +483,7 @@ public class BattleMenuProcess {
         return outputArr;
     }
 
-    public static int attack(String cardID) {
+    public static int attack(String cardID) throws IOException {
         if (findCard(cardID) == null)
             return 3;
         Card attackedCard = findCard(cardID);
@@ -489,6 +491,8 @@ public class BattleMenuProcess {
         if (attackedCard instanceof MovableCard)
             returnValue = ((MovableCard) match.currentTurnPlayer().getHand().getSelectedCard())
                     .attack((MovableCard) attackedCard);
+        if (endGameReached())
+            endingProcedure();
         if (returnValue == 0) return 17;
         return returnValue;
     }
@@ -662,9 +666,9 @@ public class BattleMenuProcess {
                     for (int j = 1; j <= 9; j++)
                         if (match.getTable().getCellByCoordination(i, j).getItem() instanceof Flag) {
                             if (match.getTable().getCellByCoordination(i, j).getMovableCard() != null) {
-                                System.out.println("holder : " + match.getTable().getCellByCoordination(i, j).getMovableCard().getPlayer().getAccount().getUserName());
+                                System.out.print("holder : " + match.getTable().getCellByCoordination(i, j).getMovableCard().getPlayer().getAccount().getUserName() + "\n\t");
                             }
-                            System.out.println("location : " + i + " " + j);
+                            System.out.println("location : (" + i + ", " + j + ")");
                         }
                 // location & holder of flag
                 break;
