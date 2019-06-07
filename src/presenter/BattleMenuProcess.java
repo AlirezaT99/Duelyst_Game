@@ -294,40 +294,45 @@ public class BattleMenuProcess {
 
     private void playAI(Player player) {
         player.getHand().selectCard(0);
-        Card card = player.getHand().getSelectedCard();
         //
         outer:
         for (int i = 0; i < player.getHand().getCards().size(); i++) {
-            if (player.getHand().getCards().get(i) instanceof Spell) {
-                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
+            Card card = player.getHand().getCards().get(i);
+            if (card instanceof Spell) {
+                ArrayList<Cell> arrayList = ((Spell) player.getHand().getCards().get(i)).getValidCoordination();
                 if (arrayList != null && arrayList.size() >= 1)
                     if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
                             arrayList.get(0).getCellCoordination().getY())) {
                         ((Spell) card).castCard(arrayList.get(0), player);
                         BattleMenu.showMessage(card.getCardID() + " inserted to ("
                                 + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
-                        break outer;
                     }
             } else {
-                String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
-                for (int j = 1; j <= 5; j++) {
+               inner: for (int j = 1; j <= 5; j++) {
                     for (int k = 1; k <= 9; k++) {
                         if (isCoordinationValidToInsert(j, k)) {
-                            match.currentTurnPlayer().getHand().findCardByName(card.getName())
-                                    .castCard(match.getTable().getCellByCoordination(j, k));
-                            BattleMenu.showMessage(card.getCardID() + " inserted to ("
-                                    + j + "," + k + ")");
-                            break outer;
+                            try {
+
+                                match.currentTurnPlayer().getHand().findCardByName(card.getName())
+                                        .castCard(match.getTable().getCellByCoordination(j, k));
+                                BattleMenu.showMessage(card.getCardID() + " inserted to ("
+                                        + j + "," + k + ")");
+                                break inner;
+                            }catch (NullPointerException e){
+                                System.out.println("null");
+                            }
                         }
                     }
                 }
             }
+            System.out.println("shimbala looi");
             for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
                 for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
                     MovableCard movableCard = allSoldier.getMovableCard();
+                    System.out.println(movableCard.getName()+"****");
+                    Cell destination = match.getTable().getCellByCoordination(allSoldier.getCellCoordination().getX(),allSoldier.getCellCoordination().getY()-1);
+                    movableCard.move(destination);
                     if (soldier.getMovableCard() != null) {
-                        Cell destination = match.getTable().getCellByCoordination(soldier.getCellCoordination().getX(),soldier.getCellCoordination().getY()-2);
-                        movableCard.move(destination);
                         int result = movableCard.attack(soldier.getMovableCard());
                         if (result == 0) {
                             if (movableCard != null && soldier.getMovableCard() != null)
