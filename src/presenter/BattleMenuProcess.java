@@ -171,7 +171,6 @@ public class BattleMenuProcess {
         secondModeProcedure(match);
         resetFlags();
         buryTheDead();
-        match.handleMana(); // <-- added 5/11
         match.coolDownIncrease();
         if (endGameReached()) {
             endingProcedure();
@@ -190,6 +189,7 @@ public class BattleMenuProcess {
             match.switchTurn();
             impactGoThroughTime();
         }
+        match.handleMana();
         return 0;
     }
 
@@ -294,45 +294,40 @@ public class BattleMenuProcess {
 
     private void playAI(Player player) {
         player.getHand().selectCard(0);
+        Card card = player.getHand().getSelectedCard();
         //
         outer:
         for (int i = 0; i < player.getHand().getCards().size(); i++) {
-            Card card = player.getHand().getCards().get(i);
-            if (card instanceof Spell) {
-                ArrayList<Cell> arrayList = ((Spell) player.getHand().getCards().get(i)).getValidCoordination();
+            if (player.getHand().getCards().get(i) instanceof Spell) {
+                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
                 if (arrayList != null && arrayList.size() >= 1)
                     if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
                             arrayList.get(0).getCellCoordination().getY())) {
                         ((Spell) card).castCard(arrayList.get(0), player);
                         BattleMenu.showMessage(card.getCardID() + " inserted to ("
                                 + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
+                        break outer;
                     }
             } else {
-               inner: for (int j = 1; j <= 5; j++) {
+                String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
+                for (int j = 1; j <= 5; j++) {
                     for (int k = 1; k <= 9; k++) {
                         if (isCoordinationValidToInsert(j, k)) {
-                            try {
-
-                                match.currentTurnPlayer().getHand().findCardByName(card.getName())
-                                        .castCard(match.getTable().getCellByCoordination(j, k));
-                                BattleMenu.showMessage(card.getCardID() + " inserted to ("
-                                        + j + "," + k + ")");
-                                break inner;
-                            }catch (NullPointerException e){
-                                System.out.println("null");
-                            }
+                            match.currentTurnPlayer().getHand().findCardByName(card.getName())
+                                    .castCard(match.getTable().getCellByCoordination(j, k));
+                            BattleMenu.showMessage(card.getCardID() + " inserted to ("
+                                    + j + "," + k + ")");
+                            break outer;
                         }
                     }
                 }
             }
-            System.out.println("shimbala looi");
             for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
                 for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
                     MovableCard movableCard = allSoldier.getMovableCard();
-                    System.out.println(movableCard.getName()+"****");
-                    Cell destination = match.getTable().getCellByCoordination(allSoldier.getCellCoordination().getX(),allSoldier.getCellCoordination().getY()-1);
-                    movableCard.move(destination);
                     if (soldier.getMovableCard() != null) {
+                        Cell destination = match.getTable().getCellByCoordination(soldier.getCellCoordination().getX(), soldier.getCellCoordination().getY() - 2);
+                        movableCard.move(destination);
                         int result = movableCard.attack(soldier.getMovableCard());
                         if (result == 0) {
                             if (movableCard != null && soldier.getMovableCard() != null)
@@ -559,10 +554,14 @@ public class BattleMenuProcess {
     }
 
     private static int showCardInfo(String cardID) {
-        if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID))
+        if (match.getPlayer1().getDeck().getHero().getCardID().equals(cardID)) {
             showInfo(match.getPlayer1().getDeck().getHero(), true);
-        if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID))
+            return 0;
+        }
+        if (match.getPlayer2().getDeck().getHero().getCardID().equals(cardID)) {
             showInfo(match.getPlayer2().getDeck().getHero(), true);
+            return 0;
+        }
         for (Card minion : match.getPlayer1().getDeck().getMinions())
             if (minion.getCardID().equals(cardID))
                 showInfo(minion, true);
@@ -575,6 +574,16 @@ public class BattleMenuProcess {
         for (Card spell : match.getPlayer2().getDeck().getSpells())
             if (spell.getCardID().equals(cardID))
                 showInfo(spell, true);
+        for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
+            if (cell.getMovableCard().getCardID().equals(cardID)) {
+                showInfo(cell.getMovableCard(), true);
+                return 0;
+            }
+        for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
+            if (cell.getMovableCard().getCardID().equals(cardID)) {
+                showInfo(cell.getMovableCard(), true);
+                return 0;
+            }
         return 0;
     }
 
@@ -641,10 +650,12 @@ public class BattleMenuProcess {
     private int gameInfo() {
         switch (match.getGameMode()) {
             case 1:
-                System.out.println("Player1 Hero Health = "
-                        + match.getPlayer1().getDeck().getHero().getHealth());
-                System.out.println("Player2 Hero Health = "
-                        + match.getPlayer2().getDeck().getHero().getHealth());
+                System.out.println("Player1: Hero Health = "
+                        + match.getPlayer1().getDeck().getHero().getHealth()
+                        + ", Mana : " + match.getPlayer1().getMana());
+                System.out.println("Player2: Hero Health = "
+                        + match.getPlayer2().getDeck().getHero().getHealth()
+                        + ", Mana : " + match.getPlayer2().getMana());
                 break;
             case 2:
                 for (int i = 1; i <= 5; i++)
