@@ -311,8 +311,8 @@ public class Login extends Application {
     }
 
     private void fadingIn(TextField textField, PasswordField passwordField) {
-        FadeTransition textFieldFadeIn = new FadeTransition(Duration.millis(1000));
-        FadeTransition passwordFadeIn = new FadeTransition(Duration.millis(1000));
+        FadeTransition textFieldFadeIn = new FadeTransition(Duration.millis(3000));
+        FadeTransition passwordFadeIn = new FadeTransition(Duration.millis(3000));
         textFieldFadeIn.setNode(textField);
         textField.setVisible(true);
         passwordFadeIn.setNode(passwordField);
