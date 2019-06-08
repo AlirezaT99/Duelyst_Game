@@ -23,11 +23,9 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.*;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import presenter.LoginMenuProcess;
@@ -105,12 +103,7 @@ public class Login extends Application {
         Image cursor = new Image(new FileInputStream("src/view/sources/loginMenu/cursor/auto.png"));
         loginScene.setCursor(new ImageCursor(cursor));
         double width = loginScene.getWidth() / 6;
-        Rectangle container = new Rectangle(loginScene.getWidth() * 13 / 60, loginScene.getHeight() / 2);
-        container.relocate(loginScene.getWidth() * 29 / 40, loginScene.getHeight() / 2.4);
-        container.setFill(Color.rgb(20, 50, 100, 0.4));
-        container.setArcHeight(10);
-        container.setArcWidth(10);
-
+        createAccountAndLoginBarsContainerDesign(root, loginScene);
         //labels
         StackPane onLogin = new StackPane();
         StackPane onSignUp = new StackPane();
@@ -133,15 +126,7 @@ public class Login extends Application {
         //loginLabel.relocate();
         TextField textField = new TextField("Username");
         PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
-        textField.setPrefWidth(width);
-        passwordField.setPrefWidth(width);
-        textField.relocate(loginScene.getWidth() * 3 / 4, loginScene.getHeight() / 2);
-        fadingIn(textField, passwordField);
-        textField.setOpacity(0.3);
-        textField.setStyle("-fx-background-color:rgba(175, 175, 175, 0.5) ; -fx-font-size:  20px; ");
-        passwordField.setStyle("-fx-background-color:rgba(175,175,175,0.5) ; -fx-font-size:  20px; ");
-        passwordField.relocate(loginScene.getWidth() * 3 / 4, loginScene.getHeight() / 1.5);
+        textBoxesDesign(root, loginScene, width, textField, passwordField);
         // login and sign up so called buttons
         StackPane login = new StackPane();
         Image loginButtonImage = new Image(new FileInputStream("src/view/sources/loginMenu/buttons/login.png"));
@@ -154,6 +139,41 @@ public class Login extends Application {
         ImageView signUpButton = new ImageView(signUpButtonImage);
         adjustButton(font, loginScene, width, signUp, signUpButton, "Sign Up");
 
+        initCreateAccountAndLoginBarsDesign(onLoginCircle, onSignUpCircle, login, signUp);
+        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login,loginButton,onLoginButtonImage,loginButtonImage);
+        handleLoginSubmission(textField, passwordField, login);
+        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp,signUpButton,onSignUpButtonImage,signUpButtonImage);
+        handleSignUpSubmission(onLoginCircle, onSignUpCircle, textField, passwordField, login, signUp);
+        manageCreateAccountAndLoginBars(onLogin, onSignUp, onLoginCircle, onSignUpCircle, login, signUp);
+        root.getChildren().addAll(login, signUp, onLogin, onSignUp);
+        letterbox(loginScene, root);
+        backgroundMusicPlay();
+        primaryStage.show();
+    }
+
+    private void createAccountAndLoginBarsContainerDesign(Pane root, Scene loginScene) {
+        Rectangle container = new Rectangle(loginScene.getWidth() * 13 / 60, loginScene.getHeight() / 2);
+        container.relocate(loginScene.getWidth() * 29 / 40, loginScene.getHeight() / 2.4);
+        container.setFill(Color.rgb(20, 50, 100, 0.4));
+        container.setArcHeight(10);
+        container.setArcWidth(10);
+        root.getChildren().add(container);
+    }
+
+    private void textBoxesDesign(Pane root, Scene loginScene, double width, TextField textField, PasswordField passwordField) {
+        passwordField.setPromptText("Password");
+        textField.setPrefWidth(width);
+        passwordField.setPrefWidth(width);
+        textField.relocate(loginScene.getWidth() * 3 / 4, loginScene.getHeight() / 2);
+        fadingIn(textField, passwordField);
+        textField.setOpacity(0.3);
+        textField.setStyle("-fx-background-color:rgba(175, 175, 175, 0.5) ; -fx-font-size:  20px; ");
+        passwordField.setStyle("-fx-background-color:rgba(175,175,175,0.5) ; -fx-font-size:  20px; ");
+        passwordField.relocate(loginScene.getWidth() * 3 / 4, loginScene.getHeight() / 1.5);
+        root.getChildren().addAll(passwordField,textField);
+    }
+
+    private void initCreateAccountAndLoginBarsDesign(Circle onLoginCircle, Circle onSignUpCircle, StackPane login, StackPane signUp) {
         if (isInLogin) {
             onLoginCircle.setVisible(true);
             login.setVisible(true);
@@ -168,84 +188,69 @@ public class Login extends Application {
             onSignUpCircle.setVisible(false);
             signUp.setVisible(false);
         }
-        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login,loginButton,onLoginButtonImage,loginButtonImage);
-        login.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (login.isVisible()) {
-                    LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
-                    try {
-                        //todo : check if the password is not empty and return the according alert otherwise.
-                        if (loginMenuProcess.login(textField.getText(), passwordField.getText()) == 0) {
-                            System.out.println("logged in");
-                            //todo : change the fucking scene to main menu
-                        } else {
-                            //todo : alerts
+    }
+
+    private void handleSignUpSubmission(Circle onLoginCircle, Circle onSignUpCircle, TextField textField, PasswordField passwordField, StackPane login, StackPane signUp) {
+        signUp.setOnMouseClicked(event -> {
+            if (signUp.isVisible()) {
+                try {
+                    //todo : check if the password is not empty and return the according alert otherwise.
+                    if (LoginMenuProcess.createAccount(textField.getText(), passwordField.getText()) == 0) {
+                        System.out.println("account created");
+                        if (!isInLogin) {
+                            loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle,true);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } else {
+                        //todo : alerts
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
-        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp,signUpButton,onSignUpButtonImage,signUpButtonImage);
-        signUp.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (signUp.isVisible()) {
-                    try {
-                        //todo : check if the password is not empty and return the according alert otherwise.
-                        if (LoginMenuProcess.createAccount(textField.getText(), passwordField.getText()) == 0) {
-                            System.out.println("account created");
-                            if (!isInLogin) {
-                                login.setVisible(true);
-                                signUp.setVisible(false);
-                                onSignUpCircle.setVisible(false);
-                                onLoginCircle.setVisible(true);
-                                isInLogin = true;
-                                isInSignUp = false;
-                            }
-                        } else {
-                            //todo : alerts
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+    }
+
+    private void handleLoginSubmission(TextField textField, PasswordField passwordField, StackPane login) {
+        login.setOnMouseClicked(event -> {
+            if (login.isVisible()) {
+                LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
+                try {
+                    //todo : check if the password is not empty and return the according alert otherwise.
+                    if (loginMenuProcess.login(textField.getText(), passwordField.getText()) == 0) {
+                        System.out.println("logged in");
+                        //todo : change the fucking scene to main menu
+                    } else {
+                        //todo : alerts
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
-        onSignUp.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (!isInSignUp) {
-                    clickSoundEffectPlay();
-                    login.setVisible(false);
-                    signUp.setVisible(true);
-                    onSignUpCircle.setVisible(true);
-                    onLoginCircle.setVisible(false);
-                    isInSignUp = true;
-                    isInLogin = false;
-                }
+    }
+
+    private void manageCreateAccountAndLoginBars(StackPane onLogin, StackPane onSignUp, Circle onLoginCircle, Circle onSignUpCircle, StackPane login, StackPane signUp) {
+        onSignUp.setOnMouseClicked(event -> {
+            if (!isInSignUp) {
+                clickSoundEffectPlay();
+                loginAndCreateAccountBarManager(login,signUp,onSignUpCircle,onLoginCircle,false);
             }
         });
-        onLogin.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (!isInLogin) {
-                    clickSoundEffectPlay();
-                    login.setVisible(true);
-                    signUp.setVisible(false);
-                    onSignUpCircle.setVisible(false);
-                    onLoginCircle.setVisible(true);
-                    isInLogin = true;
-                    isInSignUp = false;
-                }
+        onLogin.setOnMouseClicked(event -> {
+            if (!isInLogin) {
+                clickSoundEffectPlay();
+                loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle,true);
             }
         });
-        root.getChildren().addAll(container, textField, passwordField, login, signUp, onLogin, onSignUp);
-        letterbox(loginScene, root);
-        backgroundMusicPlay();
-        primaryStage.show();
+    }
+
+    private void loginAndCreateAccountBarManager(StackPane login, StackPane signUp, Circle onSignUpCircle, Circle onLoginCircle, boolean setOnLogin) {
+        login.setVisible(setOnLogin);
+        signUp.setVisible(!setOnLogin);
+        onSignUpCircle.setVisible(!setOnLogin);
+        onLoginCircle.setVisible(setOnLogin);
+        isInLogin = setOnLogin;
+        isInSignUp = !setOnLogin;
     }
 
     private Rectangle2D initPrimaryStage(Stage primaryStage) {
@@ -274,6 +279,8 @@ public class Login extends Application {
         buttonPane.setLayoutY(loginScene.getHeight() / 1.25);
         loginText.relocate(loginScene.getWidth() * 3 / 4 + width / 4, loginScene.getHeight() / 1.25);
     }
+
+
 
     private void fadingIn(TextField textField, PasswordField passwordField) {
         FadeTransition textFieldFadeIn = new FadeTransition(Duration.millis(3000));
