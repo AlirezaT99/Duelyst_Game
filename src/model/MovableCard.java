@@ -162,6 +162,7 @@ public abstract class MovableCard extends Card {
 
     //move
     public void move(Cell destination) {
+        System.out.println("sssssssss");
         if (isMoveValid(destination) == 0) {
             didMoveInThisTurn = true;
             this.cardCell.setMovableCard(null);

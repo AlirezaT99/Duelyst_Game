@@ -117,6 +117,7 @@ public class BattleMenu {
                     }
                 }
             } catch (Throwable e) {
+                e.printStackTrace();
             }
         }
         scanner.close();
