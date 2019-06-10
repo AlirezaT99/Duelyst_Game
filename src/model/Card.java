@@ -49,10 +49,6 @@ public abstract class Card {
         return match;
     }
 
-    public Coordination getCoordination() {
-        return cell.getCellCoordination();
-    }
-
     public int getManaCost() {
         return manaCost;
     }
