@@ -75,22 +75,18 @@ class SceneSizeChangeListener implements ChangeListener<Number> {
     }
 }
 
-public class Login extends Application {
+public class Login {
     boolean isInLogin = true;
     boolean isInSignUp = false;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
-    @Override
-    public void start(Stage primaryStage) throws FileNotFoundException {
+
+    public Scene start(Stage primaryStage) throws FileNotFoundException {
 
         Rectangle2D primaryScreenBounds = initPrimaryStage(primaryStage);
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/loginMenu/fonts/TrumpGothicPro-Medium-webfont.ttf")), 22);
         Pane root = new Pane();
         Scene loginScene = new Scene(root, primaryScreenBounds.getMaxX(), primaryScreenBounds.getMaxY());
-        primaryStage.setScene(loginScene);
         Random random = new Random();
         int backGroundNumber = random.nextInt(24) + 1;
         primaryStage.setTitle(backGroundNumber + "");
@@ -150,7 +146,7 @@ public class Login extends Application {
         root.getChildren().addAll(login, signUp, onLogin, onSignUp);
         letterbox(loginScene, root);
         backgroundMusicPlay();
-        primaryStage.show();
+        return loginScene;
     }
 
     private void createAccountAndLoginBarsContainerDesign(Pane root, Scene loginScene) {
