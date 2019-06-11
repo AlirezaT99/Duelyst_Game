@@ -43,7 +43,7 @@ public class Deck {
         return deck;
     }
 
-    public String show(boolean showCost) {
+    public String show() {
         String output = "";
         if (hero != null)
             output += "Heroes :\n" + "\t\t1 : " + hero.toString(false) + "\n";
@@ -66,8 +66,8 @@ public class Deck {
 
     public int addItemToDeck(UsableItem item) { // only used for computer Decks
         this.getItemsHashMap()
-                .put(item.getItemID(), (UsableItem) item);
-        this.getItems().add((UsableItem) item);
+                .put(item.getItemID(), item);
+        this.getItems().add(item);
         return 0;
     }
 
@@ -107,18 +107,6 @@ public class Deck {
         return null;
     }
 
-    public Card findCardByName(String name) {
-        if (hero.getName().equals(name))
-            return hero;
-        for (Spell spell : spells)
-            if (spell.getName().equals(name))
-                return spell;
-        for (Minion minion : minions)
-            if (minion.getName().equals(name))
-                return minion;
-        return null;
-    }
-
     public Card getNextCard() {
         return nextCard;
 
@@ -136,10 +124,6 @@ public class Deck {
         nextCard = possibleCards.get(i);
 
     }
-
-    public static void createDeck(String deckName) {
-        Deck deck = new Deck(deckName);
-    } //shouldn't it be added to collection decks
 
     public Card findCardByID(String id) {
         if (hero != null && hero.getCollectionID().equals(id))
@@ -178,6 +162,11 @@ public class Deck {
     public HashMap<String, UsableItem> getItemsHashMap() {
         return itemsHashMap;
     }
+
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+
     //getters
 
     //setters
