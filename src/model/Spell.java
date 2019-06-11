@@ -73,7 +73,7 @@ public class Spell extends Card {
     }
 
     public ArrayList<Cell> getValidCoordination(){
-        return primaryImpact.getValidCells(player);
+        return primaryImpact.getImpactAreaClass().getValidCells(player);
     }
 
 

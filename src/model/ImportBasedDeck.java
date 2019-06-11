@@ -10,8 +10,8 @@ public class ImportBasedDeck {
     private String gsonString = "";
     private Deck deck;
 
-    public ImportBasedDeck(String gsonString){
-        this.gsonString = gsonString;
+    public ImportBasedDeck(Deck deck){
+        gsonString = gson.toJson(deck);
     }
 
     public Deck getImportedDeck() {
