@@ -1,20 +1,26 @@
 package view;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -43,21 +49,66 @@ public class GraphicalCommonUsages {
         backGroundImageSetting(image, root);
     }
 
-    public static Scene getOkayPopUp(Scene scene, String message) throws FileNotFoundException {
-        Group root = new Group();
-        Scene result = new Scene(root,scene.getWidth()/3,scene.getHeight()/4);
+    public static void okPopUp(String message,Scene scene, Pane root) throws FileNotFoundException {
+//        for (Node child : root.getChildren()) {
+//            child.setEffect(new GaussianBlur());
+//        }
+
+        javafx.scene.shape.Rectangle bgRectangle = new Rectangle(scene.getWidth(),scene.getHeight());
+        bgRectangle.relocate(0,0);
+        root.getChildren().addAll(bgRectangle);
+        bgRectangle.setOpacity(0.5);
+        bgRectangle.setEffect(new GaussianBlur());
         VBox popUp = new VBox();
-        Text messageText = new Text();
-        messageText.relocate(0,0);
+        popUp.setPrefHeight(scene.getHeight()/4);
+        popUp.setPrefWidth(scene.getWidth()/3);
+        BackgroundFill background_fill = new BackgroundFill(javafx.scene.paint.Color.grayRgb(20,0.8),
+                new CornerRadii(15), new javafx.geometry.Insets(0,0,0,0));
+        popUp.setBackground(new Background(background_fill));
+        Text messageText = new Text(message);
         HBox firstLine = new HBox(messageText);
+        firstLine.setAlignment(Pos.CENTER);
+        messageText.setTextAlignment(TextAlignment.CENTER);
+        final javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 20);
+        messageText.setFill(javafx.scene.paint.Color.WHITE);
+        messageText.setFont(font);
         Image okButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm.png"));
+        Image okButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm_glow.png"));
         ImageView okButtonView = new ImageView(okButton);
-        okButtonView.setFitWidth(result.getWidth()/4);
-        HBox secondLine = new HBox(okButtonView);
-        popUp.getChildren().addAll(firstLine,secondLine);
+        okButtonView.setFitWidth(popUp.getPrefWidth()/4);
+        okButtonView.setPreserveRatio(true);
+        StackPane confirmStackPane= new StackPane();
+        Text okText = new Text("OK");
+        okText.setFont(Font.font(font.getName(),14));
+        okText.setFill(Color.WHITE);
+        confirmStackPane.getChildren().addAll(okButtonView,okText);
+        HBox secondLine = new HBox(confirmStackPane);
+        secondLine.setAlignment(Pos.CENTER);
+        popUp.getChildren().addAll(new Text(""),firstLine,secondLine);
+        popUp.setSpacing(popUp.getPrefHeight()/6);
+        popUp.layoutXProperty().bind(root.widthProperty().subtract(popUp.widthProperty()).divide(2));
+        popUp.layoutYProperty().bind(root.heightProperty().subtract(popUp.heightProperty()).divide(2));
         root.getChildren().addAll(popUp);
-        return result;
+        confirmStackPane.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ((ImageView)confirmStackPane.getChildren().get(0)).setImage(okButtonGlow);
+            }
+        });
+        confirmStackPane.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ((ImageView)confirmStackPane.getChildren().get(0)).setImage(okButton);
+            }
+        });
+        confirmStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().removeAll(bgRectangle,popUp);
+            }
+        });
     }
+
     public static Rectangle2D initPrimaryStage(Stage primaryStage) {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice defaultScreenDevice = ge.getDefaultScreenDevice();

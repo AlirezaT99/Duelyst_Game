@@ -8,18 +8,25 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.ImageCursor;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.MotionBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -99,7 +106,7 @@ public class Login {
         adjustButton(font, loginScene, width, signUp, signUpButton, "Sign Up");
         initCreateAccountAndLoginBarsDesign(onLoginCircle, onSignUpCircle, login, signUp);
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login, loginButton, onLoginButtonImage, loginButtonImage);
-        handleLoginSubmission(usernameField, passwordField, login);
+        handleLoginSubmission(usernameField, passwordField, login,loginScene, root);
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp, signUpButton, onSignUpButtonImage, signUpButtonImage);
         handleSignUpSubmission(onLoginCircle, onSignUpCircle, usernameField, passwordField, login, signUp);
         manageCreateAccountAndLoginBars(onLogin, onSignUp, onLoginCircle, onSignUpCircle, login, signUp);
@@ -193,7 +200,7 @@ public class Login {
         });
     }
 
-    private void handleLoginSubmission(TextField textField, PasswordField passwordField, StackPane login) {
+    private void handleLoginSubmission(TextField textField, PasswordField passwordField, StackPane login, Scene scene,Pane root) {
         login.setOnMouseClicked(event -> {
             if (login.isVisible()) {
                 LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
@@ -205,14 +212,7 @@ public class Login {
                         //todo : change the fucking scene to main menu
                     }
                     if(loginCheck == 2 || loginCheck == 3){
-                        Stage alert = new Stage();
-                        Scene popUp = GraphicalCommonUsages.getOkayPopUp(login.getScene(),"Wrong username/password!");
-                        alert.setScene(popUp);
-                        alert.show();
-                        alert.setAlwaysOnTop(true);
-                        long timeOfNow = System.currentTimeMillis();
-                        while(System.currentTimeMillis() - timeOfNow < 2000){}
-                        alert.close();
+                        GraphicalCommonUsages.okPopUp("incorrect username or password",scene, root);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -220,6 +220,7 @@ public class Login {
             }
         });
     }
+
 
     private void manageCreateAccountAndLoginBars(StackPane onLogin, StackPane onSignUp, Circle onLoginCircle, Circle onSignUpCircle, StackPane login, StackPane signUp) {
         onSignUp.setOnMouseClicked(event -> {
