@@ -5,11 +5,13 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.ImageCursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -33,70 +35,25 @@ import presenter.LoginMenuProcess;
 import java.io.FileInputStream;
 import java.util.Random;
 
-class SceneSizeChangeListener implements ChangeListener<Number> {
-    private final Scene scene;
-    private final double ratio;
-    private final double initHeight;
-    private final double initWidth;
-    private final Pane contentPane;
-
-    public SceneSizeChangeListener(Scene scene, double ratio, double initHeight, double initWidth, Pane contentPane) {
-        this.scene = scene;
-        this.ratio = ratio;
-        this.initHeight = initHeight;
-        this.initWidth = initWidth;
-        this.contentPane = contentPane;
-    }
-
-    @Override
-    public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-        final double newWidth = scene.getWidth();
-        final double newHeight = scene.getHeight();
-
-        double scaleFactor =
-                newWidth / newHeight > ratio
-                        ? newHeight / initHeight
-                        : newWidth / initWidth;
-
-        if (scaleFactor >= 1) {
-            Scale scale = new Scale(scaleFactor, scaleFactor);
-            scale.setPivotX(0);
-            scale.setPivotY(0);
-            scene.getRoot().getTransforms().setAll(scale);
-
-            contentPane.setPrefWidth(newWidth / scaleFactor);
-            contentPane.setPrefHeight(newHeight / scaleFactor);
-        } else {
-            contentPane.setPrefWidth(Math.max(initWidth, newWidth));
-            contentPane.setPrefHeight(Math.max(initHeight, newHeight));
-        }
-    }
-}
-
 public class Login {
     boolean isInLogin = true;
     boolean isInSignUp = false;
 
 
-
     public Scene start(Stage primaryStage) throws FileNotFoundException {
-
-        Rectangle2D primaryScreenBounds = initPrimaryStage(primaryStage);
-        final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/loginMenu/fonts/TrumpGothicPro-Medium-webfont.ttf")), 22);
+        final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/TrumpGothicPro-Medium-webfont.ttf")), 22);
         Pane root = new Pane();
-        Scene loginScene = new Scene(root, primaryScreenBounds.getMaxX(), primaryScreenBounds.getMaxY());
+        Scene loginScene = new Scene(root,primaryStage.getWidth(),primaryStage.getHeight());
         Random random = new Random();
         int backGroundNumber = random.nextInt(24) + 1;
-        primaryStage.setTitle(backGroundNumber + "");
-        GraphicalCommonUsages.setBackGroundImage("src/view/sources/loginMenu/backgrounds/" + backGroundNumber + ".jpg",root,primaryStage);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/loginMenu/backgrounds/" + backGroundNumber + ".jpg", root);
         Image logo = new Image(new FileInputStream("src/view/sources/loginMenu/backgrounds/duelyst.png"));
         ImageView logoImageView = new ImageView(logo);
         logoImageView.relocate(0, 0);
         logoImageView.setFitWidth(loginScene.getWidth() / 2.5);
         logoImageView.setFitHeight(loginScene.getHeight() / 4);
         root.getChildren().addAll(logoImageView);
-        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> primaryStage.setFullScreen(true));
-        Image cursor = new Image(new FileInputStream("src/view/sources/loginMenu/cursor/auto.png"));
+             Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         loginScene.setCursor(new ImageCursor(cursor));
         double width = loginScene.getWidth() / 6;
         createAccountAndLoginBarsContainerDesign(root, loginScene);
@@ -117,12 +74,16 @@ public class Login {
         onSignUp.setLayoutY(loginScene.getHeight() / 2.3);
         onLoginCircle.setOpacity(0.3);
         onSignUpCircle.setOpacity(0.3);
+        Image exitButton = new Image(new FileInputStream("src/view/sources/loginMenu/buttons/button_close.png"));
+        ImageView exitView = new ImageView(exitButton);
+        exitViewSetting(loginScene, exitView);
         onLogin.getChildren().addAll(onLoginCircle, loginLabel);
         onSignUp.getChildren().addAll(onSignUpCircle, signUpLabel);
         //loginLabel.relocate();
-        TextField textField = new TextField("Username");
+        TextField usernameField = new TextField();
+        usernameField.setPromptText("Username");
         PasswordField passwordField = new PasswordField();
-        textBoxesDesign(root, loginScene, width, textField, passwordField);
+        textBoxesDesign(root, loginScene, width, usernameField, passwordField);
         // login and sign up so called buttons
         StackPane login = new StackPane();
         Image loginButtonImage = new Image(new FileInputStream("src/view/sources/loginMenu/buttons/login.png"));
@@ -134,17 +95,40 @@ public class Login {
         Image onSignUpButtonImage = new Image(new FileInputStream("src/view/sources/loginMenu/buttons/signUp_glow.png"));
         ImageView signUpButton = new ImageView(signUpButtonImage);
         adjustButton(font, loginScene, width, signUp, signUpButton, "Sign Up");
-
         initCreateAccountAndLoginBarsDesign(onLoginCircle, onSignUpCircle, login, signUp);
-        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login,loginButton,onLoginButtonImage,loginButtonImage);
-        handleLoginSubmission(textField, passwordField, login);
-        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp,signUpButton,onSignUpButtonImage,signUpButtonImage);
-        handleSignUpSubmission(onLoginCircle, onSignUpCircle, textField, passwordField, login, signUp);
+        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login, loginButton, onLoginButtonImage, loginButtonImage);
+        handleLoginSubmission(usernameField, passwordField, login);
+        GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp, signUpButton, onSignUpButtonImage, signUpButtonImage);
+        handleSignUpSubmission(onLoginCircle, onSignUpCircle, usernameField, passwordField, login, signUp);
         manageCreateAccountAndLoginBars(onLogin, onSignUp, onLoginCircle, onSignUpCircle, login, signUp);
-        root.getChildren().addAll(login, signUp, onLogin, onSignUp);
-        letterbox(loginScene, root);
-        backgroundMusicPlay();
+        root.getChildren().addAll(login, signUp, onLogin, onSignUp,exitView);
+        //  letterbox(loginScene, root);
         return loginScene;
+    }
+
+    private void exitViewSetting(Scene loginScene, ImageView exitView) {
+        exitView.relocate(loginScene.getWidth()*15/16,0);
+        exitView.setFitWidth(loginScene.getWidth()/16);
+        exitView.setPreserveRatio(true);
+        exitView.setOpacity(0.5);
+        exitView.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                exitView.setOpacity(0.9);
+            }
+        });
+        exitView.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                exitView.setOpacity(0.5);
+            }
+        });
+        exitView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.exit(0);
+            }
+        });
     }
 
     private void createAccountAndLoginBarsContainerDesign(Pane root, Scene loginScene) {
@@ -166,7 +150,7 @@ public class Login {
         textField.setStyle("-fx-background-color:rgba(175, 175, 175, 0.5) ; -fx-font-size:  20px; ");
         passwordField.setStyle("-fx-background-color:rgba(175,175,175,0.5) ; -fx-font-size:  20px; ");
         passwordField.relocate(loginScene.getWidth() * 3 / 4, loginScene.getHeight() / 1.5);
-        root.getChildren().addAll(passwordField,textField);
+        root.getChildren().addAll(passwordField, textField);
     }
 
     private void initCreateAccountAndLoginBarsDesign(Circle onLoginCircle, Circle onSignUpCircle, StackPane login, StackPane signUp) {
@@ -193,8 +177,9 @@ public class Login {
                     //todo : check if the password is not empty and return the according alert otherwise.
                     if (LoginMenuProcess.createAccount(textField.getText(), passwordField.getText()) == 0) {
                         System.out.println("account created");
+
                         if (!isInLogin) {
-                            loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle,true);
+                            loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, true);
                         }
                     } else {
                         //todo : alerts
@@ -211,12 +196,21 @@ public class Login {
             if (login.isVisible()) {
                 LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
                 try {
-                    //todo : check if the password is not empty and return the according alert otherwise.
-                    if (loginMenuProcess.login(textField.getText(), passwordField.getText()) == 0) {
+                    int loginCheck = loginMenuProcess.login(textField.getText(), passwordField.getText());
+                    if (loginCheck == 0) {
                         System.out.println("logged in");
+                        Main.setMainMenuFX(loginMenuProcess.getCurrentAccount());
                         //todo : change the fucking scene to main menu
-                    } else {
-                        //todo : alerts
+                    }
+                    if(loginCheck == 2 || loginCheck == 3){
+                        Stage alert = new Stage();
+                        Scene popUp = GraphicalCommonUsages.getOkayPopUp(login.getScene(),"Wrong username/password!");
+                        alert.setScene(popUp);
+                        alert.show();
+                        alert.setAlwaysOnTop(true);
+                        long timeOfNow = System.currentTimeMillis();
+                        while(System.currentTimeMillis() - timeOfNow < 2000){}
+                        alert.close();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -229,13 +223,13 @@ public class Login {
         onSignUp.setOnMouseClicked(event -> {
             if (!isInSignUp) {
                 clickSoundEffectPlay();
-                loginAndCreateAccountBarManager(login,signUp,onSignUpCircle,onLoginCircle,false);
+                loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, false);
             }
         });
         onLogin.setOnMouseClicked(event -> {
             if (!isInLogin) {
                 clickSoundEffectPlay();
-                loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle,true);
+                loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, true);
             }
         });
     }
@@ -249,19 +243,6 @@ public class Login {
         isInSignUp = !setOnLogin;
     }
 
-    private Rectangle2D initPrimaryStage(Stage primaryStage) {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice defaultScreenDevice = ge.getDefaultScreenDevice();
-        GraphicsConfiguration defaultConfiguration = defaultScreenDevice.getDefaultConfiguration();
-        Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(defaultConfiguration);
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setX(primaryScreenBounds.getMinX());
-        primaryStage.setY(primaryScreenBounds.getMinY());
-        primaryStage.setWidth(primaryScreenBounds.getWidth() + screenInsets.right + screenInsets.left);
-        primaryStage.setHeight(primaryScreenBounds.getHeight() + screenInsets.bottom);
-        primaryStage.setFullScreen(true);
-        return primaryScreenBounds;
-    }
 
     private void adjustButton(Font font, Scene loginScene, double width, StackPane buttonPane, ImageView button, String buttonText) {
         button.relocate(loginScene.getWidth() * 3 / 4 + width / 4, loginScene.getHeight() / 1.25);
@@ -275,7 +256,6 @@ public class Login {
         buttonPane.setLayoutY(loginScene.getHeight() / 1.25);
         loginText.relocate(loginScene.getWidth() * 3 / 4 + width / 4, loginScene.getHeight() / 1.25);
     }
-
 
 
     private void fadingIn(TextField textField, PasswordField passwordField) {
@@ -305,19 +285,5 @@ public class Login {
         audioClip.play();
     }
 
-    private void backgroundMusicPlay() {
-        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
-        audioClip.setCycleCount(Integer.MAX_VALUE);
-        audioClip.play();
-    }
 
-    private void letterbox(final Scene scene, final Pane contentPane) {
-        final double initWidth = scene.getWidth();
-        final double initHeight = scene.getHeight();
-        final double ratio = initWidth / initHeight;
-
-        SceneSizeChangeListener sizeListener = new SceneSizeChangeListener(scene, ratio, initHeight, initWidth, contentPane);
-        scene.widthProperty().addListener(sizeListener);
-        scene.heightProperty().addListener(sizeListener);
-    }
 }

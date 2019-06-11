@@ -172,4 +172,11 @@ public class LoginMenuProcess {
         this.loginMenu = loginMenu;
     }
     //setters
+
+    //getters
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+    //getters
 }
