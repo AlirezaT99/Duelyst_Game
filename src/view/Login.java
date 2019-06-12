@@ -49,10 +49,13 @@ public class Login {
     boolean isInSignUp = false;
 
 
-    public Scene start(Stage primaryStage) throws FileNotFoundException {
+    public Pane start(Stage primaryStage) throws FileNotFoundException {
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/TrumpGothicPro-Medium-webfont.ttf")), 22);
         Pane root = new Pane();
-        Scene loginScene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
+        Pane fakeRoot = new Pane();
+        Scene loginScene = new Scene(fakeRoot, primaryStage.getWidth(), primaryStage.getHeight());
+        root.setPrefWidth(primaryStage.getWidth());
+        root.setPrefHeight(primaryStage.getHeight());
         Random random = new Random();
         int backGroundNumber = random.nextInt(24) + 1;
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/loginMenu/backgrounds/" + backGroundNumber + ".jpg", root);
@@ -62,8 +65,7 @@ public class Login {
         logoImageView.setFitWidth(loginScene.getWidth() / 2.5);
         logoImageView.setFitHeight(loginScene.getHeight() / 4);
         root.getChildren().addAll(logoImageView);
-        Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
-        loginScene.setCursor(new ImageCursor(cursor));
+
         double width = loginScene.getWidth() / 6;
         createAccountAndLoginBarsContainerDesign(root, loginScene);
         //labels
@@ -112,7 +114,7 @@ public class Login {
         manageCreateAccountAndLoginBars(onLogin, onSignUp, onLoginCircle, onSignUpCircle, login, signUp);
         root.getChildren().addAll(login, signUp, onLogin, onSignUp, exitView);
         //  letterbox(loginScene, root);
-        return loginScene;
+        return root;
     }
 
     private void exitViewSetting(Scene loginScene, ImageView exitView) {

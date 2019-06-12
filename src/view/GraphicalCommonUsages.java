@@ -39,8 +39,8 @@ public class GraphicalCommonUsages {
 
     public static void backGroundImageSetting(Image backGroundImage, Pane root) {
         ImageView backGround = new ImageView(backGroundImage);
-        backGround.setFitWidth(root.getWidth());
-        backGround.setFitHeight(root.getHeight());
+        backGround.setFitWidth(root.getPrefWidth());
+        backGround.setFitHeight(root.getPrefHeight());
         root.getChildren().add(backGround);
     }
 

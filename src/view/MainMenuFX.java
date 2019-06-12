@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Account;
 
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
@@ -34,14 +35,18 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class MainMenuFX  {
-
-    public Scene start(Stage primaryStage) throws FileNotFoundException {
+    private Account currentAccount;
+    public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
+        currentAccount = account;
         final javafx.scene.text.Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 30);
         final javafx.scene.text.Font fontSmall = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 15);
         Pane root = new Pane();
+        root.setPrefWidth(primaryStage.getWidth());
+        root.setPrefHeight(primaryStage.getHeight());
+        Pane fakeRoot = new Pane();
         Random random = new Random();
         int backGroundNumber = random.nextInt(2) + 1;
-        Scene mainMenuScene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
+        Scene mainMenuScene = new Scene(fakeRoot,primaryStage.getWidth(), primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + backGroundNumber + ".jpg", root);
         Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         mainMenuScene.setCursor(new ImageCursor(cursor));
@@ -96,7 +101,7 @@ public class MainMenuFX  {
         textGlowEffect(shop);
         textGlowEffect(watch);
         textGlowEffect(save);
-        return mainMenuScene;
+        return root;
     }
 
     private void settingAddNewCard(Font fontSmall, Scene mainMenuScene, VBox addCard, Text addCardText, Image addCardImage) {
@@ -199,7 +204,15 @@ public class MainMenuFX  {
         playText.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                playText.setEffect(new Glow(2));
+                switch (((Text)playText.getChildren().get(1)).getText()){
+                    case "PLAY":
+                        try {
+                            Main.setBattleMenuFX(currentAccount);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
             }
         });
     }
