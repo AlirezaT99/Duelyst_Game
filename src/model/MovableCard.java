@@ -60,19 +60,40 @@ public abstract class MovableCard extends Card {
     public int attack(MovableCard opponent) {
         int returnValue = isAttackValid(opponent);
         if (returnValue == 0) {
-            // do attack
-            opponent.takeDamage(this.damage+this.dispelableDamageChange);
             didAttackInThisTurn = true;
-            if (!Impact.doesHaveAntiHolyBuff(this))
-                Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
-            //do attack
-            opponent.counterAttack(this); // gonna need to change it
-            //
+            if (!opponent.onDefendImpact.getImpactEffectComp().doesHaveAntiNegativeImpact()) {
+                passDamage(opponent);
+                doOnAttackImpacts(opponent);
+            }
+            opponent.counterAttack(this);
             this.manageCasualties();
             opponent.manageCasualties();
             BattleMenuProcess.buryTheDead();
         }
         return returnValue;
+    }
+
+    private void doOnAttackImpacts(MovableCard opponent) {
+        if (!ImpactEffectComp.doesHaveHolyBuffCanceler(this))
+            Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
+        if (onAttackImpact.isPoisonBuff() && !opponent.onDefendImpact.getImpactEffectComp().isDoesHaveAntiPoison())
+            doOnAttackImpact(opponent, this);
+        else if (onAttackImpact.isDisarmBuff() && !opponent.onDefendImpact.getImpactEffectComp().isDoesHaveAntiDisarm())
+            doOnAttackImpact(opponent, this);
+        else {
+            doOnAttackImpact(opponent, this);
+        }
+    }
+
+    private void passDamage(MovableCard opponent) {
+        if (!opponent.onDefendImpact.isImmuneToMinDamage())
+            opponent.takeDamage(this.damage + this.dispelableDamageChange);
+        else if (!this.player.match.table.doesHaveLowestDamage(this))
+            opponent.takeDamage(this.damage + this.dispelableDamageChange);
+    }
+
+    private void doOnAttackImpact(MovableCard opponent, MovableCard movableCard) {
+        onAttackImpact.doImpact(movableCard.player, opponent, opponent.cardCell, movableCard.cardCell);
     }
 
     int isAttackValid(MovableCard opponent) {
@@ -89,7 +110,7 @@ public abstract class MovableCard extends Card {
 
     private int counterAttackAndNormalAttackSameParameters(MovableCard opponent) {
         int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
-        if(isMelee)
+        if (isMelee)
             maxAttackRange = 2;
         if (isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
             return 14;
@@ -103,11 +124,14 @@ public abstract class MovableCard extends Card {
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent)) {
             opponent.takeDamage(this.damage);
-            if (!Impact.doesHaveAntiHolyBuff(this))
+            if (!ImpactEffectComp.doesHaveHolyBuffCanceler(this))
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             this.manageCasualties();
             opponent.manageCasualties();
             BattleMenuProcess.buryTheDead();
+            if (onDefendImpact == null)
+                return;
+            onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
         }
     }
 
@@ -143,7 +167,7 @@ public abstract class MovableCard extends Card {
             for (int i = 1; i < attackers.size(); i++) {
                 target.health -= attackers.get(i).damage + attackers.get(i).dispelableDamageChange;
                 if (attackers.get(i).onAttackImpact != null)
-                    attackers.get(i).onAttackImpact.doImpact(attackers.get(i).player, target, target.cardCell, attackers.get(i).cardCell);
+                    attackers.get(i).doOnAttackImpact(target, attackers.get(i));
             }
         }
     }
@@ -167,13 +191,11 @@ public abstract class MovableCard extends Card {
             didMoveInThisTurn = true;
             this.cardCell.setMovableCard(null);
             if (destination.getItem() != null) {
-                if (destination.getItem() instanceof CollectibleItem){
+                if (destination.getItem() instanceof CollectibleItem) {
                     this.player.getCollectibleItems().add((CollectibleItem) destination.getItem());
                     destination.getItem().setItemID(createIdForItem((CollectibleItem) destination.getItem()));
-                }
-                else
-                    if(destination.getItem() instanceof Flag)
-                        this.player.getFlags().add((Flag) destination.getItem());
+                } else if (destination.getItem() instanceof Flag)
+                    this.player.getFlags().add((Flag) destination.getItem());
                 this.item = destination.getItem();
 //                destination.setItem(null);
             }
@@ -188,7 +210,7 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
-        if(cell == null)
+        if (cell == null)
             return 18;
         moveRange = 2;
         if (this.cardCell == cell)
@@ -239,6 +261,8 @@ public abstract class MovableCard extends Card {
     }
 
     protected void takeDamage(int damage) {
+        if (this.onDefendImpact.getImpactEffectComp().isDoesHaveAntiHolyBuff())
+            this.health -= this.onDefendImpact.impactQuantity;
         this.health -= damage;
     }
 
@@ -252,18 +276,17 @@ public abstract class MovableCard extends Card {
         return previousTargets.containsKey(movableCard.name);
     }
 
-    private String createIdForItem(CollectibleItem collectibleItem){
+    private String createIdForItem(CollectibleItem collectibleItem) {
         int index = 1;
-        for( int i = 0; i < this.player.getCollectibleItems().size(); i++){
-            if(this.player.getCollectibleItems().get(i).getName().equals(collectibleItem.getName()))
+        for (int i = 0; i < this.player.getCollectibleItems().size(); i++) {
+            if (this.player.getCollectibleItems().get(i).getName().equals(collectibleItem.getName()))
                 index++;
         }
-        return this.player.getAccount().getUserName()+"_"+collectibleItem.getName()+"_"+index;
+        return this.player.getAccount().getUserName() + "_" + collectibleItem.getName() + "_" + index;
     }
     //previous targets manager
 
     //getters
-
 
 
     public String getName() {
@@ -321,6 +344,7 @@ public abstract class MovableCard extends Card {
     public boolean isAlive() {
         return isAlive;
     }
+
 
     //getters
 

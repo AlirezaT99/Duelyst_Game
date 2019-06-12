@@ -18,6 +18,8 @@ public class Main extends Application {
     private static MainMenuFX mainMenuFX;
     private static BattleInitFX battleInitFX;
     private static ShopMenuFX shopMenuFX;
+    private static SinglePlayerMenuFX singlePlayerMenuFX;
+    private static StoryMenuFX storyMenuFX;
     private static Stage primaryStage;
     private static Scene currentScene;
     private static Rectangle2D primaryScreenBounds;
@@ -54,18 +56,18 @@ public class Main extends Application {
         return currentScene;
     }
 
+    public static void setMainMenuFX(Account account) throws FileNotFoundException {
+        Main.mainMenuFX = new MainMenuFX();
+        currentScene.setRoot(mainMenuFX.start(primaryStage, account));
+        primaryStage.setScene(currentScene);
+    }
+
     public static void setLoginMenu() throws FileNotFoundException {
         if (Main.login == null)
             Main.login = new Login();
         currentScene.setRoot(login.start(primaryStage));
         primaryStage.setScene(currentScene);
         //   primaryStage.setFullScreen(true);
-    }
-
-    public static void setMainMenuFX(Account account) throws FileNotFoundException {
-        Main.mainMenuFX = new MainMenuFX();
-        currentScene.setRoot(mainMenuFX.start(primaryStage, account));
-        primaryStage.setScene(currentScene);
     }
 
     public static void setShopMenuFX(Account account) throws FileNotFoundException {
@@ -78,7 +80,33 @@ public class Main extends Application {
         Main.battleInitFX = new BattleInitFX();
         currentScene.setRoot(battleInitFX.start(primaryStage, account));
         primaryStage.setScene(currentScene);
-        primaryStage.setFullScreen(true);
+    }
+
+    public static void setSinglePlayerMenuFX(Account account) throws FileNotFoundException {
+        if (singlePlayerMenuFX == null)
+            Main.singlePlayerMenuFX = new SinglePlayerMenuFX();
+        currentScene.setRoot(singlePlayerMenuFX.start(primaryStage, account));
+        primaryStage.setScene(currentScene);
+    }
+
+    public static void setStoryMenuFX(Account account) throws FileNotFoundException {
+        if (storyMenuFX == null)
+            Main.storyMenuFX= new StoryMenuFX();
+        currentScene.setRoot(storyMenuFX.start(primaryStage, account));
+        primaryStage.setScene(currentScene);
+    }
+
+
+    public static void backToLastRoots(Account account, String whereTo) throws FileNotFoundException {
+        switch (whereTo) {
+            case "singlePlayer":
+                setSinglePlayerMenuFX(account);
+                break;
+            case "battleInit":
+                setBattleMenuFX(account);
+                break;
+        }
+
     }
 
     private void backgroundMusicPlay() {

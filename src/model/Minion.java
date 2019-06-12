@@ -62,16 +62,7 @@ public class Minion extends MovableCard {
         // do summonImpact
     }
 
-    @Override
-    public int attack(MovableCard opponent) {
-        int returnValue = this.isAttackValid(opponent);
-        if (returnValue == 0) {
-            super.attack(opponent);
-            if(onAttackImpact != null)
-                onAttackImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
-        }
-        return returnValue;
-    }
+
 
     @Override
     public String toString(boolean showCost) {
@@ -83,19 +74,7 @@ public class Minion extends MovableCard {
         return output;
     }
 
-    @Override
-    protected void counterAttack(MovableCard opponent) {
-        super.counterAttack(opponent);
-        if(onDefendImpact == null)
-            return;
-        if (onDefendImpact.doesHaveAntiNegativeImpact())
-            this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
-        if (onDefendImpact.isImmuneToMinDamage()) {
-            if (this.player.match.table.doesHaveLowestDamage(opponent))
-                this.setHealth(this.getHealth() + opponent.getDamage() + opponent.dispelableDamageChange);
-        }
-        onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
-    }
+
 
     //getters
     public static Minion getMinionByName(String name) {

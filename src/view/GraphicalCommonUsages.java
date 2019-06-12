@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Account;
 
 import java.awt.*;
 import java.io.File;
@@ -95,6 +96,29 @@ public class GraphicalCommonUsages {
         javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(GraphicalCommonUsages.class.getResource("sources/common/music/" + name + ".m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play();
+    }
+    public void mouseClickAudioPlay() {
+        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/common/music/onclick.m4a").toString());
+        audioClip.setCycleCount(1);
+        audioClip.play(1);
+    }
+
+    public static void backSetting(Pane root, Scene mainMenuScene, Account account, String whereTo) throws FileNotFoundException {
+        Image back = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_back_corner.png"));
+        ImageView backView = new ImageView(back);
+        backView.setFitWidth(mainMenuScene.getWidth()/15);
+        backView.setPreserveRatio(true);
+        root.getChildren().addAll(backView);
+        backView.setOpacity(0.5);
+        backView.setOnMouseEntered(event -> backView.setOpacity(0.9));
+        backView.setOnMouseExited(event -> backView.setOpacity(0.5));
+        backView.setOnMouseClicked(event -> {
+            try {
+                Main.backToLastRoots(account,whereTo);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static Rectangle2D initPrimaryStage(Stage primaryStage) {
