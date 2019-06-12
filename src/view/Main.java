@@ -76,7 +76,6 @@ public class Main  extends Application {
         Main.battleInitFX = new BattleInitFX();
         currentScene.setRoot(battleInitFX.start(primaryStage,account));
         primaryStage.setScene(currentScene);
-        primaryStage.setFullScreen(true);
     }
     private void backgroundMusicPlay() {
         javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());

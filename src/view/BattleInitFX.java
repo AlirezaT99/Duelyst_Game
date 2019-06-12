@@ -1,20 +1,21 @@
 package view;
 
-import javafx.application.Application;
+import javafx.animation.ScaleTransition;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Account;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,15 +36,18 @@ public class BattleInitFX{
 
         HBox  battleInitPrimary = new HBox(singlePlayer,multiPlayer);
         battleInitPrimary.setSpacing(battleInitScene.getWidth()/10);
+
+        Image backToMain = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_back_corner.png"));
+        ImageView backToMainView = new ImageView(backToMain);
+        backToMainMenuViewSetting(root, battleInitScene, backToMainView,account);
         root.getChildren().addAll(battleInitPrimary);
         battleInitPrimary.layoutXProperty().bind(root.widthProperty().subtract(battleInitPrimary.widthProperty()).divide(2));
         battleInitPrimary.layoutYProperty().bind(root.heightProperty().subtract(battleInitPrimary.heightProperty()).divide(2));
+       // battleInitPrimary.setPadding(new Insets(50,0,50,0));
         BackgroundFill background_fill = new BackgroundFill(javafx.scene.paint.Color.grayRgb(20,0.8),
                 new CornerRadii(0), new javafx.geometry.Insets(0,0,0,0));
-        BackgroundFill background_fill_root = new BackgroundFill(javafx.scene.paint.Color.grayRgb(150,0.8),
-                new CornerRadii(0), new javafx.geometry.Insets(0,0,0,0));
         battleInitPrimary.setBackground(new Background(background_fill));
-        root.setBackground(new Background(background_fill_root));
+
         //  return battleInitScene;
         return root;
     }
@@ -54,21 +58,49 @@ public class BattleInitFX{
         multiPlayerView.setFitWidth(battleInitScene.getWidth()/4);
         multiPlayerView.setFitHeight(battleInitScene.getHeight()*2/3);
         StackPane view = new StackPane(multiPlayerView);
-        view.setStyle("-fx-padding: 10;-fx-background-radius: 10;");
+        view.setStyle("-fx-padding: 30;-fx-background-radius: 10;");
 
-//        javafx.scene.shape.Rectangle image = new Rectangle(battleInitScene.getWidth()/4,battleInitScene.getHeight()*2/3);
-//        image.setArcWidth(30);   // Corner radius
-//        image.setArcHeight(30);
-//        ImagePattern pattern = new ImagePattern(
-//                new Image(new FileInputStream("src/view/sources/battleInit/pictures/multi.jpg"), battleInitScene.getWidth()/4, battleInitScene.getHeight()*2/3, false, false) // Resizing
-//        );
-//        image.setFill(pattern);
-        Text multiPlayerText = new Text("Multi Player");
+        view.setOpacity(0.6);
+        Text multiPlayerText = new Text("MULTI PLAYER");
         multiPlayerText.setFill(Color.WHITE);
         multiPlayerText.setFont(font);
-        VBox multiPlayer = new VBox(view,multiPlayerText);
+        VBox multiPlayer = new VBox(view,multiPlayerText,new Text(""));
+        multiPlayer.setSpacing(battleInitScene.getHeight()/20);
         multiPlayer.setAlignment(Pos.CENTER);
+
+        mouseMovementHandling(view, multiPlayerText, multiPlayer);
+
         return multiPlayer;
+    }
+
+    private void mouseMovementHandling(StackPane view, Text multiPlayerText, VBox multiPlayer) {
+        multiPlayer.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                view.setOpacity(1);
+                ScaleTransition st = new ScaleTransition(Duration.millis(100),multiPlayer);
+                st.setFromX(1);
+                st.setFromY(1);
+                st.setToX(1.1);
+                st.setToY(1.1);
+                st.play();
+                multiPlayerText.setEffect(new Glow(0.5));
+            }
+        });
+
+        multiPlayer.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                view.setOpacity(0.6);
+                ScaleTransition st = new ScaleTransition(Duration.millis(100),multiPlayer);
+                st.setFromX(1.1);
+                st.setFromY(1.1);
+                st.setToX(1);
+                st.setToY(1);
+                st.play();
+                multiPlayerText.setEffect(new Glow(0.5));
+            }
+        });
     }
 
     private VBox singlePlayerSetUp(Scene battleInitScene, Font font) throws FileNotFoundException {
@@ -77,13 +109,31 @@ public class BattleInitFX{
         singlePlayerView.setFitWidth(battleInitScene.getWidth()/4);
         singlePlayerView.setFitHeight(battleInitScene.getHeight()*2/3);
         StackPane view = new StackPane(singlePlayerView);
-        view.setStyle("-fx-padding: 10;-fx-background-radius: 10;");
-        Text singlePlayerText = new Text("Single Player");
+        view.setStyle("-fx-padding: 30;-fx-background-radius: 10;");
+        view.setOpacity(0.6);
+        Text singlePlayerText = new Text("SINGLE PLAYER");
         singlePlayerText.setFill(Color.WHITE);
         singlePlayerText.setFont(font);
-
-        VBox singlePlayer = new VBox(view,singlePlayerText);
+        VBox singlePlayer = new VBox(view,singlePlayerText,new Text());
+        singlePlayer.setSpacing(battleInitScene.getHeight()/20);
         singlePlayer.setAlignment(Pos.CENTER);
+        mouseMovementHandling(view,singlePlayerText,singlePlayer);
         return singlePlayer;
+    }
+
+    private void backToMainMenuViewSetting(Pane root, Scene mainMenuScene, ImageView backToLoginView,Account account)  {
+        backToLoginView.setFitWidth(mainMenuScene.getWidth()/15);
+        backToLoginView.setPreserveRatio(true);
+        root.getChildren().addAll(backToLoginView);
+        backToLoginView.setOpacity(0.5);
+        backToLoginView.setOnMouseEntered(event -> backToLoginView.setOpacity(0.9));
+        backToLoginView.setOnMouseExited(event -> backToLoginView.setOpacity(0.5));
+        backToLoginView.setOnMouseClicked(event -> {
+            try {
+                Main.setMainMenuFX(account);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
