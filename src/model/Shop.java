@@ -1,7 +1,5 @@
 package model;
 
-import presenter.CollectionMenuProcess;
-
 import java.util.ArrayList;
 
 public class Shop {
@@ -94,11 +92,9 @@ public class Shop {
         }
         return 0;
     }
-
     //buy
 
     // sell
-
     public int sell(Account account, String id) {
         UsableItem item = account.getCollection().findItemByCollectionID(id);
         Card card = account.getCollection().findCardByCollectionID(id);
@@ -116,7 +112,6 @@ public class Shop {
         account.sell(cost, item, card);
         return 0;
     }
-
     // sell
 
     private static UsableItem findItemByName(String itemName) {
@@ -195,7 +190,6 @@ public class Shop {
     public static ArrayList<UsableItem> getShopItems() {
         return shopItems;
     }
-
     //getters
 
     //setters
@@ -211,5 +205,5 @@ public class Shop {
     public static void addToItems(UsableItem usableItem){
         shopItems.add(usableItem);
     }
-
+    //setters
 }

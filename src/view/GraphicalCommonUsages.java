@@ -1,15 +1,12 @@
 package view;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -90,27 +87,12 @@ public class GraphicalCommonUsages {
         popUp.layoutYProperty().bind(root.heightProperty().subtract(popUp.heightProperty()).divide(2));
         root.getChildren().addAll(popUp);
 
-        confirmStackPane.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                ((ImageView)confirmStackPane.getChildren().get(0)).setImage(okButtonGlow);
-            }
-        });
-        confirmStackPane.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                ((ImageView)confirmStackPane.getChildren().get(0)).setImage(okButton);
-            }
-        });
-        confirmStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                root.getChildren().removeAll(bgRectangle,popUp);
-            }
-        });
+        confirmStackPane.setOnMouseEntered(event -> ((ImageView)confirmStackPane.getChildren().get(0)).setImage(okButtonGlow));
+        confirmStackPane.setOnMouseExited(event -> ((ImageView)confirmStackPane.getChildren().get(0)).setImage(okButton));
+        confirmStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle,popUp));
     }
     public static void soundEffectPlay(String name) {
-        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(new GraphicalCommonUsages().getClass().getResource("sources/common/music/" + name + ".m4a").toString());
+        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(GraphicalCommonUsages.class.getResource("sources/common/music/" + name + ".m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play();
     }

@@ -1,47 +1,28 @@
 package view;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import javafx.animation.FadeTransition;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.ImageCursor;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.effect.MotionBlur;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Scale;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-
-import java.awt.*;
-import java.io.*;
-
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import presenter.LoginMenuProcess;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Random;
 
 public class Login {
@@ -122,24 +103,9 @@ public class Login {
         exitView.setFitWidth(loginScene.getWidth() / 16);
         exitView.setPreserveRatio(true);
         exitView.setOpacity(0.5);
-        exitView.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                exitView.setOpacity(0.9);
-            }
-        });
-        exitView.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                exitView.setOpacity(0.5);
-            }
-        });
-        exitView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.exit(0);
-            }
-        });
+        exitView.setOnMouseEntered(event -> exitView.setOpacity(0.9));
+        exitView.setOnMouseExited(event -> exitView.setOpacity(0.5));
+        exitView.setOnMouseClicked(event -> System.exit(0));
     }
 
     private void createAccountAndLoginBarsContainerDesign(Pane root, Scene loginScene) {

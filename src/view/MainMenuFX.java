@@ -1,34 +1,21 @@
 package view;
 
-import javafx.animation.PathTransition;
-import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.Account;
 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,8 +25,8 @@ public class MainMenuFX  {
     private Account currentAccount;
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
         currentAccount = account;
-        final javafx.scene.text.Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 30);
-        final javafx.scene.text.Font fontSmall = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 15);
+        final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 30);
+        final Font fontSmall = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 15);
         Pane root = new Pane();
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
@@ -120,21 +107,15 @@ public class MainMenuFX  {
         firstLine.setAlignment(Pos.CENTER);
         secondLine.setAlignment(Pos.CENTER);
         addCardView.setOpacity(0.7);
-        addCard.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                addCardView.setOpacity(0.9);
-                addCardView.setEffect(new Glow(0.5));
-                addCardText.setEffect(new Glow(0.5));
-            }
+        addCard.setOnMouseEntered(event -> {
+            addCardView.setOpacity(0.9);
+            addCardView.setEffect(new Glow(0.5));
+            addCardText.setEffect(new Glow(0.5));
         });
-        addCard.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                addCardView.setOpacity(0.7);
-                addCardView.setEffect(new Glow(0));
-                addCardText.setEffect(new Glow(0));
-            }
+        addCard.setOnMouseExited(event -> {
+            addCardView.setOpacity(0.7);
+            addCardView.setEffect(new Glow(0));
+            addCardText.setEffect(new Glow(0));
         });
     }
 
@@ -143,31 +124,18 @@ public class MainMenuFX  {
         friendsView.setPreserveRatio(true);
         friendsView.setEffect(new Glow(0));
         friendsView.setOpacity(0.9);
-        friendsView.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                friendsText.setEffect(new Glow(1));
-                friendsView.setEffect(new Glow(0.4));
-            }
+        friendsView.setOnMouseEntered(event -> {
+            friendsText.setEffect(new Glow(1));
+            friendsView.setEffect(new Glow(0.4));
         });
-        friendsView.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                friendsText.setEffect(new Glow(0));
-                friendsView.setEffect(new Glow(0));
-            }
+        friendsView.setOnMouseExited(event -> {
+            friendsText.setEffect(new Glow(0));
+            friendsView.setEffect(new Glow(0));
         });
-
-
     }
 
     private void backToLoginViewSetting(Pane root, Scene mainMenuScene, ImageView backToLoginView)  {
-        backToLoginView.setFitWidth(mainMenuScene.getWidth()/15);
-        backToLoginView.setPreserveRatio(true);
-        root.getChildren().addAll(backToLoginView);
-        backToLoginView.setOpacity(0.5);
-        backToLoginView.setOnMouseEntered(event -> backToLoginView.setOpacity(0.9));
-        backToLoginView.setOnMouseExited(event -> backToLoginView.setOpacity(0.5));
+        backButtonAdjustment(root, mainMenuScene, backToLoginView);
         backToLoginView.setOnMouseClicked(event -> {
             try {
                 Main.setLoginMenu();
@@ -175,6 +143,15 @@ public class MainMenuFX  {
                 e.printStackTrace();
             }
         });
+    }
+
+    static void backButtonAdjustment(Pane root, Scene mainMenuScene, ImageView backToLoginView) {
+        backToLoginView.setFitWidth(mainMenuScene.getWidth()/15);
+        backToLoginView.setPreserveRatio(true);
+        root.getChildren().addAll(backToLoginView);
+        backToLoginView.setOpacity(0.5);
+        backToLoginView.setOnMouseEntered(event -> backToLoginView.setOpacity(0.9));
+        backToLoginView.setOnMouseExited(event -> backToLoginView.setOpacity(0.5));
     }
 
     private ImageView getArrowView(Scene mainMenuScene, Image arrow) {
@@ -186,33 +163,31 @@ public class MainMenuFX  {
     }
 
     private void textGlowEffect(HBox playText) {
-        playText.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                playText.getChildren().get(0).setVisible(true);
-                playText.setEffect(new Glow(1));
-                audioPlay();
-            }
+        playText.setOnMouseEntered(event -> {
+            playText.getChildren().get(0).setVisible(true);
+            playText.setEffect(new Glow(1));
+            audioPlay();
         });
-        playText.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                playText.getChildren().get(0).setVisible(false);
-                playText.setEffect(new Glow(0));
-            }
+        playText.setOnMouseExited(event -> {
+            playText.getChildren().get(0).setVisible(false);
+            playText.setEffect(new Glow(0));
         });
-        playText.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                switch (((Text)playText.getChildren().get(1)).getText()){
-                    case "PLAY":
-                        try {
-                            Main.setBattleMenuFX(currentAccount);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                }
+        playText.setOnMouseClicked(event -> {
+            switch (((Text)playText.getChildren().get(1)).getText()){
+                case "PLAY":
+                    try {
+                        Main.setBattleMenuFX(currentAccount);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "SHOP":
+                    try {
+                        Main.setShopMenuFX(currentAccount);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         });
     }
@@ -227,5 +202,4 @@ public class MainMenuFX  {
         audioClip.setCycleCount(1);
         audioClip.play(1);
     }
-
 }
