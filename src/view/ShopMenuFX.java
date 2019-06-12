@@ -1,14 +1,11 @@
 package view;
 
-import com.google.gson.Gson;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -27,7 +24,6 @@ import model.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -60,9 +56,6 @@ public class ShopMenuFX {
         drawShopLabels(root, averta, scene);
         drawLeftBox(trump_med, root, scene);
         drawBackButton(root, scene);
-        //
-        ArrayList names = new Gson().fromJson(new FileReader("src/view/sources/shopMenu/namesArrayList.txt"), ArrayList.class);
-        cardsToShow = (ArrayList<String>) names;
 
         return root;
     }
@@ -183,7 +176,6 @@ public class ShopMenuFX {
                     else if (isInCollection)
                         for (Item item : account.getCollection().getItems())
                             cardsToShow.add(item.getName());
-                    // set ArrayList toShow
                     pageNumber = 1;
                     updateLabels();
                     showSearchBar(searchTextField, searchButton, false);
@@ -268,22 +260,6 @@ public class ShopMenuFX {
         page.setFill(Color.WHITE);
 
 
-        Button b = new Button("nothing");
-        b.relocate(500, 10);
-        b.setOnMouseClicked(event -> {
-        }); // TODO empty for now
-
-        Button b2 = new Button("Glow = 0");
-        b2.relocate(600, 10);
-        b2.setOnMouseClicked(event -> {
-            shopButton.setImage(shopBackground);
-            collectionButton.setImage(collectionBackground);
-        });
-
-
-        root.getChildren().addAll(page, b, b2);
-        //
-
         manageShopAndCollectionBars(shopPane, collectionPane);
         root.getChildren().addAll(shopPane, collectionPane);
     }
@@ -335,6 +311,7 @@ public class ShopMenuFX {
                 cardLabels.get(i).setText("NULL");
             /*label->stackPane[i].setVisible(false)*/
         }
+        pageSetText();
     }
 
     private void manageShopAndCollectionBars(StackPane shopPane, StackPane collectionPane) {
