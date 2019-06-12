@@ -34,7 +34,7 @@ public class ShopMenuFX {
     private boolean isInCollection = false;
     private static ArrayList<String> cardsToShow = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
-    private static int pageNumber = 1;
+    private static int pageNumber = 0;
     private Account account;
 
     public ShopMenuFX(Account account) {
@@ -73,7 +73,7 @@ public class ShopMenuFX {
             label.setTextFill(Color.WHITE);
             cardLabels.put(i, label);
             stackPanes[i].getChildren().addAll(imageView, label);
-            StackPane.setAlignment(label, Pos.CENTER);
+            StackPane.setAlignment(label, Pos.TOP_CENTER);
             stackPanes[i].setMaxSize(157,279);
         }
         root.getChildren().addAll(stackPanes);
@@ -259,9 +259,8 @@ public class ShopMenuFX {
         page.setFont(font);
         page.setFill(Color.WHITE);
 
-
         manageShopAndCollectionBars(shopPane, collectionPane);
-        root.getChildren().addAll(shopPane, collectionPane);
+        root.getChildren().addAll(page, shopPane, collectionPane);
     }
 
     private void pageSetText() {
@@ -306,7 +305,7 @@ public class ShopMenuFX {
     private void updateLabels() {
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
-                cardLabels.get(i).setText(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                cardLabels.get(i).setText("\n"+cardsToShow.get(i + (10 * (pageNumber - 1))));
             else
                 cardLabels.get(i).setText("NULL");
             /*label->stackPane[i].setVisible(false)*/
