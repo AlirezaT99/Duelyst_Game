@@ -25,6 +25,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -185,6 +186,7 @@ public class MainMenuFX  {
             public void handle(MouseEvent event) {
                 playText.getChildren().get(0).setVisible(true);
                 playText.setEffect(new Glow(1));
+                audioPlay();
             }
         });
         playText.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -205,6 +207,12 @@ public class MainMenuFX  {
     private void setText(Font font, Text playText) {
         playText.setFont(font);
         playText.setFill(Color.WHITE);
+    }
+
+    private void audioPlay(){
+        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/mainMenu/music/sfx_ui_booster_huming_tail.m4a").toString());
+        audioClip.setCycleCount(1);
+        audioClip.play(1);
     }
 
 }

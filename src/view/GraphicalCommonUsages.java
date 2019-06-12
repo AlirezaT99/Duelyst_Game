@@ -53,7 +53,7 @@ public class GraphicalCommonUsages {
 //        for (Node child : root.getChildren()) {
 //            child.setEffect(new GaussianBlur());
 //        }
-
+        soundEffectPlay("error");
         javafx.scene.shape.Rectangle bgRectangle = new Rectangle(scene.getWidth(),scene.getHeight());
         bgRectangle.relocate(0,0);
         root.getChildren().addAll(bgRectangle);
@@ -89,6 +89,7 @@ public class GraphicalCommonUsages {
         popUp.layoutXProperty().bind(root.widthProperty().subtract(popUp.widthProperty()).divide(2));
         popUp.layoutYProperty().bind(root.heightProperty().subtract(popUp.heightProperty()).divide(2));
         root.getChildren().addAll(popUp);
+
         confirmStackPane.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -107,6 +108,11 @@ public class GraphicalCommonUsages {
                 root.getChildren().removeAll(bgRectangle,popUp);
             }
         });
+    }
+    public static void soundEffectPlay(String name) {
+        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(new GraphicalCommonUsages().getClass().getResource("sources/common/music/" + name + ".m4a").toString());
+        audioClip.setCycleCount(1);
+        audioClip.play();
     }
 
     public static Rectangle2D initPrimaryStage(Stage primaryStage) {

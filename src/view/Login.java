@@ -52,7 +52,7 @@ public class Login {
     public Scene start(Stage primaryStage) throws FileNotFoundException {
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/TrumpGothicPro-Medium-webfont.ttf")), 22);
         Pane root = new Pane();
-        Scene loginScene = new Scene(root,primaryStage.getWidth(),primaryStage.getHeight());
+        Scene loginScene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
         Random random = new Random();
         int backGroundNumber = random.nextInt(24) + 1;
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/loginMenu/backgrounds/" + backGroundNumber + ".jpg", root);
@@ -62,7 +62,7 @@ public class Login {
         logoImageView.setFitWidth(loginScene.getWidth() / 2.5);
         logoImageView.setFitHeight(loginScene.getHeight() / 4);
         root.getChildren().addAll(logoImageView);
-             Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
+        Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         loginScene.setCursor(new ImageCursor(cursor));
         double width = loginScene.getWidth() / 6;
         createAccountAndLoginBarsContainerDesign(root, loginScene);
@@ -106,18 +106,18 @@ public class Login {
         adjustButton(font, loginScene, width, signUp, signUpButton, "Sign Up");
         initCreateAccountAndLoginBarsDesign(onLoginCircle, onSignUpCircle, login, signUp);
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login, loginButton, onLoginButtonImage, loginButtonImage);
-        handleLoginSubmission(usernameField, passwordField, login,loginScene, root);
+        handleLoginSubmission(usernameField, passwordField, login, loginScene, root);
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp, signUpButton, onSignUpButtonImage, signUpButtonImage);
-        handleSignUpSubmission(onLoginCircle, onSignUpCircle, usernameField, passwordField, login, signUp);
+        handleSignUpSubmission(onLoginCircle, onSignUpCircle, usernameField, passwordField, login, signUp,loginScene,root);
         manageCreateAccountAndLoginBars(onLogin, onSignUp, onLoginCircle, onSignUpCircle, login, signUp);
-        root.getChildren().addAll(login, signUp, onLogin, onSignUp,exitView);
+        root.getChildren().addAll(login, signUp, onLogin, onSignUp, exitView);
         //  letterbox(loginScene, root);
         return loginScene;
     }
 
     private void exitViewSetting(Scene loginScene, ImageView exitView) {
-        exitView.relocate(loginScene.getWidth()*15/16,0);
-        exitView.setFitWidth(loginScene.getWidth()/16);
+        exitView.relocate(loginScene.getWidth() * 15 / 16, 0);
+        exitView.setFitWidth(loginScene.getWidth() / 16);
         exitView.setPreserveRatio(true);
         exitView.setOpacity(0.5);
         exitView.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -179,19 +179,22 @@ public class Login {
         }
     }
 
-    private void handleSignUpSubmission(Circle onLoginCircle, Circle onSignUpCircle, TextField textField, PasswordField passwordField, StackPane login, StackPane signUp) {
+    private void handleSignUpSubmission(Circle onLoginCircle, Circle onSignUpCircle, TextField textField, PasswordField passwordField, StackPane login, StackPane signUp, Scene scene, Pane root) {
         signUp.setOnMouseClicked(event -> {
             if (signUp.isVisible()) {
                 try {
-                    //todo : check if the password is not empty and return the according alert otherwise.
-                    if (LoginMenuProcess.createAccount(textField.getText(), passwordField.getText()) == 0) {
-                        System.out.println("account created");
-
-                        if (!isInLogin) {
-                            loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, true);
+                    if (textField.getText().length() == 0 || passwordField.getText().length() == 0)
+                        GraphicalCommonUsages.okPopUp("username and password should not be empty", scene, root);
+                    else {
+                        int result = LoginMenuProcess.createAccount(textField.getText(), passwordField.getText());
+                        if (result == 1)
+                            GraphicalCommonUsages.okPopUp("a user with this username already exists", scene, root);
+                        if (result == 0) {
+                            System.out.println("account created");
+                            if (!isInLogin) {
+                                loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, true);
+                            }
                         }
-                    } else {
-                        //todo : alerts
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -200,7 +203,7 @@ public class Login {
         });
     }
 
-    private void handleLoginSubmission(TextField textField, PasswordField passwordField, StackPane login, Scene scene,Pane root) {
+    private void handleLoginSubmission(TextField textField, PasswordField passwordField, StackPane login, Scene scene, Pane root) {
         login.setOnMouseClicked(event -> {
             if (login.isVisible()) {
                 LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
@@ -209,10 +212,9 @@ public class Login {
                     if (loginCheck == 0) {
                         System.out.println("logged in");
                         Main.setMainMenuFX(loginMenuProcess.getCurrentAccount());
-                        //todo : change the fucking scene to main menu
                     }
-                    if(loginCheck == 2 || loginCheck == 3){
-                        GraphicalCommonUsages.okPopUp("incorrect username or password",scene, root);
+                    if (loginCheck == 2 || loginCheck == 3) {
+                        GraphicalCommonUsages.okPopUp("incorrect username or password", scene, root);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -225,13 +227,13 @@ public class Login {
     private void manageCreateAccountAndLoginBars(StackPane onLogin, StackPane onSignUp, Circle onLoginCircle, Circle onSignUpCircle, StackPane login, StackPane signUp) {
         onSignUp.setOnMouseClicked(event -> {
             if (!isInSignUp) {
-                clickSoundEffectPlay();
+                clickSoundEffectPlay("pointdrop");
                 loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, false);
             }
         });
         onLogin.setOnMouseClicked(event -> {
             if (!isInLogin) {
-                clickSoundEffectPlay();
+                clickSoundEffectPlay("pointdrop");
                 loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, true);
             }
         });
@@ -282,8 +284,8 @@ public class Login {
 
     }
 
-    private void clickSoundEffectPlay() {
-        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/pointdrop.m4a").toString());
+    private void clickSoundEffectPlay(String name) {
+        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/" + name + ".m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play();
     }
