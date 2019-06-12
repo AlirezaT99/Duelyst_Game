@@ -4,7 +4,10 @@ import com.sun.scenario.effect.impl.prism.PrImage;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.ImageCursor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Screen;
@@ -13,6 +16,7 @@ import javafx.stage.WindowEvent;
 import model.Account;
 
 import java.awt.*;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -20,6 +24,7 @@ public class Main  extends Application {
     private static LoginMenu loginMenu = new LoginMenu();
     private static Login login;
     private static MainMenuFX mainMenuFX;
+    private static BattleInitFX battleInitFX;
     private static Stage primaryStage;
     private static Scene currentScene;
     private static Rectangle2D primaryScreenBounds;
@@ -37,7 +42,10 @@ public class Main  extends Application {
         primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> primaryStage.setFullScreen(true));
        // primaryStage.setFullScreen(true);
         login = new Login();
-        currentScene = login.start(primaryStage);
+        currentScene = new Scene(login.start(primaryStage),primaryStage.getWidth(),primaryStage.getHeight());
+        javafx.scene.image.Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
+        currentScene.setCursor(new ImageCursor(cursor));
+//        currentScene = login.start(primaryStage);
         primaryStage.setScene(currentScene);
         primaryStage.setOnCloseRequest(event -> System.exit(0));
         backgroundMusicPlay();
@@ -54,14 +62,21 @@ public class Main  extends Application {
 
     public static void setMainMenuFX(Account account) throws FileNotFoundException {
         Main.mainMenuFX = new MainMenuFX();
-        currentScene = mainMenuFX.start(primaryStage);
+        currentScene.setRoot(mainMenuFX.start(primaryStage,account));
         primaryStage.setScene(currentScene);
     }
     public static void setLoginMenu() throws FileNotFoundException {
         if(Main.login == null)
         Main.login = new Login();
-        currentScene = login.start(primaryStage);
+        currentScene.setRoot(login.start(primaryStage));
         primaryStage.setScene(currentScene);
+     //   primaryStage.setFullScreen(true);
+    }
+    public static void setBattleMenuFX(Account account) throws FileNotFoundException {
+        Main.battleInitFX = new BattleInitFX();
+        currentScene.setRoot(battleInitFX.start(primaryStage,account));
+        primaryStage.setScene(currentScene);
+        primaryStage.setFullScreen(true);
     }
     private void backgroundMusicPlay() {
         javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
