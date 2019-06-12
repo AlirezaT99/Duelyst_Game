@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class ImpactArea {
     private String targetTypeId = "";
-    private Cell objectedCell;
     private Match match;
     private ArrayList<Cell> impactArea = new ArrayList<>();
     // 0.(0,1)"SelectedCellImportance"
@@ -12,18 +11,20 @@ public class ImpactArea {
     // 2.(0,1)"ValidOnAWholeTeam"
     // 3.(0-2)"onWhichTeam"{friendly, hostile, both}
     // 4.(0-2)"targetSoldierType"{hero,minion,both}
-    // 5.(0-1)"combo"
-    // 6.(2,3)"SquareLength"
-    // 7.column(1,0)
-    // 8.row(0,1)
-    // 9.adjacentToObjectedCell(0-3){none, one , all,all+self}
-    // 10.random(0,1)
-    // 11.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid,ranged & hybrid}
-    // 12.closestSoldiers(0,1)
-    // 13.ranged(0-n)
+    // 5.(2,3)"SquareLength"
+    // 6.column(1,0)
+    // 7.row(0,1)
+    // 8.adjacentToObjectedCell(0-3){none, one , all,all+self}
+    // 9.random(0,1)
+    // 10.soldierAttackType(0-3){doesn't matter,melee, ranged, hybrid,ranged & hybrid}
+    // 11.closestSoldiers(0,1)
+    // 12.ranged(0-n)
 
+    public ImpactArea(String targetTypeId, Match match) {
+        this.targetTypeId = targetTypeId;
+        this.match = match;
+    }
 
-    // 11.previousAttacksMatters(0-2){none,constRise,difRise}
 
     //targetTypeId variables
 
@@ -59,26 +60,26 @@ public class ImpactArea {
         validOnHostileTeamOnly = targetTypeId.charAt(3) == '1';
         allSoldierType = targetTypeId.charAt(4) == '2';
         minionSoldierTypeOnly = targetTypeId.charAt(4) == '1';
-        isImpactAreaSquare = targetTypeId.charAt(6) != '0';
-        oneColumn = targetTypeId.charAt(7) == '1';
-        oneRow = targetTypeId.charAt(8) == '1';
-        oneSoldierBeside = targetTypeId.charAt(9) == '1';
-        allSoldiersBeside = targetTypeId.charAt(9) == '2' || targetTypeId.charAt(8) == '3';
-        plusItSelf = targetTypeId.charAt(9) == '3';
-        isRandom = targetTypeId.charAt(10) == '1';
-        hybridTypeMatters = targetTypeId.charAt(11) == '3' || targetTypeId.charAt(11) == '4';
-        rangedTypeMatters = targetTypeId.charAt(11) == '2' || targetTypeId.charAt(11) == '4';
-        meleeTypeMatters = targetTypeId.charAt(11) == '1';
-        oneRandomClosest = targetTypeId.charAt(12) == '1';
-        isRangedSetting = targetTypeId.charAt(13) != '0';
+        isImpactAreaSquare = targetTypeId.charAt(5) != '0';
+        oneColumn = targetTypeId.charAt(6) == '1';
+        oneRow = targetTypeId.charAt(7) == '1';
+        oneSoldierBeside = targetTypeId.charAt(8) == '1';
+        allSoldiersBeside = targetTypeId.charAt(8) == '2' || targetTypeId.charAt(8) == '3';
+        plusItSelf = targetTypeId.charAt(8) == '3';
+        isRandom = targetTypeId.charAt(9) == '1';
+        hybridTypeMatters = targetTypeId.charAt(10) == '3' || targetTypeId.charAt(10) == '4';
+        rangedTypeMatters = targetTypeId.charAt(10) == '2' || targetTypeId.charAt(10) == '4';
+        meleeTypeMatters = targetTypeId.charAt(10) == '1';
+        oneRandomClosest = targetTypeId.charAt(11) == '1';
+        isRangedSetting = targetTypeId.charAt(12) != '0';
         targetAttackTypeMatters = meleeTypeMatters || rangedTypeMatters || hybridTypeMatters;
-        squareLength = Integer.parseInt(targetTypeId.substring(6, 7));
-        distance = Integer.parseInt(targetTypeId.substring(13));
+        squareLength = Integer.parseInt(targetTypeId.substring(5, 6));
+        distance = Integer.parseInt(targetTypeId.substring(12));
     }
 
     //setImpact main methods
     void setImpactArea(Player friendlyPlayer, Cell targetCell, Cell castingCell) {
-        Player opponentPlayer = initRequirements(friendlyPlayer,targetCell);
+        Player opponentPlayer = initRequirements(friendlyPlayer);
         teamOrHeroSets(friendlyPlayer, opponentPlayer);
         oneTargetSets(friendlyPlayer, targetCell, opponentPlayer);
         specialSets(friendlyPlayer, targetCell, castingCell, opponentPlayer);
@@ -86,8 +87,7 @@ public class ImpactArea {
 
     }
 
-    private Player initRequirements(Player friendlyPlayer,Cell cell) {
-        objectedCell = cell;
+    private Player initRequirements(Player friendlyPlayer) {
         setAllTargetTypeIdVariables();
         match = friendlyPlayer.match;
         Player opponentPlayer = match.getOtherPlayer(friendlyPlayer);
@@ -335,7 +335,7 @@ public class ImpactArea {
             impactArea.add(soldiersCells.get(j));
     }
 
-    public ArrayList<Cell> getValidCells(Player friendlyPlayer) {
+    ArrayList<Cell> getValidCells(Player friendlyPlayer) {
         ArrayList<Cell> cellArrayList = new ArrayList<>();
         match = friendlyPlayer.match;
         for (int i = 1; i <= 5; i++) {
@@ -372,15 +372,11 @@ public class ImpactArea {
 
     //setters
 
-    public void setObjectedCell(Cell objectedCell) {
-        this.objectedCell = objectedCell;
-    }
-
     public void setTargetTypeId(String targetTypeId) {
         this.targetTypeId = targetTypeId;
     }
 
-    public boolean isAttackTypeMatters() {
+    boolean isAttackTypeMatters() {
         return targetAttackTypeMatters;
     }
 
