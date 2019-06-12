@@ -277,7 +277,7 @@ public class CollectionMenuProcess {
 
     private static int showDeck(String deckName, Account account) {
         if (account.getCollection().getDeckHashMap().get(deckName) != null)
-            CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show(false));
+            CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show());
         else
             return 8;
         return 0;

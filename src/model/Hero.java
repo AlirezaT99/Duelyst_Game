@@ -38,7 +38,7 @@ public class Hero extends MovableCard {
     public int attack(MovableCard opponent) {
         int returnValue = super.attack(opponent);
         if (onAttackImpact != null)
-            onAttackImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
+            onAttackImpact.getImpactAreaClass().setImpactArea(this.player, opponent.cardCell, this.cardCell);
         return returnValue;
     }
 
@@ -46,7 +46,7 @@ public class Hero extends MovableCard {
     public void counterAttack(MovableCard opponent) {
         super.counterAttack(opponent);
         if (onDefendImpact != null)
-            onDefendImpact.setImpactArea(this.player, opponent.cardCell, this.cardCell);
+            onDefendImpact.getImpactAreaClass().setImpactArea(this.player, opponent.cardCell, this.cardCell);
     }
 
     @Override
