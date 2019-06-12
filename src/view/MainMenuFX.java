@@ -1,11 +1,8 @@
 package view;
 
-import javafx.animation.PathTransition;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
@@ -16,26 +13,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.Account;
 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
-public class MainMenuFX  {
+public class MainMenuFX {
     private Account currentAccount;
+
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
         currentAccount = account;
         final javafx.scene.text.Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 30);
@@ -46,7 +36,7 @@ public class MainMenuFX  {
         Pane fakeRoot = new Pane();
         Random random = new Random();
         int backGroundNumber = random.nextInt(2) + 1;
-        Scene mainMenuScene = new Scene(fakeRoot,primaryStage.getWidth(), primaryStage.getHeight());
+        Scene mainMenuScene = new Scene(fakeRoot, primaryStage.getWidth(), primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + backGroundNumber + ".jpg", root);
         Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         mainMenuScene.setCursor(new ImageCursor(cursor));
@@ -54,26 +44,26 @@ public class MainMenuFX  {
         Text playText = new Text("PLAY");
         setText(font, playText);
         HBox play = new HBox();
-        play.getChildren().addAll(getArrowView(mainMenuScene, arrow),playText);
+        play.getChildren().addAll(getArrowView(mainMenuScene, arrow), playText);
         Text collectionText = new Text("COLLECTION");
         setText(font, collectionText);
         HBox collection = new HBox();
-        collection.getChildren().addAll(getArrowView(mainMenuScene, arrow),collectionText);
+        collection.getChildren().addAll(getArrowView(mainMenuScene, arrow), collectionText);
         Text shopText = new Text("SHOP");
         setText(font, shopText);
         HBox shop = new HBox();
-        shop.getChildren().addAll(getArrowView(mainMenuScene, arrow),shopText);
+        shop.getChildren().addAll(getArrowView(mainMenuScene, arrow), shopText);
         Text watchText = new Text("WATCH");
         setText(font, watchText);
         HBox watch = new HBox();
-        watch.getChildren().addAll(getArrowView(mainMenuScene, arrow),watchText);
+        watch.getChildren().addAll(getArrowView(mainMenuScene, arrow), watchText);
         Text saveText = new Text("SAVE");
         setText(font, saveText);
         HBox save = new HBox();
-        save.getChildren().addAll(getArrowView(mainMenuScene, arrow),saveText);
+        save.getChildren().addAll(getArrowView(mainMenuScene, arrow), saveText);
         VBox textQueries = new VBox();
         textQueries.setSpacing(mainMenuScene.getHeight() / 100);
-        textQueries.setPadding(new Insets(mainMenuScene.getHeight() / 3, mainMenuScene.getWidth()*2/3, mainMenuScene.getWidth() / 5, mainMenuScene.getWidth() / 6));
+        textQueries.setPadding(new Insets(mainMenuScene.getHeight() / 3, mainMenuScene.getWidth() * 2 / 3, mainMenuScene.getWidth() / 5, mainMenuScene.getWidth() / 6));
         textQueries.getChildren().addAll(play, collection, shop, watch, save);
         root.getChildren().addAll(textQueries);
         Image brandImage = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/brand_duelyst.png"));
@@ -96,11 +86,11 @@ public class MainMenuFX  {
 
         root.getChildren().add(addCard);
         root.getChildren().addAll(brandView);
-        textGlowEffect(play);
-        textGlowEffect(collection);
-        textGlowEffect(shop);
-        textGlowEffect(watch);
-        textGlowEffect(save);
+        textGlowEffect(play,mainMenuScene,root);
+        textGlowEffect(collection,mainMenuScene,root);
+        textGlowEffect(shop,mainMenuScene,root);
+        textGlowEffect(watch,mainMenuScene,root);
+        textGlowEffect(save,mainMenuScene,root);
         return root;
     }
 
@@ -112,11 +102,11 @@ public class MainMenuFX  {
         firstLine.getChildren().addAll(addCardView);
         HBox secondLine = new HBox();
         secondLine.getChildren().addAll(addCardText);
-        addCardView.setFitWidth(mainMenuScene.getWidth()/20);
+        addCardView.setFitWidth(mainMenuScene.getWidth() / 20);
         addCard.setPrefWidth(addCardView.getFitWidth());
         addCardView.setPreserveRatio(true);
-        addCard.relocate(mainMenuScene.getWidth()*9/10,mainMenuScene.getHeight()*5/6);
-        addCard.getChildren().addAll(firstLine,secondLine);
+        addCard.relocate(mainMenuScene.getWidth() * 9 / 10, mainMenuScene.getHeight() * 5 / 6);
+        addCard.getChildren().addAll(firstLine, secondLine);
         firstLine.setAlignment(Pos.CENTER);
         secondLine.setAlignment(Pos.CENTER);
         addCardView.setOpacity(0.7);
@@ -139,7 +129,7 @@ public class MainMenuFX  {
     }
 
     private void friendsSetting(VBox friends, ImageView friendsView, Text friendsText, Scene scene) {
-        friendsView.setFitWidth(scene.getWidth()/10);
+        friendsView.setFitWidth(scene.getWidth() / 10);
         friendsView.setPreserveRatio(true);
         friendsView.setEffect(new Glow(0));
         friendsView.setOpacity(0.9);
@@ -161,8 +151,8 @@ public class MainMenuFX  {
 
     }
 
-    private void backToLoginViewSetting(Pane root, Scene mainMenuScene, ImageView backToLoginView)  {
-        backToLoginView.setFitWidth(mainMenuScene.getWidth()/15);
+    private void backToLoginViewSetting(Pane root, Scene mainMenuScene, ImageView backToLoginView) {
+        backToLoginView.setFitWidth(mainMenuScene.getWidth() / 15);
         backToLoginView.setPreserveRatio(true);
         root.getChildren().addAll(backToLoginView);
         backToLoginView.setOpacity(0.5);
@@ -179,19 +169,19 @@ public class MainMenuFX  {
 
     private ImageView getArrowView(Scene mainMenuScene, Image arrow) {
         ImageView shopArrowView = new ImageView(arrow);
-        shopArrowView.setFitWidth(mainMenuScene.getWidth()/50);
+        shopArrowView.setFitWidth(mainMenuScene.getWidth() / 50);
         shopArrowView.setPreserveRatio(true);
         shopArrowView.setVisible(false);
         return shopArrowView;
     }
 
-    private void textGlowEffect(HBox playText) {
+    private void textGlowEffect(HBox playText, Scene scene, Pane root) {
         playText.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 playText.getChildren().get(0).setVisible(true);
                 playText.setEffect(new Glow(1));
-                audioPlay();
+                mouseHoverAudioPlay();
             }
         });
         playText.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -204,10 +194,15 @@ public class MainMenuFX  {
         playText.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                switch (((Text)playText.getChildren().get(1)).getText()){
+                new GraphicalCommonUsages().mouseClickAudioPlay();
+                switch (((Text) playText.getChildren().get(1)).getText()) {
                     case "PLAY":
                         try {
-                            Main.setBattleMenuFX(currentAccount);
+                            if (currentAccount.getCollection().getSelectedDeck() == null) {
+                                GraphicalCommonUsages.okPopUp("selected deck is invalid", scene, root);
+                            } else {
+                                Main.setBattleMenuFX(currentAccount);
+                            }
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -222,10 +217,12 @@ public class MainMenuFX  {
         playText.setFill(Color.WHITE);
     }
 
-    private void audioPlay(){
+    private void mouseHoverAudioPlay() {
         javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/mainMenu/music/sfx_ui_booster_huming_tail.m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play(1);
     }
+
+
 
 }

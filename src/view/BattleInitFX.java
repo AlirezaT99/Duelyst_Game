@@ -30,9 +30,9 @@ public class BattleInitFX{
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 40);
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root);
 
-        VBox singlePlayer = singlePlayerSetUp(battleInitScene, font);
+        VBox singlePlayer = singlePlayerSetUp(battleInitScene, font,account);
 
-        VBox multiPlayer = multiPlayerSetUp(battleInitScene, font);
+        VBox multiPlayer = multiPlayerSetUp(battleInitScene, font,account);
 
         HBox  battleInitPrimary = new HBox(singlePlayer,multiPlayer);
         battleInitPrimary.setSpacing(battleInitScene.getWidth()/10);
@@ -52,7 +52,7 @@ public class BattleInitFX{
         return root;
     }
 
-    private VBox multiPlayerSetUp(Scene battleInitScene, Font font) throws FileNotFoundException {
+    private VBox multiPlayerSetUp(Scene battleInitScene, Font font, Account account) throws FileNotFoundException {
         Image multiPlayerImage = new Image(new FileInputStream("src/view/sources/battleInit/pictures/multi.jpg"));
         ImageView multiPlayerView = new ImageView(multiPlayerImage);
         multiPlayerView.setFitWidth(battleInitScene.getWidth()/4);
@@ -68,12 +68,12 @@ public class BattleInitFX{
         multiPlayer.setSpacing(battleInitScene.getHeight()/20);
         multiPlayer.setAlignment(Pos.CENTER);
 
-        mouseMovementHandling(view, multiPlayerText, multiPlayer);
+        mouseMovementHandling(view, multiPlayerText, multiPlayer,account);
 
         return multiPlayer;
     }
 
-    private void mouseMovementHandling(StackPane view, Text multiPlayerText, VBox multiPlayer) {
+    private void mouseMovementHandling(StackPane view, Text multiPlayerText, VBox multiPlayer, Account account) {
         multiPlayer.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -101,9 +101,24 @@ public class BattleInitFX{
                 multiPlayerText.setEffect(new Glow(0.5));
             }
         });
+        multiPlayer.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                new GraphicalCommonUsages().mouseClickAudioPlay();
+                switch (multiPlayerText.getText()){
+                    case "SINGLE PLAYER":
+                        try {
+                            Main.setSinglePlayerMenuFX(account);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            }
+        });
     }
 
-    private VBox singlePlayerSetUp(Scene battleInitScene, Font font) throws FileNotFoundException {
+    private VBox singlePlayerSetUp(Scene battleInitScene, Font font, Account account) throws FileNotFoundException {
         Image singlePlayerImage = new Image(new FileInputStream("src/view/sources/battleInit/pictures/single.jpg"));
         ImageView singlePlayerView = new ImageView(singlePlayerImage);
         singlePlayerView.setFitWidth(battleInitScene.getWidth()/4);
@@ -117,7 +132,7 @@ public class BattleInitFX{
         VBox singlePlayer = new VBox(view,singlePlayerText,new Text());
         singlePlayer.setSpacing(battleInitScene.getHeight()/20);
         singlePlayer.setAlignment(Pos.CENTER);
-        mouseMovementHandling(view,singlePlayerText,singlePlayer);
+        mouseMovementHandling(view,singlePlayerText,singlePlayer, account);
         return singlePlayer;
     }
 
