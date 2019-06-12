@@ -56,6 +56,7 @@ public class ShopMenuFX {
         drawShopLabels(root, averta, scene);
         drawLeftBox(trump_med, root, scene);
         drawBackButton(root, scene);
+        drawDrake(root, scene, trump_reg);
 
         return root;
     }
@@ -208,14 +209,14 @@ public class ShopMenuFX {
         underLine.setFill(Color.WHITE);
         underLine.relocate(scene.getWidth() / 16, scene.getHeight() / 16 + shop.getLayoutY() + 10);
 
-        Rectangle underLine2 = new Rectangle(200, 10);
+        Rectangle underLine2 = new Rectangle(300, 10);
         underLine2.setFill(Color.WHITE);
         underLine2.relocate(scene.getWidth(), scene.getHeight() / 16 + shop.getLayoutY() + 20);
 
         root.getChildren().addAll(shop, underLine, underLine2);
 
         //Timeline
-        KeyValue xValue = new KeyValue(underLine.widthProperty(), scene.getWidth() * 5 / 8);
+        KeyValue xValue = new KeyValue(underLine.widthProperty(), scene.getWidth() * 4 / 8);
         KeyValue yValue = new KeyValue(underLine.heightProperty(), 3);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), xValue, yValue);
         Timeline timeline = new Timeline(keyFrame);
@@ -223,7 +224,7 @@ public class ShopMenuFX {
         timeline.getKeyFrames().addAll(keyFrame);
         timeline.play();
 
-        KeyValue xValue2 = new KeyValue(underLine2.layoutXProperty(), scene.getWidth() * 7.2 / 8);
+        KeyValue xValue2 = new KeyValue(underLine2.layoutXProperty(), scene.getWidth() * 6.2 / 8);
         KeyValue yValue2 = new KeyValue(underLine2.heightProperty(), 3);
         KeyFrame keyFrame2 = new KeyFrame(Duration.millis(1001), xValue2, yValue2); // to avoid duplicate annoying lines -_-
         Timeline timeline2 = new Timeline(keyFrame2);
@@ -244,9 +245,9 @@ public class ShopMenuFX {
         Image collectionBackgroundGlow = new Image(new FileInputStream("src/view/sources/shopMenu/backCollectionGlow.png"));
         ImageView shopButton = new ImageView(shopBackgroundGlow);
         ImageView collectionButton = new ImageView(collectionBackground);
-        shopPane.setLayoutX(scene.getWidth() * 28 / 40);
+        shopPane.setLayoutX(scene.getWidth() * 23 / 40);
         shopPane.setLayoutY(scene.getHeight() / 16 + shop.getLayoutY() * 0.7);
-        collectionPane.setLayoutX(scene.getWidth() * 30.5 / 40);
+        collectionPane.setLayoutX(scene.getWidth() * 25.5 / 40);
         collectionPane.setLayoutY(scene.getHeight() / 16 + shop.getLayoutY() * 0.7);
         shopPane.getChildren().addAll(shopButton, shopLabel);
         collectionPane.getChildren().addAll(collectionButton, collectionLabel);
@@ -261,6 +262,16 @@ public class ShopMenuFX {
 
         manageShopAndCollectionBars(shopPane, collectionPane);
         root.getChildren().addAll(page, shopPane, collectionPane);
+    }
+
+    private void drawDrake(Pane root, Scene scene, Font font) throws FileNotFoundException {
+        ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/drake_verySmall.png"))); // for now
+        imageView.relocate(scene.getWidth() * 0.92, scene.getHeight() / 64);
+        Label money = new Label(account.getMoney() + "");
+        money.relocate(scene.getWidth() * 0.88, scene.getHeight() / 64 + 20);
+        money.setFont(font);
+        money.setTextFill(Color.WHITE);
+        root.getChildren().addAll(imageView, money);
     }
 
     private void pageSetText() {
