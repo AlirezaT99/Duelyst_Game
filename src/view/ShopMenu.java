@@ -4,6 +4,7 @@ import model.Account;
 import model.Shop;
 import presenter.ShopMenuProcess;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -42,7 +43,7 @@ public class ShopMenu {
         return scanner.nextLine();
     }
 
-    private static void handleErrors(int messageID) {
+    static void handleErrors(int messageID) throws FileNotFoundException {
         switch (messageID) {
             case 1:
                 showMessage("Card/Item not found in shop.");
@@ -67,19 +68,20 @@ public class ShopMenu {
         }
     }
 
-    public static int help() {
-        showMessage("exit");
-        showMessage("show collection");
-        showMessage("search [item name|card name]");
-        showMessage("search collection [item name|card name]");
-        showMessage("buy [card name|item name]");
-        showMessage("sell [card id|item id]");
-        showMessage("show");
-        showMessage("help");
+    public static int help() throws FileNotFoundException {
+//        showMessage("exit");
+//        showMessage("show collection");
+//        showMessage("search [item name|card name]");
+//        showMessage("search collection [item name|card name]");
+//        showMessage("buy [card name|item name]");
+//        showMessage("sell [card id|item id]");
+//        showMessage("show");
+//        showMessage("help");
         return 0;
     }
 
-    public static void showMessage(String message) {
+    public static void showMessage(String message) throws FileNotFoundException {
+        GraphicalCommonUsages.okPopUp(message, Main.getCurrentScene(), ShopMenuFX.getRoot());
         System.out.println(message);
     }
 

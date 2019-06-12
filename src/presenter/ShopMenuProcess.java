@@ -5,6 +5,7 @@ import view.CollectionMenu;
 import view.MainMenu;
 import view.ShopMenu;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -12,11 +13,12 @@ import java.util.regex.Pattern;
 public class ShopMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     public static String[] commandParts;
-    private Account currentAccount;
-    private ShopMenu shopMenu;
+    private static Account currentAccount;
+    private static ShopMenu shopMenu;
     private MainMenu mainMenu;
 
-    static { commandPatterns.add(Pattern.compile("exit"));
+    static {
+        commandPatterns.add(Pattern.compile("exit"));
         commandPatterns.add(Pattern.compile("show collection"));
         commandPatterns.add(Pattern.compile("search [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]* [a-zA-Z0-9._]*"));
         commandPatterns.add(Pattern.compile("search collection [a-zA-Z0-9._]+[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*[ ]*[a-zA-Z0-9._]*"));
@@ -31,28 +33,18 @@ public class ShopMenuProcess {
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            },
+            this::exit,
+            ShopMenuProcess::showCollection,
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return showCollection();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    if(commandParts.length == 5)
-                        return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]+" "+commandParts[4]);
-                    if(commandParts.length == 4)
-                        return search(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
-                    if(commandParts.length == 3)
-                        return search(commandParts[1]+" "+commandParts[2]);
-                    if(commandParts.length == 2)
+                    if (commandParts.length == 5)
+                        return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3] + " " + commandParts[4]);
+                    if (commandParts.length == 4)
+                        return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3]);
+                    if (commandParts.length == 3)
+                        return search(commandParts[1] + " " + commandParts[2]);
+                    if (commandParts.length == 2)
                         return search(commandParts[1]);
                     return 0;
                 }
@@ -60,49 +52,39 @@ public class ShopMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    if(commandParts.length == 6)
-                        return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4]+" "+commandParts[5],shopMenu,currentAccount);
-                    if(commandParts.length == 5)
-                        return searchCollection(commandParts[2]+" "+commandParts[3]+" "+commandParts[4],shopMenu,currentAccount);
-                    if(commandParts.length == 4)
-                        return searchCollection(commandParts[2]+" "+commandParts[3],shopMenu,currentAccount);
-                    if(commandParts.length == 3)
-                        return searchCollection(commandParts[2],shopMenu,currentAccount);
+                    if (commandParts.length == 6)
+                        return searchCollection(commandParts[2] + " " + commandParts[3] + " " + commandParts[4] + " " + commandParts[5], currentAccount);
+                    if (commandParts.length == 5)
+                        return searchCollection(commandParts[2] + " " + commandParts[3] + " " + commandParts[4], currentAccount);
+                    if (commandParts.length == 4)
+                        return searchCollection(commandParts[2] + " " + commandParts[3], currentAccount);
+                    if (commandParts.length == 3)
+                        return searchCollection(commandParts[2], currentAccount);
                     return 0;
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
-                    if(commandParts.length == 5)
-                        return buy(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]+ " " + commandParts[4]);
-                    if(commandParts.length == 4)
-                        return buy(commandParts[1]+" "+commandParts[2]+" "+commandParts[3]);
-                    if(commandParts.length == 3)
-                        return buy(commandParts[1]+" "+commandParts[2]);
-                    if(commandParts.length == 2)
+                public int doIt() throws FileNotFoundException {
+                    if (commandParts.length == 5)
+                        return buy(commandParts[1] + " " + commandParts[2] + " " + commandParts[3] + " " + commandParts[4]);
+                    if (commandParts.length == 4)
+                        return buy(commandParts[1] + " " + commandParts[2] + " " + commandParts[3]);
+                    if (commandParts.length == 3)
+                        return buy(commandParts[1] + " " + commandParts[2]);
+                    if (commandParts.length == 2)
                         return buy(commandParts[1]);
                     return 0;
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws FileNotFoundException {
                     return sell(commandParts[1]);
                 }
             },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return show();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return ShopMenu.help();
-                }
-            }
+            this::show,
+            ShopMenu::help
     };
 
     public static int findPatternIndex(String command, String[] commandParts) {
@@ -129,29 +111,29 @@ public class ShopMenuProcess {
         return 0;
     }
 
-    private int showCollection() {
+    public static int showCollection() {
         CollectionMenu.showMessage(currentAccount.getCollection().show(true));
         return 0;
     }
 
-    private int search(String name) {
-        String s = shopMenu.getShop().search(name);
-        if (s.equals("-1"))
+    public static int search(String name) {
+        String str = Shop.search(name);
+        if (str.equals("-1"))
             return 1;
-        int i = Integer.parseInt(s)+1;
-        ShopMenu.showMessage(i+"");
+        int i = Integer.parseInt(str) + 1;
+        System.out.println(i + ""); // TODO gotta change this stuff here and now -_-
         return 0;
     }
 
-    private static int searchCollection(String name, ShopMenu shopMenu, Account currentAccount) {
-        if (shopMenu.getShop().searchCollection(name, currentAccount).equals("Item/Card not found in collection"))
+    public static int searchCollection(String name, Account currentAccount) {
+        if (Shop.searchCollection(name, currentAccount).equals("Item/Card not found in collection"))
             return 2;
-        return CollectionMenuProcess.search(name,currentAccount);
+        return CollectionMenuProcess.search(name, currentAccount);
 //        ShopMenu.showMessage(shopMenu.getShop().searchCollection(name, currentAccount));
 //        return 0;
     }
 
-    private int buy(String name) {
+    private int buy(String name) throws FileNotFoundException {
         if (shopMenu.getShop().buy(currentAccount, name) == 0)
             ShopMenu.showMessage("purchase was successful.");
         else
@@ -159,7 +141,7 @@ public class ShopMenuProcess {
         return 0;
     }
 
-    private int sell(String id) {
+    private int sell(String id) throws FileNotFoundException {
         if (shopMenu.getShop().sell(currentAccount, id) == 0)
             ShopMenu.showMessage("trade was successful.");
         else
@@ -167,29 +149,29 @@ public class ShopMenuProcess {
         return 0;
     }
 
-    private int show() {
-        ShopMenu.showMessage("Heroes :");
-        for (int i = 0; i < Shop.getShopHeroes().size(); i++) {
-            Hero hero = Shop.getShopHeroes().get(i);
-            ShopMenu.showMessage("          "+(i + 1) + " : " + hero.toString(false) +" Buy Cost : "+
-                    hero.getCost());
-        }
-        ShopMenu.showMessage("Items :");
-        for (int i = 0; i < Shop.getShopItems().size(); i++) {
-            ShopMenu.showMessage("          "+(i + 1) + " : " + Shop.getShopItems().get(i).toString(false) + " Buy Cost : " +
-                    Shop.getShopItems().get(i).getCost());
-        }
-        ShopMenu.showMessage("Cards : ");
-        ShopMenu.showMessage("  Spells : ");
-        for (int i = 0; i < Shop.getShopSpells().size(); i++) {
-            Spell spell = Shop.getShopSpells().get(i);
-            ShopMenu.showMessage("            "+(i + 1) + " : " + spell.toString(false) + " Buy Cost : " + spell.getCost());
-        }
-        ShopMenu.showMessage("  Minions : ");
-        for (int i = 0; i < Shop.getShopMinions().size(); i++) {
-            Minion minion = Shop.getShopMinions().get(i);
-            ShopMenu.showMessage("            "+ (i + 1) + " : " + minion.toString(false) + " Buy Cost : " + minion.getCost());
-        }
+    private int show() throws FileNotFoundException {
+//        ShopMenu.showMessage("Heroes :");
+//        for (int i = 0; i < Shop.getShopHeroes().size(); i++) {
+//            Hero hero = Shop.getShopHeroes().get(i);
+//            ShopMenu.showMessage("          " + (i + 1) + " : " + hero.toString(false) + " Buy Cost : " +
+//                    hero.getCost());
+//        }
+//        ShopMenu.showMessage("Items :");
+//        for (int i = 0; i < Shop.getShopItems().size(); i++) {
+//            ShopMenu.showMessage("          " + (i + 1) + " : " + Shop.getShopItems().get(i).toString(false) + " Buy Cost : " +
+//                    Shop.getShopItems().get(i).getCost());
+//        }
+//        ShopMenu.showMessage("Cards : ");
+//        ShopMenu.showMessage("  Spells : ");
+//        for (int i = 0; i < Shop.getShopSpells().size(); i++) {
+//            Spell spell = Shop.getShopSpells().get(i);
+//            ShopMenu.showMessage("            " + (i + 1) + " : " + spell.toString(false) + " Buy Cost : " + spell.getCost());
+//        }
+//        ShopMenu.showMessage("  Minions : ");
+//        for (int i = 0; i < Shop.getShopMinions().size(); i++) {
+//            Minion minion = Shop.getShopMinions().get(i);
+//            ShopMenu.showMessage("            " + (i + 1) + " : " + minion.toString(false) + " Buy Cost : " + minion.getCost());
+//        }
         return 0;
     }
 

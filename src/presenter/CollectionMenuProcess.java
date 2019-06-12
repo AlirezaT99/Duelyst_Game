@@ -183,14 +183,14 @@ public class CollectionMenuProcess {
             if (account.getCollection().findCardByCollectionID(idStr) instanceof Hero) {
                 Hero hero = ((Hero) account.getCollection().findCardByCollectionID(idStr));
                 Hero heroCopy = hero.copy();
-                heroCopy.setCardID(account.getUserName()+"_"+nameCreator(heroCopy.getName())+"_1");
+                heroCopy.setCardID(account.getUserName() + "_" + nameCreator(heroCopy.getName()) + "_1");
                 deck.setHero(hero.copy());
                 return 0;
             }
         if (account.getCollection().getItemsHashMap().containsKey(idStr)
                 && deck.getItemsHashMap().size() < 1) {
             UsableItem item = account.getCollection().getItemsHashMap().get(idStr).copy();
-            item.setItemID(account.getUserName()+"_"+nameCreator(item.getName())+"_1");
+            item.setItemID(account.getUserName() + "_" + nameCreator(item.getName()) + "_1");
             deck.getItemsHashMap()
                     .put(idStr, item);
             deck.getItems().add(item);
@@ -214,7 +214,7 @@ public class CollectionMenuProcess {
 
     private int removeFromDeck(String idStr, String deckName) {
         Deck deck = account.getCollection().getDeckHashMap().get(deckName);
-        if(deck == null)
+        if (deck == null)
             return 9;
         if (deck.findCardByID(idStr) == null && !deck.getItems().isEmpty()
                 && !deck.getItems().get(0).getCollectionID().equals(idStr))
@@ -227,8 +227,8 @@ public class CollectionMenuProcess {
         }
         if (account.getCollection().findCardByCollectionID(idStr) instanceof Spell
                 && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getCollectionID()) != null) {
-            for( int i = 0 ; i < deck.getSpells().size(); i++){
-                if(deck.getSpells().get(i).getCollectionID().equals(idStr)){
+            for (int i = 0; i < deck.getSpells().size(); i++) {
+                if (deck.getSpells().get(i).getCollectionID().equals(idStr)) {
                     deck.getSpells().remove(deck.getSpells().get(i));
                     break;
                 }
@@ -237,8 +237,8 @@ public class CollectionMenuProcess {
         }
         if (account.getCollection().findCardByCollectionID(idStr) instanceof Minion
                 && deck.findCardByID(account.getCollection().findCardByCollectionID(idStr).getCollectionID()) != null) {
-            for( int i = 0 ; i < deck.getMinions().size(); i++){
-                if(deck.getMinions().get(i).getCollectionID().equals(idStr)){
+            for (int i = 0; i < deck.getMinions().size(); i++) {
+                if (deck.getMinions().get(i).getCollectionID().equals(idStr)) {
                     deck.getMinions().remove(deck.getMinions().get(i));
                     break;
                 }
@@ -246,7 +246,7 @@ public class CollectionMenuProcess {
             return 0;
         }
 
-        if((deck.getItems().size()>0) && deck.getItems().get(0).getCollectionID().equals(idStr))
+        if ((deck.getItems().size() > 0) && deck.getItems().get(0).getCollectionID().equals(idStr))
             account.getCollection().getDeckHashMap().get(deckName).getItems().remove(0);
         account.getCollection().getDeckHashMap().get(deckName).getItemsHashMap().remove(idStr);
         return 0;
@@ -305,9 +305,10 @@ public class CollectionMenuProcess {
     }
 
     public static String createCardID(String playerName, Deck deck, Card card) {
-        if (card instanceof Hero){
+        if (card instanceof Hero) {
             System.out.println();
-            return playerName + "_" + nameCreator(card.getName()) + "_1";}
+            return playerName + "_" + nameCreator(card.getName()) + "_1";
+        }
         if (card instanceof Spell) {
             int idx = 1;
             for (int i = 0; i < deck.getSpells().size(); i++)

@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import presenter.ShopMenuProcess;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,8 +37,9 @@ public class ShopMenuFX {
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
     private static int pageNumber = 0;
     private Account account;
+    private static Pane root = new Pane();
 
-    public ShopMenuFX(Account account) {
+    ShopMenuFX(Account account) {
         this.account = account;
     }
 
@@ -47,7 +49,6 @@ public class ShopMenuFX {
         final Font averta = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/averta-light-webfont.ttf"), 40);
 
         Scene scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
-        Pane root = new Pane();
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
         setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, primaryStage);
@@ -66,7 +67,7 @@ public class ShopMenuFX {
         for (int i = 0; i < 10; i++) {
             stackPanes[i] = new StackPane();
             stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
-                    , i / 5 > 0 ? (scene.getHeight() * 9 / 16) : (scene.getHeight() * 3 / 16));
+                    , i / 5.0 > 0 ? (scene.getHeight() * 9 / 16) : (scene.getHeight() * 3 / 16));
             ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme1.png"))); // for now
             //, 157, 279, false, false
             Label label = new Label("Label " + i);
@@ -75,7 +76,7 @@ public class ShopMenuFX {
             cardLabels.put(i, label);
             stackPanes[i].getChildren().addAll(imageView, label);
             StackPane.setAlignment(label, Pos.TOP_CENTER);
-            stackPanes[i].setMaxSize(157,279);
+            stackPanes[i].setMaxSize(157, 279);
         }
         root.getChildren().addAll(stackPanes);
     }
@@ -122,6 +123,22 @@ public class ShopMenuFX {
         TextField searchTextField = new TextField();
         searchTextField.setPromptText("Enter card/item ID");
         ImageView searchButton = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/searchButton.png")));
+        searchButton.setOnMouseClicked(event -> {
+            String command = searchTextField.getText();
+            if (isInShop) {
+                try {
+                    ShopMenu.handleErrors(ShopMenuProcess.search(command));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else if (isInCollection) {
+                try {
+                    ShopMenu.handleErrors(ShopMenuProcess.searchCollection(command, account));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         searchButton.setFitHeight(40);
         searchButton.setFitWidth(40);
@@ -251,8 +268,6 @@ public class ShopMenuFX {
         collectionPane.setLayoutY(scene.getHeight() / 16 + shop.getLayoutY() * 0.7);
         shopPane.getChildren().addAll(shopButton, shopLabel);
         collectionPane.getChildren().addAll(collectionButton, collectionLabel);
-        addOnClickHandler(shopLabel, shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
-        addOnClickHandler(collectionLabel, collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
 
         // CHECKUP
 //      <!-- PageDefinedHere -->
@@ -260,7 +275,7 @@ public class ShopMenuFX {
         page.setFont(font);
         page.setFill(Color.WHITE);
 
-        manageShopAndCollectionBars(shopPane, collectionPane);
+        manageShopAndCollectionBars(shopPane, collectionPane, shopButton, collectionButton, shopBackground, collectionBackground, shopBackgroundGlow, collectionBackgroundGlow);
         root.getChildren().addAll(page, shopPane, collectionPane);
     }
 
@@ -316,7 +331,7 @@ public class ShopMenuFX {
     private void updateLabels() {
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
-                cardLabels.get(i).setText("\n"+cardsToShow.get(i + (10 * (pageNumber - 1))));
+                cardLabels.get(i).setText("\n" + cardsToShow.get(i + (10 * (pageNumber - 1))));
             else
                 cardLabels.get(i).setText("NULL");
             /*label->stackPane[i].setVisible(false)*/
@@ -324,14 +339,18 @@ public class ShopMenuFX {
         pageSetText();
     }
 
-    private void manageShopAndCollectionBars(StackPane shopPane, StackPane collectionPane) {
+    private void manageShopAndCollectionBars(StackPane shopPane, StackPane collectionPane, ImageView shopButton
+            , ImageView collectionButton, Image shopBackground, Image collectionBackground, Image shopBackgroundGlow
+            , Image collectionBackgroundGlow) {
         collectionPane.setOnMouseClicked(event -> {
             if (!isInCollection)
                 shopAndCollectionBarManager(false);
+            shopAndCollectionGlowHandler(collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
         });
         shopPane.setOnMouseClicked(event -> {
             if (!isInShop)
                 shopAndCollectionBarManager(true);
+            shopAndCollectionGlowHandler(shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
         });
     }
 
@@ -364,10 +383,12 @@ public class ShopMenuFX {
         });
     }
 
-    private static void addOnClickHandler(Label firstLabel, ImageView changeableArea, Image secondImage, ImageView otherChangeableArea, Image otherFirstImage) {
-        firstLabel.setOnMouseClicked(event -> changeableArea.setImage(secondImage));
-        changeableArea.setOnMouseClicked(event -> changeableArea.setImage(secondImage));
+    private static void shopAndCollectionGlowHandler(ImageView changeableArea, Image secondImage, ImageView otherChangeableArea, Image otherFirstImage) {
+        changeableArea.setImage(secondImage);
         otherChangeableArea.setImage(otherFirstImage);
-        // TODO clicking one, doesn't remove the glow from the other -_-
+    }
+
+    static Pane getRoot() {
+        return root;
     }
 }

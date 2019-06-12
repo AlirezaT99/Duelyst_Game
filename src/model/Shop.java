@@ -19,40 +19,40 @@ public class Shop {
 
     // search
 
-    public String search(String name) {
+    public static String search(String name) {
         int itemIndex = findItemIndex(name);
         if (itemIndex != -1)
-            return itemIndex+"";
+            return itemIndex + "";
         int cardIndex = findCardIndex(name);
         if (cardIndex != -1)
-            return cardIndex+"";
+            return cardIndex + "";
         return "-1";
     }
 
-    public String searchCollection(String name, Account buyingAccount) {
-        if(buyingAccount.getCollection().findItemByName(name)==null &&
-                buyingAccount.getCollection().findCardByName(name)==null){
-            return "Item/Card not found in collection";}
-        else
-        {
+    public static String searchCollection(String name, Account buyingAccount) {
+        if (buyingAccount.getCollection().findItemByName(name) == null &&
+                buyingAccount.getCollection().findCardByName(name) == null) {
+            return "Item/Card not found in collection";
+        } else {
             String result = "";
             Collection collection = buyingAccount.getCollection();
-            if(collection.findItemByName(name)!=null){
-                for(int i = 0; i< collection.getItems().size(); i++)
-                    if( collection.getItems().get(i).getName().equals(name))
-                        result+=(collection.getItems().get(i).getCollectionID() + "\n");
-                return result;}
-            else{
-                for(int i = 0; i< collection.getMinions().size(); i++)
-                    if( collection.getMinions().get(i).getName().equals(name))
-                        result+=(collection.getMinions().get(i).getCollectionID() + "\n");
-                for(int i = 0; i< collection.getSpells().size(); i++)
-                    if( collection.getSpells().get(i).getName().equals(name))
-                        result+=(collection.getSpells().get(i).getCollectionID() + "\n");
-                for(int i = 0; i< collection.getHeroes().size(); i++)
-                    if( collection.getHeroes().get(i).getName().equals(name))
-                        result+=(collection.getHeroes().get(i).getCollectionID() + "\n");
-                return result;}
+            if (collection.findItemByName(name) != null) {
+                for (int i = 0; i < collection.getItems().size(); i++)
+                    if (collection.getItems().get(i).getName().equals(name))
+                        result += (collection.getItems().get(i).getCollectionID() + "\n");
+                return result;
+            } else {
+                for (int i = 0; i < collection.getMinions().size(); i++)
+                    if (collection.getMinions().get(i).getName().equals(name))
+                        result += (collection.getMinions().get(i).getCollectionID() + "\n");
+                for (int i = 0; i < collection.getSpells().size(); i++)
+                    if (collection.getSpells().get(i).getName().equals(name))
+                        result += (collection.getSpells().get(i).getCollectionID() + "\n");
+                for (int i = 0; i < collection.getHeroes().size(); i++)
+                    if (collection.getHeroes().get(i).getName().equals(name))
+                        result += (collection.getHeroes().get(i).getCollectionID() + "\n");
+                return result;
+            }
         }
     }
 
@@ -73,7 +73,7 @@ public class Shop {
             cost = item.getCost();
         else
             cost = card.getCost();
-        account.buy(cost, item ==null?null:item.copy(), card);
+        account.buy(cost, item == null ? null : item.copy(), card);
         return 0;
     }
 
@@ -122,12 +122,12 @@ public class Shop {
         return null;
     }
 
-    private static  int findItemIndex(String itemName){
-            UsableItem item = findItemByName(itemName);
-            if(item != null)
-                return shopItems.indexOf(item);
-            return -1;
-        }
+    private static int findItemIndex(String itemName) {
+        UsableItem item = findItemByName(itemName);
+        if (item != null)
+            return shopItems.indexOf(item);
+        return -1;
+    }
 
     private static Card findCardByName(String cardName) {
         for (Card card : shopHeroes) {
@@ -161,11 +161,11 @@ public class Shop {
                 }
             }
         }
-        if(spell != null)
+        if (spell != null)
             return shopSpells.indexOf(spell);
-        if(hero != null)
+        if (hero != null)
             return shopHeroes.indexOf(hero);
-        if(minion != null)
+        if (minion != null)
             return shopMinions.indexOf(minion);
         return -1;
     }
@@ -193,16 +193,19 @@ public class Shop {
     //getters
 
     //setters
-    public static void addToHeroes(Hero hero){
+    public static void addToHeroes(Hero hero) {
         shopHeroes.add(hero);
     }
-    public static void addToMinions(Minion minion){
+
+    public static void addToMinions(Minion minion) {
         shopMinions.add(minion);
     }
-    public static void addToSpells(Spell spell){
+
+    public static void addToSpells(Spell spell) {
         shopSpells.add(spell);
     }
-    public static void addToItems(UsableItem usableItem){
+
+    public static void addToItems(UsableItem usableItem) {
         shopItems.add(usableItem);
     }
     //setters
