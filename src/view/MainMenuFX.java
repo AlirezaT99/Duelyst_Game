@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -165,56 +166,48 @@ public class MainMenuFX {
     }
 
     private void textGlowEffect(HBox playText, Scene scene, Pane root) {
-        playText.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                playText.getChildren().get(0).setVisible(true);
-                playText.setEffect(new Glow(1));
-                mouseHoverAudioPlay();
-            }
+        playText.setOnMouseEntered(event -> {
+            playText.getChildren().get(0).setVisible(true);
+            playText.setEffect(new Glow(1));
+            mouseHoverAudioPlay();
         });
         playText.setOnMouseExited(event -> {
             playText.getChildren().get(0).setVisible(false);
             playText.setEffect(new Glow(0));
         });
-        playText.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                new GraphicalCommonUsages().mouseClickAudioPlay();
-                switch (((Text) playText.getChildren().get(1)).getText()) {
-                    case "PLAY":
-                        try {
-                            if (currentAccount.getCollection().getSelectedDeck() == null) {
-                                GraphicalCommonUsages.okPopUp("selected deck is invalid", scene, root);
-                            } else {
-                                Main.setBattleMenuFX(currentAccount);
-                            }
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+        playText.setOnMouseClicked(event -> {
+            new GraphicalCommonUsages().mouseClickAudioPlay();
+            switch (((Text) playText.getChildren().get(1)).getText()) {
+                case "PLAY":
+                    try {
+                        if (currentAccount.getCollection().getSelectedDeck() == null) {
+                            GraphicalCommonUsages.okPopUp("selected deck is invalid", scene, root);
+                        } else {
+                            Main.setBattleMenuFX(currentAccount);
                         }
-                        break;
-                    case "SHOP":
-                        try {
-                            Main.setShopMenuFX(currentAccount);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                }
-            });
-        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "SHOP":
+                    try {
+                        Main.setShopMenuFX(currentAccount);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        });
+    }
 
-        private void setText (Font font, Text playText){
-            playText.setFont(font);
-            playText.setFill(Color.WHITE);
-        }
+    private void setText(Font font, Text playText) {
+        playText.setFont(font);
+        playText.setFill(Color.WHITE);
+    }
 
     private void mouseHoverAudioPlay() {
-            javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/mainMenu/music/sfx_ui_booster_huming_tail.m4a").toString());
-            audioClip.setCycleCount(1);
-            audioClip.play(1);
-        }
-
-
-
+        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/mainMenu/music/sfx_ui_booster_huming_tail.m4a").toString());
+        audioClip.setCycleCount(1);
+        audioClip.play(1);
     }
+}
