@@ -129,7 +129,7 @@ public class Shop {
         return -1;
     }
 
-    private static Card findCardByName(String cardName) {
+    public static Card findCardByName(String cardName) {
         for (Card card : shopHeroes) {
             if (card.getName().equals(cardName))
                 return card;
