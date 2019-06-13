@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,11 +23,15 @@ import javafx.util.Duration;
 import model.*;
 import presenter.ShopMenuProcess;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import static view.GraphicalCommonUsages.popUpInCommonConfigs;
+import static view.ShopMenu.handleErrors;
 
 public class ShopMenuFX {
     private Text page = new Text();
@@ -36,9 +40,12 @@ public class ShopMenuFX {
     private static ArrayList<String> cardsToShow = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
     private static HashMap<Integer, Label> cardPowers = new HashMap<>();
+    private static HashMap<Integer, Label> cardPrices = new HashMap<>();
+    private static HashMap<Integer, StackPane> cardPanes = new HashMap<>();
     private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
     private static int pageNumber = 0;
-    private Account account;
+    private static int selectedIndex = 0;
+    private static Account account;
     private static Pane root = new Pane();
 
     ShopMenuFX(Account account) {
@@ -65,27 +72,50 @@ public class ShopMenuFX {
         return root;
     }
 
-    private void drawCards(Scene scene, Pane root, Font large, Font small) throws FileNotFoundException {
+    private void drawCards(Scene scene, Pane root, Font trump, Font trump_small) throws FileNotFoundException {
+        Image tinyDrake = new Image(new FileInputStream("src/view/sources/shopMenu/drake_veryVerySmall.png"));
         StackPane[] stackPanes = new StackPane[10];
         for (int i = 0; i < 10; i++) {
             stackPanes[i] = new StackPane();
             stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
-                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16)); // 9/16 va 3/16 bood
+                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
 
             ImageView imageView = new ImageView(getCardTheme(3));
             Label cardName = new Label(); // "Label " + i
             Label card_AP_HP = new Label(); // "\n0\t\t0"
-            cardName.setFont(large);
+            cardName.setFont(trump);
             cardName.setTextFill(Color.WHITE);
-            card_AP_HP.setFont(small);
+            card_AP_HP.setFont(trump_small);
             card_AP_HP.setTextFill(Color.WHITE);
             cardLabels.put(i, cardName);
             cardPowers.put(i, card_AP_HP);
             cardImages.put(i, imageView);
-            stackPanes[i].getChildren().addAll(imageView, cardName, card_AP_HP);
+            cardPanes.put(i, stackPanes[i]);
             StackPane.setAlignment(cardName, Pos.TOP_CENTER);
             StackPane.setAlignment(card_AP_HP, Pos.CENTER);
             stackPanes[i].setMaxSize(157, 279);
+
+            HBox price = new HBox();
+            Label priceLabel = new Label();
+            priceLabel.setFont(Font.font(trump_small.getName(), 16));
+            priceLabel.setTextFill(Color.WHITE);
+            cardPrices.put(i, priceLabel);
+            price.setAlignment(Pos.BOTTOM_CENTER);
+            price.getChildren().addAll(priceLabel, new ImageView(tinyDrake));
+
+            int finalI = i;
+            stackPanes[i].setOnMouseEntered(event -> stackPanes[finalI].setEffect(new Glow(0.2)));
+            stackPanes[i].setOnMouseClicked(event -> {
+                try {
+                    selectedIndex = finalI;
+                    String str = isInShop ? "BUY" : "SELL";
+                    yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                } catch (FileNotFoundException e) {
+                }
+            });
+            stackPanes[i].setOnMouseExited(event -> stackPanes[finalI].setEffect(new Glow(0)));
+
+            stackPanes[i].getChildren().addAll(imageView, cardName, card_AP_HP, price);
         }
         root.getChildren().addAll(stackPanes);
     }
@@ -136,13 +166,13 @@ public class ShopMenuFX {
             String command = searchTextField.getText();
             if (isInShop) {
                 try {
-                    ShopMenu.handleErrors(ShopMenuProcess.search(command));
+                    handleErrors(ShopMenuProcess.search(command));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             } else if (isInCollection) {
                 try {
-                    ShopMenu.handleErrors(ShopMenuProcess.searchCollection(command, account));
+                    handleErrors(ShopMenuProcess.searchCollection(command, account));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -182,6 +212,7 @@ public class ShopMenuFX {
                     pageNumber = 1;
                     updateLabels();
                     updatePowers();
+                    updatePrices();
                     try {
                         setImages(1);
                     } catch (FileNotFoundException e) {
@@ -199,6 +230,7 @@ public class ShopMenuFX {
                     pageNumber = 1;
                     updateLabels();
                     updatePowers();
+                    updatePrices();
                     try {
                         setImages(1);
                     } catch (FileNotFoundException e) {
@@ -216,6 +248,7 @@ public class ShopMenuFX {
                     pageNumber = 1;
                     updateLabels();
                     removePowers();
+                    removePrices();
                     try {
                         setImages(2);
                     } catch (FileNotFoundException e) {
@@ -293,7 +326,6 @@ public class ShopMenuFX {
         shopPane.getChildren().addAll(shopButton, shopLabel);
         collectionPane.getChildren().addAll(collectionButton, collectionLabel);
 
-        // CHECKUP
 //      <!-- PageDefinedHere -->
         page.relocate(50, 650);
         page.setFont(font);
@@ -353,6 +385,7 @@ public class ShopMenuFX {
             else {
                 updateLabels();
                 updatePowers();
+                updatePrices();
             }
             pageSetText();
         });
@@ -362,6 +395,7 @@ public class ShopMenuFX {
             else {
                 updateLabels();
                 updatePowers();
+                updatePrices();
             }
             pageSetText();
         });
@@ -377,9 +411,9 @@ public class ShopMenuFX {
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 cardLabels.get(i).setText("\n" + cardsToShow.get(i + (10 * (pageNumber - 1))));
-                cardImages.get(i).setVisible(true);
+                cardPanes.get(i).setVisible(true);
             } else {
-                cardImages.get(i).setVisible(false);
+                cardPanes.get(i).setVisible(false);
                 cardLabels.get(i).setText("");
             }
         }
@@ -402,6 +436,22 @@ public class ShopMenuFX {
         }
     }
 
+    private void updatePrices() {
+        removePrices();
+        for (int i = 0; i < 10; i++) {
+            if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
+                MovableCard card = null;
+                if (isInCollection)
+                    card = (MovableCard) Collection.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                else if (isInShop)
+                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                if (card == null) continue; // TODO ??
+                cardPrices.get(i).setText(card.getCost() + "");
+            }
+            /*label->stackPane[i].setVisible(false)*/
+        }
+    }
+
     private void removeLabels() {
         for (int i = 0; i < 10; i++)
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
@@ -413,6 +463,11 @@ public class ShopMenuFX {
             cardPowers.get(i).setText("");
     }
 
+    private void removePrices() {
+        for (int i = 0; i < 10; i++)
+            cardPrices.get(i).setText("");
+    }
+
     private void manageShopAndCollectionBars(StackPane shopPane, StackPane collectionPane, ImageView shopButton
             , ImageView collectionButton, Image shopBackground, Image collectionBackground, Image shopBackgroundGlow
             , Image collectionBackgroundGlow) {
@@ -420,11 +475,17 @@ public class ShopMenuFX {
             if (!isInCollection)
                 shopAndCollectionBarManager(false);
             shopAndCollectionGlowHandler(collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
+            updateLabels();
+            updatePowers();
+            updatePrices();
         });
         shopPane.setOnMouseClicked(event -> {
             if (!isInShop)
                 shopAndCollectionBarManager(true);
             shopAndCollectionGlowHandler(shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
+            updateLabels();
+            updatePowers();
+            updatePrices();
         });
     }
 
@@ -437,7 +498,7 @@ public class ShopMenuFX {
         ImageView backGround = new ImageView(backGroundImage);
         backGround.setFitWidth(stage.getWidth());
         backGround.setFitHeight(stage.getHeight());
-        backGround.setEffect(new BoxBlur());
+        backGround.setEffect(new GaussianBlur());
         root.getChildren().add(backGround);
     }
 
@@ -461,6 +522,73 @@ public class ShopMenuFX {
         changeableArea.setImage(secondImage);
         otherChangeableArea.setImage(otherFirstImage);
     }
+
+    public static void yesCancelPopUp(String message, Scene scene, Pane root, String buyOrSell) throws FileNotFoundException {
+        VBox popUp = new VBox();
+        Text messageText = new Text(message);
+        Rectangle bgRectangle = new Rectangle(scene.getWidth(), scene.getHeight());
+        final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 20);
+        popUpInCommonConfigs(scene, root, bgRectangle, popUp, messageText, font);
+
+
+        Image yesButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm.png"));
+        Image yesButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm_glow.png"));
+        Image cancelButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_cancel.png"));
+        Image cancelButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_cancel_glow.png"));
+
+        ImageView yesButtonView = new ImageView(yesButton);
+        yesButtonView.setFitWidth(popUp.getPrefWidth() / 4);
+        yesButtonView.setPreserveRatio(true);
+        //
+        ImageView cancelButtonView = new ImageView(cancelButton);
+        cancelButtonView.setFitWidth(popUp.getPrefWidth() / 4);
+        cancelButtonView.setPreserveRatio(true);
+        //
+        StackPane confirmStackPane = new StackPane();
+        Text yesText = new Text(buyOrSell);
+        yesText.setFont(Font.font(font.getName(), 14));
+        yesText.setFill(Color.WHITE);
+        confirmStackPane.getChildren().addAll(yesButtonView, yesText);
+        //
+        StackPane cancelStackPane = new StackPane();
+        Text cancelText = new Text("CANCEL");
+        cancelText.setFont(Font.font(font.getName(), 14));
+        cancelText.setFill(Color.WHITE);
+        cancelStackPane.getChildren().addAll(cancelButtonView, cancelText);
+        //
+        HBox secondLine = new HBox();
+        secondLine.getChildren().addAll(confirmStackPane, cancelStackPane);
+        secondLine.setAlignment(Pos.CENTER);
+        popUp.getChildren().addAll(secondLine);
+
+        confirmStackPane.setOnMouseEntered(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(yesButtonGlow));
+        confirmStackPane.setOnMouseExited(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(yesButton));
+        confirmStackPane.setOnMouseClicked(event -> {
+            root.getChildren().removeAll(bgRectangle, popUp);
+            // TODO buy/sell process
+            if (yesText.getText().equals("BUY")) {
+                try {
+                    buyProcess();
+                } catch (FileNotFoundException e) {
+                }
+            } else if (yesText.getText().equals("SELL")) {
+                sellProcess();
+            }
+        });
+
+        cancelStackPane.setOnMouseEntered(event -> ((ImageView) cancelStackPane.getChildren().get(0)).setImage(cancelButtonGlow));
+        cancelStackPane.setOnMouseExited(event -> ((ImageView) cancelStackPane.getChildren().get(0)).setImage(cancelButton));
+        cancelStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
+    }
+
+    private static void buyProcess() throws FileNotFoundException {
+        handleErrors(Shop.buy(account, cardLabels.get(selectedIndex).getText()));
+    }
+
+    private static void sellProcess() {
+
+    }
+
 
     static Pane getRoot() {
         return root;
