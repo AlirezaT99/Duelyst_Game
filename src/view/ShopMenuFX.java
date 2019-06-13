@@ -211,7 +211,7 @@ public class ShopMenuFX {
                             cardsToShow.add(hero.getName());
                     pageNumber = 1;
                     updateLabels();
-                    updatePowers();
+                    updatePowers(account);
                     updatePrices();
                     try {
                         setImages(1);
@@ -229,8 +229,8 @@ public class ShopMenuFX {
                             cardsToShow.add(minion.getName());
                     pageNumber = 1;
                     updateLabels();
-                    updatePowers();
                     updatePrices();
+                    updatePowers(account);
                     try {
                         setImages(1);
                     } catch (FileNotFoundException e) {
@@ -384,7 +384,7 @@ public class ShopMenuFX {
                 pageNumber++;
             else {
                 updateLabels();
-                updatePowers();
+                updatePowers(account);
                 updatePrices();
             }
             pageSetText();
@@ -394,7 +394,7 @@ public class ShopMenuFX {
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
                 updateLabels();
-                updatePowers();
+                updatePowers(account);
                 updatePrices();
             }
             pageSetText();
@@ -420,13 +420,13 @@ public class ShopMenuFX {
         pageSetText();
     }
 
-    private void updatePowers() {
+    private void updatePowers(Account account) {
         removePowers();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 MovableCard card = null;
                 if (isInCollection)
-                    card = (MovableCard) Collection.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 else if (isInShop)
                     card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 if (card == null) continue; // TODO ??

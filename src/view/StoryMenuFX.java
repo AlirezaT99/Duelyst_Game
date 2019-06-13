@@ -1,6 +1,7 @@
 package view;
 
 import javafx.animation.ScaleTransition;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -38,7 +39,7 @@ public class StoryMenuFX {
         HBox storyMenuHBox = new HBox(level1, level2, level3);
         storyMenuHBox.setSpacing(storyMenuScene.getWidth() / 10);
 
-        GraphicalCommonUsages.backSetting(root,storyMenuScene,account,"singlePlayer");
+        GraphicalCommonUsages.backSetting(root, storyMenuScene, account, "singlePlayer");
         root.getChildren().addAll(storyMenuHBox);
         storyMenuHBox.layoutXProperty().bind(root.widthProperty().subtract(storyMenuHBox.widthProperty()).divide(2));
         storyMenuHBox.layoutYProperty().bind(root.heightProperty().subtract(storyMenuHBox.heightProperty()).divide(2));
@@ -54,34 +55,46 @@ public class StoryMenuFX {
     }
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox) {
+        view.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                new GraphicalCommonUsages().mouseClickAudioPlay();
+                System.out.println(text.getText());
+//                switch (text.getText()){
+//                    case "SINGLE PLAYER":
+//
+//                }
+            }
+        });
         vBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                switch (text.getText().split("\n")[0]){
+                System.out.println(vBox.getLayoutX()+" "+vBox.getLayoutY() + text.getText().split("\n")[0]);
+                switch (text.getText().split("\n")[0]) {
                     case "DIV-E-SEFID":
                         try {
-                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid2.jpg")));
+                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid2.jpg")));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "ZAHHAK":
                         try {
-                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak2.jpg")));
+                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak2.jpg")));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "ARASH":
                         try {
-                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash2.jpg")));
+                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash2.jpg")));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                         break;
                 }
                 view.setOpacity(1);
-                ScaleTransition st = new ScaleTransition(Duration.millis(100),vBox);
+                ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
                 st.setFromX(1);
                 st.setFromY(1);
                 st.setToX(1.1);
@@ -94,66 +107,64 @@ public class StoryMenuFX {
         vBox.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                switch (text.getText().split("\n")[0]){
+                switch (text.getText().split("\n")[0]) {
                     case "DIV-E-SEFID":
                         try {
-                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid.jpg")));
+                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid.jpg")));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "ZAHHAK":
                         try {
-                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak.jpg")));
+                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak.jpg")));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "ARASH":
                         try {
-                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash.jpg")));
+                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash.jpg")));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                         break;
                 }
                 view.setOpacity(0.6);
-                ScaleTransition st = new ScaleTransition(Duration.millis(100),vBox);
+                ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
                 st.setFromX(1.1);
                 st.setFromY(1.1);
                 st.setToX(1);
                 st.setToY(1);
                 st.play();
-                text.setEffect(new Glow(0.5));
+                text.setEffect(new Glow(0));
             }
         });
-        vBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                new GraphicalCommonUsages().mouseClickAudioPlay();
-                switch (text.getText()){
-                    case "SINGLE PLAYER":
-
-                }
-            }
-        });
+//        vBox.setOnMouseClicked(event -> {
+//            System.out.println("diiiiiv");
+//            new GraphicalCommonUsages().mouseClickAudioPlay();
+////                switch (text.getText()){
+////                    case "SINGLE PLAYER":
+////
+////                }
+//        });
     }
 
     private VBox levelSetUp(String address, String heroName, int mode, Scene battleInitScene, Font font) throws FileNotFoundException {
         Image levelImage = new Image(new FileInputStream(address));
         ImageView levelView = new ImageView(levelImage);
-        levelView.setFitWidth(battleInitScene.getWidth()/6);
-        levelView.setFitHeight(battleInitScene.getHeight()/6);
+        levelView.setFitWidth(battleInitScene.getWidth() / 6);
+        levelView.setFitHeight(battleInitScene.getHeight() / 6);
         StackPane view = new StackPane(levelView);
         view.setStyle("-fx-padding: 30;-fx-background-radius: 10;");
         view.setOpacity(0.6);
-        Text description = new Text(heroName+"\n"+"MODE : "+mode);
+        Text description = new Text(heroName + "\n" + "MODE : " + mode);
         description.setFill(Color.WHITE);
         description.setFont(font);
-        VBox levelVBox = new VBox(view,description,new Text());
-        levelVBox.setSpacing(battleInitScene.getHeight()/20);
+        VBox levelVBox = new VBox(view, description, new Text());
+        levelVBox.setSpacing(battleInitScene.getHeight() / 20);
         levelVBox.setAlignment(Pos.CENTER);
-        mouseMovementHandling(view,description,levelVBox);
+        mouseMovementHandling(view, description, levelVBox);
         return levelVBox;
     }
 }

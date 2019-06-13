@@ -115,6 +115,7 @@ public class GraphicalCommonUsages {
         AudioClip audioClip = new AudioClip(this.getClass().getResource("sources/common/music/onclick.m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play(1);
+        System.gc();
     }
 
     public static void backSetting(Pane root, Scene mainMenuScene, Account account, String whereTo) throws FileNotFoundException {
