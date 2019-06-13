@@ -72,7 +72,7 @@ public class ShopMenuFX {
             stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
                     , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16)); // 9/16 va 3/16 bood
 
-            ImageView imageView = new ImageView(getCardTheme(2));
+            ImageView imageView = new ImageView(getCardTheme(3));
             Label cardName = new Label(); // "Label " + i
             Label card_AP_HP = new Label(); // "\n0\t\t0"
             cardName.setFont(large);
@@ -306,8 +306,10 @@ public class ShopMenuFX {
     private Image getCardTheme(int number) throws FileNotFoundException {
         Image cardTheme1 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme1.png"));
         Image cardTheme2 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme2.png"));
+        Image cardTheme3 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme3.png"));
         if (number == 1) return cardTheme1;
-        else return cardTheme2;
+        if (number == 2) return cardTheme2;
+        else return cardTheme3;
     }
 
     private void setImages(int number) throws FileNotFoundException {
