@@ -35,6 +35,8 @@ public class ShopMenuFX {
     private boolean isInCollection = false;
     private static ArrayList<String> cardsToShow = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
+    private static HashMap<Integer, Label> cardPowers = new HashMap<>();
+    private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
     private static int pageNumber = 0;
     private Account account;
     private static Pane root = new Pane();
@@ -46,6 +48,7 @@ public class ShopMenuFX {
     public Pane start(Stage primaryStage) throws FileNotFoundException {
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
+        final Font trump_reg_small = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 28);
         final Font averta = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/averta-light-webfont.ttf"), 40);
 
         Scene scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
@@ -53,7 +56,7 @@ public class ShopMenuFX {
         root.setPrefHeight(primaryStage.getHeight());
         setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, primaryStage);
 
-        drawCards(scene, root, trump_reg);
+        drawCards(scene, root, trump_reg, trump_reg_small);
         drawShopLabels(root, averta, scene);
         drawLeftBox(trump_med, root, scene);
         drawBackButton(root, scene);
@@ -62,20 +65,26 @@ public class ShopMenuFX {
         return root;
     }
 
-    private void drawCards(Scene scene, Pane root, Font trump_reg) throws FileNotFoundException {
+    private void drawCards(Scene scene, Pane root, Font large, Font small) throws FileNotFoundException {
         StackPane[] stackPanes = new StackPane[10];
         for (int i = 0; i < 10; i++) {
             stackPanes[i] = new StackPane();
             stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
-                    , i / 5.0 > 0 ? (scene.getHeight() * 9 / 16) : (scene.getHeight() * 3 / 16));
-            ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme1.png"))); // for now
-            //, 157, 279, false, false
-            Label label = new Label("Label " + i);
-            label.setFont(trump_reg);
-            label.setTextFill(Color.WHITE);
-            cardLabels.put(i, label);
-            stackPanes[i].getChildren().addAll(imageView, label);
-            StackPane.setAlignment(label, Pos.TOP_CENTER);
+                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16)); // 9/16 va 3/16 bood
+
+            ImageView imageView = new ImageView(getCardTheme(2));
+            Label cardName = new Label(); // "Label " + i
+            Label card_AP_HP = new Label(); // "\n0\t\t0"
+            cardName.setFont(large);
+            cardName.setTextFill(Color.WHITE);
+            card_AP_HP.setFont(small);
+            card_AP_HP.setTextFill(Color.WHITE);
+            cardLabels.put(i, cardName);
+            cardPowers.put(i, card_AP_HP);
+            cardImages.put(i, imageView);
+            stackPanes[i].getChildren().addAll(imageView, cardName, card_AP_HP);
+            StackPane.setAlignment(cardName, Pos.TOP_CENTER);
+            StackPane.setAlignment(card_AP_HP, Pos.CENTER);
             stackPanes[i].setMaxSize(157, 279);
         }
         root.getChildren().addAll(stackPanes);
@@ -172,6 +181,11 @@ public class ShopMenuFX {
                             cardsToShow.add(hero.getName());
                     pageNumber = 1;
                     updateLabels();
+                    updatePowers();
+                    try {
+                        setImages(1);
+                    } catch (FileNotFoundException e) {
+                    }
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[1]":
@@ -184,6 +198,11 @@ public class ShopMenuFX {
                             cardsToShow.add(minion.getName());
                     pageNumber = 1;
                     updateLabels();
+                    updatePowers();
+                    try {
+                        setImages(1);
+                    } catch (FileNotFoundException e) {
+                    }
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[2]":
@@ -196,6 +215,11 @@ public class ShopMenuFX {
                             cardsToShow.add(item.getName());
                     pageNumber = 1;
                     updateLabels();
+                    removePowers();
+                    try {
+                        setImages(2);
+                    } catch (FileNotFoundException e) {
+                    }
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[3]":
@@ -279,6 +303,18 @@ public class ShopMenuFX {
         root.getChildren().addAll(page, shopPane, collectionPane);
     }
 
+    private Image getCardTheme(int number) throws FileNotFoundException {
+        Image cardTheme1 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme1.png"));
+        Image cardTheme2 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme2.png"));
+        if (number == 1) return cardTheme1;
+        else return cardTheme2;
+    }
+
+    private void setImages(int number) throws FileNotFoundException {
+        for (int i = 0; i < 10; i++)
+            cardImages.get(i).setImage(getCardTheme(number));
+    }
+
     private void drawDrake(Pane root, Scene scene, Font font) throws FileNotFoundException {
         ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/drake_verySmall.png"))); // for now
         imageView.relocate(scene.getWidth() * 0.92, scene.getHeight() / 64);
@@ -312,13 +348,19 @@ public class ShopMenuFX {
             pageNumber--;
             if (pageNumber == 0)
                 pageNumber++;
-            else updateLabels();
+            else {
+                updateLabels();
+                updatePowers();
+            }
             pageSetText();
         });
         rightArrow.setOnMouseClicked(event -> {
             pageNumber++;
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
-            else updateLabels();
+            else {
+                updateLabels();
+                updatePowers();
+            }
             pageSetText();
         });
     }
@@ -329,14 +371,44 @@ public class ShopMenuFX {
     }
 
     private void updateLabels() {
+        removeLabels();
         for (int i = 0; i < 10; i++) {
-            if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
+            if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 cardLabels.get(i).setText("\n" + cardsToShow.get(i + (10 * (pageNumber - 1))));
-            else
-                cardLabels.get(i).setText("NULL");
-            /*label->stackPane[i].setVisible(false)*/
+                cardImages.get(i).setVisible(true);
+            } else {
+                cardImages.get(i).setVisible(false);
+                cardLabels.get(i).setText("");
+            }
         }
         pageSetText();
+    }
+
+    private void updatePowers() {
+        removePowers();
+        for (int i = 0; i < 10; i++) {
+            if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
+                MovableCard card = null;
+                if (isInCollection)
+                    card = (MovableCard) Collection.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                else if (isInShop)
+                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                if (card == null) continue; // TODO ??
+                cardPowers.get(i).setText("\n" + card.getDamage() + "\t\t\t" + card.getHealth());
+            }
+            /*label->stackPane[i].setVisible(false)*/
+        }
+    }
+
+    private void removeLabels() {
+        for (int i = 0; i < 10; i++)
+            if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
+                cardPowers.get(i).setText("");
+    }
+
+    private void removePowers() {
+        for (int i = 0; i < 10; i++)
+            cardPowers.get(i).setText("");
     }
 
     private void manageShopAndCollectionBars(StackPane shopPane, StackPane collectionPane, ImageView shopButton
