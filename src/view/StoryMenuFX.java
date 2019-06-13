@@ -46,7 +46,9 @@ public class StoryMenuFX {
         BackgroundFill background_fill = new BackgroundFill(javafx.scene.paint.Color.grayRgb(20, 0.8),
                 new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0));
         storyMenuHBox.setBackground(new Background(background_fill));
+        level1.setOnMouseClicked(event -> {
 
+        });
         //  return battleInitScene;
         return root;
     }

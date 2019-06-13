@@ -97,7 +97,7 @@ public class GraphicalCommonUsages {
         audioClip.setCycleCount(1);
         audioClip.play();
     }
-    public void mouseClickAudioPlay() {
+    public  void mouseClickAudioPlay() {
         javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/common/music/onclick.m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play(1);
