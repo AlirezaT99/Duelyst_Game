@@ -442,7 +442,7 @@ public class ShopMenuFX {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 MovableCard card = null;
                 if (isInCollection)
-                    card = (MovableCard) Collection.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 else if (isInShop)
                     card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 if (card == null) continue; // TODO ??
@@ -476,7 +476,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(false);
             shopAndCollectionGlowHandler(collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
             updateLabels();
-            updatePowers();
+            updatePowers(account);
             updatePrices();
         });
         shopPane.setOnMouseClicked(event -> {
@@ -484,7 +484,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(true);
             shopAndCollectionGlowHandler(shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
             updateLabels();
-            updatePowers();
+            updatePowers(account);
             updatePrices();
         });
     }
