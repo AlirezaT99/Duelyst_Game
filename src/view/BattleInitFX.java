@@ -24,6 +24,7 @@ public class BattleInitFX{
 
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
         Pane root = new Pane();
+
         Scene battleInitScene = new Scene(new Pane(),primaryStage.getWidth(),primaryStage.getHeight());
         root.setPrefWidth(battleInitScene.getWidth());
         root.setPrefHeight(battleInitScene.getHeight());

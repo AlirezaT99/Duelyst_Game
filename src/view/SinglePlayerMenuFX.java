@@ -112,7 +112,15 @@ public class SinglePlayerMenuFX {
                             e.printStackTrace();
                         }
                         break;
+                    case "CUSTOM GAME":
+                        try {
+                            Main.setCustomGameMenuFX(account);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                 }
+
             }
         });
     }
