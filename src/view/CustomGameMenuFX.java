@@ -71,7 +71,6 @@ public class CustomGameMenuFX {
         root.getChildren().addAll(customGame);
         customGame.layoutXProperty().bind(root.widthProperty().subtract(customGame.widthProperty()).divide(2));
         customGame.layoutYProperty().bind(root.heightProperty().subtract(customGame.heightProperty()).divide(2));
-        System.out.println(customGame.getLayoutX());
         BackgroundFill background_fill = new BackgroundFill(javafx.scene.paint.Color.grayRgb(20, 0.8),
                 new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0));
         customGame.setBackground(new Background(background_fill));

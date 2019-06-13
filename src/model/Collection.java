@@ -5,10 +5,10 @@ import java.util.HashMap;
 
 public class Collection {
     private ArrayList<UsableItem> items = new ArrayList<>();
-    private static ArrayList<Deck> decks = new ArrayList<>(); // just changed all of these to static 6/13/2019 12:37
-    private static ArrayList<Hero> heroes = new ArrayList<>();
-    private static ArrayList<Minion> minions = new ArrayList<>();
-    private static ArrayList<Spell> spells = new ArrayList<>();
+    private  ArrayList<Deck> decks = new ArrayList<>(); // just changed all of these to static 6/13/2019 12:37
+    private  ArrayList<Hero> heroes = new ArrayList<>();
+    private  ArrayList<Minion> minions = new ArrayList<>();
+    private  ArrayList<Spell> spells = new ArrayList<>();
     private HashMap<String, UsableItem> itemsHashMap;
     private HashMap<String, Minion> minionHashMap;
     private HashMap<String, Hero> heroHashMap;
@@ -115,7 +115,7 @@ public class Collection {
         return null;
     }
 
-    public static Card findCardByName(String name) {
+    public Card findCardByName(String name) {
         for (Hero hero : heroes)
             if (hero.getName().equals(name))
                 return hero;
