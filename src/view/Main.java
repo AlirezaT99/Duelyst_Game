@@ -19,6 +19,7 @@ public class Main extends Application {
     private static BattleInitFX battleInitFX;
     private static ShopMenuFX shopMenuFX;
     private static SinglePlayerMenuFX singlePlayerMenuFX;
+    private static CustomGameMenuFX customGameMenuFX;
     private static StoryMenuFX storyMenuFX;
     private static Stage primaryStage;
     private static Scene currentScene;
@@ -93,6 +94,13 @@ public class Main extends Application {
         if (storyMenuFX == null)
             Main.storyMenuFX= new StoryMenuFX();
         currentScene.setRoot(storyMenuFX.start(primaryStage, account));
+        primaryStage.setScene(currentScene);
+    }
+
+    public static void setCustomGameMenuFX(Account account) throws FileNotFoundException {
+        if (customGameMenuFX == null)
+            Main.customGameMenuFX= new CustomGameMenuFX();
+        currentScene.setRoot(customGameMenuFX.start(primaryStage, account));
         primaryStage.setScene(currentScene);
     }
 

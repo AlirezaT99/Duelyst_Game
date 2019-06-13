@@ -29,11 +29,11 @@ public class StoryMenuFX {
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 40);
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root);
 
-        VBox level1 = levelSetUp("src/view/sources/storyMenu/pictures/div-e-sefid.png", "DIV-E-SEFID", 1, storyMenuScene, font);
+        VBox level1 = levelSetUp("src/view/sources/storyMenu/pictures/div-e-sefid.jpg", "DIV-E-SEFID", 1, storyMenuScene, font);
 
-        VBox level2 = levelSetUp("src/view/sources/storyMenu/pictures/zahhak.png", "ZAHHAK", 2, storyMenuScene, font);
+        VBox level2 = levelSetUp("src/view/sources/storyMenu/pictures/zahhak.jpg", "ZAHHAK", 2, storyMenuScene, font);
 
-        VBox level3 = levelSetUp("src/view/sources/storyMenu/pictures/arash.png", "ARASH", 3, storyMenuScene, font);
+        VBox level3 = levelSetUp("src/view/sources/storyMenu/pictures/arash.jpg", "ARASH", 3, storyMenuScene, font);
 
         HBox storyMenuHBox = new HBox(level1, level2, level3);
         storyMenuHBox.setSpacing(storyMenuScene.getWidth() / 10);
@@ -55,6 +55,29 @@ public class StoryMenuFX {
         vBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                switch (text.getText().split("\n")[0]){
+                    case "DIV-E-SEFID":
+                        try {
+                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid2.jpg")));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "ZAHHAK":
+                        try {
+                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak2.jpg")));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "ARASH":
+                        try {
+                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash2.jpg")));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
                 view.setOpacity(1);
                 ScaleTransition st = new ScaleTransition(Duration.millis(100),vBox);
                 st.setFromX(1);
@@ -69,6 +92,29 @@ public class StoryMenuFX {
         vBox.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                switch (text.getText().split("\n")[0]){
+                    case "DIV-E-SEFID":
+                        try {
+                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid.jpg")));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "ZAHHAK":
+                        try {
+                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak.jpg")));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "ARASH":
+                        try {
+                            ((ImageView)view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash.jpg")));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
                 view.setOpacity(0.6);
                 ScaleTransition st = new ScaleTransition(Duration.millis(100),vBox);
                 st.setFromX(1.1);
