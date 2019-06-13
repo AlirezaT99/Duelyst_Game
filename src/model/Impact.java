@@ -10,7 +10,7 @@ public class Impact {
     private Match match;
     private ImpactArea impactAreaClass;
     private String impactTypeComp = "";
-    private String impactWayOfAssigning ="";
+    private String impactWayOfAssigning = "";
     private String targetTypeId = "";
     private String impactTypeId = "";
     // 0.(0,1)isPositive
@@ -95,11 +95,11 @@ public class Impact {
 
     void doImpact(Player friendlyPlayer, MovableCard target, Cell targetCell, Cell castingCell) {
         setAllVariablesNeeded();
-        impactAreaClass = new ImpactArea(targetTypeId,match);
+        impactAreaClass = new ImpactArea(targetTypeId, match);
         impactAreaClass.setImpactArea(friendlyPlayer, targetCell, castingCell);
         impactArea = impactAreaClass.getImpactArea();
-        impactEffectComp = new ImpactEffectComp(impactArea,this,match,impactWayOfAssigning,impactTypeComp);
-        if(impactEffectComp.doesItHaveToBeSetOnSoldiersFourImpacts(targetCell))
+        impactEffectComp = new ImpactEffectComp(impactArea, this, match, impactWayOfAssigning, impactTypeComp);
+        if (impactEffectComp.doesItHaveToBeSetOnSoldiersFourImpacts(targetCell))
             return;
         impactEffectComp.doImpactComp(target, castingCell);
         if (turnsToBeActivated <= 0)
@@ -158,8 +158,15 @@ public class Impact {
         for (Cell cell : impactArea) {
             MovableCard movableCard = cell.getMovableCard();
             cell.cellImpacts.removeIf(impact -> impact.isPositiveImpact);
-            if (movableCard != null)
-                cell.getMovableCard().getImpactsAppliedToThisOne().removeIf(impact -> impact.isPositiveImpact);
+            if (movableCard != null) {
+                movableCard.getImpactsAppliedToThisOne().removeIf(impact -> impact.isPositiveImpact);
+                movableCard.onDefendImpact = movableCard.onDefendImpact.isPositiveImpact?null:movableCard.onDefendImpact;
+                movableCard.onAttackImpact = movableCard.onAttackImpact.isPositiveImpact?null:movableCard.onAttackImpact;
+                if(movableCard instanceof Minion){
+                    Minion minion = (Minion) movableCard;
+                    minion.setSummonImpact(minion.getSummonImpact());
+                }
+            }
         }
     }
 

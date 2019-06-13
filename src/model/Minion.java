@@ -84,6 +84,15 @@ public class Minion extends MovableCard {
         }
         return null;
     }
+
+    public Impact getSummonImpact() {
+        return summonImpact;
+    }
+
+    public Impact getDyingWishImpact() {
+        return dyingWishImpact;
+    }
+
     //getters
 
     //setters
@@ -108,6 +117,9 @@ public class Minion extends MovableCard {
     public static void addToMinions(Minion minion) {
         minions.add(minion);
     }
+
+
+
     //setters
 }
 
