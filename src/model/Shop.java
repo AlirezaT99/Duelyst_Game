@@ -63,7 +63,7 @@ public class Shop {
 
     //buy
 
-    public int buy(Account account, String name) {
+    public static int buy(Account account, String name) {
         UsableItem item = findItemByName(name);
         Card card = findCardByName(name);
         if (isBuyValid(account, item, card) != 0)
@@ -77,7 +77,7 @@ public class Shop {
         return 0;
     }
 
-    private int isBuyValid(Account account, UsableItem item, Card card) {
+    private static int isBuyValid(Account account, UsableItem item, Card card) {
         if (item == null && card == null) {
             // printMessage("Card/Item is out of stock");
             return 3;
