@@ -1,13 +1,18 @@
 package model;
 
+import org.omg.CORBA.IMP_LIMIT;
+
 import java.util.ArrayList;
 
 public class Spell extends Card {
     private static ArrayList<Spell> spells = new ArrayList<>();
-    private Impact impact;
     private Impact primaryImpact;
     private Impact secondaryImpact;
 
+    public Spell(Impact primaryImpact, Impact secondaryImpact) {
+        this.primaryImpact = primaryImpact;
+        this.secondaryImpact = secondaryImpact;
+    }
 
     @Override
     public String toString(boolean showCost) {
@@ -55,11 +60,11 @@ public class Spell extends Card {
     }
 
     public Spell copy(){
-        Spell spell = new Spell();
+        Impact primaryImpactCopy = primaryImpact == null?null:primaryImpact.copy();
+        Impact secondaryImpactCopy = secondaryImpact == null? null:secondaryImpact.copy();
+        Spell spell = new Spell(primaryImpactCopy,secondaryImpactCopy);
         spell.cell = cell;
         setCardFieldsForCopy(spell);
-        spell.primaryImpact = primaryImpact == null? null :primaryImpact.copy();
-        spell.secondaryImpact =secondaryImpact  == null? null : secondaryImpact.copy();
         spell.collectionID = this.collectionID;
         spell.manaCost = manaCost;
         spell.name = name;

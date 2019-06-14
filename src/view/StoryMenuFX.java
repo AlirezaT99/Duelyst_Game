@@ -16,6 +16,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Account;
+import model.Match;
+import model.Table;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,11 +49,33 @@ public class StoryMenuFX {
         BackgroundFill background_fill = new BackgroundFill(javafx.scene.paint.Color.grayRgb(20, 0.8),
                 new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0));
         storyMenuHBox.setBackground(new Background(background_fill));
-        level1.setOnMouseClicked(event -> {
-
-        });
+        handleSetOnMouseClicked(level1, level2, level3);
         //  return battleInitScene;
         return root;
+    }
+
+    private void handleSetOnMouseClicked(VBox level1, VBox level2, VBox level3) {
+        level1.setOnMouseClicked(event -> {
+            try {
+                Main.setBattleFX(null , null, new Match(false,1,0),true);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+        level2.setOnMouseClicked(event -> {
+            try {
+                Main.setBattleFX(null,null,new Match(false,2,10),true);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+        level3.setOnMouseClicked(event -> {
+            try {
+                Main.setBattleFX(null, null, new Match(false,3,10),true);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox) {

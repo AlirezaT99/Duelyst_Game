@@ -79,10 +79,7 @@ public class Match {
             player2_graveyard.add(card);
         card.cardCell.setMovableCard(null);
     }
-
-    public void play(Player player) {
-        //
-    }
+    
 
 
     public void setup(Account account, String deckName, int numberOfFlags, Deck deck) {

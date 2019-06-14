@@ -7,7 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Account;
+import model.Match;
 
+import javax.accessibility.AccessibleEditableText;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,6 +23,7 @@ public class Main extends Application {
     private static SinglePlayerMenuFX singlePlayerMenuFX;
     private static CustomGameMenuFX customGameMenuFX;
     private static StoryMenuFX storyMenuFX;
+    private static BattleFx battleFx;
     private static Stage primaryStage;
     private static Scene currentScene;
     private static Rectangle2D primaryScreenBounds;
@@ -74,7 +77,6 @@ public class Main extends Application {
     public static void setShopMenuFX(Account account) throws FileNotFoundException {
         Main.shopMenuFX = new ShopMenuFX(account);
         currentScene.setRoot(shopMenuFX.start(primaryStage));
-        primaryStage.setScene(currentScene);
     }
 
     public static void setBattleMenuFX(Account account) throws FileNotFoundException {
@@ -102,6 +104,12 @@ public class Main extends Application {
             Main.customGameMenuFX= new CustomGameMenuFX();
         currentScene.setRoot(customGameMenuFX.start(primaryStage, account));
         primaryStage.setScene(currentScene);
+    }
+
+    public static void setBattleFX(Account firstPlayer, Account secondPlayer, Match match,boolean storyMode) throws FileNotFoundException {
+        battleFx = new BattleFx();
+        currentScene.setRoot(battleFx.start(match,storyMode,getPrimaryStage(),firstPlayer));
+
     }
 
 

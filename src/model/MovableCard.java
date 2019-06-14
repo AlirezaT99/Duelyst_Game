@@ -21,6 +21,7 @@ public abstract class MovableCard extends Card {
     protected boolean isHybrid;
     protected Impact onDefendImpact = null;
     protected Impact onAttackImpact = null;
+    protected Impact passiveImpact = null;
     protected boolean isComboAttacker;
     public int dispelableHealthChange = 0;
     public int dispelableDamageChange = 0;

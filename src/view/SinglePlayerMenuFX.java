@@ -73,32 +73,14 @@ public class SinglePlayerMenuFX {
     }
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox, Account account) {
-        vBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setOpacity(1);
-                ScaleTransition st = new ScaleTransition(Duration.millis(100),vBox);
-                st.setFromX(1);
-                st.setFromY(1);
-                st.setToX(1.1);
-                st.setToY(1.1);
-                st.play();
-                text.setEffect(new Glow(0.5));
-            }
+        vBox.setOnMouseEntered(event -> {
+            double[] numbers = {1,1,1.1,0.5};
+            handleMouseEvent(view,vBox,text,numbers);
         });
 
-        vBox.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setOpacity(0.6);
-                ScaleTransition st = new ScaleTransition(Duration.millis(100),vBox);
-                st.setFromX(1.1);
-                st.setFromY(1.1);
-                st.setToX(1);
-                st.setToY(1);
-                st.play();
-                text.setEffect(new Glow(0.5));
-            }
+        vBox.setOnMouseExited(event -> {
+            double[] numbers = {0.6,1.1,1,0.5};
+            handleMouseEvent(view, vBox, text,numbers);
         });
         vBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -123,6 +105,17 @@ public class SinglePlayerMenuFX {
 
             }
         });
+    }
+
+    private void handleMouseEvent(StackPane view, VBox vBox, Text text,double[]numbers) {
+        view.setOpacity(numbers[0]);
+        ScaleTransition st = new ScaleTransition(Duration.millis(100),vBox);
+        st.setFromX(numbers[1]);
+        st.setFromY(numbers[1]);
+        st.setToX(numbers[2]);
+        st.setToY(numbers[2]);
+        st.play();
+        text.setEffect(new Glow(numbers[3]));
     }
 
     private VBox storyModeSetUP(Scene battleInitScene, Font font, Account account) throws FileNotFoundException {

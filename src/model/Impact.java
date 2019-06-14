@@ -25,6 +25,14 @@ public class Impact {
     // 11.cellImpact(0-4){none,poison,fire,holy}
     //12.isOnCell(0,1)
 
+    public Impact(String impactTypeComp, String impactWayOfAssigning, String targetTypeId, String impactTypeId) {
+        this.impactTypeComp = impactTypeComp;
+        this.impactWayOfAssigning = impactWayOfAssigning;
+        this.targetTypeId = targetTypeId;
+        this.impactTypeId = impactTypeId;
+    }
+
+
     //impactTypeVariables
 
     private int turnsToBeActivated;
@@ -95,6 +103,7 @@ public class Impact {
 
     void doImpact(Player friendlyPlayer, MovableCard target, Cell targetCell, Cell castingCell) {
         setAllVariablesNeeded();
+        match = target.match;
         impactAreaClass = new ImpactArea(targetTypeId, match);
         impactAreaClass.setImpactArea(friendlyPlayer, targetCell, castingCell);
         impactArea = impactAreaClass.getImpactArea();
@@ -351,13 +360,7 @@ public class Impact {
 
 
     Impact copy() {
-        Impact impact = new Impact();
-//        impact.targetTypeId = targetTypeId;
-        //todo complete
-        impact.impactTypeId = impactTypeId;
-//        impact.impactTypeIdComp = impactTypeIdComp;
-//        impact.impactWayOfAssigning = impactWayOfAssigning;
-//        impact.impactAdderTypes = impactAdderTypes;
+        Impact impact = new Impact(impactTypeComp,impactWayOfAssigning,targetTypeId,impactTypeId);
         impact.match = match;
         return impact;
     }
