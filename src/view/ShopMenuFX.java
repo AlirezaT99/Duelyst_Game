@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +30,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import static view.GraphicalCommonUsages.popUpInCommonConfigs;
+import static view.GraphicalCommonUsages.yesCancelPopUp;
 import static view.ShopMenu.handleErrors;
 
 public class ShopMenuFX {
@@ -49,7 +49,7 @@ public class ShopMenuFX {
     private static Pane root = new Pane();
 
     ShopMenuFX(Account account) {
-        this.account = account;
+        ShopMenuFX.account = account;
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
@@ -61,7 +61,7 @@ public class ShopMenuFX {
         Scene scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
-        setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, primaryStage);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 
         drawCards(scene, root, trump_reg, trump_reg_small);
         drawShopLabels(root, averta, scene);
@@ -120,7 +120,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(stackPanes);
     }
 
-    private void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
+    void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
         ImageView heroesCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle1.png")));
         ImageView minionsCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle2.png")));
         ImageView itemsCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle3.png")));
@@ -293,18 +293,14 @@ public class ShopMenuFX {
         KeyValue xValue = new KeyValue(underLine.widthProperty(), scene.getWidth() * 4 / 8);
         KeyValue yValue = new KeyValue(underLine.heightProperty(), 3);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), xValue, yValue);
-        Timeline timeline = new Timeline(keyFrame);
-
-        timeline.getKeyFrames().addAll(keyFrame);
-        timeline.play();
 
         KeyValue xValue2 = new KeyValue(underLine2.layoutXProperty(), scene.getWidth() * 6.2 / 8);
         KeyValue yValue2 = new KeyValue(underLine2.heightProperty(), 3);
         KeyFrame keyFrame2 = new KeyFrame(Duration.millis(1001), xValue2, yValue2); // to avoid duplicate annoying lines -_-
-        Timeline timeline2 = new Timeline(keyFrame2);
+        Timeline timeline = new Timeline(keyFrame, keyFrame2);
 
-        timeline2.getKeyFrames().addAll(keyFrame2);
-        timeline2.play();
+        timeline.getKeyFrames().addAll(keyFrame, keyFrame2);
+        timeline.play();
         //
         StackPane shopPane = new StackPane();
         StackPane collectionPane = new StackPane();
@@ -363,7 +359,7 @@ public class ShopMenuFX {
         page.setText("Page = " + pageNumber + "/" + (cardsToShow.size() / 10 + (cardsToShow.size() % 10 != 0 ? 1 : 0)));
     }
 
-    private void drawBackButton(Pane root, Scene scene) throws FileNotFoundException {
+    static void drawBackButton(Pane root, Scene scene) throws FileNotFoundException {
         ImageView backToMainView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/button_back_corner.png")));
         backToMainViewSetting(root, scene, backToMainView);
     }
@@ -494,20 +490,7 @@ public class ShopMenuFX {
         isInCollection = !setOnShop;
     }
 
-    private static void setBackGroundImage(Image backGroundImage, Pane root, Stage stage) {
-        ImageView backGround = new ImageView(backGroundImage);
-        backGround.setFitWidth(stage.getWidth());
-        backGround.setFitHeight(stage.getHeight());
-        backGround.setEffect(new GaussianBlur());
-        root.getChildren().add(backGround);
-    }
-
-    private static void setBackGroundImage(String imageAddress, Pane root, Stage stage) throws FileNotFoundException {
-        Image image = new Image(new FileInputStream(imageAddress));
-        setBackGroundImage(image, root, stage);
-    }
-
-    private void backToMainViewSetting(Pane root, Scene mainMenuScene, ImageView backToMainView) {
+    private static void backToMainViewSetting(Pane root, Scene mainMenuScene, ImageView backToMainView) {
         MainMenuFX.backButtonAdjustment(root, mainMenuScene, backToMainView);
         backToMainView.setOnMouseClicked(event -> {
             try {
@@ -523,69 +506,11 @@ public class ShopMenuFX {
         otherChangeableArea.setImage(otherFirstImage);
     }
 
-    public static void yesCancelPopUp(String message, Scene scene, Pane root, String buyOrSell) throws FileNotFoundException {
-        VBox popUp = new VBox();
-        Text messageText = new Text(message);
-        Rectangle bgRectangle = new Rectangle(scene.getWidth(), scene.getHeight());
-        final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 20);
-        popUpInCommonConfigs(scene, root, bgRectangle, popUp, messageText, font);
-
-
-        Image yesButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm.png"));
-        Image yesButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm_glow.png"));
-        Image cancelButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_cancel.png"));
-        Image cancelButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_cancel_glow.png"));
-
-        ImageView yesButtonView = new ImageView(yesButton);
-        yesButtonView.setFitWidth(popUp.getPrefWidth() / 4);
-        yesButtonView.setPreserveRatio(true);
-        //
-        ImageView cancelButtonView = new ImageView(cancelButton);
-        cancelButtonView.setFitWidth(popUp.getPrefWidth() / 4);
-        cancelButtonView.setPreserveRatio(true);
-        //
-        StackPane confirmStackPane = new StackPane();
-        Text yesText = new Text(buyOrSell);
-        yesText.setFont(Font.font(font.getName(), 14));
-        yesText.setFill(Color.WHITE);
-        confirmStackPane.getChildren().addAll(yesButtonView, yesText);
-        //
-        StackPane cancelStackPane = new StackPane();
-        Text cancelText = new Text("CANCEL");
-        cancelText.setFont(Font.font(font.getName(), 14));
-        cancelText.setFill(Color.WHITE);
-        cancelStackPane.getChildren().addAll(cancelButtonView, cancelText);
-        //
-        HBox secondLine = new HBox();
-        secondLine.getChildren().addAll(confirmStackPane, cancelStackPane);
-        secondLine.setAlignment(Pos.CENTER);
-        popUp.getChildren().addAll(secondLine);
-
-        confirmStackPane.setOnMouseEntered(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(yesButtonGlow));
-        confirmStackPane.setOnMouseExited(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(yesButton));
-        confirmStackPane.setOnMouseClicked(event -> {
-            root.getChildren().removeAll(bgRectangle, popUp);
-            // TODO buy/sell process
-            if (yesText.getText().equals("BUY")) {
-                try {
-                    buyProcess();
-                } catch (FileNotFoundException e) {
-                }
-            } else if (yesText.getText().equals("SELL")) {
-                sellProcess();
-            }
-        });
-
-        cancelStackPane.setOnMouseEntered(event -> ((ImageView) cancelStackPane.getChildren().get(0)).setImage(cancelButtonGlow));
-        cancelStackPane.setOnMouseExited(event -> ((ImageView) cancelStackPane.getChildren().get(0)).setImage(cancelButton));
-        cancelStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
-    }
-
-    private static void buyProcess() throws FileNotFoundException {
+    static void buyProcess() throws FileNotFoundException {
         handleErrors(Shop.buy(account, cardLabels.get(selectedIndex).getText()));
     }
 
-    private static void sellProcess() {
+    static void sellProcess() {
 
     }
 

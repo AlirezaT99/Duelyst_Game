@@ -30,7 +30,7 @@ public class StoryMenuFX {
         root.setPrefWidth(storyMenuScene.getWidth());
         root.setPrefHeight(storyMenuScene.getHeight());
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 40);
-        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root, false);
 
         VBox level1 = levelSetUp("src/view/sources/storyMenu/pictures/div-e-sefid.jpg", "DIV-E-SEFID", 1, storyMenuScene, font);
 
@@ -46,9 +46,8 @@ public class StoryMenuFX {
         storyMenuHBox.layoutXProperty().bind(root.widthProperty().subtract(storyMenuHBox.widthProperty()).divide(2));
         storyMenuHBox.layoutYProperty().bind(root.heightProperty().subtract(storyMenuHBox.heightProperty()).divide(2));
         // battleInitPrimary.setPadding(new Insets(50,0,50,0));
-        BackgroundFill background_fill = new BackgroundFill(javafx.scene.paint.Color.grayRgb(20, 0.8),
-                new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0));
-        storyMenuHBox.setBackground(new Background(background_fill));
+        storyMenuHBox.setBackground(new Background(new BackgroundFill(Color.grayRgb(20, 0.8),
+                new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0))));
         handleSetOnMouseClicked(level1, level2, level3);
         //  return battleInitScene;
         return root;
@@ -79,53 +78,47 @@ public class StoryMenuFX {
     }
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox) {
-        view.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                new GraphicalCommonUsages().mouseClickAudioPlay();
-                System.out.println(text.getText());
+        view.setOnMouseClicked(event -> {
+            new GraphicalCommonUsages().mouseClickAudioPlay();
+            System.out.println(text.getText());
 //                switch (text.getText()){
 //                    case "SINGLE PLAYER":
 //
 //                }
-            }
         });
-        vBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println(vBox.getLayoutX()+" "+vBox.getLayoutY() + text.getText().split("\n")[0]);
-                switch (text.getText().split("\n")[0]) {
-                    case "DIV-E-SEFID":
-                        try {
-                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid2.jpg")));
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case "ZAHHAK":
-                        try {
-                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak2.jpg")));
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case "ARASH":
-                        try {
-                            ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash2.jpg")));
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                }
-                view.setOpacity(1);
-                ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
-                st.setFromX(1);
-                st.setFromY(1);
-                st.setToX(1.1);
-                st.setToY(1.1);
-                st.play();
-                text.setEffect(new Glow(0.5));
+        vBox.setOnMouseEntered(event -> {
+            System.out.println(vBox.getLayoutX()+" "+vBox.getLayoutY() + text.getText().split("\n")[0]);
+            switch (text.getText().split("\n")[0]) {
+                case "DIV-E-SEFID":
+                    try {
+                        ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/div-e-sefid2.jpg")));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "ZAHHAK":
+                    try {
+                        ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/zahhak2.jpg")));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "ARASH":
+                    try {
+                        ((ImageView) view.getChildren().get(0)).setImage(new Image(new FileInputStream("src/view/sources/storyMenu/pictures/arash2.jpg")));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
+            view.setOpacity(1);
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
+            st.setFromX(1);
+            st.setFromY(1);
+            st.setToX(1.1);
+            st.setToY(1.1);
+            st.play();
+            text.setEffect(new Glow(0.5));
         });
 
         vBox.setOnMouseExited(new EventHandler<MouseEvent>() {

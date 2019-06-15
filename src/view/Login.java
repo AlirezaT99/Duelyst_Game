@@ -39,7 +39,7 @@ public class Login {
         root.setPrefHeight(primaryStage.getHeight());
         Random random = new Random();
         int backGroundNumber = random.nextInt(24) + 1;
-        GraphicalCommonUsages.setBackGroundImage("src/view/sources/loginMenu/backgrounds/" + backGroundNumber + ".jpg", root);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/loginMenu/backgrounds/" + backGroundNumber + ".jpg", root, false);
         Image logo = new Image(new FileInputStream("src/view/sources/loginMenu/backgrounds/duelyst.png"));
         ImageView logoImageView = new ImageView(logo);
         logoImageView.relocate(0, 0);

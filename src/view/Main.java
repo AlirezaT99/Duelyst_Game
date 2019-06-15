@@ -20,6 +20,7 @@ public class Main extends Application {
     private static MainMenuFX mainMenuFX;
     private static BattleInitFX battleInitFX;
     private static ShopMenuFX shopMenuFX;
+    private static CollectionMenuFX collectionMenuFX;
     private static SinglePlayerMenuFX singlePlayerMenuFX;
     private static CustomGameMenuFX customGameMenuFX;
     private static StoryMenuFX storyMenuFX;
@@ -77,6 +78,11 @@ public class Main extends Application {
     public static void setShopMenuFX(Account account) throws FileNotFoundException {
         Main.shopMenuFX = new ShopMenuFX(account);
         currentScene.setRoot(shopMenuFX.start(primaryStage));
+    }
+
+    public static void setCollectionMenuFX(Account account) throws FileNotFoundException {
+        Main.collectionMenuFX = new CollectionMenuFX(account);
+        currentScene.setRoot(collectionMenuFX.start(primaryStage));
     }
 
     public static void setBattleMenuFX(Account account) throws FileNotFoundException {

@@ -37,16 +37,18 @@ public class GraphicalCommonUsages {
         addOnMouseEnterAndExitHandler(area, changeableArea, image1, image2);
     }
 
-    public static void backGroundImageSetting(Image backGroundImage, Pane root) {
+    public static void backGroundImageSetting(Image backGroundImage, Pane root, boolean blur) {
         ImageView backGround = new ImageView(backGroundImage);
         backGround.setFitWidth(root.getPrefWidth());
         backGround.setFitHeight(root.getPrefHeight());
+        if (blur)
+            backGround.setEffect(new GaussianBlur());
         root.getChildren().add(backGround);
     }
 
-    public static void setBackGroundImage(String imageAddress, Pane root) throws FileNotFoundException {
+    public static void setBackGroundImage(String imageAddress, Pane root, boolean blur) throws FileNotFoundException {
         Image image = new Image(new FileInputStream(imageAddress));
-        backGroundImageSetting(image, root);
+        backGroundImageSetting(image, root, blur);
     }
 
     public static void okPopUp(String message, Scene scene, Pane root) throws FileNotFoundException {
@@ -75,6 +77,70 @@ public class GraphicalCommonUsages {
         confirmStackPane.setOnMouseEntered(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(okButtonGlow));
         confirmStackPane.setOnMouseExited(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(okButton));
         confirmStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
+    }
+
+    public static void yesCancelPopUp(String message, Scene scene, Pane root, String command) throws FileNotFoundException {
+        VBox popUp = new VBox();
+        Text messageText = new Text(message);
+        Rectangle bgRectangle = new Rectangle(scene.getWidth(), scene.getHeight());
+        final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 20);
+        popUpInCommonConfigs(scene, root, bgRectangle, popUp, messageText, font);
+
+
+        Image confirmButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm.png"));
+        Image confirmButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm_glow.png"));
+        Image cancelButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_cancel.png"));
+        Image cancelButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_cancel_glow.png"));
+
+        ImageView confirmButtonView = new ImageView(confirmButton);
+        confirmButtonView.setFitWidth(popUp.getPrefWidth() / 4);
+        confirmButtonView.setPreserveRatio(true);
+        //
+        ImageView cancelButtonView = new ImageView(cancelButton);
+        cancelButtonView.setFitWidth(popUp.getPrefWidth() / 4);
+        cancelButtonView.setPreserveRatio(true);
+        //
+        StackPane confirmStackPane = new StackPane();
+        Text confirmText = new Text(command);
+        confirmText.setFont(Font.font(font.getName(), 14));
+        confirmText.setFill(Color.WHITE);
+        confirmStackPane.getChildren().addAll(confirmButtonView, confirmText);
+        //
+        StackPane cancelStackPane = new StackPane();
+        Text cancelText = new Text("CANCEL");
+        cancelText.setFont(Font.font(font.getName(), 14));
+        cancelText.setFill(Color.WHITE);
+        cancelStackPane.getChildren().addAll(cancelButtonView, cancelText);
+        //
+        HBox secondLine = new HBox();
+        secondLine.getChildren().addAll(confirmStackPane, cancelStackPane);
+        secondLine.setAlignment(Pos.CENTER);
+        popUp.getChildren().addAll(secondLine);
+
+        confirmStackPane.setOnMouseEntered(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(confirmButtonGlow));
+        confirmStackPane.setOnMouseExited(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(confirmButton));
+        confirmStackPane.setOnMouseClicked(event -> {
+            root.getChildren().removeAll(bgRectangle, popUp);
+            // TODO buy/sell/deleteDeck process
+            switch (confirmText.getText()) {
+                case "BUY":
+                    try {
+                        ShopMenuFX.buyProcess();
+                    } catch (FileNotFoundException e) {
+                    }
+                    break;
+                case "SELL":
+                    ShopMenuFX.sellProcess();
+                    break;
+                case "DELETE":
+                    CollectionMenuFX.deleteDeckProcess();
+                    break;
+            }
+        });
+
+        cancelStackPane.setOnMouseEntered(event -> ((ImageView) cancelStackPane.getChildren().get(0)).setImage(cancelButtonGlow));
+        cancelStackPane.setOnMouseExited(event -> ((ImageView) cancelStackPane.getChildren().get(0)).setImage(cancelButton));
+        cancelStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
     }
 
     static void popUpInCommonConfigs(Scene scene, Pane root, Rectangle bgRectangle, VBox popUp, Text messageText, Font font) {

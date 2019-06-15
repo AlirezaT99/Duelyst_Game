@@ -37,7 +37,7 @@ public class MainMenuFX {
         Random random = new Random();
         int backGroundNumber = random.nextInt(2) + 1;
         Scene mainMenuScene = new Scene(fakeRoot, primaryStage.getWidth(), primaryStage.getHeight());
-        GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + backGroundNumber + ".jpg", root);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + backGroundNumber + ".jpg", root, false);
         Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         mainMenuScene.setCursor(new ImageCursor(cursor));
         Image arrow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/dialogue.png"));
@@ -192,6 +192,13 @@ public class MainMenuFX {
                 case "SHOP":
                     try {
                         Main.setShopMenuFX(currentAccount);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "COLLECTION":
+                    try {
+                        Main.setCollectionMenuFX(currentAccount);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }

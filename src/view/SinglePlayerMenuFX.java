@@ -27,7 +27,7 @@ public class SinglePlayerMenuFX {
         root.setPrefWidth(singlePlayerMenuScene.getWidth());
         root.setPrefHeight(singlePlayerMenuScene.getHeight());
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 40);
-        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root, false);
 
         VBox storyMode = storyModeSetUP(singlePlayerMenuScene, font, account);
 
