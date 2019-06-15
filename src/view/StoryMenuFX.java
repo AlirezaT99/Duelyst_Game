@@ -18,10 +18,12 @@ import javafx.util.Duration;
 import model.Account;
 import model.Match;
 import model.Table;
+import presenter.StoryMenuProcess;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class StoryMenuFX {
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
@@ -48,29 +50,29 @@ public class StoryMenuFX {
         // battleInitPrimary.setPadding(new Insets(50,0,50,0));
         storyMenuHBox.setBackground(new Background(new BackgroundFill(Color.grayRgb(20, 0.8),
                 new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0))));
-        handleSetOnMouseClicked(level1, level2, level3);
+        handleSetOnMouseClicked(level1, level2, level3,account);
         //  return battleInitScene;
         return root;
     }
 
-    private void handleSetOnMouseClicked(VBox level1, VBox level2, VBox level3) {
+    private void handleSetOnMouseClicked(VBox level1, VBox level2, VBox level3, Account account) {
         level1.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(null , null, new Match(false,1,0),true);
+                Main.setBattleFX(account, new Match(false,1,0),true);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });
         level2.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(null,null,new Match(false,2,10),true);
-            } catch (FileNotFoundException e) {
+                Main.setBattleFX(account, new Match(false,2,1),true);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         level3.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(null, null, new Match(false,3,10),true);
+                Main.setBattleFX(account, new Match(false,3,7),true);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -78,14 +80,14 @@ public class StoryMenuFX {
     }
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox) {
-        view.setOnMouseClicked(event -> {
-            new GraphicalCommonUsages().mouseClickAudioPlay();
-            System.out.println(text.getText());
-//                switch (text.getText()){
-//                    case "SINGLE PLAYER":
-//
-//                }
-        });
+//        view.setOnMouseClicked(event -> {
+//            new GraphicalCommonUsages().mouseClickAudioPlay();
+//            System.out.println(text.getText());
+////                switch (text.getText()){
+////                    case "SINGLE PLAYER":
+////
+////                }
+//        });
         vBox.setOnMouseEntered(event -> {
             System.out.println(vBox.getLayoutX()+" "+vBox.getLayoutY() + text.getText().split("\n")[0]);
             switch (text.getText().split("\n")[0]) {
