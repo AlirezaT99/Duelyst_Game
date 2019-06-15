@@ -103,7 +103,7 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("Bahman"));
         deck.addMinionToDeck(Minion.getMinionByName("The Great Ghoul"));
         deck.addItemToDeck(UsableItem.getUsableItemByName("Terror Hood"));
-        deck.setHero(Hero.getHeroByName("Aarash"));
+        deck.setHero(Hero.getHeroByName("Zahhak"));
         deck.getItems().get(0).setItemID("computer_TerrorHood_1");
         setDeckCardIDs("computer", deck);
         Match match = new Match(true, 2, -1);
@@ -137,7 +137,7 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("Iraj"));
         deck.addMinionToDeck(Minion.getMinionByName("Shah Ghoul"));
         deck.addItemToDeck(UsableItem.getUsableItemByName("Soul Eater"));
-        deck.setHero(Hero.getHeroByName("Zahhak"));
+        deck.setHero(Hero.getHeroByName("Aarash"));
         deck.getItems().get(0).setItemID("computer_SoulEater_1");
         setDeckCardIDs("computer", deck);
         Match match = new Match(true, 3, -1);
