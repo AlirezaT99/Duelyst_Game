@@ -39,9 +39,6 @@ public class StoryMenuProcess {
     }
 
     public DoCommand[] DoCommands = new DoCommand[]{
-            this::enterFirstLevel,
-            this::enterSecondLevel,
-            this::enterThirdLevel,
             this::exit,
             new DoCommand() {
                 @Override
@@ -51,7 +48,7 @@ public class StoryMenuProcess {
             }
     };
 
-    private int enterFirstLevel() throws IOException {
+    public static Match enterFirstLevel(Account account) throws IOException {
         Deck deck = new Deck("computerDeck");
         deck.addSpellToDeck(Spell.getSpellByName("Total Disarm"));
         deck.addSpellToDeck(Spell.getSpellByName("Lightning Bolt"));
@@ -78,16 +75,12 @@ public class StoryMenuProcess {
         deck.getItems().get(0).setItemID("computer_TheCrownOfKnowledge_1");
         setDeckCardIDs("computer", deck);
         Match match = new Match(true, 1, -1);
-        match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
-                storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
-                        .getAccount().getCollection().getSelectedDeck().getName(), 0, deck);
+        match.setup(account, account.getCollection().getSelectedDeck().getName(), 0, deck);
         match.getPlayer2().setDeck(deck);
-        BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
-        enterBattleMenu(battleMenu);
-        return 0;
+        return match;
     }
 
-    private int enterSecondLevel() throws IOException {
+    public static Match enterSecondLevel(Account account) throws IOException {
         Deck deck = new Deck("computerDeck");
         deck.addSpellToDeck(Spell.getSpellByName("HellFire"));
         deck.addSpellToDeck(Spell.getSpellByName("All Disarm"));
@@ -114,18 +107,14 @@ public class StoryMenuProcess {
         deck.getItems().get(0).setItemID("computer_TerrorHood_1");
         setDeckCardIDs("computer", deck);
         Match match = new Match(true, 2, -1);
-        match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
-                storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
-                        .getAccount().getCollection().getSelectedDeck().getName(), 1, deck);
+        match.setup(account, account.getCollection().getSelectedDeck().getName(), 1, deck);
         Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
         match.getTable().getCellByCoordination(3,5).setItem(flag);
         match.getPlayer2().setDeck(deck);
-        BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
-        enterBattleMenu(battleMenu);
-        return 0;
+        return match;
     }
 
-    private int enterThirdLevel() throws IOException {
+    public static Match enterThirdLevel(Account account) throws IOException {
         Deck deck = new Deck("computerDeck");
         deck.addSpellToDeck(Spell.getSpellByName("Area Dispel"));
         deck.addSpellToDeck(Spell.getSpellByName("Empower"));
@@ -152,13 +141,9 @@ public class StoryMenuProcess {
         deck.getItems().get(0).setItemID("computer_SoulEater_1");
         setDeckCardIDs("computer", deck);
         Match match = new Match(true, 3, -1);
-        match.setup(storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess().getAccount(),
-                storyMenu.getSinglePlayerMenu().getSinglePlayerMenuProcess()
-                        .getAccount().getCollection().getSelectedDeck().getName(), 7, deck);
+        match.setup(account, account.getCollection().getSelectedDeck().getName(), 7, deck);
         match.getPlayer2().setDeck(deck);
-        BattleMenu battleMenu = new BattleMenu(storyMenu.getSinglePlayerMenu().getBattleInit(), match);
-        enterBattleMenu(battleMenu);
-        return 0;
+        return match;
     }
 
     private void enterBattleMenu(BattleMenu battleMenu) {

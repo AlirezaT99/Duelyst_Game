@@ -111,10 +111,9 @@ public class Main extends Application {
         primaryStage.setScene(currentScene);
     }
 
-    public static void setBattleFX(Account firstPlayer, Account secondPlayer, Match match, boolean storyMode) throws FileNotFoundException {
+    public static void setBattleFX(Account firstPlayer, Match match, boolean storyMode) throws FileNotFoundException {
         battleFx = new BattleFX();
         currentScene.setRoot(battleFx.start(match, storyMode, getPrimaryStage(), firstPlayer));
-
     }
 
 
