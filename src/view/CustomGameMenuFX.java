@@ -34,7 +34,7 @@ public class CustomGameMenuFX {
         root.setPrefWidth(customGameMenu.getWidth());
         root.setPrefHeight(customGameMenu.getHeight());
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 25);
-        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root, false);
         VBox customGame = new VBox();
 
         VBox hero1 = opponentSetUp("src/view/sources/customGameMenu/pictures/div-e-sefid.jpg", "DIV-E-SEFID", customGameMenu, font, account, customGame, root);
@@ -97,42 +97,33 @@ public class CustomGameMenuFX {
     }
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox, Account account, VBox motherSet, Pane root) {
-        vBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setOpacity(1);
-                ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
-                st.setFromX(1);
-                st.setFromY(1);
-                st.setToX(1.15);
-                st.setToY(1.15);
-                st.play();
-                text.setEffect(new Glow(0.5));
-            }
+        vBox.setOnMouseEntered(event -> {
+            view.setOpacity(1);
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
+            st.setFromX(1);
+            st.setFromY(1);
+            st.setToX(1.15);
+            st.setToY(1.15);
+            st.play();
+            text.setEffect(new Glow(0.5));
         });
 
-        vBox.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setOpacity(0.6);
-                ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
-                st.setFromX(1.15);
-                st.setFromY(1.15);
-                st.setToX(1);
-                st.setToY(1);
-                st.play();
-                text.setEffect(new Glow(0.5));
-            }
+        vBox.setOnMouseExited(event -> {
+            view.setOpacity(0.6);
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
+            st.setFromX(1.15);
+            st.setFromY(1.15);
+            st.setToX(1);
+            st.setToY(1);
+            st.play();
+            text.setEffect(new Glow(0.5));
         });
-        vBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                new GraphicalCommonUsages().mouseClickAudioPlay();
-                try {
-                    chooseDeck(account, text.getText(), motherSet, root);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+        vBox.setOnMouseClicked(event -> {
+            new GraphicalCommonUsages().mouseClickAudioPlay();
+            try {
+                chooseDeck(account, text.getText(), motherSet, root);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -149,7 +140,7 @@ public class CustomGameMenuFX {
         }
         VBox replacingVBox = new VBox();
         VBox.setMargin(replacingVBox, motherSet.getInsets());
-        BackgroundFill background_fill = new BackgroundFill(javafx.scene.paint.Color.grayRgb(20, 0),
+        BackgroundFill background_fill = new BackgroundFill(Color.grayRgb(20, 0),
                 new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0));
         replacingVBox.setBackground(new Background(background_fill));
         replacingVBox.layoutXProperty().bind(root.widthProperty().subtract(replacingVBox.widthProperty()).divide(2));
@@ -157,7 +148,7 @@ public class CustomGameMenuFX {
 
         final Font deckFont = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 40);
 
-        javafx.scene.control.Label choose_your_deck = new Label("CHOOSE YOUR DECK");
+        Label choose_your_deck = new Label("CHOOSE YOUR DECK");
         choose_your_deck.setFont(deckFont);
         choose_your_deck.setTextFill(Color.WHITE);
 
@@ -172,8 +163,8 @@ public class CustomGameMenuFX {
         }
         decks.setSpacing(motherSet.getSpacing()/3);
         for (Node child : decks.getChildren()) {
-            child.setOnMouseEntered(event -> ((Text)child).setEffect(new Glow(0.5)));
-            child.setOnMouseExited(event -> ((Text)child).setEffect(new Glow(0)));
+            child.setOnMouseEntered(event -> child.setEffect(new Glow(0.5)));
+            child.setOnMouseExited(event -> child.setEffect(new Glow(0)));
             //todo : setOnMouseClicked -> make a match
         }
         decks.setAlignment(Pos.CENTER);

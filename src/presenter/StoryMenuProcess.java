@@ -161,11 +161,10 @@ public class StoryMenuProcess {
         return 0;
     }
 
-    private void enterBattleMenu(BattleMenu battleMenu) throws IOException {
+    private void enterBattleMenu(BattleMenu battleMenu) {
         storyMenu.setHasRun(false);
         storyMenu.setInStoryMenu(false);
         battleMenu.setInBattleMenu(true);
-        battleMenu.run();
     }
 
 

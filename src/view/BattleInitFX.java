@@ -29,7 +29,7 @@ public class BattleInitFX{
         root.setPrefWidth(battleInitScene.getWidth());
         root.setPrefHeight(battleInitScene.getHeight());
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 40);
-        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root);
+        GraphicalCommonUsages.setBackGroundImage("src/view/sources/battleInit/pictures/obsidian_woods.jpg", root, false);
 
         VBox singlePlayer = singlePlayerSetUp(battleInitScene, font,account);
 

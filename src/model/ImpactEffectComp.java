@@ -16,8 +16,8 @@ public class ImpactEffectComp {
     // 8.previousAttackMatters(0,1)
     private String impactWayOfAssigning = "";
     // 0.whereToPutIt(0-4){no where,defend,attack,dyingWish,summonImpact}
-    // 2.impactGiverTeam(0-3)
-    // 3.impactGetterTeam(0-3)
+    // 1.impactGiverTeam(0-3)
+    // 2.impactGetterTeam(0-3)
 
     private int impactQuantity;
     private ArrayList<Cell> impactArea;
@@ -69,7 +69,7 @@ public class ImpactEffectComp {
         putItOnAttack = impactWayOfAssigning.charAt(0) == '1';
         putItOnDyingWish = impactWayOfAssigning.charAt(0) == '3';
         putItOnSummonImpact = impactWayOfAssigning.charAt(0) == '4';
-        getterTeam = impactWayOfAssigning.charAt(2) == '1' ? match.getPlayer1().getUserName() : match.getPlayer2().getUserName();
+        getterTeam = impactWayOfAssigning.charAt(1) == '1' ? match.getPlayer1().getUserName() : match.getPlayer2().getUserName();
     }
 
 
