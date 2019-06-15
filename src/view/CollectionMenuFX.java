@@ -45,7 +45,7 @@ public class CollectionMenuFX {
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 //
-        drawBackButton(root, scene);
+        drawBackButton(root, scene, account);
         drawCollectionLabels(root, averta, scene);
 //        new ShopMenuFX(account).drawLeftBox(trump_med, root, scene);
 

@@ -66,7 +66,7 @@ public class ShopMenuFX {
         drawCards(scene, root, trump_reg, trump_reg_small);
         drawShopLabels(root, averta, scene);
         drawLeftBox(trump_med, root, scene);
-        drawBackButton(root, scene);
+        drawBackButton(root, scene, account);
         drawDrake(root, scene, trump_reg);
 
         return root;
@@ -359,9 +359,9 @@ public class ShopMenuFX {
         page.setText("Page = " + pageNumber + "/" + (cardsToShow.size() / 10 + (cardsToShow.size() % 10 != 0 ? 1 : 0)));
     }
 
-    static void drawBackButton(Pane root, Scene scene) throws FileNotFoundException {
+    static void drawBackButton(Pane root, Scene scene, Account account) throws FileNotFoundException {
         ImageView backToMainView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/button_back_corner.png")));
-        backToMainViewSetting(root, scene, backToMainView);
+        backToMainViewSetting(root, scene, backToMainView, account);
     }
 
     private void addEventHandlerOnArrows(ImageView leftArrow, ImageView rightArrow) {
@@ -490,7 +490,7 @@ public class ShopMenuFX {
         isInCollection = !setOnShop;
     }
 
-    private static void backToMainViewSetting(Pane root, Scene mainMenuScene, ImageView backToMainView) {
+    private static void backToMainViewSetting(Pane root, Scene mainMenuScene, ImageView backToMainView, Account account) {
         MainMenuFX.backButtonAdjustment(root, mainMenuScene, backToMainView);
         backToMainView.setOnMouseClicked(event -> {
             try {
