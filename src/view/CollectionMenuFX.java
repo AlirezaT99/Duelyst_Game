@@ -19,9 +19,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Account;
+import model.Deck;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Random;
 
 import static view.GraphicalCommonUsages.yesCancelPopUp;
@@ -30,6 +32,11 @@ import static view.ShopMenuFX.drawBackButton;
 public class CollectionMenuFX {
     private static Account account;
     private static Pane root = new Pane();
+    private static HashMap<ImageView, String> deleteDeckHMap = new HashMap<>();
+    private static HashMap<ImageView, String> selectDeckHMap = new HashMap<>();
+    private static Scene scene;
+    private static VBox decksVBox;
+    private static String aboutToDelete = "";
 
     CollectionMenuFX(Account account) {
         CollectionMenuFX.account = account;
@@ -40,7 +47,7 @@ public class CollectionMenuFX {
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
         final Font averta = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/averta-light-webfont.ttf"), 40);
 
-        Scene scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
+        scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
@@ -57,7 +64,7 @@ public class CollectionMenuFX {
 
         Rectangle background = new Rectangle(scene.getWidth() * 0.25, scene.getHeight());
         background.setFill(Color.grayRgb(20, 0.8));
-        VBox decksVBox = new VBox();
+        decksVBox = new VBox();
         Label label = new Label("Manage Decks");
         label.setFont(font);
         label.setTextFill(Color.WHITE);
@@ -71,7 +78,7 @@ public class CollectionMenuFX {
         StackPane.setAlignment(createDeck, Pos.BOTTOM_CENTER);
 
         decksVBox.getChildren().addAll(new Text(""), label, titleUnderline, new Text("\n"));
-        addDecks(decksVBox, scene);
+        drawDecks(decksVBox, scene);
 
         ImageView createDeckView = new ImageView(new Image(new FileInputStream("src/view/sources/collectionMenu/gauntlet_control_bar_bg.png")));
         Label createDeckLabel = new Label("CREATE DECK");
@@ -137,7 +144,7 @@ public class CollectionMenuFX {
         closeBar.setVisible(false);
         closeBar.setOpacity(0.5);
         closeBar.setOnMouseEntered(event -> closeBar.setOpacity(0.9));
-        closeBar.setOnMouseExited (event -> closeBar.setOpacity(0.5));
+        closeBar.setOnMouseExited(event -> closeBar.setOpacity(0.5));
         closeBar.setOnMouseClicked(event -> {
             timeline3.play();
 
@@ -182,43 +189,75 @@ public class CollectionMenuFX {
         root.getChildren().add(manageDeckPane);
     }
 
-    private void addDecks(VBox decksVBox, Scene scene) throws FileNotFoundException {
+    private static void drawDecks(VBox decksVBox, Scene scene) throws FileNotFoundException {
+//        decksVBox.getChildren().clear();
+        for (Deck deck : account.getCollection().getDeckHashMap().values())
+            decksVBox.getChildren().add(addDeckView(scene, deck.getName(), decksVBox));
+    }
+
+    private static HBox addDeckView(Scene scene, String deckName, VBox decksVBox) throws FileNotFoundException {
         Image deckBackground = new Image(new FileInputStream("src/view/sources/collectionMenu/button_primary_middle.png"));
         Image deckBackgroundGlow = new Image(new FileInputStream("src/view/sources/collectionMenu/button_primary_middle_glow.png"));
         Image deleteDeck = new Image(new FileInputStream("src/view/sources/collectionMenu/recycle-bin-small.png"));
-        final Font deckNameFont = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 24);
+        Image selectDeck = new Image(new FileInputStream("src/view/sources/collectionMenu/checkCircle.png"));
+        Image selectDeckGray = new Image(new FileInputStream("src/view/sources/collectionMenu/checkCircle_gray.png"));
+        final Font deckNameFont = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 24);
 
         StackPane deck = new StackPane();
         ImageView deckBg = new ImageView(deckBackground);
+        Label name = new Label("\t" + deckName);
+        StackPane.setAlignment(name, Pos.CENTER_LEFT);
+        name.setFont(deckNameFont);
+        name.setTextFill(Color.WHITE);
         deck.setOnMouseClicked(event -> {
             deckBg.setImage(deckBackgroundGlow);
             // selected deck = this
             //unGlow the rest
             //show deck
         });
-        Label deckName = new Label();
-        deckName.setTextFill(Color.WHITE);
-        deckName.setFont(deckNameFont);
-        deck.getChildren().addAll(deckBg, deckName);
-        StackPane.setAlignment(deckName, Pos.CENTER_LEFT);
+        deck.getChildren().addAll(deckBg, name);
+
         ImageView deleteDeckView = new ImageView(deleteDeck);
         deleteDeckView.setOnMouseEntered(event -> deleteDeckView.setEffect(new Glow(0.5)));
         deleteDeckView.setOnMouseExited(event -> deleteDeckView.setEffect(new Glow(0)));
         deleteDeckView.setOnMouseClicked(event -> {
+            aboutToDelete = deleteDeckHMap.get(deleteDeckView);
             try {
-                yesCancelPopUp("Are you sure to delete "/* deckName */ + " ?", scene, root, "DELETE");
+                yesCancelPopUp("Are you sure to delete " + aboutToDelete + " ?", scene, root, "DELETE");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });
-
+        ImageView selectDeckView = new ImageView(selectDeckGray);
+        if (account.getCollection().getSelectedDeck().getName().equals(deckName))
+            selectDeckView.setImage(selectDeck);
+        selectDeckView.setOnMouseClicked(event -> {
+            if (account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName))) {
+                selectDeckView.setImage(selectDeck);
+                account.getCollection().setSelectedDeck(deckName);
+                for (ImageView imageView : selectDeckHMap.keySet())
+                    if (!selectDeckHMap.get(imageView).equals(deckName))
+                        imageView.setImage(selectDeckGray);
+            } else {
+                try {
+                    GraphicalCommonUsages.okPopUp("this deck is invalid", scene, root);
+                } catch (FileNotFoundException e) {
+                }
+            }
+        });
+        deleteDeckHMap.put(deleteDeckView, deckName);
+        selectDeckHMap.put(selectDeckView, deckName);
         HBox deckHBox = new HBox();
         deckHBox.setSpacing(10);
-        deckHBox.getChildren().addAll(new Text("   "), deck, deleteDeckView);
+        deckHBox.getChildren().addAll(new Text("   "), deck, deleteDeckView, selectDeckView);
         deckHBox.setAlignment(Pos.CENTER_LEFT);
-        decksVBox.getChildren().add(deckHBox);
+
+        return deckHBox;
     }
 
-    public static void deleteDeckProcess() {
+    static void deleteDeckProcess() throws FileNotFoundException {
+        account.getCollection().deleteDeck(aboutToDelete);
+        decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
+        drawDecks(decksVBox, scene);
     }
 }

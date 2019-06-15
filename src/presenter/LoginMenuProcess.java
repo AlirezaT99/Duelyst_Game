@@ -4,6 +4,7 @@ import view.LoginMenu;
 import model.Account;
 import view.MainMenu;
 import com.google.gson.*;
+
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.*;
@@ -39,13 +40,13 @@ public class LoginMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return createAccount(commandParts[2],"");
+                    return createAccount(commandParts[2], "");
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
-                    return login(commandParts[1],"");
+                    return login(commandParts[1], "");
                 }
             },
             new DoCommand() {
@@ -119,7 +120,7 @@ public class LoginMenuProcess {
 //        }
     }
 
-    public  int login(String userName, String password) throws IOException {
+    public int login(String userName, String password) throws IOException {
         readUsers();
         for (Account user : users) {
             if (user.getUserName().equals(userName)) {

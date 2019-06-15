@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Account;
 import model.Match;
+import model.Table;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,11 +22,13 @@ public class BattleFX {
     private static double screenHeight;
     private static Rectangle[][] rectangles = new Rectangle[9][5];
 
-    Pane start(Match match, boolean isStoryMode, Stage stage,Account account) throws FileNotFoundException {
+    Pane start(Match match, boolean isStoryMode, Stage stage, Account account) throws FileNotFoundException {
         Pane pane = new Pane();
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, pane);
-        pane.getChildren().addAll(setTable(new Group()));
+        Pane table = setTable(new Pane());
+        pane.getChildren().addAll(table);
+//        table.relocate((screenWidth - table.getWidth()) / 2, (screenHeight - table.getHeight()) / 2);
         pane.setOnMouseClicked(event -> {
             try {
                 Main.setBattleMenuFX(account);
@@ -38,7 +41,7 @@ public class BattleFX {
 
     //create table graphics
 
-    private Group setTable(Group group){
+    private Pane setTable(Pane group) {
         PerspectiveTransform perspectiveTransform = getPerspectiveTransform();
         group.setEffect(perspectiveTransform);
         group.setCache(true);
@@ -46,13 +49,13 @@ public class BattleFX {
         return group;
     }
 
-    private void createTableRectangles(Group group) {
+    private void createTableRectangles(Pane group) {
         double width = 100;
         double margin = 5;
         double height = 100;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
-                rectangles[i][j] = new Rectangle((width+margin)*(i+1),(height+margin)*(j+1),width,height);
+                rectangles[i][j] = new Rectangle((width + margin) * (i + 1), (height + margin) * (j + 1), width, height);
                 rectangles[i][j].setFill(Color.BLUE);
                 rectangles[i][j].setOpacity(0.4);
                 group.getChildren().addAll(rectangles[i][j]);
@@ -65,11 +68,11 @@ public class BattleFX {
 
     private PerspectiveTransform getPerspectiveTransform() {
         double ulx = 520.0;
-        double urx = 660+screenWidth/32*11;
+        double urx = 660 + screenWidth / 32 * 11;
         double llx = 480.0;
-        double lrx = 760.0+screenWidth/32*11;
+        double lrx = 760.0 + screenWidth / 32 * 11;
         double uy = 320.0;
-        double ly = 420.0+screenHeight/3;
+        double ly = 420.0 + screenHeight / 3;
         PerspectiveTransform perspectiveTransform = new PerspectiveTransform();
         perspectiveTransform.setUrx(urx);
         perspectiveTransform.setUry(uy);
@@ -85,14 +88,15 @@ public class BattleFX {
     //create Table graphics
 
     private void setScreenVariables(Stage stage) {
-        screenHeight = stage.getHeight();
-        screenWidth = stage.getWidth();
+        screenHeight = stage.getScene().getHeight();
+        screenWidth = stage.getScene().getWidth();
+        System.out.println("screenHeight = " + screenHeight);
     }
 
     private void setBackGround(Match match, boolean isStoryMode, Pane pane) throws FileNotFoundException {
         String arenaAddress = "src/view/sources/Battle/BattlePictures/Arena/";
         arenaAddress += !isStoryMode ? "Story/" : "nonStory/";
-        arenaAddress += !isStoryMode ? match.getGameMode(): Math.abs(new Random().nextInt() % 7 );
+        arenaAddress += !isStoryMode ? match.getGameMode() : Math.abs(new Random().nextInt() % 7);
         arenaAddress += ".jpg";
         ImageView backGround = new ImageView(new Image(new FileInputStream(arenaAddress)));
         setImageFItToScreen(backGround);
