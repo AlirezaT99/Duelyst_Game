@@ -58,36 +58,28 @@ public class StoryMenuFX {
     private void handleSetOnMouseClicked(VBox level1, VBox level2, VBox level3, Account account) {
         level1.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(account, new Match(false,1,0),true);
-            } catch (FileNotFoundException e) {
+                Main.setBattleFX(account, StoryMenuProcess.enterFirstLevel(account),true);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         level2.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(account, new Match(false,2,1),true);
+                Main.setBattleFX(account, StoryMenuProcess.enterSecondLevel(account),true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         level3.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(account, new Match(false,3,7),true);
-            } catch (FileNotFoundException e) {
+                Main.setBattleFX(account, StoryMenuProcess.enterThirdLevel(account),true);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox) {
-//        view.setOnMouseClicked(event -> {
-//            new GraphicalCommonUsages().mouseClickAudioPlay();
-//            System.out.println(text.getText());
-////                switch (text.getText()){
-////                    case "SINGLE PLAYER":
-////
-////                }
-//        });
         vBox.setOnMouseEntered(event -> {
             System.out.println(vBox.getLayoutX()+" "+vBox.getLayoutY() + text.getText().split("\n")[0]);
             switch (text.getText().split("\n")[0]) {
