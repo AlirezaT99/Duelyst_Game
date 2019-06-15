@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import static model.Shop.findCardByName;
+import static model.Shop.findItemByName;
+
 public class ShopMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     public static String[] commandParts;
@@ -139,6 +142,22 @@ public class ShopMenuProcess {
         else
             return shopMenu.getShop().buy(currentAccount, name);
         return 0;
+    }
+
+    public static boolean isDrakeEnough(int money, String name){
+        UsableItem item = findItemByName(name.trim());
+        Card card = findCardByName(name.trim());
+        if(item != null)
+            if(item.getCost()<=money)
+                return true;
+            else
+                return false;
+        if(card!=null)
+            if(card.getCost()<=money)
+                return true;
+            else
+                return false;
+        return false;
     }
 
     private int sell(String id) throws FileNotFoundException {

@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
-public class BattleFx {
+public class BattleFX {
     private static double screenWidth;
     private static double screenHeight;
     private static Rectangle[][] rectangles = new Rectangle[9][5];
@@ -98,7 +98,6 @@ public class BattleFx {
         setImageFItToScreen(backGround);
         pane.getChildren().addAll(backGround);
     }
-
 
     private void setImageFItToScreen(ImageView foreGroundImage) {
         foreGroundImage.setFitHeight(screenHeight);

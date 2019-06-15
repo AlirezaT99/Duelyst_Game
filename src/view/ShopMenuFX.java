@@ -5,6 +5,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -46,6 +47,7 @@ public class ShopMenuFX {
     private static int pageNumber = 0;
     private static int selectedIndex = 0;
     private static Account account;
+    private static Label money;
     private static Pane root = new Pane();
 
     ShopMenuFX(Account account) {
@@ -109,7 +111,17 @@ public class ShopMenuFX {
                 try {
                     selectedIndex = finalI;
                     String str = isInShop ? "BUY" : "SELL";
-                    yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                    if (str.equals("BUY")) {
+                        if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim()))
+                        {
+                            //todo : drake(no) popUp
+                            GraphicalCommonUsages.drakePopUp("not enough drake",scene,root,2);
+                        }
+                        else{
+                            yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                        }
+                    } else
+                        yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
                 } catch (FileNotFoundException e) {
                 }
             });
@@ -191,12 +203,16 @@ public class ShopMenuFX {
         searchButton.setOnMouseExited(event -> searchButton.setEffect(new Glow(0)));
         root.getChildren().addAll(searchButton, searchTextField);
 
-        ListView<HBox> listView = new ListView<>(); // TODO somebody help :/ don't know how to remove its background -_-
+        ListView<HBox> listView = new ListView<>();
+
         listView.relocate(scene.getWidth() / 30, scene.getHeight() / 5);
         listView.getItems().addAll(hBoxes);
         listView.setMaxHeight(388);
         listView.setStyle("-fx-control-inner-background: rgba(0,46,72,0.3);-fx-border-color: rgba(0,46,72,0.3);" +
-                "-fx-control-outer-background: rgba(0,46,72,0.3);"); // -fx-border-radius: 10;-fx-background-radius: 10;
+                "-fx-control-outer-background: rgba(0,46,72,0.3);-fx-background-color: transparent;"); // -fx-border-radius: 10;-fx-background-radius: 10;
+        for (HBox item : listView.getItems())
+            item.setStyle("-fx-background-color: transparent;");
+
         listView.setBackground(new Background
                 (new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, new javafx.geometry.Insets(0))));
         listView.setOnMouseClicked(event -> {
@@ -348,7 +364,7 @@ public class ShopMenuFX {
     private void drawDrake(Pane root, Scene scene, Font font) throws FileNotFoundException {
         ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/drake_verySmall.png"))); // for now
         imageView.relocate(scene.getWidth() * 0.92, scene.getHeight() / 64);
-        Label money = new Label(account.getMoney() + "");
+        money = new Label(account.getMoney() + "");
         money.relocate(scene.getWidth() * 0.88, scene.getHeight() / 64 + 20);
         money.setFont(font);
         money.setTextFill(Color.WHITE);
@@ -508,6 +524,12 @@ public class ShopMenuFX {
 
     static void buyProcess() throws FileNotFoundException {
         handleErrors(Shop.buy(account, cardLabels.get(selectedIndex).getText()));
+//        GraphicalCommonUsages.drakePopUp("purchase was successful",);
+        updateMoney();
+    }
+
+    static void updateMoney() {
+        money.setText(account.getMoney() + "");
     }
 
     static void sellProcess() {

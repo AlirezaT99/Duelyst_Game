@@ -3,6 +3,7 @@ package view;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -10,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -49,6 +52,72 @@ public class GraphicalCommonUsages {
     public static void setBackGroundImage(String imageAddress, Pane root, boolean blur) throws FileNotFoundException {
         Image image = new Image(new FileInputStream(imageAddress));
         backGroundImageSetting(image, root, blur);
+    }
+
+    public static void drakePopUp(String message, Scene scene, Pane root, int mode) throws FileNotFoundException {
+        Rectangle bgRectangle = new Rectangle(scene.getWidth(), scene.getHeight());
+        HBox popUp = new HBox();
+        VBox popUpLeft = new VBox();
+        Text messageText = new Text(message);
+        final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 20);
+        Image image = new Image(new FileInputStream("src/view/sources/shopMenu/popUpPictures/yes.jpg"));
+        if(mode == 2)
+            image = new Image(new FileInputStream("src/view/sources/shopMenu/popUpPictures/no.jpg"));
+        Circle circle = new Circle();
+        circle.setFill(new ImagePattern(image));
+        circle.setRadius(scene.getWidth()/15);
+
+        bgRectangle.relocate(0.0, 0.0);
+        root.getChildren().addAll(bgRectangle);
+        bgRectangle.setOpacity(0.5);
+        bgRectangle.setEffect(new GaussianBlur());
+
+        popUp.setPrefHeight(scene.getHeight() / 4);
+        popUp.setPrefWidth(scene.getWidth() / 3);
+        BackgroundFill background_fill = new BackgroundFill(Color.grayRgb(20, 0.8),
+                new CornerRadii(15), new javafx.geometry.Insets(0, 0, 0, 0));
+
+        popUp.setBackground(new Background(background_fill));
+
+        messageText.setTextAlignment(TextAlignment.CENTER);
+        messageText.setFill(Color.WHITE);
+        messageText.setFont(font);
+
+        HBox firstLine = new HBox(messageText);
+        firstLine.setAlignment(Pos.CENTER);
+        messageText.setTextAlignment(TextAlignment.CENTER);
+        popUpLeft.getChildren().addAll(new Text(""), firstLine);
+
+        popUpLeft.setSpacing(popUpLeft.getPrefHeight() / 6);
+        popUp.layoutXProperty().bind(root.widthProperty().subtract(popUp.widthProperty()).divide(2));
+        popUp.layoutYProperty().bind(root.heightProperty().subtract(popUp.heightProperty()).divide(2));
+
+        popUp.getChildren().addAll(new Text(""),circle,popUpLeft,new Text(""));
+        popUp.setAlignment(Pos.CENTER);
+        popUp.setSpacing(popUp.getPrefWidth()/8);
+        root.getChildren().addAll(popUp);
+        soundEffectPlay("error");
+        //
+
+        Image okButton = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm.png"));
+        Image okButtonGlow = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_confirm_glow.png"));
+        ImageView okButtonView = new ImageView(okButton);
+        okButtonView.setFitWidth(popUp.getPrefWidth() / 4);
+        okButtonView.setPreserveRatio(true);
+
+        StackPane confirmStackPane = new StackPane();
+        Text okText = new Text("OK");
+        okText.setFont(Font.font(font.getName(), 14));
+        okText.setFill(Color.WHITE);
+        confirmStackPane.getChildren().addAll(okButtonView, okText);
+        HBox secondLine = new HBox(confirmStackPane);
+        secondLine.setAlignment(Pos.CENTER);
+        popUpLeft.getChildren().addAll(secondLine,new Text(""));
+        popUpLeft.setSpacing(popUp.getPrefHeight()/4);
+
+        confirmStackPane.setOnMouseEntered(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(okButtonGlow));
+        confirmStackPane.setOnMouseExited(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(okButton));
+        confirmStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
     }
 
     public static void okPopUp(String message, Scene scene, Pane root) throws FileNotFoundException {

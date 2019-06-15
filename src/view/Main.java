@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import model.Account;
 import model.Match;
 
-import javax.accessibility.AccessibleEditableText;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +23,7 @@ public class Main extends Application {
     private static SinglePlayerMenuFX singlePlayerMenuFX;
     private static CustomGameMenuFX customGameMenuFX;
     private static StoryMenuFX storyMenuFX;
-    private static BattleFx battleFx;
+    private static BattleFX battleFx;
     private static Stage primaryStage;
     private static Scene currentScene;
     private static Rectangle2D primaryScreenBounds;
@@ -100,21 +99,21 @@ public class Main extends Application {
 
     public static void setStoryMenuFX(Account account) throws FileNotFoundException {
         if (storyMenuFX == null)
-            Main.storyMenuFX= new StoryMenuFX();
+            Main.storyMenuFX = new StoryMenuFX();
         currentScene.setRoot(storyMenuFX.start(primaryStage, account));
         primaryStage.setScene(currentScene);
     }
 
     public static void setCustomGameMenuFX(Account account) throws FileNotFoundException {
         if (customGameMenuFX == null)
-            Main.customGameMenuFX= new CustomGameMenuFX();
+            Main.customGameMenuFX = new CustomGameMenuFX();
         currentScene.setRoot(customGameMenuFX.start(primaryStage, account));
         primaryStage.setScene(currentScene);
     }
 
-    public static void setBattleFX(Account firstPlayer, Account secondPlayer, Match match,boolean storyMode) throws FileNotFoundException {
-        battleFx = new BattleFx();
-        currentScene.setRoot(battleFx.start(match,storyMode,getPrimaryStage(),firstPlayer));
+    public static void setBattleFX(Account firstPlayer, Account secondPlayer, Match match, boolean storyMode) throws FileNotFoundException {
+        battleFx = new BattleFX();
+        currentScene.setRoot(battleFx.start(match, storyMode, getPrimaryStage(), firstPlayer));
 
     }
 

@@ -64,8 +64,8 @@ public class Shop {
     //buy
 
     public static int buy(Account account, String name) {
-        UsableItem item = findItemByName(name);
-        Card card = findCardByName(name);
+        UsableItem item = findItemByName(name.trim());
+        Card card = findCardByName(name.trim());
         if (isBuyValid(account, item, card) != 0)
             return isBuyValid(account, item, card);
         int cost;
@@ -114,7 +114,7 @@ public class Shop {
     }
     // sell
 
-    private static UsableItem findItemByName(String itemName) {
+    public static UsableItem findItemByName(String itemName) {
         for (UsableItem item : shopItems) {
             if (item.getName().equals(itemName))
                 return item;
