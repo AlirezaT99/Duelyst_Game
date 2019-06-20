@@ -20,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -99,8 +100,9 @@ public class BattleFX {
         iconsRow.layoutXProperty().bind(root.widthProperty().subtract(iconsRow.widthProperty()).divide(2));
         iconsRow.setLayoutY(-1 * (scene.getHeight() / 20));
         HBox bottomRow = drawHand(match.getPlayer1(),match,root,scene);
+        StackPane nextCard = getNextStackPane(scene,match.getPlayer1());
+        root.getChildren().addAll(iconsRow,bottomRow,nextCard,getBootomRight(scene,match.getPlayer1()));
 
-        root.getChildren().addAll(iconsRow,bottomRow);
         bottomRow.layoutXProperty().bind(root.widthProperty().subtract(bottomRow.widthProperty()).divide(2));
 
         bottomRow.setPadding(new Insets(scene.getHeight()*3/4,0,0,0));
@@ -112,9 +114,107 @@ public class BattleFX {
         secondPlayerImageView.setOnMouseExited(event -> scaleIcon(secondPlayerImageView, 1.1, 1));
 
     }
+
+    private StackPane getNextStackPane(Scene scene, Player player) throws FileNotFoundException {
+        StackPane nextCard = new StackPane();
+        ImageView nextBackGround = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/next/next_background.png")));
+        nextBackGround.setFitHeight(scene.getHeight()/3);
+        nextBackGround.setPreserveRatio(true);
+        ImageView nextBorderShine = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/next/next_outer_ring_shine.png")));
+        nextBorderShine.setFitHeight(scene.getHeight()/3);
+        nextBorderShine.setPreserveRatio(true);
+        Label nextLabel = new Label("Next : " + player.getDeck().getNextCard().getName());
+        nextLabel.setTextFill(Color.WHITE);
+        nextLabel.setFont(new Font(20));
+        nextCard.setOnMouseEntered(event -> {
+            try {
+                nextLabel.setEffect(new Glow(1));
+                nextBorderShine.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/next/next_outer_ring_smoke.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+        nextCard.setOnMouseExited(event -> {
+            try {
+                nextLabel.setEffect(new Glow(0));
+                nextBorderShine.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/next/next_outer_ring_shine.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+        nextCard.getChildren().addAll(nextBackGround,nextBorderShine,nextLabel);
+        nextCard.relocate(0,scene.getHeight()*2/3);
+
+        return nextCard;
+    }
+    private VBox getBootomRight(Scene scene, Player player) throws FileNotFoundException {
+        VBox bottomRight = new VBox();
+        Image endTurnInitialImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine.png"));
+        Image endTurnGlowImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine_glow.png"));
+
+        Image menuInitial = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_left.png"));
+        Image menuGlow = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_left_glow.png"));
+
+        Image graveYardInitial = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_right.png"));
+        Image graveYardGlow = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_right_glow.png"));
+
+
+        ImageView endTurnImage = new ImageView(endTurnInitialImage);
+        endTurnImage.setFitWidth(scene.getWidth()/5);
+        endTurnImage.setPreserveRatio(true);
+
+        Label endTurnLabel = new Label("END TURN");
+        endTurnLabel.setTextFill(Color.WHITE);
+        endTurnLabel.setFont(new Font(25));
+       StackPane endTurn = new StackPane(endTurnImage,endTurnLabel);
+        endTurn.setOnMouseEntered(event -> {
+                endTurnLabel.setEffect(new Glow(1));
+                endTurnImage.setImage(endTurnGlowImage);
+        });
+        endTurn.setOnMouseExited(event -> {
+                endTurnLabel.setEffect(new Glow(0));
+                endTurnImage.setImage(endTurnInitialImage);
+
+        });
+
+        HBox lowerPart = new HBox();
+        StackPane menu = new StackPane();
+        StackPane graveYard = new StackPane();
+
+        Label menuLabel = new Label("MENU");
+        menuLabel.setTextFill(Color.WHITE);
+        menuLabel.setFont(new Font(14));
+
+        Label graveYardLabel = new Label("GRAVE YARD");
+        graveYardLabel.setTextFill(Color.WHITE);
+        graveYardLabel.setFont(new Font(14));
+
+        ImageView menuView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_left.png")));
+        menuView.setFitWidth(scene.getWidth()/10);
+        menuView.setPreserveRatio(true);
+        ImageView graveYardView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_right.png")));
+        graveYardView.setFitWidth(scene.getWidth()/10);
+        graveYardView.setPreserveRatio(true);
+
+        menu.setOnMouseEntered(event -> menuView.setImage(menuGlow));
+        menu.setOnMouseExited(event -> menuView.setImage(menuInitial));
+
+        graveYard.setOnMouseEntered(event -> graveYardView.setImage(graveYardGlow));
+        graveYard.setOnMouseExited(event -> graveYardView.setImage(graveYardInitial));
+
+        menu.getChildren().addAll(menuView,menuLabel);
+        graveYard.getChildren().addAll(graveYardView,graveYardLabel);
+        lowerPart.getChildren().addAll(menu,graveYard);
+        bottomRight.getChildren().addAll(endTurn,lowerPart);
+        bottomRight.relocate(scene.getWidth()*4/5,scene.getHeight()*3/4);
+
+        return bottomRight;
+    }
+
     private HBox drawHand(Player player, Match match, Pane root, Scene scene) throws FileNotFoundException {
         HBox bottomRow = new HBox();
-        Image cardHolder = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container.png"));
+        Image cardHolder = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container-hover.png"));
 
         for(int i = 0; i < 5; i++) {
             VBox cardContainer = new VBox();
@@ -124,6 +224,7 @@ public class BattleFX {
             Image mana = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/mana/mana_active.png"));
             ImageView manaView = new ImageView(mana);
             if (( player.getMana()<player.getHand().getCards().get(i).getManaCost())){
+                cardHolderView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container.png")));
                 ColorAdjust grayscale = new ColorAdjust();
                 grayscale.setBrightness(-0.5);
                 manaView.setEffect(grayscale);
@@ -139,8 +240,7 @@ public class BattleFX {
             cardContainer.getChildren().addAll(imageStackPane,manaStackPane);
             cardContainer.setAlignment(Pos.CENTER);
             cardContainer.setSpacing((-1)*(scene.getHeight())/20);
-//            cardContainer.setOnMouseEntered(event -> scaleIcon(cardHolderView,1,1.1));
-//            cardHolderView.setOnMouseExited(event -> scaleIcon(cardHolderView,1.1,1));
+
             bottomRow.getChildren().add(cardContainer);
 
         }
