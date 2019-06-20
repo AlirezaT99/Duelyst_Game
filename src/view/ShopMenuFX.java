@@ -5,7 +5,6 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -23,14 +22,12 @@ import javafx.util.Duration;
 import model.*;
 import presenter.ShopMenuProcess;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static view.GraphicalCommonUsages.popUpInCommonConfigs;
 import static view.GraphicalCommonUsages.yesCancelPopUp;
 import static view.ShopMenu.handleErrors;
 
@@ -44,7 +41,7 @@ public class ShopMenuFX {
     private static HashMap<Integer, Label> cardPrices = new HashMap<>();
     private static HashMap<Integer, StackPane> cardPanes = new HashMap<>();
     private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
-    private static int pageNumber = 0;
+    private static int pageNumber = 1;
     private static int selectedIndex = 0;
     private static Account account;
     private static Label money;
@@ -76,12 +73,12 @@ public class ShopMenuFX {
 
     private void drawCards(Scene scene, Pane root, Font trump, Font trump_small) throws FileNotFoundException {
         Image tinyDrake = new Image(new FileInputStream("src/view/sources/shopMenu/drake_veryVerySmall.png"));
-        StackPane[] stackPanes = new StackPane[10];
+        GridPane gridPane = new GridPane();
+        gridPane.relocate(scene.getWidth() * 7.3 / 24,scene.getHeight() * 7.5 / 24);
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
         for (int i = 0; i < 10; i++) {
-            stackPanes[i] = new StackPane();
-            stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
-                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
-
+            StackPane stackPane = new StackPane();
             ImageView imageView = new ImageView(getCardTheme(3));
             Label cardName = new Label(); // "Label " + i
             Label card_AP_HP = new Label(); // "\n0\t\t0"
@@ -92,10 +89,10 @@ public class ShopMenuFX {
             cardLabels.put(i, cardName);
             cardPowers.put(i, card_AP_HP);
             cardImages.put(i, imageView);
-            cardPanes.put(i, stackPanes[i]);
+            cardPanes.put(i, stackPane);
             StackPane.setAlignment(cardName, Pos.TOP_CENTER);
             StackPane.setAlignment(card_AP_HP, Pos.CENTER);
-            stackPanes[i].setMaxSize(157, 279);
+            stackPane.setMaxSize(157, 279);
 
             HBox price = new HBox();
             Label priceLabel = new Label();
@@ -106,8 +103,8 @@ public class ShopMenuFX {
             price.getChildren().addAll(priceLabel, new ImageView(tinyDrake));
 
             int finalI = i;
-            stackPanes[i].setOnMouseEntered(event -> stackPanes[finalI].setEffect(new Glow(0.2)));
-            stackPanes[i].setOnMouseClicked(event -> {
+            stackPane.setOnMouseEntered(event -> stackPane.setEffect(new Glow(0.2)));
+            stackPane.setOnMouseClicked(event -> {
                 try {
                     selectedIndex = finalI;
                     String str = isInShop ? "BUY" : "SELL";
@@ -125,11 +122,14 @@ public class ShopMenuFX {
                 } catch (FileNotFoundException e) {
                 }
             });
-            stackPanes[i].setOnMouseExited(event -> stackPanes[finalI].setEffect(new Glow(0)));
+            stackPane.setOnMouseExited(event -> stackPane.setEffect(new Glow(0)));
 
-            stackPanes[i].getChildren().addAll(imageView, cardName, card_AP_HP, price);
+            stackPane.getChildren().addAll(imageView, cardName, card_AP_HP, price);
+            gridPane.add(stackPane, i % 5, i / 5 > 0 ? 1 : 0);
+//            stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
+//                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
         }
-        root.getChildren().addAll(stackPanes);
+        root.getChildren().addAll(gridPane);
     }
 
     void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {

@@ -202,7 +202,10 @@ public class GraphicalCommonUsages {
                     ShopMenuFX.sellProcess();
                     break;
                 case "DELETE":
-                    CollectionMenuFX.deleteDeckProcess();
+                    try {
+                        CollectionMenuFX.deleteDeckProcess();
+                    } catch (FileNotFoundException e) {
+                    }
                     break;
             }
         });
