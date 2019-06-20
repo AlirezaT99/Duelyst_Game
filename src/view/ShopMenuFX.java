@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 
 import static view.GraphicalCommonUsages.yesCancelPopUp;
 import static view.ShopMenu.handleErrors;
@@ -77,11 +78,12 @@ public class ShopMenuFX {
         gridPane.relocate(scene.getWidth() * 7.3 / 24,scene.getHeight() * 7.5 / 24);
         gridPane.setHgap(5);
         gridPane.setVgap(5);
+
         for (int i = 0; i < 10; i++) {
             StackPane stackPane = new StackPane();
             ImageView imageView = new ImageView(getCardTheme(3));
-            Label cardName = new Label(); // "Label " + i
-            Label card_AP_HP = new Label(); // "\n0\t\t0"
+            Label cardName = new Label();
+            Label card_AP_HP = new Label();
             cardName.setFont(trump);
             cardName.setTextFill(Color.WHITE);
             card_AP_HP.setFont(trump_small);
