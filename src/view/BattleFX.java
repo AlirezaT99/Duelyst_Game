@@ -2,10 +2,13 @@ package view;
 
 import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.print.PageLayout;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Glow;
 import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.image.Image;
@@ -13,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -23,6 +27,7 @@ import model.Account;
 import model.Match;
 import model.Player;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Random;
@@ -37,7 +42,7 @@ public class BattleFX {
         Pane root = new Pane();
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
-        root.getChildren().addAll(setTable(new Group()));
+       // root.getChildren().addAll(setTable(new Group()));
         setGeneralIcons(match, root, new Scene(new Group(), screenWidth, screenHeight));
         root.setOnMouseClicked(event -> {
             try {
@@ -66,7 +71,7 @@ public class BattleFX {
 
     private void setGeneralIcons(Match match, Pane root, Scene scene) throws FileNotFoundException {
         //  System.out.println(match.getPlayer1());
-        System.out.println(match.getPlayer2().getDeck().getHero().getName());
+
         Image firstPlayerImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/generals/" + deleteWhiteSpaces(match.getPlayer1().getDeck().getHero().getName()).toLowerCase() + ".png"));
         Image secondPlayerImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/generals/" + deleteWhiteSpaces(match.getPlayer2().getDeck().getHero().getName()).toLowerCase() + ".png"));
 
@@ -93,9 +98,12 @@ public class BattleFX {
         iconsRow.setSpacing(scene.getWidth() / 4.5);
         iconsRow.layoutXProperty().bind(root.widthProperty().subtract(iconsRow.widthProperty()).divide(2));
         iconsRow.setLayoutY(-1 * (scene.getHeight() / 20));
+        HBox bottomRow = drawHand(match.getPlayer1(),match,root,scene);
 
-        root.getChildren().addAll(iconsRow);
+        root.getChildren().addAll(iconsRow,bottomRow);
+        bottomRow.layoutXProperty().bind(root.widthProperty().subtract(bottomRow.widthProperty()).divide(2));
 
+        bottomRow.setPadding(new Insets(scene.getHeight()*3/4,0,0,0));
 
         firstPlayerImageView.setOnMouseEntered(event -> scaleIcon(firstPlayerImageView, 1, 1.1));
         firstPlayerImageView.setOnMouseExited(event -> scaleIcon(firstPlayerImageView, 1.1, 1));
@@ -104,6 +112,42 @@ public class BattleFX {
         secondPlayerImageView.setOnMouseExited(event -> scaleIcon(secondPlayerImageView, 1.1, 1));
 
     }
+    private HBox drawHand(Player player, Match match, Pane root, Scene scene) throws FileNotFoundException {
+        HBox bottomRow = new HBox();
+        Image cardHolder = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container.png"));
+
+        for(int i = 0; i < 5; i++) {
+            VBox cardContainer = new VBox();
+            ImageView cardHolderView = new ImageView(cardHolder);
+            cardHolderView.setFitHeight(scene.getWidth()/8);
+            cardHolderView.setPreserveRatio(true);
+            Image mana = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/mana/mana_active.png"));
+            ImageView manaView = new ImageView(mana);
+            if (( player.getMana()<player.getHand().getCards().get(i).getManaCost())){
+                ColorAdjust grayscale = new ColorAdjust();
+                grayscale.setBrightness(-0.5);
+                manaView.setEffect(grayscale);
+            }
+            StackPane imageStackPane = new StackPane();
+            javafx.scene.control.Label cardName = new Label(player.getHand().getCards().get(i).getName());
+            cardName.setTextFill(Color.WHITE);
+            imageStackPane.getChildren().addAll(cardHolderView,cardName);
+            manaView.setFitHeight(scene.getHeight() / 20);
+            manaView.setPreserveRatio(true);
+            StackPane manaStackPane = new StackPane();
+            manaStackPane.getChildren().addAll(manaView,new Text(player.getHand().getCards().get(i).getManaCost()+""));
+            cardContainer.getChildren().addAll(imageStackPane,manaStackPane);
+            cardContainer.setAlignment(Pos.CENTER);
+            cardContainer.setSpacing((-1)*(scene.getHeight())/20);
+//            cardContainer.setOnMouseEntered(event -> scaleIcon(cardHolderView,1,1.1));
+//            cardHolderView.setOnMouseExited(event -> scaleIcon(cardHolderView,1.1,1));
+            bottomRow.getChildren().add(cardContainer);
+
+        }
+
+        return bottomRow;
+    }
+
 
     private HBox drawMana(Player player, Match match, Pane root, Scene scene, int mode) throws FileNotFoundException {
         HBox manas = new HBox();
@@ -134,7 +178,6 @@ public class BattleFX {
         scaleTransition.setToY(to);
         scaleTransition.play();
     }
-
 
     private void createTableRectangles(Group group) {
         double width = 100;
