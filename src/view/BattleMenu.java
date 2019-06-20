@@ -23,7 +23,7 @@ public class BattleMenu {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        battleSetup();
+       // battleSetup();
 
         while (true) {
             try {
@@ -138,34 +138,35 @@ public class BattleMenu {
         return -1;
     }
 
-    private void battleSetup() {
-        setPlayerToCards(BattleMenuProcess.getMatch().getPlayer1());
-        BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero().setCardID(
-                BattleMenuProcess.getMatch().getPlayer1().getAccount().getUserName() + "_" +
-                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero().getName()) + "_1");
-        setPlayerToCards(BattleMenuProcess.getMatch().getPlayer2());
-        BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().setCardID(
-                BattleMenuProcess.getMatch().getPlayer2().getAccount().getUserName() + "_" +
-                        CollectionMenuProcess.nameCreator(BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero().getName()) + "_1");
+    public static void battleSetup(Match match) {
+        setPlayerToCards(match.getPlayer1());
+        match.getPlayer1().getDeck().getHero().setCardID(
+                match.getPlayer1().getAccount().getUserName() + "_" +
+                        CollectionMenuProcess.nameCreator(match.getPlayer1().getDeck().getHero().getName()) + "_1");
+        setPlayerToCards(match.getPlayer2());
+        match.getPlayer2().getDeck().getHero().setCardID(
+                match.getPlayer2().getAccount().getUserName() + "_" +
+                        CollectionMenuProcess.nameCreator(match.getPlayer2().getDeck().getHero().getName()) + "_1");
 
-        BattleMenuProcess.getMatch().getPlayer1().fillHand();
-        BattleMenuProcess.getMatch().getPlayer2().fillHand();
+        match.getPlayer1().fillHand();
+        match.getPlayer2().fillHand();
         //
 //        BattleMenuProcess.getMatch().getPlayer1().setMana(20);
-        BattleMenuProcess.getMatch().getPlayer1().setMana(2);
+        match.getPlayer1().setMana(2);
+        match.getPlayer2().setMana(2);
 //        BattleMenuProcess.getMatch().getPlayer2().setMana(20); // unused
         //
-        BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero()
-                .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 1));
-        BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero()
-                .castCard(BattleMenuProcess.getMatch().getTable().getCellByCoordination(3, 9));
-        Hero hero1 = BattleMenuProcess.getMatch().getPlayer1().getDeck().getHero();
-        Hero hero2 = BattleMenuProcess.getMatch().getPlayer2().getDeck().getHero();
+        match.getPlayer1().getDeck().getHero()
+                .castCard(match.getTable().getCellByCoordination(3, 1));
+        match.getPlayer2().getDeck().getHero()
+                .castCard(match.getTable().getCellByCoordination(3, 9));
+        Hero hero1 = match.getPlayer1().getDeck().getHero();
+        Hero hero2 = match.getPlayer2().getDeck().getHero();
         doSumKasifJob(hero1);
         doSumKasifJob(hero2);
     }
 
-    private void doSumKasifJob(Hero hero1) {
+    private static void doSumKasifJob(Hero hero1) {
         if(hero1.getHeroSpell().getName().equals("Esfandiar")) {
             hero1.getHeroSpell().castCard(hero1.getCardCell(), hero1.getPlayer());
             System.out.println("esfandiar");
@@ -177,7 +178,7 @@ public class BattleMenu {
         }
     }
 
-    private void setPlayerToCards(Player player) {
+    private static void setPlayerToCards(Player player) {
         Deck deck = player.getDeck();
         for (int i = 0; i < deck.getItems().size(); i++)
             deck.getItems().get(i).setPlayer(player);

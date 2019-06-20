@@ -130,8 +130,8 @@ public class Main extends Application {
     }
 
     private void backgroundMusicPlay() {
-        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
-        audioClip.setCycleCount(Integer.MAX_VALUE);
-        audioClip.play();
+//        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
+//        audioClip.setCycleCount(Integer.MAX_VALUE);
+//        audioClip.play();
     }
 }
