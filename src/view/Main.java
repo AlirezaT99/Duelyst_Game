@@ -116,7 +116,6 @@ public class Main extends Application {
         currentScene.setRoot(battleFx.start(match, storyMode, getPrimaryStage(), firstPlayer));
     }
 
-
     public static void backToLastRoots(Account account, String whereTo) throws FileNotFoundException {
         switch (whereTo) {
             case "singlePlayer":
@@ -134,4 +133,5 @@ public class Main extends Application {
         audioClip.setCycleCount(Integer.MAX_VALUE);
         audioClip.play();
     }
+
 }
