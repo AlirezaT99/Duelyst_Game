@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Account;
+import presenter.LoginMenuProcess;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -203,6 +204,13 @@ public class MainMenuFX {
                         e.printStackTrace();
                     }
                     break;
+                case "SAVE":
+                    try{
+                        LoginMenuProcess.save(currentAccount);
+                        GraphicalCommonUsages.okPopUp("all changes saved",scene,root);
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
             }
         });
     }

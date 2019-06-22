@@ -95,9 +95,9 @@ public class Shop {
     //buy
 
     // sell
-    public int sell(Account account, String id) {
-        UsableItem item = account.getCollection().findItemByCollectionID(id);
-        Card card = account.getCollection().findCardByCollectionID(id);
+    public static int sell(Account account, String name) {
+        UsableItem item = account.getCollection().findItemByName(name.trim());
+        Card card = account.getCollection().findCardByName(name.trim());
         int cost;
         if (item == null && card == null) {
             //printMessage("Item/Card not found");

@@ -199,7 +199,11 @@ public class GraphicalCommonUsages {
                     }
                     break;
                 case "SELL":
-                    ShopMenuFX.sellProcess();
+                    try {
+                        ShopMenuFX.sellProcess();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "DELETE":
                     try {

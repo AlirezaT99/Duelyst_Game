@@ -75,7 +75,7 @@ public class ShopMenuFX {
     private void drawCards(Scene scene, Pane root, Font trump, Font trump_small) throws FileNotFoundException {
         Image tinyDrake = new Image(new FileInputStream("src/view/sources/shopMenu/drake_veryVerySmall.png"));
         GridPane gridPane = new GridPane();
-        gridPane.relocate(scene.getWidth() * 7.3 / 24,scene.getHeight() * 7.5 / 24);
+        gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
         gridPane.setHgap(5);
         gridPane.setVgap(5);
 
@@ -111,16 +111,16 @@ public class ShopMenuFX {
                     selectedIndex = finalI;
                     String str = isInShop ? "BUY" : "SELL";
                     if (str.equals("BUY")) {
-                        if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim()))
-                        {
+                        if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
                             //todo : drake(no) popUp
-                            GraphicalCommonUsages.drakePopUp("not enough drake",scene,root,2);
-                        }
-                        else{
+                            GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
+                        } else {
                             yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
                         }
-                    } else
+                    } else {
+
                         yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                    }
                 } catch (FileNotFoundException e) {
                 }
             });
@@ -534,8 +534,10 @@ public class ShopMenuFX {
         money.setText(account.getMoney() + "");
     }
 
-    static void sellProcess() {
-
+    static void sellProcess() throws FileNotFoundException {
+        handleErrors(Shop.sell(account, cardLabels.get(selectedIndex).getText()));
+//        GraphicalCommonUsages.drakePopUp("purchase was successful",);
+        updateMoney();
     }
 
 
