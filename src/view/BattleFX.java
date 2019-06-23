@@ -5,6 +5,7 @@ import com.dd.plist.NSData;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListFormatException;
 import com.dd.plist.PropertyListParser;
+import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -32,12 +33,15 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Account;
 import model.Match;
+import model.MovableCard;
 import model.Player;
 import org.xml.sax.SAXException;
+import presenter.BattleMenuProcess;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Random;
@@ -52,15 +56,15 @@ public class BattleFX {
         Pane root = new Pane();
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
-         root.getChildren().addAll(setTable(new Group()));
-        setGeneralIcons(match, root, new Scene(new Group(), screenWidth, screenHeight));
-        root.setOnMouseClicked(event -> {
-            try {
-                Main.setBattleMenuFX(account);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
+         root.getChildren().addAll(setTable(new Group(),stage.getScene()));
+        setGeneralIcons(account,match, root, new Scene(new Group(), screenWidth, screenHeight));
+//        root.setOnMouseClicked(event -> {
+//            try {
+//                Main.setBattleMenuFX(account);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        });
         return root;
     }
 
@@ -70,8 +74,8 @@ public class BattleFX {
 
 
 
-    private Group setTable(Group group) {
-        createTableRectangles(group);
+    private Group setTable(Group group,Scene scene) {
+        createTableRectangles(group,scene);
         return group;
     }
 
@@ -80,7 +84,7 @@ public class BattleFX {
         return result.trim();
     }
 
-    private void setGeneralIcons(Match match, Pane root, Scene scene) throws FileNotFoundException {
+    private void setGeneralIcons(Account account,Match match, Pane root, Scene scene) throws FileNotFoundException {
         //  System.out.println(match.getPlayer1());
 
         Image firstPlayerImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/generals/" + deleteWhiteSpaces(match.getPlayer1().getDeck().getHero().getName()).toLowerCase() + ".png"));
@@ -111,8 +115,8 @@ public class BattleFX {
         iconsRow.setLayoutY(-1 * (scene.getHeight() / 20));
         HBox bottomRow = drawHand(match.getPlayer1(), match, root, scene);
         StackPane nextCard = getNextStackPane(scene, match.getPlayer1());
-        root.getChildren().addAll(iconsRow, bottomRow, nextCard, getBootomRight(scene, match.getPlayer1()));
-
+        root.getChildren().addAll(iconsRow, bottomRow, nextCard, getBootomRight(account,scene, match.getPlayer1(), match));
+        bottomRow.setAlignment(Pos.BOTTOM_CENTER);
         bottomRow.layoutXProperty().bind(root.widthProperty().subtract(bottomRow.widthProperty()).divide(2));
 
         bottomRow.setPadding(new Insets(scene.getHeight() * 3 / 4, 0, 0, 0));
@@ -133,8 +137,10 @@ public class BattleFX {
         ImageView nextBorderShine = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/next/next_outer_ring_shine.png")));
         nextBorderShine.setFitHeight(scene.getHeight() / 3);
         nextBorderShine.setPreserveRatio(true);
-        Label nextLabel = new Label("Next : " + player.getDeck().getNextCard().getName());
-        nextLabel.setTextFill(Color.WHITE);
+        Text nextLabel = new Text("Next : " + player.getDeck().getNextCard().getName());
+        nextLabel.setWrappingWidth(nextBackGround.getFitWidth()*3/4);
+        nextLabel.setFill(Color.WHITE);
+
         nextLabel.setFont(new Font(20));
         nextCard.setOnMouseEntered(event -> {
             try {
@@ -156,13 +162,18 @@ public class BattleFX {
         nextCard.getChildren().addAll(nextBackGround, nextBorderShine, nextLabel);
         nextCard.relocate(0, scene.getHeight() * 2 / 3);
 
+
+
         return nextCard;
     }
 
-    private VBox getBootomRight(Scene scene, Player player) throws FileNotFoundException {
+    private VBox getBootomRight(Account account,Scene scene, Player player, Match match) throws FileNotFoundException {
         VBox bottomRight = new VBox();
         Image endTurnInitialImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine.png"));
         Image endTurnGlowImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine_glow.png"));
+
+        Image endTurnEnemyInitialImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_enemy.png"));
+        Image endTurnEnemyGlowImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_enemy.png"));
 
         Image menuInitial = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_left.png"));
         Image menuGlow = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_primary_left_glow.png"));
@@ -180,15 +191,32 @@ public class BattleFX {
         endTurnLabel.setFont(new Font(25));
         StackPane endTurn = new StackPane(endTurnImage, endTurnLabel);
         endTurn.setOnMouseEntered(event -> {
+            if (match.currentTurnPlayer().getUserName().equals(player.getUserName())) {
+                endTurnImage.setImage(endTurnGlowImage);
+            }
             endTurnLabel.setEffect(new Glow(1));
-            endTurnImage.setImage(endTurnGlowImage);
         });
         endTurn.setOnMouseExited(event -> {
+            if (match.currentTurnPlayer().getUserName().equals(player.getUserName())) {
+                endTurnImage.setImage(endTurnInitialImage);
+            }
             endTurnLabel.setEffect(new Glow(0));
             endTurnImage.setImage(endTurnInitialImage);
 
         });
-
+        endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    if (match.currentTurnPlayer().getUserName().equals(player.getUserName())) {
+                        new BattleMenuProcess().endTurn();
+                        ((ImageView) endTurn.getChildren().get(0)).setImage(endTurnEnemyInitialImage);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         HBox lowerPart = new HBox();
         StackPane menu = new StackPane();
         StackPane graveYard = new StackPane();
@@ -210,6 +238,13 @@ public class BattleFX {
 
         menu.setOnMouseEntered(event -> menuView.setImage(menuGlow));
         menu.setOnMouseExited(event -> menuView.setImage(menuInitial));
+        menu.setOnMouseClicked(event -> {
+            try {
+                Main.setMainMenuFX(account);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
 
         graveYard.setOnMouseEntered(event -> graveYardView.setImage(graveYardGlow));
         graveYard.setOnMouseExited(event -> graveYardView.setImage(graveYardInitial));
@@ -226,11 +261,11 @@ public class BattleFX {
     private HBox drawHand(Player player, Match match, Pane root, Scene scene) throws FileNotFoundException {
         HBox bottomRow = new HBox();
         Image cardHolder = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container-hover.png"));
-
+        bottomRow.setSpacing(scene.getWidth() / 60);
         for (int i = 0; i < 5; i++) {
             VBox cardContainer = new VBox();
             ImageView cardHolderView = new ImageView(cardHolder);
-            cardHolderView.setFitHeight(scene.getWidth() / 8);
+            cardHolderView.setFitHeight(scene.getWidth() / 10);
             cardHolderView.setPreserveRatio(true);
             Image mana = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/mana/mana_active.png"));
             ImageView manaView = new ImageView(mana);
@@ -251,19 +286,22 @@ public class BattleFX {
             StackPane manaStackPane = new StackPane();
             manaStackPane.getChildren().addAll(manaView, new Text(player.getHand().getCards().get(i).getManaCost() + ""));
             cardContainer.getChildren().addAll(imageStackPane, manaStackPane);
-            cardContainer.setAlignment(Pos.CENTER);
-            cardContainer.setSpacing((-1) * (scene.getHeight()) / 20);
-            if(!cardName.getText().equals(""))
-            {
+            cardContainer.setAlignment(Pos.BOTTOM_CENTER);
+            cardContainer.setSpacing((-1) * (scene.getHeight()) / 30);
+            if (!cardName.getText().equals("")) {
                 final String descriptionString = player.getHand().getCards().get(i).getDescription();
+
+                final String AP = player.getHand().getCards().get(i) instanceof MovableCard ? ((MovableCard) player.getHand().getCards().get(i)).getDamage() + "" : "";
+                final String HP = player.getHand().getCards().get(i) instanceof MovableCard ? ((MovableCard) player.getHand().getCards().get(i)).getHealth() + "" : "";
+
                 cardContainer.setOnMouseEntered(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         try {
 
                             ImageView descriptionView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/description/minion.png")));
-                            descriptionView.setFitWidth(scene.getWidth()/7);
-                            descriptionView.setFitHeight(scene.getHeight()/3);
+                            descriptionView.setFitWidth(scene.getWidth() / 7);
+                            descriptionView.setFitHeight(scene.getHeight() / 3);
 
                             Pane description = new Pane();
                             description.setPrefWidth(descriptionView.getFitWidth());
@@ -274,12 +312,24 @@ public class BattleFX {
                             description.getChildren().addAll(descriptionView,text);
 
                             Bounds boundsInScene = cardContainer.localToScene(cardContainer.getBoundsInLocal());
-                            descriptionView.relocate((boundsInScene.getMinX()+boundsInScene.getMaxX())/2-(descriptionView.getFitWidth())/2 , boundsInScene.getMinY()-descriptionView.getFitHeight());
+                            descriptionView.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 - (descriptionView.getFitWidth()) / 2, boundsInScene.getMinY() - descriptionView.getFitHeight());
 
-                            text.setWrappingWidth(descriptionView.getFitWidth()*3/4);
-                            text.relocate((boundsInScene.getMinX()+boundsInScene.getMaxX())/2-(text.getWrappingWidth())/2,boundsInScene.getMinY()-descriptionView.getFitHeight()/3);
+                            Label APLabel = new Label(AP);
+                            APLabel.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 - (descriptionView.getFitWidth() / 3.4), boundsInScene.getMinY() - descriptionView.getFitHeight() / 2.35);
+                            APLabel.setTextFill(Color.WHITE);
+
+                            Label HPLabel = new Label(HP);
+                            HPLabel.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 + (descriptionView.getFitWidth() / 4), boundsInScene.getMinY() - descriptionView.getFitHeight() / 2.35);
+                            HPLabel.setTextFill(Color.WHITE);
+
+                            text.setWrappingWidth(descriptionView.getFitWidth() * 3 / 4);
+                            text.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 - (text.getWrappingWidth()) / 2, boundsInScene.getMinY() - descriptionView.getFitHeight() / 3.1);
                             text.setFill(Color.WHITE);
                             text.setFont(Font.font(10));
+
+                            description.getChildren().addAll(APLabel, HPLabel);
+
+                            fadeInPane(description);
                             root.getChildren().addAll(description);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
@@ -290,7 +340,7 @@ public class BattleFX {
                 cardContainer.setOnMouseExited(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        root.getChildren().remove(root.getChildren().size()-1);
+                       root.getChildren().remove(root.getChildren().size() - 1);
                     }
                 });
             }
@@ -299,6 +349,15 @@ public class BattleFX {
         }
 
         return bottomRow;
+    }
+
+    private void fadeInPane(Pane description) {
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setNode(description);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
+        fadeTransition.setDuration(Duration.millis(100));
+        fadeTransition.play();
     }
 
 
@@ -332,12 +391,12 @@ public class BattleFX {
         scaleTransition.play();
     }
 
-    private void createTableRectangles(Group group) {
-        double ulx = 500;
-        double uly = 320;
-        double width = 100;
+    private void createTableRectangles(Group group,Scene scene) {
+        double ulx = scene.getWidth()/4;
+        double uly = scene.getHeight()/3;
+        double width = scene.getWidth()/20;
         double margin = 5;
-        double height = 90;
+        double height = scene.getHeight()/10;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
                 rectangles[i][j] = new Rectangle(ulx+(width + margin) * (i ), uly+(height + margin) * (j ), width, height);
@@ -350,15 +409,7 @@ public class BattleFX {
 
             }
         }
-        try {
-            NSDictionary nsDictionary = (NSDictionary) PropertyListParser.parse("a.plist");
-            if(nsDictionary.containsKey("breathing")){
-                byte[] image = ((NSData) nsDictionary.get("breathing")).bytes();
-                System.out.println("joooon");
-            }
-        } catch (ParserConfigurationException | ParseException | SAXException | PropertyListFormatException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     private PerspectiveTransform getPerspectiveTransform() {

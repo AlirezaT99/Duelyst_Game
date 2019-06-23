@@ -65,7 +65,7 @@ public class Hero extends MovableCard {
         // if check
         // cast spell
         // put the impact of spell in all targets impacts applied to this one
-         this.heroSpell.castCard(cell, this.player);
+        this.heroSpell.castCard(cell, this.player);
     }
 
     // getters
@@ -79,11 +79,27 @@ public class Hero extends MovableCard {
     }
 
     public static Hero getHeroByName(String name) {
-        for (Hero hero : heroes)
-            if (hero.getName().equals(name))
+        System.out.println(name);
+        for (Hero hero : heroes) {
+            if (equal(hero.getName().toLowerCase(), name.toLowerCase()))
                 return hero.copy();
+        }
         return null;
     }
+
+    private static boolean equal(String s1, String s2) {
+        String r1 = "", r2 = "";
+        String[] s11 = s1.split("[ -]", 0);
+        String[] s22 = s2.split("[ -]", 0);
+        for (String s : s11) {
+            r1 += s;
+        }
+        for (String s : s22) {
+            r2 += s;
+        }
+        return r1.equals(r2);
+    }
+
 
     public static ArrayList<Hero> getHeroes() {
         return heroes;

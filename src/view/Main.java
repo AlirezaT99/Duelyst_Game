@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Account;
 import model.Match;
+import presenter.BattleInitProcess;
+import presenter.BattleMenuProcess;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -113,6 +115,7 @@ public class Main extends Application {
 
     public static void setBattleFX(Account firstPlayer, Match match, boolean storyMode) throws FileNotFoundException {
         battleFx = new BattleFX();
+        BattleMenuProcess.setMatch(match);
         currentScene.setRoot(battleFx.start(match, storyMode, getPrimaryStage(), firstPlayer));
     }
 
@@ -125,7 +128,6 @@ public class Main extends Application {
                 setBattleMenuFX(account);
                 break;
         }
-
     }
 
     private void backgroundMusicPlay() {

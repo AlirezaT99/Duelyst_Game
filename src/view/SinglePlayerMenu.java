@@ -85,8 +85,8 @@ public class SinglePlayerMenu {
                         case 2:
                             break inner_Loop;
                         case 3:
-                            if (singlePlayerMenuProcess.customGame(command,hero) == 4)
-                                showMessage("invalid deck");
+//                            if (singlePlayerMenuProcess.customGame(command,hero) == 4)
+//                                showMessage("invalid deck");
                             break;
                         default:
                             showMessage("invalid input");
