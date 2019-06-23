@@ -56,8 +56,8 @@ public class BattleFX {
         Pane root = new Pane();
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
-         root.getChildren().addAll(setTable(new Group(),stage.getScene()));
-        setGeneralIcons(account,match, root, new Scene(new Group(), screenWidth, screenHeight));
+        setGeneralIcons(account, match, root, new Scene(new Group(), screenWidth, screenHeight));
+        root.getChildren().addAll(setTable(new Pane(), stage.getScene()));
 //        root.setOnMouseClicked(event -> {
 //            try {
 //                Main.setBattleMenuFX(account);
@@ -71,11 +71,8 @@ public class BattleFX {
     //create table graphics
 
 
-
-
-
-    private Group setTable(Group group,Scene scene) {
-        createTableRectangles(group,scene);
+    private Pane setTable(Pane group, Scene scene) {
+        createTableRectangles(group, scene);
         return group;
     }
 
@@ -84,7 +81,7 @@ public class BattleFX {
         return result.trim();
     }
 
-    private void setGeneralIcons(Account account,Match match, Pane root, Scene scene) throws FileNotFoundException {
+    private void setGeneralIcons(Account account, Match match, Pane root, Scene scene) throws FileNotFoundException {
         //  System.out.println(match.getPlayer1());
 
         Image firstPlayerImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/generals/" + deleteWhiteSpaces(match.getPlayer1().getDeck().getHero().getName()).toLowerCase() + ".png"));
@@ -115,7 +112,7 @@ public class BattleFX {
         iconsRow.setLayoutY(-1 * (scene.getHeight() / 20));
         HBox bottomRow = drawHand(match.getPlayer1(), match, root, scene);
         StackPane nextCard = getNextStackPane(scene, match.getPlayer1());
-        root.getChildren().addAll(iconsRow, bottomRow, nextCard, getBootomRight(account,scene, match.getPlayer1(), match));
+        root.getChildren().addAll(iconsRow, bottomRow, nextCard, getBootomRight(account, scene, match.getPlayer1(), match));
         bottomRow.setAlignment(Pos.BOTTOM_CENTER);
         bottomRow.layoutXProperty().bind(root.widthProperty().subtract(bottomRow.widthProperty()).divide(2));
 
@@ -138,7 +135,7 @@ public class BattleFX {
         nextBorderShine.setFitHeight(scene.getHeight() / 3);
         nextBorderShine.setPreserveRatio(true);
         Text nextLabel = new Text("Next : " + player.getDeck().getNextCard().getName());
-        nextLabel.setWrappingWidth(nextBackGround.getFitWidth()*3/4);
+        nextLabel.setWrappingWidth(nextBackGround.getFitWidth() * 3 / 4);
         nextLabel.setFill(Color.WHITE);
 
         nextLabel.setFont(new Font(20));
@@ -163,11 +160,10 @@ public class BattleFX {
         nextCard.relocate(0, scene.getHeight() * 2 / 3);
 
 
-
         return nextCard;
     }
 
-    private VBox getBootomRight(Account account,Scene scene, Player player, Match match) throws FileNotFoundException {
+    private VBox getBootomRight(Account account, Scene scene, Player player, Match match) throws FileNotFoundException {
         VBox bottomRight = new VBox();
         Image endTurnInitialImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine.png"));
         Image endTurnGlowImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine_glow.png"));
@@ -309,7 +305,7 @@ public class BattleFX {
 
                             Text text = new Text(descriptionString);
                             System.out.println(descriptionString);
-                            description.getChildren().addAll(descriptionView,text);
+                            description.getChildren().addAll(descriptionView, text);
 
                             Bounds boundsInScene = cardContainer.localToScene(cardContainer.getBoundsInLocal());
                             descriptionView.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 - (descriptionView.getFitWidth()) / 2, boundsInScene.getMinY() - descriptionView.getFitHeight());
@@ -340,7 +336,7 @@ public class BattleFX {
                 cardContainer.setOnMouseExited(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                       root.getChildren().remove(root.getChildren().size() - 1);
+                        root.getChildren().remove(root.getChildren().size() - 1);
                     }
                 });
             }
@@ -391,24 +387,39 @@ public class BattleFX {
         scaleTransition.play();
     }
 
-    private void createTableRectangles(Group group,Scene scene) {
-        double ulx = scene.getWidth()/4;
-        double uly = scene.getHeight()/3;
-        double width = scene.getWidth()/20;
-        double margin = 5;
-        double height = scene.getHeight()/10;
+    private void createTableRectangles(Pane group, Scene scene) {
+        double ulx = scene.getWidth() / 5;
+        double uly = scene.getHeight() / 4;
+        double width = scene.getWidth() * 3 / 47;
+        double margin = width / 20;
+        double height = (scene.getHeight() / 2 - width / 5) / 5;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
-                rectangles[i][j] = new Rectangle(ulx+(width + margin) * (i ), uly+(height + margin) * (j ), width, height);
-                rectangles[i][j].setFill(Color.BLUE);
-                rectangles[i][j].setOpacity(0.4);
+                rectangles[i][j] = new Rectangle(ulx + (width + margin) * (i), uly + (height + margin) * (j), width, height);
+                rectangles[i][j].setFill(Color.rgb(50,50,50));
+                rectangles[i][j].setOpacity(0.3);
+               // rectangles[i][j].setOpacity(0.6);
+                final int finalJ = j;
+                final int finalI = i;
+                rectangles[i][j].setArcWidth(rectangles[i][j].getWidth()/20);
+                rectangles[i][j].setArcHeight(rectangles[i][j].getHeight()/20);
+                rectangles[i][j].setOnMouseEntered(event -> {
+                    rectangles[finalI][finalJ].setFill(Color.WHITE);
+                    rectangles[finalI][finalJ].setOpacity(0.2);
+                });
+                rectangles[i][j].setOnMouseExited(event -> {rectangles[finalI][finalJ].setFill(Color.rgb(50,50,50));
+                    rectangles[finalI][finalJ].setOpacity(0.3);
+                });
+//
                 group.getChildren().addAll(rectangles[i][j]);
-                int finalJ = j;
-                int finalI = i;
-                rectangles[i][j].setOnMouseEntered(event -> rectangles[finalI][finalJ].setEffect(new Glow(1)));
-
             }
         }
+//        backgroundRectangle.setOnMouseMoved(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//
+//            }
+//        });
 
     }
 
