@@ -1,11 +1,15 @@
 package view;
 
+
+import com.dd.plist.NSData;
+import com.dd.plist.NSDictionary;
+import com.dd.plist.PropertyListFormatException;
+import com.dd.plist.PropertyListParser;
 import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.print.PageLayout;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,10 +33,13 @@ import javafx.util.Duration;
 import model.Account;
 import model.Match;
 import model.Player;
+import org.xml.sax.SAXException;
 
-import java.awt.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Random;
 
 public class BattleFX {
@@ -44,7 +52,7 @@ public class BattleFX {
         Pane root = new Pane();
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
-        // root.getChildren().addAll(setTable(new Group()));
+         root.getChildren().addAll(setTable(new Group()));
         setGeneralIcons(match, root, new Scene(new Group(), screenWidth, screenHeight));
         root.setOnMouseClicked(event -> {
             try {
@@ -58,10 +66,11 @@ public class BattleFX {
 
     //create table graphics
 
+
+
+
+
     private Group setTable(Group group) {
-        PerspectiveTransform perspectiveTransform = getPerspectiveTransform();
-        group.setEffect(perspectiveTransform);
-        group.setCache(true);
         createTableRectangles(group);
         return group;
     }
@@ -324,19 +333,31 @@ public class BattleFX {
     }
 
     private void createTableRectangles(Group group) {
+        double ulx = 500;
+        double uly = 320;
         double width = 100;
         double margin = 5;
-        double height = 100;
+        double height = 90;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
-                rectangles[i][j] = new Rectangle((width + margin) * (i + 1), (height + margin) * (j + 1), width, height);
+                rectangles[i][j] = new Rectangle(ulx+(width + margin) * (i ), uly+(height + margin) * (j ), width, height);
                 rectangles[i][j].setFill(Color.BLUE);
                 rectangles[i][j].setOpacity(0.4);
                 group.getChildren().addAll(rectangles[i][j]);
                 int finalJ = j;
                 int finalI = i;
                 rectangles[i][j].setOnMouseEntered(event -> rectangles[finalI][finalJ].setEffect(new Glow(1)));
+
             }
+        }
+        try {
+            NSDictionary nsDictionary = (NSDictionary) PropertyListParser.parse("a.plist");
+            if(nsDictionary.containsKey("breathing")){
+                byte[] image = ((NSData) nsDictionary.get("breathing")).bytes();
+                System.out.println("joooon");
+            }
+        } catch (ParserConfigurationException | ParseException | SAXException | PropertyListFormatException | IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -8,9 +8,9 @@ public class Hero extends MovableCard {
     private int spellCost;
     private int spellCoolDown;
 
-    public Hero(String name, int health, int damage, Spell heroSpell, int spellCost, int spellCoolDown) {
+    public Hero(String name, int health, int damage, Spell heroSpell, int spellCoolDown) {
         this.heroSpell = heroSpell;
-        this.spellCost = spellCost;
+        this.spellCost = heroSpell.manaCost;
         this.spellCoolDown = spellCoolDown;
         this.setHealth(health);
         this.name = name;
@@ -18,7 +18,7 @@ public class Hero extends MovableCard {
     }
 
     public Hero copy() {
-        Hero hero = new Hero(this.name, this.getHealth(), this.getDamage(), this.heroSpell == null ? null : this.heroSpell.copy(), this.spellCost, this.spellCoolDown);
+        Hero hero = new Hero(this.name, this.getHealth(), this.getDamage(), this.heroSpell == null ? null : this.heroSpell.copy(), this.spellCoolDown);
         hero.setCardCollectionID(this.collectionID);
         hero.manaCost = manaCost;
         hero.name = name;
