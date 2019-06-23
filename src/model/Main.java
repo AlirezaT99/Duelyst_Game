@@ -194,7 +194,7 @@ public class Main {
         int damage = scanner.nextInt();
         Minion minion = new Minion();
         minion.setName(name);
-        minion.setHealth(health);
+        minion.setHealth(health);//dup
         minion.setDamage(damage);
         System.out.println("has summon Impact?(y/n)");
         if (scanner.nextLine().equals("y"))
