@@ -171,9 +171,9 @@ public class BattleMenuProcess {
         if (endGameReached())
             endingProcedure();
         if (match.notCurrentTurnPlayer().isAI()) {
-            match.switchTurn();
+          //  match.switchTurn();
             impactGoThroughTime();
-            playAI(match.currentTurnPlayer());
+         //   playAI(match.currentTurnPlayer());
             match.currentTurnPlayer().fillHand();
             secondModeProcedure(match);
             resetFlags();
