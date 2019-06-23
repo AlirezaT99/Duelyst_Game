@@ -1,5 +1,10 @@
 package view;
 
+
+import com.dd.plist.NSData;
+import com.dd.plist.NSDictionary;
+import com.dd.plist.PropertyListFormatException;
+import com.dd.plist.PropertyListParser;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
@@ -20,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -29,11 +35,15 @@ import model.Account;
 import model.Match;
 import model.MovableCard;
 import model.Player;
+import org.xml.sax.SAXException;
 import presenter.BattleMenuProcess;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Random;
 
 public class BattleFX {
@@ -46,7 +56,7 @@ public class BattleFX {
         Pane root = new Pane();
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
-        // root.getChildren().addAll(setTable(new Group()));
+         root.getChildren().addAll(setTable(new Group(),stage.getScene()));
         setGeneralIcons(account,match, root, new Scene(new Group(), screenWidth, screenHeight));
 //        root.setOnMouseClicked(event -> {
 //            try {
@@ -60,11 +70,12 @@ public class BattleFX {
 
     //create table graphics
 
-    private Group setTable(Group group) {
-        PerspectiveTransform perspectiveTransform = getPerspectiveTransform();
-        group.setEffect(perspectiveTransform);
-        group.setCache(true);
-        createTableRectangles(group);
+
+
+
+
+    private Group setTable(Group group,Scene scene) {
+        createTableRectangles(group,scene);
         return group;
     }
 
@@ -190,6 +201,8 @@ public class BattleFX {
                 endTurnImage.setImage(endTurnInitialImage);
             }
             endTurnLabel.setEffect(new Glow(0));
+            endTurnImage.setImage(endTurnInitialImage);
+
         });
         endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -296,6 +309,7 @@ public class BattleFX {
 
                             Text text = new Text(descriptionString);
                             System.out.println(descriptionString);
+                            description.getChildren().addAll(descriptionView,text);
 
                             Bounds boundsInScene = cardContainer.localToScene(cardContainer.getBoundsInLocal());
                             descriptionView.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 - (descriptionView.getFitWidth()) / 2, boundsInScene.getMinY() - descriptionView.getFitHeight());
@@ -313,8 +327,7 @@ public class BattleFX {
                             text.setFill(Color.WHITE);
                             text.setFont(Font.font(10));
 
-                            description.getChildren().addAll(descriptionView, text, APLabel, HPLabel);
-
+                            description.getChildren().addAll(APLabel, HPLabel);
 
                             fadeInPane(description);
                             root.getChildren().addAll(description);
@@ -327,7 +340,7 @@ public class BattleFX {
                 cardContainer.setOnMouseExited(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        root.getChildren().remove(root.getChildren().size() - 1);
+                       root.getChildren().remove(root.getChildren().size() - 1);
                     }
                 });
             }
@@ -378,21 +391,25 @@ public class BattleFX {
         scaleTransition.play();
     }
 
-    private void createTableRectangles(Group group) {
-        double width = 100;
+    private void createTableRectangles(Group group,Scene scene) {
+        double ulx = scene.getWidth()/4;
+        double uly = scene.getHeight()/3;
+        double width = scene.getWidth()/20;
         double margin = 5;
-        double height = 100;
+        double height = scene.getHeight()/10;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
-                rectangles[i][j] = new Rectangle((width + margin) * (i + 1), (height + margin) * (j + 1), width, height);
+                rectangles[i][j] = new Rectangle(ulx+(width + margin) * (i ), uly+(height + margin) * (j ), width, height);
                 rectangles[i][j].setFill(Color.BLUE);
                 rectangles[i][j].setOpacity(0.4);
                 group.getChildren().addAll(rectangles[i][j]);
                 int finalJ = j;
                 int finalI = i;
                 rectangles[i][j].setOnMouseEntered(event -> rectangles[finalI][finalJ].setEffect(new Glow(1)));
+
             }
         }
+
     }
 
     private PerspectiveTransform getPerspectiveTransform() {
