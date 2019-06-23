@@ -14,10 +14,6 @@ public class BattleMenuProcess {
     public String[] commandParts;
     private static Match match;
 
-    public BattleMenuProcess(BattleMenu battleMenu) {
-        BattleMenuProcess.battleMenu = battleMenu;
-    }
-
     static {
         commandPatterns.add(Pattern.compile("[sS]how my minions"));
         commandPatterns.add(Pattern.compile("[sS]how opponent minions"));
@@ -166,7 +162,7 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private int endTurn() throws IOException {
+    public int endTurn() throws IOException {
         match.currentTurnPlayer().fillHand();
         secondModeProcedure(match);
         resetFlags();
