@@ -482,18 +482,11 @@ public class BattleFX {
                     public void handle(MouseDragEvent event) {
                         System.out.println("actual map:" + finalI + " " + finalJ);
                         if (draggedFromNode != null && draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
-                            // group.getChildren().remove(draggedFromNode);
-                            // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
                             String cardName = ((Label) ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().get(1)).getText();
                             ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
                             player.getHand().findCardByName(cardName)
                                     .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
                             player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
-                            //   ((VBox) draggedFromNode).getChildren().remove(0);
-                            // match.getPlayer2().getHand().removeCardFromHand();
-//                            Text text = new Text(cardName);
-//                            text.setFont(Font.font(10));
-//                            text.setFill(Color.WHITE);
                             draggedFromNode = null;
                             try {
                                 bottomRow = drawHand(player, mainPane, scene);
@@ -502,8 +495,6 @@ public class BattleFX {
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
-//                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
-//                            group.getChildren().addAll(text);
                         }
                     }
                 });

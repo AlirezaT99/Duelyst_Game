@@ -27,12 +27,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Scanner;
 
+import static model.Shop.findCardByName;
+import static model.Shop.findItemByName;
 import static view.GraphicalCommonUsages.soundEffectPlay;
 import static view.GraphicalCommonUsages.yesCancelPopUp;
 import static view.ShopMenu.handleErrors;
-import static view.ShopMenu.scan;
 
 public class ShopMenuFX {
     private Text page = new Text();
@@ -144,7 +144,7 @@ public class ShopMenuFX {
         UsableItem item = Shop.findItemByName(cardName);
         if (item != null)
             return new AnimatedGif(address + "items/" + cardName + "/idle.gif", 1000);
-        Card card = Shop.findCardByName(cardName);
+        Card card = findCardByName(cardName);
         if (card instanceof Spell)
             return new AnimatedGif(address + "spells/" + cardName + "/idle.gif", 1000);
         if (card instanceof Minion)
@@ -210,7 +210,7 @@ public class ShopMenuFX {
                 }
             } else if (isInCollection) {
                 try {
-                    int collectionSearchResult = ShopMenuProcess.searchCollection(command,account);
+                    int collectionSearchResult = ShopMenuProcess.searchCollection(command, account);
                     handleErrors(collectionSearchResult);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -279,22 +279,33 @@ public class ShopMenuFX {
         moveToHeroTab();
         try {
             goGetTheCardsFromWantedGroup(cardName, result);
-        }catch (Exception ignored){ }
-        try{
+        } catch (Exception ignored) {
+        }
+        try {
             moveToMinionTab();
             goGetTheCardsFromWantedGroup(cardName, result);
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         try {
             moveToItemTab();
             goGetTheCardsFromWantedGroup(cardName, result);
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
+        try {
+            setImages(result);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         cardsToShow.clear();
         cardsToShow.addAll(result);
         updateLabels();
+        updateMoney();
+        updatePrices();
+        updatePowers();
     }
 
     private void goGetTheCardsFromWantedGroup(String cardName, ArrayList<String> result) {
-        for (String card:cardsToShow ) {
+        for (String card : cardsToShow) {
             if (card.equalsIgnoreCase(cardName))
                 result.add(card);
         }
@@ -330,7 +341,7 @@ public class ShopMenuFX {
         pageNumber = 1;
         updateLabels();
         updatePrices();
-        updatePowers(account);
+        updatePowers();
         try {
             setImages(1);
         } catch (FileNotFoundException e) {
@@ -347,7 +358,7 @@ public class ShopMenuFX {
                 cardsToShow.add(hero.getName());
         pageNumber = 1;
         updateLabels();
-        updatePowers(account);
+        updatePowers();
         updatePrices();
         try {
             setImages(1);
@@ -427,6 +438,15 @@ public class ShopMenuFX {
             cardImages.get(i).setImage(getCardTheme(number));
     }
 
+    private void setImages(ArrayList<String> result) throws FileNotFoundException {
+        for (int i = 0; i < result.size(); i++) {
+            int number = 1;
+            Item item = findItemByName(cardLabels.get(i).getText());
+            if (item != null) number = 2;
+            cardImages.get(i).setImage(getCardTheme(number));
+        }
+    }
+
     private void drawDrake(Pane root, Scene scene, Font font) throws FileNotFoundException {
         ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/drake_verySmall.png"))); // for now
         imageView.relocate(scene.getWidth() * 0.92, scene.getHeight() / 64);
@@ -462,7 +482,7 @@ public class ShopMenuFX {
                 pageNumber++;
             else {
                 updateLabels();
-                updatePowers(account);
+                updatePowers();
                 updatePrices();
             }
             pageSetText();
@@ -472,7 +492,7 @@ public class ShopMenuFX {
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
                 updateLabels();
-                updatePowers(account);
+                updatePowers();
                 updatePrices();
             }
             pageSetText();
@@ -509,7 +529,7 @@ public class ShopMenuFX {
         pageSetText();
     }
 
-    private void updatePowers(Account account) {
+    private void updatePowers() {
         removePowers();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
@@ -517,7 +537,7 @@ public class ShopMenuFX {
                 if (isInCollection)
                     card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 else if (isInShop)
-                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    card = (MovableCard) findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 if (card == null) continue; // TODO ??
                 cardPowers.get(i).setText("\n" + card.getDamage() + "\t\t\t" + card.getHealth());
             }
@@ -533,7 +553,7 @@ public class ShopMenuFX {
                 if (isInCollection)
                     card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 else if (isInShop)
-                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    card = (MovableCard) findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 if (card == null) continue; // TODO ??
                 cardPrices.get(i).setText(card.getCost() + "");
             }
@@ -565,7 +585,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(false);
             shopAndCollectionGlowHandler(collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
             updateLabels();
-            updatePowers(account);
+            updatePowers();
             updatePrices();
         });
         shopPane.setOnMouseClicked(event -> {
@@ -573,7 +593,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(true);
             shopAndCollectionGlowHandler(shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
             updateLabels();
-            updatePowers(account);
+            updatePowers();
             updatePrices();
         });
     }
