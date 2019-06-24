@@ -139,20 +139,6 @@ public class ShopMenuFX {
         root.getChildren().addAll(gridPane);
     }
 
-    public static Animation getGif(String cardName) {
-        String address = "src/view/sources/gifs/";
-        UsableItem item = Shop.findItemByName(cardName);
-        if (item != null)
-            return new AnimatedGif(address + "items/" + cardName + "/idle.gif", 1000);
-        Card card = Shop.findCardByName(cardName);
-        if (card instanceof Spell)
-            return new AnimatedGif(address + "spells/" + cardName + "/idle.gif", 1000);
-        if (card instanceof Minion)
-            return new AnimatedGif(address + "minions/" + cardName + "/idle.gif", 1000);
-        if (card instanceof Hero)
-            return new AnimatedGif(address + "heroes/" + cardName + "/idle.gif", 1000);
-        return null;
-    }
 
     void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
         ImageView heroesCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle1.png")));
@@ -205,18 +191,13 @@ public class ShopMenuFX {
             String command = searchTextField.getText();
             if (isInShop) {
                 try {
-                    int shopSearchResult = ShopMenuProcess.search(command);
-                    if (shopSearchResult != -1) {
-                        doSomeThingsAfterFindingThingsInShop(command);
-                    } else
-                        handleErrors(ShopMenuProcess.search(command));
+                    handleErrors(ShopMenuProcess.search(command));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             } else if (isInCollection) {
                 try {
-                    int collectionSearchResult = ShopMenuProcess.searchCollection(command, account);
-                    handleErrors(collectionSearchResult);
+                    handleErrors(ShopMenuProcess.searchCollection(command, account));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -523,9 +504,10 @@ public class ShopMenuFX {
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-                Animation animation = getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
-                animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
+
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                animation.getView().setFitWidth(stage.getScene().getWidth() /20);
+                animation.getView().setFitHeight(stage.getScene().getHeight()/10);
                 animation.setCycleCount(Integer.MAX_VALUE);
                 animation.play();
 
