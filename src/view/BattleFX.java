@@ -395,8 +395,8 @@ public class BattleFX {
         double ulx = scene.getWidth()/4;
         double uly = scene.getHeight()/3;
         double width = scene.getWidth()/20;
-        double margin = 5;
-        double height = scene.getHeight()/10;
+        double margin = scene.getWidth()/400;
+        double height = scene.getHeight()/13;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
                 rectangles[i][j] = new Rectangle(ulx+(width + margin) * (i ), uly+(height + margin) * (j ), width, height);
