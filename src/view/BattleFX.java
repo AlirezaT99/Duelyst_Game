@@ -92,7 +92,7 @@ public class BattleFX {
 
         gameMap[x][y].getChildren().get(0).setLayoutX(0);
         gameMap[x][y].getChildren().get(0).setLayoutY(0);
-        StackPane hp = new StackPane();
+        StackPane hp = new StackPane(); //skdjfsljbdfd
         ImageView hpView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/hp.png")));
         Label hpLabel = new Label();
         hpLabel.setTextFill(Color.WHITE);
