@@ -134,10 +134,14 @@ public class Match {
     }
 
     public void handleMana() {
+        //System.out.println("turn number : "+turn_number+" , basedOnTurnMana "+ mana_basedOnTurn);
+        ///System.out.println("in handleMana : "+player1.getMana());
+
         if (turn_number % 2 == 0)
             mana_basedOnTurn++;
         if (turn_number >= 14) mana_basedOnTurn = 9;
         currentTurnPlayer().setMana(mana_basedOnTurn);
+        //System.out.println("in handleMana : "+player2.getMana());
     }
     //turn based manager
 

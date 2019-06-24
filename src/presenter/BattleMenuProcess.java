@@ -171,9 +171,10 @@ public class BattleMenuProcess {
         if (endGameReached())
             endingProcedure();
         if (match.notCurrentTurnPlayer().isAI()) {
-          //  match.switchTurn();
+            match.switchTurn();
             impactGoThroughTime();
-         //   playAI(match.currentTurnPlayer());
+            match.handleMana();
+            playAI(match.currentTurnPlayer());
             match.currentTurnPlayer().fillHand();
             secondModeProcedure(match);
             resetFlags();
@@ -181,14 +182,17 @@ public class BattleMenuProcess {
             if (endGameReached())
                 endingProcedure();
             match.switchTurn();
+            match.handleMana();
+            impactGoThroughTime();
             impactGoThroughTime();
         } else {
+           // match.handleMana();
             match.switchTurn();
             impactGoThroughTime();
         }
-        match.handleMana();
         return 0;
     }
+
 
     private static void endingProcedure() throws IOException {
         if (match.getGameMode() == 1) {

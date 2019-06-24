@@ -24,12 +24,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.Account;
-import model.Match;
-import model.MovableCard;
-import model.Player;
+import model.*;
 import presenter.BattleMenuProcess;
 
 import java.io.FileInputStream;
@@ -41,9 +39,13 @@ public class BattleFX {
     private static double screenWidth;
     private static double screenHeight;
     private static Rectangle[][] rectangles = new Rectangle[7][11];
+    private static StackPane[][] gameMap = new StackPane[7][11];
     private static Object draggedFromNode = new Object();
     private static int objectInHandIndex;
     private HBox bottomRow = new HBox();
+    private HBox firstPlayer = new HBox();
+    private HBox secondPlayer = new HBox();
+    private Pane rectanglesPane = new Pane();
 
     Pane start(Match match, boolean isStoryMode, Stage stage, Account account) throws FileNotFoundException {
         BattleMenu.battleSetup(match);
@@ -51,7 +53,8 @@ public class BattleFX {
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
         setGeneralIcons(account, match, root, new Scene(new Group(), screenWidth, screenHeight));
-        root.getChildren().addAll(setTable(new Pane(), stage.getScene(), match.getPlayer1(), root, match));
+        root.getChildren().addAll(setTable(rectanglesPane, stage.getScene(), match.getPlayer1(), root, match));
+        updtdateSoldiers(match, new Scene(new Group(), screenWidth, screenHeight), rectanglesPane);
 //        root.setOnMouseClicked(event -> {
 //            try {
 //                Main.setBattleMenuFX(account);
@@ -63,7 +66,47 @@ public class BattleFX {
     }
 
     //create table graphics
+    private void updtdateSoldiers(Match match, Scene scene, Pane root) {
+        for (int i = 1; i <= 5; i++)
+            for (int j = 1; j <= 9; j++) {
+                if (match.getTable().getCellByCoordination(i, j).getMovableCard() != null)
+                    setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match);
+            }
+    }
 
+    private void setGif(Card card, int x, int y, Scene scene, Pane root, Match match) {
+        Animation animation = ShopMenuFX.getGif(card.getName());
+        animation.getView().setFitWidth(scene.getWidth() / 18.8);
+        animation.getView().setPreserveRatio(true);
+        // animation.getView().setFitHeight(scene.getHeight()/10);
+        animation.setCycleCount(Integer.MAX_VALUE);
+        animation.play();
+        //root.getChildren().add(animation.getView());
+        gameMap[x][y].getChildren().add(animation.getView());
+        gameMap[x][y].getChildren().get(0).setLayoutX(0);
+        gameMap[x][y].getChildren().get(0).setLayoutY(0);
+
+        if (card.getPlayer().equals(match.getPlayer2()))
+            rotateImageView(animation.getView());
+        int finalX = x;
+        int finalY = y;
+        EventHandler<MouseEvent> handler = MouseEvent::consume;
+        animation.getView().addEventFilter(MouseEvent.ANY,handler);
+//        animation.getView().setOnMouseEntered(event -> {
+//            rectangles[finalX][finalY].setFill(Color.WHITE);
+//            rectangles[finalX][finalY].setOpacity(0.2);
+//        });
+//        animation.getView().setOnMouseExited(event -> {
+//            rectangles[finalX][finalY].setFill(Color.rgb(50, 50, 50));
+//            rectangles[finalX][finalY].setOpacity(0.3);
+//        });
+    }
+
+    private void rotateImageView(ImageView imageView) {
+        imageView.setTranslateZ(imageView.getBoundsInLocal().getWidth() / 2.0);
+        imageView.setRotationAxis(Rotate.Y_AXIS);
+        imageView.setRotate(180);
+    }
 
     private Pane setTable(Pane group, Scene scene, Player player, Pane mainPane, Match match) {
         createTableRectangles(group, scene, player, mainPane, match);
@@ -91,14 +134,13 @@ public class BattleFX {
         secondPlayerImageView.setFitWidth(scene.getWidth() / 6);
         secondPlayerImageView.setPreserveRatio(true);
 
+        HBox manaFirstPlayer = drawMana(match.getPlayer1(), match, root, scene, 1);
+        firstPlayer = new HBox(firstPlayerImageView, manaFirstPlayer);
+        manaFirstPlayer.setAlignment(Pos.CENTER);
 
-        HBox firstPlayerManas = drawMana(match.getPlayer1(), match, root, scene, 1);
-        HBox firstPlayer = new HBox(firstPlayerImageView, firstPlayerManas);
-        firstPlayerManas.setAlignment(Pos.CENTER);
-
-        HBox secondPlayerManas = drawMana(match.getPlayer2(), match, root, scene, 2);
-        HBox secondPlayer = new HBox(secondPlayerManas, secondPlayerImageView);
-        secondPlayerManas.setAlignment(Pos.CENTER);
+        HBox manaSecondPlayer = drawMana(match.getPlayer2(), match, root, scene, 2);
+        secondPlayer = new HBox(manaSecondPlayer, secondPlayerImageView);
+        manaSecondPlayer.setAlignment(Pos.CENTER);
 
         HBox iconsRow = new HBox(firstPlayer, secondPlayer);
         iconsRow.setSpacing(scene.getWidth() / 4.5);
@@ -106,7 +148,7 @@ public class BattleFX {
         iconsRow.setLayoutY(-1 * (scene.getHeight() / 20));
         HBox bottomRow = drawHand(match.getPlayer1(), root, scene);
         StackPane nextCard = getNextStackPane(scene, match.getPlayer1());
-        root.getChildren().addAll(iconsRow, bottomRow, nextCard, getBootomRight(account, scene, match.getPlayer1(), match));
+        root.getChildren().addAll(iconsRow, bottomRow, nextCard, getBootomRight(account, scene, match.getPlayer1(), match, root));
         bottomRow.setAlignment(Pos.BOTTOM_CENTER);
         bottomRow.layoutXProperty().bind(root.widthProperty().subtract(bottomRow.widthProperty()).divide(2));
 
@@ -158,7 +200,7 @@ public class BattleFX {
         return nextCard;
     }
 
-    private VBox getBootomRight(Account account, Scene scene, Player player, Match match) throws FileNotFoundException {
+    private VBox getBootomRight(Account account, Scene scene, Player player, Match match, Pane root) throws FileNotFoundException {
         VBox bottomRight = new VBox();
         Image endTurnInitialImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine.png"));
         Image endTurnGlowImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/bottomright/button_end_turn_mine_glow.png"));
@@ -201,7 +243,11 @@ public class BattleFX {
                 try {
                     if (match.currentTurnPlayer().getUserName().equals(player.getUserName())) {
                         new BattleMenuProcess().endTurn();
+                        System.out.println("fuck " + player.getMana());
+                        updateMana(match, root, scene);
+                        bottomRow = drawHand(player, root, scene);
                         ((ImageView) endTurn.getChildren().get(0)).setImage(endTurnEnemyInitialImage);
+                        updtdateSoldiers(match,scene,rectanglesPane);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -246,6 +292,19 @@ public class BattleFX {
         bottomRight.relocate(scene.getWidth() * 4 / 5, scene.getHeight() * 3 / 4);
 
         return bottomRight;
+    }
+
+    private void updateMana(Match match, Pane root, Scene scene) throws FileNotFoundException {
+        System.out.println("player 2 :" + match.getPlayer2().getMana());
+        System.out.println("player 1: " + match.getPlayer1().getMana());
+        firstPlayer.getChildren().remove(1);
+        HBox manafirstPlayer = drawMana(match.getPlayer1(), match, root, scene, 1);
+        firstPlayer.getChildren().add(1, manafirstPlayer);
+        manafirstPlayer.setAlignment(Pos.CENTER);
+        HBox manaSecondPlayer = drawMana(match.getPlayer2(), match, root, scene, 2);
+        secondPlayer.getChildren().remove(0);
+        secondPlayer.getChildren().add(0, manaSecondPlayer);
+        manaSecondPlayer.setAlignment(Pos.CENTER);
     }
 
     private HBox drawHand(Player player, Pane root, Scene scene) throws FileNotFoundException {
@@ -359,14 +418,12 @@ public class BattleFX {
         fadeTransition.play();
     }
 
-
     private HBox drawMana(Player player, Match match, Pane root, Scene scene, int mode) throws FileNotFoundException {
         HBox manas = new HBox();
         for (int i = 0; i < 9; i++) {
             Image mana = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/mana/mana_inactive.png"));
             if ((i < player.getMana() && mode == 1) || (i > 8 - player.getMana() && mode == 2))
                 mana = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/mana/mana_active.png"));
-            System.out.println(player.getUserName() + " " + player.getMana());
             ImageView manaView = new ImageView(mana);
             manaView.setFitHeight(scene.getHeight() / 20);
             manaView.setPreserveRatio(true);
@@ -406,18 +463,21 @@ public class BattleFX {
                 final int finalI = i;
                 rectangles[i][j].setArcWidth(rectangles[i][j].getWidth() / 20);
                 rectangles[i][j].setArcHeight(rectangles[i][j].getHeight() / 20);
-                rectangles[i][j].setOnMouseEntered(event -> {
+                gameMap[i][j] = new StackPane();
+                gameMap[i][j].getChildren().add(rectangles[i][j]);
+                gameMap[i][j].relocate((width + margin) * (j - 1), (height + margin) * (i - 1));
+                gameMap[i][j].setOnMouseEntered(event -> {
                     rectangles[finalI][finalJ].setFill(Color.WHITE);
                     rectangles[finalI][finalJ].setOpacity(0.2);
                 });
-                rectangles[i][j].setOnDragDetected(new EventHandler<MouseEvent>() {
+                gameMap[i][j].setOnDragDetected(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         rectangles[finalI][finalJ].startFullDrag();
                         draggedFromNode = rectangles[finalI][finalJ];
                     }
                 });
-                rectangles[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+                gameMap[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
                     @Override
                     public void handle(MouseDragEvent event) {
                         System.out.println("actual map:" + finalI + " " + finalJ);
@@ -431,21 +491,23 @@ public class BattleFX {
                             player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
                             //   ((VBox) draggedFromNode).getChildren().remove(0);
                             // match.getPlayer2().getHand().removeCardFromHand();
-                            Text text = new Text(cardName);
-                            text.setFont(Font.font(10));
-                            text.setFill(Color.WHITE);
+//                            Text text = new Text(cardName);
+//                            text.setFont(Font.font(10));
+//                            text.setFill(Color.WHITE);
                             draggedFromNode = null;
                             try {
                                 bottomRow = drawHand(player, mainPane, scene);
+                                updateMana(match, mainPane, scene);
+                                updtdateSoldiers(match,scene,group);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
-                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
-                            group.getChildren().addAll(text);
+//                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
+//                            group.getChildren().addAll(text);
                         }
                     }
                 });
-                rectangles[i][j].setOnMouseExited(event -> {
+                gameMap[i][j].setOnMouseExited(event -> {
                     rectangles[finalI][finalJ].setFill(Color.rgb(50, 50, 50));
                     rectangles[finalI][finalJ].setOpacity(0.3);
                 });
@@ -453,7 +515,7 @@ public class BattleFX {
                 group.setPrefWidth(scene.getWidth() * 3 / 5);
                 group.setPrefHeight(scene.getHeight() / 2);
                 group.relocate(ulx, uly);
-                group.getChildren().addAll(rectangles[i][j]);
+                group.getChildren().addAll(gameMap[i][j]);
             }
         }
 //        backgroundRectangle.setOnMouseMoved(new EventHandler<MouseEvent>() {

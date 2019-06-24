@@ -139,7 +139,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(gridPane);
     }
 
-    private Animation getGif(String  cardName) {
+    public static Animation getGif(String  cardName) {
         String address = "src/view/sources/gifs/";
         UsableItem item = Shop.findItemByName(cardName);
         if(item != null)
@@ -446,14 +446,11 @@ public class ShopMenuFX {
 
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
 
-
                 Animation animation = getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 animation.getView().setFitWidth(stage.getScene().getWidth() /20);
                 animation.getView().setFitHeight(stage.getScene().getHeight()/10);
-                animation.setCycleCount(99);
+                animation.setCycleCount(Integer.MAX_VALUE);
                 animation.play();
-
-
 
                 cardLabels.get(i).setText("\n" + cardsToShow.get(i + (10 * (pageNumber - 1))));
                 cardPanes.get(i).setVisible(true);
