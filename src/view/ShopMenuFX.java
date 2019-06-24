@@ -36,7 +36,7 @@ import static view.ShopMenu.scan;
 
 public class ShopMenuFX {
     private Text page = new Text();
-    private boolean isInShop = true;
+    private static boolean isInShop = true;
     private boolean isInCollection = false;
     private static ArrayList<String> cardsToShow = new ArrayList<>();
     private static ArrayList<Pane> panesOfGifs = new ArrayList<>();
@@ -68,7 +68,7 @@ public class ShopMenuFX {
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 
-        drawCards(scene, root, trump_reg, trump_reg_small);
+        drawCards(scene, root, trump_reg, trump_reg_small, true);
         drawShopLabels(root, averta, scene);
         drawLeftBox(trump_med, root, scene);
         drawBackButton(root, scene, account);
@@ -77,10 +77,17 @@ public class ShopMenuFX {
         return root;
     }
 
-    private void drawCards(Scene scene, Pane root, Font trump, Font trump_small) throws FileNotFoundException {
-        Image tinyDrake = new Image(new FileInputStream("src/view/sources/shopMenu/drake_veryVerySmall.png"));
+    static void drawCards(Scene scene, Pane root, Font trump, Font trump_small, Boolean shopMenuOrCollection) throws FileNotFoundException {
         GridPane gridPane = new GridPane();
-        gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
+        if (shopMenuOrCollection)
+            gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
+        else
+            gridPane.relocate(scene.getWidth() / 6, scene.getHeight() * 7.5 / 24);
+        drawGridPane(gridPane, scene, trump, trump_small, shopMenuOrCollection);
+        root.getChildren().addAll(gridPane);
+    }
+
+    private static void drawGridPane(GridPane gridPane, Scene scene, Font trump, Font trump_small, Boolean showPrice) throws FileNotFoundException {
         gridPane.setHgap(5);
         gridPane.setVgap(5);
         for (int i = 0; i < 10; i++) {
@@ -101,13 +108,15 @@ public class ShopMenuFX {
             StackPane.setAlignment(card_AP_HP, Pos.CENTER);
             stackPane.setMaxSize(157, 279);
 
+            Image tinyDrake = new Image(new FileInputStream("src/view/sources/shopMenu/drake_veryVerySmall.png"));
             HBox price = new HBox();
             Label priceLabel = new Label();
             priceLabel.setFont(Font.font(trump_small.getName(), 16));
             priceLabel.setTextFill(Color.WHITE);
             cardPrices.put(i, priceLabel);
             price.setAlignment(Pos.BOTTOM_CENTER);
-            price.getChildren().addAll(priceLabel, new ImageView(tinyDrake));
+            price.getChildren().add(priceLabel);
+            if (showPrice) price.getChildren().add(new ImageView(tinyDrake));
 
             int finalI = i;
             stackPane.setOnMouseEntered(event -> stackPane.setEffect(new Glow(0.2)));
@@ -136,7 +145,6 @@ public class ShopMenuFX {
 //            stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
 //                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
         }
-        root.getChildren().addAll(gridPane);
     }
 
 
@@ -425,7 +433,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(page, shopPane, collectionPane);
     }
 
-    private Image getCardTheme(int number) throws FileNotFoundException {
+    private static Image getCardTheme(int number) throws FileNotFoundException {
         Image cardTheme1 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme1.png"));
         Image cardTheme2 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme2.png"));
         Image cardTheme3 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme3.png"));
