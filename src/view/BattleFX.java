@@ -1,10 +1,6 @@
 package view;
 
 
-import com.dd.plist.NSData;
-import com.dd.plist.NSDictionary;
-import com.dd.plist.PropertyListFormatException;
-import com.dd.plist.PropertyListParser;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
@@ -16,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Glow;
-import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
@@ -26,7 +21,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -36,21 +30,17 @@ import model.Account;
 import model.Match;
 import model.MovableCard;
 import model.Player;
-import org.xml.sax.SAXException;
 import presenter.BattleMenuProcess;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Random;
 
 public class BattleFX {
     private static double screenWidth;
     private static double screenHeight;
-    private static Rectangle[][] rectangles = new Rectangle[9][5];
+    private static Rectangle[][] rectangles = new Rectangle[7][11];
     private static Object draggedFromNode = new Object();
     private static int objectInHandIndex;
     private HBox bottomRow = new HBox();
@@ -61,7 +51,7 @@ public class BattleFX {
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
         setGeneralIcons(account, match, root, new Scene(new Group(), screenWidth, screenHeight));
-        root.getChildren().addAll(setTable(new Pane(), stage.getScene(),match.getPlayer1(), root));
+        root.getChildren().addAll(setTable(new Pane(), stage.getScene(), match.getPlayer1(), root, match));
 //        root.setOnMouseClicked(event -> {
 //            try {
 //                Main.setBattleMenuFX(account);
@@ -75,8 +65,8 @@ public class BattleFX {
     //create table graphics
 
 
-    private Pane setTable(Pane group, Scene scene, Player player, Pane mainPane) {
-        createTableRectangles(group, scene, player, mainPane);
+    private Pane setTable(Pane group, Scene scene, Player player, Pane mainPane, Match match) {
+        createTableRectangles(group, scene, player, mainPane, match);
         return group;
     }
 
@@ -127,7 +117,7 @@ public class BattleFX {
 
         secondPlayerImageView.setOnMouseEntered(event -> scaleIcon(secondPlayerImageView, 1, 1.1));
         secondPlayerImageView.setOnMouseExited(event -> scaleIcon(secondPlayerImageView, 1.1, 1));
-       // this.bottomRow = bottomRow;
+        // this.bottomRow = bottomRow;
 
     }
 
@@ -258,7 +248,7 @@ public class BattleFX {
         return bottomRight;
     }
 
-    private HBox drawHand(Player player,Pane root, Scene scene) throws FileNotFoundException {
+    private HBox drawHand(Player player, Pane root, Scene scene) throws FileNotFoundException {
         bottomRow.getChildren().clear();
         Image cardHolder = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container-hover.png"));
         bottomRow.setSpacing(scene.getWidth() / 60);
@@ -269,7 +259,7 @@ public class BattleFX {
             cardHolderView.setPreserveRatio(true);
             Image mana = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/mana/mana_active.png"));
             ImageView manaView = new ImageView(mana);
-            if ((player.getHand().getCards().get(i)!=null && (player.getMana() < player.getHand().getCards().get(i).getManaCost())) || player.getHand().getCards().get(i)==null) {
+            if ((player.getHand().getCards().get(i) != null && (player.getMana() < player.getHand().getCards().get(i).getManaCost())) || player.getHand().getCards().get(i) == null) {
                 cardHolderView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container.png")));
                 ColorAdjust grayscale = new ColorAdjust();
                 grayscale.setBrightness(-0.5);
@@ -284,7 +274,7 @@ public class BattleFX {
             manaView.setFitHeight(scene.getHeight() / 20);
             manaView.setPreserveRatio(true);
             StackPane manaStackPane = new StackPane();
-            manaStackPane.getChildren().addAll(manaView, new Text(player.getHand().getCards().get(i)!=null?player.getHand().getCards().get(i).getManaCost()+"":""));
+            manaStackPane.getChildren().addAll(manaView, new Text(player.getHand().getCards().get(i) != null ? player.getHand().getCards().get(i).getManaCost() + "" : ""));
             cardContainer.getChildren().addAll(imageStackPane, manaStackPane);
             cardContainer.setAlignment(Pos.BOTTOM_CENTER);
             cardContainer.setSpacing((-1) * (scene.getHeight()) / 30);
@@ -300,7 +290,7 @@ public class BattleFX {
                         if (player.getHand().getCards().get(finalI) != null && player.getMana() >= player.getHand().getCards().get(finalI).getManaCost()) {
                             cardContainer.startFullDrag();
                             draggedFromNode = cardContainer;
-                            objectInHandIndex =finalI;
+                            objectInHandIndex = finalI;
                             //  System.out.println("fuck you");
                         }
                     }
@@ -400,15 +390,15 @@ public class BattleFX {
         scaleTransition.play();
     }
 
-    private void createTableRectangles(Pane group, Scene scene, Player player, Pane mainPane) {
+    private void createTableRectangles(Pane group, Scene scene, Player player, Pane mainPane, Match match) {
         double ulx = scene.getWidth() / 5;
         double uly = scene.getHeight() / 4;
         double width = scene.getWidth() * 3 / 47;
         double margin = width / 20;
         double height = (scene.getHeight() / 2 - width / 5) / 5;
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 5; j++) {
-                rectangles[i][j] = new Rectangle((width + margin) * (i), (height + margin) * (j), width, height);
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 9; j++) {
+                rectangles[i][j] = new Rectangle((width + margin) * (j - 1), (height + margin) * (i - 1), width, height);
                 rectangles[i][j].setFill(Color.rgb(50, 50, 50));
                 rectangles[i][j].setOpacity(0.3);
                 // rectangles[i][j].setOpacity(0.6);
@@ -430,21 +420,23 @@ public class BattleFX {
                 rectangles[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
                     @Override
                     public void handle(MouseDragEvent event) {
-                       // System.out.println(finalI + " " + finalJ);
-                        if (draggedFromNode != null && draggedFromNode instanceof VBox) { //todo : ehtemalan shartaye bishatri mikhad
+                        System.out.println("actual map:" + finalI + " " + finalJ);
+                        if (draggedFromNode != null && draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
                             // group.getChildren().remove(draggedFromNode);
-                            ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
+                            // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
                             String cardName = ((Label) ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().get(1)).getText();
                             ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
-                           player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
+                            player.getHand().findCardByName(cardName)
+                                    .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
+                            player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
                             //   ((VBox) draggedFromNode).getChildren().remove(0);
-                           // match.getPlayer2().getHand().removeCardFromHand();
+                            // match.getPlayer2().getHand().removeCardFromHand();
                             Text text = new Text(cardName);
                             text.setFont(Font.font(10));
                             text.setFill(Color.WHITE);
                             draggedFromNode = null;
                             try {
-                                bottomRow = drawHand(player,mainPane,scene);
+                                bottomRow = drawHand(player, mainPane, scene);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -458,9 +450,9 @@ public class BattleFX {
                     rectangles[finalI][finalJ].setOpacity(0.3);
                 });
 
-                group.setPrefWidth(scene.getWidth()*3/5);
-                group.setPrefHeight(scene.getHeight()/2);
-                group.relocate(ulx,uly);
+                group.setPrefWidth(scene.getWidth() * 3 / 5);
+                group.setPrefHeight(scene.getHeight() / 2);
+                group.relocate(ulx, uly);
                 group.getChildren().addAll(rectangles[i][j]);
             }
         }
@@ -471,25 +463,6 @@ public class BattleFX {
 //            }
 //        });
 
-    }
-
-    private PerspectiveTransform getPerspectiveTransform() {
-        double ulx = 520.0;
-        double urx = 660 + screenWidth / 32 * 11;
-        double llx = 480.0;
-        double lrx = 760.0 + screenWidth / 32 * 11;
-        double uy = 320.0;
-        double ly = 420.0 + screenHeight / 3;
-        PerspectiveTransform perspectiveTransform = new PerspectiveTransform();
-        perspectiveTransform.setUrx(urx);
-        perspectiveTransform.setUry(uy);
-        perspectiveTransform.setUlx(ulx);
-        perspectiveTransform.setUly(uy);
-        perspectiveTransform.setLlx(llx);
-        perspectiveTransform.setLly(ly);
-        perspectiveTransform.setLrx(lrx);
-        perspectiveTransform.setLry(ly);
-        return perspectiveTransform;
     }
 
     //create Table graphics
