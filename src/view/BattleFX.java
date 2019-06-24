@@ -19,6 +19,7 @@ import javafx.scene.effect.Glow;
 import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -50,6 +51,9 @@ public class BattleFX {
     private static double screenWidth;
     private static double screenHeight;
     private static Rectangle[][] rectangles = new Rectangle[9][5];
+    private static Object draggedFromNode = new Object();
+    private static int objectInHandIndex;
+    private HBox bottomRow = new HBox();
 
     Pane start(Match match, boolean isStoryMode, Stage stage, Account account) throws FileNotFoundException {
         BattleMenu.battleSetup(match);
@@ -57,7 +61,7 @@ public class BattleFX {
         setScreenVariables(stage);
         setBackGround(match, isStoryMode, root);
         setGeneralIcons(account, match, root, new Scene(new Group(), screenWidth, screenHeight));
-        root.getChildren().addAll(setTable(new Pane(), stage.getScene()));
+        root.getChildren().addAll(setTable(new Pane(), stage.getScene(),match.getPlayer1(), root));
 //        root.setOnMouseClicked(event -> {
 //            try {
 //                Main.setBattleMenuFX(account);
@@ -71,8 +75,8 @@ public class BattleFX {
     //create table graphics
 
 
-    private Pane setTable(Pane group, Scene scene) {
-        createTableRectangles(group, scene);
+    private Pane setTable(Pane group, Scene scene, Player player, Pane mainPane) {
+        createTableRectangles(group, scene, player, mainPane);
         return group;
     }
 
@@ -110,7 +114,7 @@ public class BattleFX {
         iconsRow.setSpacing(scene.getWidth() / 4.5);
         iconsRow.layoutXProperty().bind(root.widthProperty().subtract(iconsRow.widthProperty()).divide(2));
         iconsRow.setLayoutY(-1 * (scene.getHeight() / 20));
-        HBox bottomRow = drawHand(match.getPlayer1(), match, root, scene);
+        HBox bottomRow = drawHand(match.getPlayer1(), root, scene);
         StackPane nextCard = getNextStackPane(scene, match.getPlayer1());
         root.getChildren().addAll(iconsRow, bottomRow, nextCard, getBootomRight(account, scene, match.getPlayer1(), match));
         bottomRow.setAlignment(Pos.BOTTOM_CENTER);
@@ -123,6 +127,7 @@ public class BattleFX {
 
         secondPlayerImageView.setOnMouseEntered(event -> scaleIcon(secondPlayerImageView, 1, 1.1));
         secondPlayerImageView.setOnMouseExited(event -> scaleIcon(secondPlayerImageView, 1.1, 1));
+       // this.bottomRow = bottomRow;
 
     }
 
@@ -241,7 +246,6 @@ public class BattleFX {
                 e.printStackTrace();
             }
         });
-
         graveYard.setOnMouseEntered(event -> graveYardView.setImage(graveYardGlow));
         graveYard.setOnMouseExited(event -> graveYardView.setImage(graveYardInitial));
 
@@ -254,8 +258,8 @@ public class BattleFX {
         return bottomRight;
     }
 
-    private HBox drawHand(Player player, Match match, Pane root, Scene scene) throws FileNotFoundException {
-        HBox bottomRow = new HBox();
+    private HBox drawHand(Player player,Pane root, Scene scene) throws FileNotFoundException {
+        bottomRow.getChildren().clear();
         Image cardHolder = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container-hover.png"));
         bottomRow.setSpacing(scene.getWidth() / 60);
         for (int i = 0; i < 5; i++) {
@@ -265,7 +269,7 @@ public class BattleFX {
             cardHolderView.setPreserveRatio(true);
             Image mana = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/mana/mana_active.png"));
             ImageView manaView = new ImageView(mana);
-            if ((player.getMana() < player.getHand().getCards().get(i).getManaCost())) {
+            if ((player.getHand().getCards().get(i)!=null && (player.getMana() < player.getHand().getCards().get(i).getManaCost())) || player.getHand().getCards().get(i)==null) {
                 cardHolderView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container.png")));
                 ColorAdjust grayscale = new ColorAdjust();
                 grayscale.setBrightness(-0.5);
@@ -280,7 +284,7 @@ public class BattleFX {
             manaView.setFitHeight(scene.getHeight() / 20);
             manaView.setPreserveRatio(true);
             StackPane manaStackPane = new StackPane();
-            manaStackPane.getChildren().addAll(manaView, new Text(player.getHand().getCards().get(i).getManaCost() + ""));
+            manaStackPane.getChildren().addAll(manaView, new Text(player.getHand().getCards().get(i)!=null?player.getHand().getCards().get(i).getManaCost()+"":""));
             cardContainer.getChildren().addAll(imageStackPane, manaStackPane);
             cardContainer.setAlignment(Pos.BOTTOM_CENTER);
             cardContainer.setSpacing((-1) * (scene.getHeight()) / 30);
@@ -289,7 +293,18 @@ public class BattleFX {
 
                 final String AP = player.getHand().getCards().get(i) instanceof MovableCard ? ((MovableCard) player.getHand().getCards().get(i)).getDamage() + "" : "";
                 final String HP = player.getHand().getCards().get(i) instanceof MovableCard ? ((MovableCard) player.getHand().getCards().get(i)).getHealth() + "" : "";
-
+                final int finalI = i;
+                cardContainer.setOnDragDetected(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if (player.getHand().getCards().get(finalI) != null && player.getMana() >= player.getHand().getCards().get(finalI).getManaCost()) {
+                            cardContainer.startFullDrag();
+                            draggedFromNode = cardContainer;
+                            objectInHandIndex =finalI;
+                            //  System.out.println("fuck you");
+                        }
+                    }
+                });
                 cardContainer.setOnMouseEntered(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -341,9 +356,7 @@ public class BattleFX {
                 });
             }
             bottomRow.getChildren().add(cardContainer);
-
         }
-
         return bottomRow;
     }
 
@@ -387,7 +400,7 @@ public class BattleFX {
         scaleTransition.play();
     }
 
-    private void createTableRectangles(Pane group, Scene scene) {
+    private void createTableRectangles(Pane group, Scene scene, Player player, Pane mainPane) {
         double ulx = scene.getWidth() / 5;
         double uly = scene.getHeight() / 4;
         double width = scene.getWidth() * 3 / 47;
@@ -395,22 +408,59 @@ public class BattleFX {
         double height = (scene.getHeight() / 2 - width / 5) / 5;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
-                rectangles[i][j] = new Rectangle(ulx + (width + margin) * (i), uly + (height + margin) * (j), width, height);
-                rectangles[i][j].setFill(Color.rgb(50,50,50));
+                rectangles[i][j] = new Rectangle((width + margin) * (i), (height + margin) * (j), width, height);
+                rectangles[i][j].setFill(Color.rgb(50, 50, 50));
                 rectangles[i][j].setOpacity(0.3);
-               // rectangles[i][j].setOpacity(0.6);
+                // rectangles[i][j].setOpacity(0.6);
                 final int finalJ = j;
                 final int finalI = i;
-                rectangles[i][j].setArcWidth(rectangles[i][j].getWidth()/20);
-                rectangles[i][j].setArcHeight(rectangles[i][j].getHeight()/20);
+                rectangles[i][j].setArcWidth(rectangles[i][j].getWidth() / 20);
+                rectangles[i][j].setArcHeight(rectangles[i][j].getHeight() / 20);
                 rectangles[i][j].setOnMouseEntered(event -> {
                     rectangles[finalI][finalJ].setFill(Color.WHITE);
                     rectangles[finalI][finalJ].setOpacity(0.2);
                 });
-                rectangles[i][j].setOnMouseExited(event -> {rectangles[finalI][finalJ].setFill(Color.rgb(50,50,50));
+                rectangles[i][j].setOnDragDetected(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        rectangles[finalI][finalJ].startFullDrag();
+                        draggedFromNode = rectangles[finalI][finalJ];
+                    }
+                });
+                rectangles[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+                    @Override
+                    public void handle(MouseDragEvent event) {
+                       // System.out.println(finalI + " " + finalJ);
+                        if (draggedFromNode != null && draggedFromNode instanceof VBox) { //todo : ehtemalan shartaye bishatri mikhad
+                            // group.getChildren().remove(draggedFromNode);
+                            ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
+                            String cardName = ((Label) ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().get(1)).getText();
+                            ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
+                           player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
+                            //   ((VBox) draggedFromNode).getChildren().remove(0);
+                           // match.getPlayer2().getHand().removeCardFromHand();
+                            Text text = new Text(cardName);
+                            text.setFont(Font.font(10));
+                            text.setFill(Color.WHITE);
+                            draggedFromNode = null;
+                            try {
+                                bottomRow = drawHand(player,mainPane,scene);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
+                            group.getChildren().addAll(text);
+                        }
+                    }
+                });
+                rectangles[i][j].setOnMouseExited(event -> {
+                    rectangles[finalI][finalJ].setFill(Color.rgb(50, 50, 50));
                     rectangles[finalI][finalJ].setOpacity(0.3);
                 });
-//
+
+                group.setPrefWidth(scene.getWidth()*3/5);
+                group.setPrefHeight(scene.getHeight()/2);
+                group.relocate(ulx,uly);
                 group.getChildren().addAll(rectangles[i][j]);
             }
         }

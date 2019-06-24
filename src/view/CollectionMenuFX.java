@@ -175,9 +175,19 @@ public class CollectionMenuFX {
         Label collectionLabel = new Label("MANAGE DECKS");
         collectionLabel.setTextFill(Color.WHITE);
 
+        StackPane importPane = new StackPane();
+        Label importLabel = new Label("IMPORT DECK");
+        importLabel.setTextFill(Color.WHITE);
+
         Image collectionBackground = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeck.png"));
         Image collectionBackgroundGlow = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeckGlow.png"));
         ImageView collectionButton = new ImageView(collectionBackground);
+
+        Image importBackground = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeck.png"));
+        Image importBackgroundGlow = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeckGlow.png"));
+        ImageView importButton = new ImageView(importBackground);
+
+        importPane.getChildren().addAll(importButton,importLabel);
 
         StackPane manageDecksBar = new StackPane();
         manageDecksBar.setVisible(false);
@@ -244,7 +254,9 @@ public class CollectionMenuFX {
         manageDeckPane.setLayoutX(scene.getWidth() * 30 / 40);
         manageDeckPane.setLayoutY(scene.getHeight() * 4 / 40);
         manageDeckPane.getChildren().addAll(collectionButton, collectionLabel);
-        root.getChildren().add(manageDeckPane);
+        importPane.setLayoutX(scene.getWidth() * 30 / 40);
+        importPane.setLayoutY(scene.getHeight() * 8 / 40);
+        root.getChildren().addAll(manageDeckPane,importPane);
     }
 
     private static void drawDecks(VBox decksVBox, Scene scene) throws FileNotFoundException {
