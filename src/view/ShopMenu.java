@@ -45,7 +45,7 @@ public class ShopMenu {
 
     static void handleErrors(int messageID) throws FileNotFoundException {
         switch (messageID) {
-            case 1:
+            case -1:
                 showMessage("Card/Item not found in shop.");
                 break;
             case 2:

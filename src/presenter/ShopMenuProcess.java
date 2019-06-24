@@ -122,10 +122,10 @@ public class ShopMenuProcess {
     public static int search(String name) {
         String str = Shop.search(name);
         if (str.equals("-1"))
-            return 1;
+            return -1;
         int i = Integer.parseInt(str) + 1;
         System.out.println(i + ""); // TODO gotta change this stuff here and now -_-
-        return 0;
+        return i;
     }
 
     public static int searchCollection(String name, Account currentAccount) {
