@@ -481,7 +481,7 @@ public class ShopMenuFX {
                 pageNumber++;
             else {
                 updateLabels();
-                updatePowers(account);
+                updatePowers();
                 updatePrices();
             }
             pageSetText();
@@ -491,7 +491,7 @@ public class ShopMenuFX {
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
                 updateLabels();
-                updatePowers(account);
+                updatePowers();
                 updatePrices();
             }
             pageSetText();
@@ -584,7 +584,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(false);
             shopAndCollectionGlowHandler(collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
             updateLabels();
-            updatePowers(account);
+            updatePowers();
             updatePrices();
         });
         shopPane.setOnMouseClicked(event -> {
@@ -592,7 +592,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(true);
             shopAndCollectionGlowHandler(shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
             updateLabels();
-            updatePowers(account);
+            updatePowers();
             updatePrices();
         });
     }
