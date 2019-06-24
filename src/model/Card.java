@@ -86,10 +86,6 @@ public abstract class Card {
         this.manaCost = manaCost;
     }
 
-    public void setCoordination(Coordination coordination) {
-        this.cell.setCellCoordination(coordination);
-    }
-
     public void setCost(int cost) {
         this.cost = cost;
     }

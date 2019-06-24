@@ -449,7 +449,7 @@ public class BattleMenuProcess {
         String cardID = match.currentTurnPlayer().getHand().findCardByName(cardName).getCardID();
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
             match.currentTurnPlayer().getHand().findCardByName(cardName)
-                    .castCard(match.getTable().getCellByCoordination(x, y));
+                .castCard(match.getTable().getCellByCoordination(x, y));
         else if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell) // ok?
             ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
                     .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
@@ -533,7 +533,7 @@ public class BattleMenuProcess {
         return 0;
     }
 
-    private boolean isCoordinationValidToInsert(int x, int y) {
+    public static boolean isCoordinationValidToInsert(int x, int y) {
         if (match.getTable().getCellByCoordination(x, y).getItem() != null)
             return false;
         ArrayList<Cell> soldiersCells = match.getTable().findAllSoldiers(match.currentTurnPlayer());
@@ -543,13 +543,15 @@ public class BattleMenuProcess {
         //
         ArrayList<Cell> toRemove = new ArrayList<>();
         for (Cell cell : wantedCells)
-            if (!cell.isCellFree())
+            if (!cell.isCellFree() || cell.getCellCoordination().getY() ==0 || cell.getCellCoordination().getX() == 0 ||
+            cell.getCellCoordination().getX() == 6 || cell.getCellCoordination().getY() == 10)
                 toRemove.add(cell);
         wantedCells.removeAll(toRemove);
         //
-        for (Cell cell : wantedCells)
+        for (Cell cell : wantedCells){
+            System.out.println(cell.getCellCoordination().getX()+" "+cell.getCellCoordination().getY());
             if (cell.getCellCoordination().equals(new Coordination(x, y)))
-                return true;
+                return true;}
         return false;
     }
 

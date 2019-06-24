@@ -10,6 +10,8 @@ public class Hand {
 
     {
         cards = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            cards.add(null);
     }
 
     public Card findCardByName(String name) {
@@ -30,8 +32,11 @@ public class Hand {
         return false;
     }
 
-    void removeCardFromHand(Card card) {
-        cards.remove(card);
+    public void removeCardFromHand(Card card) {
+        try {
+            cards.set(cards.indexOf(card), null);
+        }catch (Exception ignored){}
+//        cards.remove(card);
     }
 
     //switching
