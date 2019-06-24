@@ -7,7 +7,6 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Glow;
@@ -20,28 +19,25 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.Account;
-import model.Deck;
-import model.ImportBasedDeck;
-import presenter.ShopMenuProcess;
+import model.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 import static view.GraphicalCommonUsages.okPopUp;
 import static view.GraphicalCommonUsages.yesCancelPopUp;
-import static view.ShopMenuFX.drawBackButton;
+import static view.ShopMenuFX.*;
 
 public class CollectionMenuFX {
     private static Account account;
     private static Pane root = new Pane();
+    private static GridPane gridPane = new GridPane();
     private static HashMap<ImageView, String> deleteDeckHMap = new HashMap<>();
     private static HashMap<ImageView, String> selectDeckHMap = new HashMap<>();
     private static HashMap<String, ImageView> decksBackground = new HashMap<>();
-    private static String visibleDeckName = null;
+    private static String visibleDeckName = "";
     private static Scene scene;
     private static VBox decksVBox;
     private static String aboutToDelete = "";
@@ -60,66 +56,29 @@ public class CollectionMenuFX {
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
-//
-//        drawCards(scene, root, trump_reg, trump_reg_small);
+
+        gridPane.setVisible(false);
+        drawCards(gridPane, scene, root, trump_reg, trump_reg_small, false);
+        drawArrows();
 
         drawBackButton(root, scene, account);
         drawCollectionLabels(root, averta, scene);
-//        new ShopMenuFX(account).drawLeftBox(trump_med, root, scene);
 
         return root;
     }
 
-//    private void drawCards(Scene scene, Pane root, Font trump, Font trump_small) throws FileNotFoundException {
-//        GridPane gridPane = new GridPane();
-//        gridPane.relocate(scene.getWidth() * 7.3 / 24,scene.getHeight() * 7.5 / 24);
-//        gridPane.setHgap(5);
-//        gridPane.setVgap(5);
-//
-//        for (int i = 0; i < 10; i++) {
-//            StackPane stackPane = new StackPane();
-//            ImageView imageView = new ImageView(getCardTheme(3));
-//            Label cardName = new Label();
-//            Label card_AP_HP = new Label();
-//            cardName.setFont(trump);
-//            cardName.setTextFill(Color.WHITE);
-//            card_AP_HP.setFont(trump_small);
-//            card_AP_HP.setTextFill(Color.WHITE);
-//            cardLabels.put(i, cardName);
-//            cardPowers.put(i, card_AP_HP);
-//            cardImages.put(i, imageView);
-//            cardPanes.put(i, stackPane);
-//            StackPane.setAlignment(cardName, Pos.TOP_CENTER);
-//            StackPane.setAlignment(card_AP_HP, Pos.CENTER);
-//            stackPane.setMaxSize(157, 279);
-//
-//            int finalI = i;
-//            stackPane.setOnMouseEntered(event -> stackPane.setEffect(new Glow(0.2)));
-//            stackPane.setOnMouseClicked(event -> {
-//                try {
-//                    selectedIndex = finalI;
-//                    String str = isInShop ? "BUY" : "SELL";
-//                    if (str.equals("BUY")) {
-//                        if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim()))
-//                        {
-//                            //todo : drake(no) popUp
-//                            GraphicalCommonUsages.drakePopUp("not enough drake",scene,root,2);
-//                        }
-//                        else{
-//                            yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
-//                        }
-//                    } else
-//                        yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
-//                } catch (FileNotFoundException e) {
-//                }
-//            });
-//            stackPane.setOnMouseExited(event -> stackPane.setEffect(new Glow(0)));
-//
-//            stackPane.getChildren().addAll(imageView, cardName, card_AP_HP, price);
-//            gridPane.add(stackPane, i % 5, i / 5 > 0 ? 1 : 0);
-//        }
-//        root.getChildren().addAll(gridPane);
-//    }
+    private void drawArrows() throws FileNotFoundException {
+        ImageView leftArrow = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/arrow-invari.png")));
+        ImageView rightArrow = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/arrow-unvari.png")));
+        leftArrow.setScaleX(1.5);
+        leftArrow.setScaleY(1.5);
+        rightArrow.setScaleX(1.5);
+        rightArrow.setScaleY(1.5);
+        leftArrow.relocate((scene.getWidth() / 20), (scene.getHeight() * 0.8));
+        rightArrow.relocate((scene.getWidth() / 20 + 50), (scene.getHeight() * 0.8));
+        root.getChildren().addAll(leftArrow, rightArrow);
+        addEventHandlerOnArrows(leftArrow, rightArrow);
+    }
 
     private void drawDeckBar(Pane root, Scene scene, Font font, StackPane manageDecksBar) throws FileNotFoundException {
         final Font averta = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/averta-light-webfont.ttf"), 28);
@@ -189,10 +148,12 @@ public class CollectionMenuFX {
 
     private void exportDeckProcess() throws FileNotFoundException {
         if (visibleDeckName.equals(""))
-            okPopUp("no deck selected" , scene, root);
+            okPopUp("no deck is selected", scene, root);
         else {
 //            new ImportBasedDeck(account.getCollection().getDeckHashMap().get(visibleDeckName));
-            okPopUp("deck \"" + visibleDeckName +"\" successfully exported." , scene, root);
+            okPopUp("deck \"" + visibleDeckName + "\" successfully exported.", scene, root);
+            decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
+            drawDecks(decksVBox, scene);
         }
     }
 
@@ -318,6 +279,13 @@ public class CollectionMenuFX {
                 imageView.setImage(deckBackground);
             deckBg.setImage(deckBackgroundGlow);
             visibleDeckName = deckName;
+            gridPane.setVisible(true);
+            try {
+                setDeckToShow();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            pageNumber = 1;
             // TODO show deck
         });
         deck.getChildren().addAll(deckBg, name);
@@ -360,10 +328,66 @@ public class CollectionMenuFX {
         return deckHBox;
     }
 
+    private static void setDeckToShow() throws FileNotFoundException {
+        Deck deck = account.getCollection().getDeckHashMap().get(visibleDeckName);
+        cardsToShow.clear();
+        cardsToShow.add(deck.getHero().getName());
+        for (Minion minion : deck.getMinions())
+            cardsToShow.add(minion.getName());
+        for (Spell spell : deck.getSpells())
+            cardsToShow.add(spell.getName());
+        for (Item item : deck.getItems())
+            cardsToShow.add(item.getName());
+        updateLabels();
+        updatePowers(account);
+        for (int i = 0; i < 10; i++) {
+            int number = 1;
+            String label = ((Label) ((StackPane) gridPane.getChildren().get(i)).getChildren().get(1)).getText();
+            if (account.getCollection().findItemByName(label) != null
+                    || account.getCollection().findCardByName(label) instanceof Spell) number = 2;
+            ((ImageView) ((StackPane) gridPane.getChildren().get(i)).getChildren().get(0)).setImage(getCardTheme(number));
+        }
+    }
+
     static void deleteDeckProcess() throws FileNotFoundException {
         account.getCollection().deleteDeck(aboutToDelete);
+        if (visibleDeckName.equals(aboutToDelete)) gridPane.setVisible(false);
+        aboutToDelete = "";
         decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
         drawDecks(decksVBox, scene);
         decksBackground.get(visibleDeckName).setImage(new Image(new FileInputStream("src/view/sources/collectionMenu/button_primary_middle_glow.png")));
+    }
+
+    private void addEventHandlerOnArrows(ImageView leftArrow, ImageView rightArrow) {
+        leftArrow.setOnMouseEntered(event -> leftArrow.setEffect(new Glow(0.4)));
+        leftArrow.setOnMouseExited(event -> leftArrow.setEffect(new Glow(0)));
+
+        rightArrow.setOnMouseEntered(event -> rightArrow.setEffect(new Glow(0.4)));
+        rightArrow.setOnMouseExited(event -> rightArrow.setEffect(new Glow(0)));
+
+        leftArrow.setOnMouseClicked(event -> {
+            pageNumber--;
+            if (pageNumber == 0)
+                pageNumber++;
+            else {
+                updateLabels();
+                updatePowers(account);
+            }
+            pageSetText();
+        });
+
+        rightArrow.setOnMouseClicked(event -> {
+            pageNumber++;
+            if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
+            else {
+                updateLabels();
+                try {
+                    updatePowers(account);
+                } catch (ClassCastException ex) {
+//                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
+                }
+            }
+            pageSetText();
+        });
     }
 }

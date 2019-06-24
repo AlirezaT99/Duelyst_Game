@@ -62,10 +62,12 @@ public abstract class MovableCard extends Card {
         int returnValue = isAttackValid(opponent);
         if (returnValue == 0) {
             didAttackInThisTurn = true;
-            if (!opponent.onDefendImpact.getImpactEffectComp().doesHaveAntiNegativeImpact()) {
-                passDamage(opponent);
-                doOnAttackImpacts(opponent);
-            }
+            try {
+                if (!opponent.onDefendImpact.getImpactEffectComp().doesHaveAntiNegativeImpact()) {
+                    passDamage(opponent);
+                    doOnAttackImpacts(opponent);
+                }
+            }catch (NullPointerException ignored){}
             opponent.counterAttack(this);
             this.manageCasualties();
             opponent.manageCasualties();
@@ -263,8 +265,9 @@ public abstract class MovableCard extends Card {
     }
 
     protected void takeDamage(int damage) {
-        if (this.onDefendImpact.getImpactEffectComp().isDoesHaveAntiHolyBuff())
-            this.health -= this.onDefendImpact.impactQuantity;
+        if (this.onDefendImpact != null)
+            if (this.onDefendImpact.getImpactEffectComp().isDoesHaveAntiHolyBuff())
+                this.health -= this.onDefendImpact.impactQuantity;
         this.health -= damage;
     }
 
