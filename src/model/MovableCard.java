@@ -213,6 +213,7 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
+        System.out.println(didMoveInThisTurn+" "+this.name);
         if (cell == null)
             return 18;
         moveRange = 2;
