@@ -509,7 +509,7 @@ public class BattleFX {
                     @Override
                     public void handle(MouseEvent event) {
                         rectangles[finalI][finalJ].startFullDrag();
-                        draggedFromNode = rectangles[finalI][finalJ];
+                        draggedFromNode = gameMap[finalI][finalJ];
                     }
                 });
                 gameMap[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
@@ -539,6 +539,9 @@ public class BattleFX {
                             }
 //                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
 //                            group.getChildren().addAll(text);
+                        }
+                        if(draggedFromNode !=null && draggedFromNode instanceof Pane && ((Pane) draggedFromNode).getChildren().size()>=3){
+
                         }
                     }
                 });
