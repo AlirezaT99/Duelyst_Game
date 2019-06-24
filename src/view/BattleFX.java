@@ -28,6 +28,7 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import org.w3c.dom.css.Rect;
 import presenter.BattleMenuProcess;
 
 import java.io.FileInputStream;
@@ -40,7 +41,7 @@ public class BattleFX {
     private static double screenWidth;
     private static double screenHeight;
     private static Rectangle[][] rectangles = new Rectangle[7][11];
-    private static StackPane[][] gameMap = new StackPane[7][11];
+    private static Pane[][] gameMap = new Pane[7][11];
     private static Object draggedFromNode = new Object();
 
     private static int objectInHandIndex;
@@ -68,7 +69,7 @@ public class BattleFX {
     }
 
     //create table graphics
-    private void updtdateSoldiers(Match match, Scene scene, Pane root) {
+    private void updtdateSoldiers(Match match, Scene scene, Pane root) throws FileNotFoundException {
         for (int i = 1; i <= 5; i++)
             for (int j = 1; j <= 9; j++) {
                 if (match.getTable().getCellByCoordination(i, j).getMovableCard() != null)
@@ -85,16 +86,41 @@ public class BattleFX {
         animation.play();
         // root.getChildren().add(animation.getView());
         gameMap[x][y].getChildren().add(animation.getView());
+
+        gameMap[x][y].setPrefHeight((rectangles[x][y].getHeight()));
+        gameMap[x][y].setPrefWidth((rectangles[x][y].getWidth()));
+
         gameMap[x][y].getChildren().get(0).setLayoutX(0);
         gameMap[x][y].getChildren().get(0).setLayoutY(0);
+        StackPane hp = new StackPane();
         ImageView hpView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/hp.png")));
-        Label hpLabel = new Label()
+        Label hpLabel = new Label();
+        hpLabel.setTextFill(Color.WHITE);
+        hpView.setFitHeight(gameMap[x][y].getPrefHeight()/3);
+        hpView.setPreserveRatio(true);
+        hpView.setOpacity(0.5);
+        hp.getChildren().addAll(hpView,hpLabel);
+
+        StackPane ap = new StackPane();
         ImageView apView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/ap.png")));
+        Label apLabel = new Label();
+        apLabel.setTextFill(Color.WHITE);
+        apView.setFitHeight(gameMap[x][y].getPrefHeight()/3);
+        apView.setPreserveRatio(true);
+        apView.setOpacity(0.5);
+        ap.getChildren().addAll(apView,apLabel);
+
+        if (card instanceof MovableCard) {
+            hpLabel.setText(((MovableCard) card).getHealth() + "");
+            apLabel.setText(((MovableCard) card).getDamage()+"");
+        }
+        gameMap[x][y].getChildren().addAll(hp,ap);
+        hp.relocate(0,gameMap[x][y].getPrefHeight()*2/3);
+        ap.relocate(gameMap[x][y].getPrefWidth()/2,gameMap[x][y].getPrefHeight()*2/3);
 
         if (card.getPlayer().equals(match.getPlayer2()))
             rotateImageView(animation.getView());
-        int finalX = x;
-        int finalY = y;
+
         EventHandler<MouseEvent> handler = MouseEvent::consume;
         animation.getView().addEventFilter(MouseEvent.ANY, handler);
     }
@@ -334,7 +360,7 @@ public class BattleFX {
                 animation.play();
             }
 
-            imageStackPane.getChildren().addAll(cardHolderView, animation!=null?animation.getView():new Label(""));
+            imageStackPane.getChildren().addAll(cardHolderView, animation != null ? animation.getView() : new Label(""));
             manaView.setFitHeight(scene.getHeight() / 20);
             manaView.setPreserveRatio(true);
             StackPane manaStackPane = new StackPane();
@@ -470,8 +496,10 @@ public class BattleFX {
                 final int finalI = i;
                 rectangles[i][j].setArcWidth(rectangles[i][j].getWidth() / 20);
                 rectangles[i][j].setArcHeight(rectangles[i][j].getHeight() / 20);
-                gameMap[i][j] = new StackPane();
+                gameMap[i][j] = new Pane();
                 gameMap[i][j].getChildren().add(rectangle);
+                gameMap[i][j].setPrefWidth(rectangles[i][j].getWidth());
+                gameMap[i][j].setPrefHeight(rectangles[i][j].getHeight());
                 gameMap[i][j].relocate((width + margin) * (j - 1), (height + margin) * (i - 1));
                 gameMap[i][j].setOnMouseEntered(event -> {
                     rectangles[finalI][finalJ].setFill(Color.WHITE);
@@ -487,7 +515,7 @@ public class BattleFX {
                 gameMap[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
                     @Override
                     public void handle(MouseDragEvent event) {
-                       // System.out.println("actual map:" + finalI + " " + finalJ);
+                        // System.out.println("actual map:" + finalI + " " + finalJ);
                         if (draggedFromNode != null && draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
                             // group.getChildren().remove(draggedFromNode);
                             // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
@@ -522,7 +550,7 @@ public class BattleFX {
                 group.setPrefWidth(scene.getWidth() * 3 / 5);
                 group.setPrefHeight(scene.getHeight() / 2);
                 group.relocate(ulx, uly);
-                group.getChildren().addAll(rectangles[i][j],gameMap[i][j]);
+                group.getChildren().addAll(rectangles[i][j], gameMap[i][j]);
             }
         }
 //        backgroundRectangle.setOnMouseMoved(new EventHandler<MouseEvent>() {
