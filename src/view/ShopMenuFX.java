@@ -121,29 +121,33 @@ public class ShopMenuFX {
 
             int finalI = i;
             stackPane.setOnMouseEntered(event -> stackPane.setEffect(new Glow(0.2)));
-            stackPane.setOnMouseClicked(event -> {
-                try {
-                    selectedIndex = finalI;
-                    String str = isInShop ? "BUY" : "SELL";
-                    if (str.equals("BUY")) {
-                        if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
-                            GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
+            if (showPrice) // equals accessing the function from shopMenu
+                stackPane.setOnMouseClicked(event -> {
+                    try {
+                        selectedIndex = finalI;
+                        String str = isInShop ? "BUY" : "SELL";
+                        if (str.equals("BUY")) {
+                            if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
+                                GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
+                            } else {
+                                yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                            }
                         } else {
+
                             yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
                         }
-                    } else {
-
-                        yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                    } catch (FileNotFoundException e) {
                     }
-                } catch (FileNotFoundException e) {
-                }
-            });
+                });
+            else // accessing the function from collectionMenu
+                CollectionMenuFX.addEventForCollectionMenu(stackPane);
             stackPane.setOnMouseExited(event -> stackPane.setEffect(new Glow(0)));
 
             stackPane.getChildren().addAll(imageView, cardName, card_AP_HP, price);
             gridPane.add(stackPane, i % 5, i / 5 > 0 ? 1 : 0);
         }
     }
+
 
     private void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
         ImageView heroesCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle1.png")));
@@ -539,7 +543,7 @@ public class ShopMenuFX {
                 else if (isInShop)
                     card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 if (card == null || card instanceof Spell) continue; // TODO ??
-                cardPowers.get(i).setText("\n" + ((MovableCard)card).getDamage() + "\t\t\t" + ((MovableCard)card).getHealth());
+                cardPowers.get(i).setText("\n" + ((MovableCard) card).getDamage() + "\t\t\t" + ((MovableCard) card).getHealth());
             }
         }
     }

@@ -41,6 +41,7 @@ public class CollectionMenuFX {
     private static Scene scene;
     private static VBox decksVBox;
     private static String aboutToDelete = "";
+    private static boolean creatingDeck = false;
 
     CollectionMenuFX(Account account) {
         CollectionMenuFX.account = account;
@@ -77,6 +78,8 @@ public class CollectionMenuFX {
         leftArrow.relocate((scene.getWidth() / 20), (scene.getHeight() * 0.8));
         rightArrow.relocate((scene.getWidth() / 20 + 50), (scene.getHeight() * 0.8));
         root.getChildren().addAll(leftArrow, rightArrow);
+        leftArrow.setVisible(false);
+        rightArrow.setVisible(false);
         addEventHandlerOnArrows(leftArrow, rightArrow);
     }
 
@@ -280,13 +283,14 @@ public class CollectionMenuFX {
             deckBg.setImage(deckBackgroundGlow);
             visibleDeckName = deckName;
             gridPane.setVisible(true);
+            root.getChildren().get(2).setVisible(true); // left arrow
+            root.getChildren().get(3).setVisible(true); // right arrow
             try {
                 setDeckToShow();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
             pageNumber = 1;
-            // TODO show deck
         });
         deck.getChildren().addAll(deckBg, name);
 
@@ -351,7 +355,11 @@ public class CollectionMenuFX {
 
     static void deleteDeckProcess() throws FileNotFoundException {
         account.getCollection().deleteDeck(aboutToDelete);
-        if (visibleDeckName.equals(aboutToDelete)) gridPane.setVisible(false);
+        if (visibleDeckName.equals(aboutToDelete)) {
+            gridPane.setVisible(false);
+            root.getChildren().get(2).setVisible(false); // left arrow
+            root.getChildren().get(3).setVisible(false); // right arrow
+        }
         aboutToDelete = "";
         decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
         drawDecks(decksVBox, scene);
@@ -389,5 +397,24 @@ public class CollectionMenuFX {
             }
             pageSetText();
         });
+    }
+
+    static void addEventForCollectionMenu(StackPane stackPane) {
+        stackPane.setOnMouseClicked(event -> {
+            if (CollectionMenuFX.creatingDeck) {
+                // TODO: add to deck
+            } else {
+                try {
+                    yesCancelPopUp("Are you sure to remove \""
+                            + ((Label) stackPane.getChildren().get(1)).getText() + "\" from deck \""
+                            + visibleDeckName + "\" ?", scene, root, "REMOVE");
+                } catch (FileNotFoundException e) {
+                }
+            }
+        });
+    }
+
+    public static void removeFromDeckProcess() {
+
     }
 }

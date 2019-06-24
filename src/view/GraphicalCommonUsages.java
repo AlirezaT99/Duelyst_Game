@@ -211,6 +211,12 @@ public class GraphicalCommonUsages {
                     } catch (FileNotFoundException e) {
                     }
                     break;
+                case "REMOVE":
+                    try {
+                        CollectionMenuFX.removeFromDeckProcess();
+                    } catch (Exception e) {
+                    }
+                    break;
             }
         });
 
