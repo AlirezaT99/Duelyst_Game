@@ -125,6 +125,8 @@ public class Main {
     }
 
     private static Card cardCreator(Scanner scanner) {
+        System.out.println("Begin--------------------");
+        scanner.nextLine();
         System.out.println("Enter Name");
         String name = scanner.nextLine();
         System.out.println("Enter Cost");
@@ -196,6 +198,7 @@ public class Main {
         minion.setName(name);
         minion.setHealth(health);//dup
         minion.setDamage(damage);
+        scanner.nextLine();
         System.out.println("has summon Impact?(y/n)");
         if (scanner.nextLine().equals("y"))
             minion.setOnAttackImpact(impactCreator(scanner));
