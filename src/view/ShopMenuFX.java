@@ -35,17 +35,17 @@ import static view.ShopMenu.handleErrors;
 import static view.ShopMenu.scan;
 
 public class ShopMenuFX {
-    private Text page = new Text();
+    private static Text page = new Text();
     private static boolean isInShop = true;
-    private boolean isInCollection = false;
-    private static ArrayList<String> cardsToShow = new ArrayList<>();
+    private static boolean isInCollection = false;
+    static ArrayList<String> cardsToShow = new ArrayList<>();
     private static ArrayList<Pane> panesOfGifs = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
     private static HashMap<Integer, Label> cardPowers = new HashMap<>();
     private static HashMap<Integer, Label> cardPrices = new HashMap<>();
     private static HashMap<Integer, StackPane> cardPanes = new HashMap<>();
     private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
-    private static int pageNumber = 1;
+    static int pageNumber = 1;
     private static int selectedIndex = 0;
     private static Account account;
     private static Label money;
@@ -68,7 +68,9 @@ public class ShopMenuFX {
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 
-        drawCards(scene, root, trump_reg, trump_reg_small, true);
+        GridPane gridPane = new GridPane();
+        drawCards(gridPane, scene, root, trump_reg, trump_reg_small, true);
+
         drawShopLabels(root, averta, scene);
         drawLeftBox(trump_med, root, scene);
         drawBackButton(root, scene, account);
@@ -77,8 +79,7 @@ public class ShopMenuFX {
         return root;
     }
 
-    static void drawCards(Scene scene, Pane root, Font trump, Font trump_small, Boolean shopMenuOrCollection) throws FileNotFoundException {
-        GridPane gridPane = new GridPane();
+    static void drawCards(GridPane gridPane, Scene scene, Pane root, Font trump, Font trump_small, Boolean shopMenuOrCollection) throws FileNotFoundException {
         if (shopMenuOrCollection)
             gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
         else
@@ -126,7 +127,6 @@ public class ShopMenuFX {
                     String str = isInShop ? "BUY" : "SELL";
                     if (str.equals("BUY")) {
                         if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
-                            //todo : drake(no) popUp
                             GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
                         } else {
                             yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
@@ -142,13 +142,10 @@ public class ShopMenuFX {
 
             stackPane.getChildren().addAll(imageView, cardName, card_AP_HP, price);
             gridPane.add(stackPane, i % 5, i / 5 > 0 ? 1 : 0);
-//            stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
-//                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
         }
     }
 
-
-    void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
+    private void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
         ImageView heroesCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle1.png")));
         ImageView minionsCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle2.png")));
         ImageView itemsCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle3.png")));
@@ -433,7 +430,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(page, shopPane, collectionPane);
     }
 
-    private static Image getCardTheme(int number) throws FileNotFoundException {
+    static Image getCardTheme(int number) throws FileNotFoundException {
         Image cardTheme1 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme1.png"));
         Image cardTheme2 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme2.png"));
         Image cardTheme3 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme3.png"));
@@ -457,7 +454,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(imageView, money);
     }
 
-    private void pageSetText() {
+    static void pageSetText() {
         page.setText("Page = " + pageNumber + "/" + (cardsToShow.size() / 10 + (cardsToShow.size() % 10 != 0 ? 1 : 0)));
     }
 
@@ -508,22 +505,22 @@ public class ShopMenuFX {
         searchTextField.setVisible(show);
     }
 
-    private void updateLabels() {
+    static void updateLabels() {
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
 
-                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                animation.getView().setFitWidth(stage.getScene().getWidth() /20);
-                animation.getView().setFitHeight(stage.getScene().getHeight()/10);
-                animation.setCycleCount(Integer.MAX_VALUE);
-                animation.play();
+//                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
+//                animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
+//                animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
+//                animation.setCycleCount(Integer.MAX_VALUE);
+//                animation.play();
 
                 cardLabels.get(i).setText(/*"\n" + */cardsToShow.get(i + (10 * (pageNumber - 1))));
                 cardPanes.get(i).setVisible(true);
                 if (cardPanes.get(i).getChildren().get(cardPanes.get(i).getChildren().size() - 1) instanceof ImageView)
                     cardPanes.get(i).getChildren().remove(cardPanes.get(i).getChildren().size() - 1);
-                cardPanes.get(i).getChildren().add(animation.getView());
+//                cardPanes.get(i).getChildren().add(animation.getView());
             } else {
                 cardPanes.get(i).setVisible(false);
                 cardLabels.get(i).setText("");
@@ -532,19 +529,18 @@ public class ShopMenuFX {
         pageSetText();
     }
 
-    private void updatePowers(Account account) {
+    static void updatePowers(Account account) {
         removePowers();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-                MovableCard card = null;
+                Card card = null;
                 if (isInCollection)
-                    card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    card = account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 else if (isInShop)
-                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                if (card == null) continue; // TODO ??
-                cardPowers.get(i).setText("\n" + card.getDamage() + "\t\t\t" + card.getHealth());
+                    card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                if (card == null || card instanceof Spell) continue; // TODO ??
+                cardPowers.get(i).setText("\n" + ((MovableCard)card).getDamage() + "\t\t\t" + ((MovableCard)card).getHealth());
             }
-            /*label->stackPane[i].setVisible(false)*/
         }
     }
 
@@ -570,13 +566,13 @@ public class ShopMenuFX {
         }
     }
 
-    private void removeLabels() {
+    private static void removeLabels() {
         for (int i = 0; i < 10; i++)
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
                 cardPowers.get(i).setText("");
     }
 
-    private void removePowers() {
+    private static void removePowers() {
         for (int i = 0; i < 10; i++)
             cardPowers.get(i).setText("");
     }
@@ -644,7 +640,6 @@ public class ShopMenuFX {
 //        GraphicalCommonUsages.drakePopUp("purchase was successful",);
         updateMoney();
     }
-
 
     static Pane getRoot() {
         return root;

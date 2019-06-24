@@ -12,18 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.Account;
-import model.Deck;
+import model.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,12 +28,12 @@ import java.util.Random;
 
 import static view.GraphicalCommonUsages.okPopUp;
 import static view.GraphicalCommonUsages.yesCancelPopUp;
-import static view.ShopMenuFX.drawBackButton;
-import static view.ShopMenuFX.drawCards;
+import static view.ShopMenuFX.*;
 
 public class CollectionMenuFX {
     private static Account account;
     private static Pane root = new Pane();
+    private static GridPane gridPane = new GridPane();
     private static HashMap<ImageView, String> deleteDeckHMap = new HashMap<>();
     private static HashMap<ImageView, String> selectDeckHMap = new HashMap<>();
     private static HashMap<String, ImageView> decksBackground = new HashMap<>();
@@ -60,11 +56,28 @@ public class CollectionMenuFX {
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
-        drawCards(scene, root, trump_reg, trump_reg_small, false);
+
+        gridPane.setVisible(false);
+        drawCards(gridPane, scene, root, trump_reg, trump_reg_small, false);
+        drawArrows();
+
         drawBackButton(root, scene, account);
         drawCollectionLabels(root, averta, scene);
 
         return root;
+    }
+
+    private void drawArrows() throws FileNotFoundException {
+        ImageView leftArrow = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/arrow-invari.png")));
+        ImageView rightArrow = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/arrow-unvari.png")));
+        leftArrow.setScaleX(1.5);
+        leftArrow.setScaleY(1.5);
+        rightArrow.setScaleX(1.5);
+        rightArrow.setScaleY(1.5);
+        leftArrow.relocate((scene.getWidth() / 20), (scene.getHeight() * 0.8));
+        rightArrow.relocate((scene.getWidth() / 20 + 50), (scene.getHeight() * 0.8));
+        root.getChildren().addAll(leftArrow, rightArrow);
+        addEventHandlerOnArrows(leftArrow, rightArrow);
     }
 
     private void drawDeckBar(Pane root, Scene scene, Font font, StackPane manageDecksBar) throws FileNotFoundException {
@@ -266,6 +279,13 @@ public class CollectionMenuFX {
                 imageView.setImage(deckBackground);
             deckBg.setImage(deckBackgroundGlow);
             visibleDeckName = deckName;
+            gridPane.setVisible(true);
+            try {
+                setDeckToShow();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            pageNumber = 1;
             // TODO show deck
         });
         deck.getChildren().addAll(deckBg, name);
@@ -308,10 +328,66 @@ public class CollectionMenuFX {
         return deckHBox;
     }
 
+    private static void setDeckToShow() throws FileNotFoundException {
+        Deck deck = account.getCollection().getDeckHashMap().get(visibleDeckName);
+        cardsToShow.clear();
+        cardsToShow.add(deck.getHero().getName());
+        for (Minion minion : deck.getMinions())
+            cardsToShow.add(minion.getName());
+        for (Spell spell : deck.getSpells())
+            cardsToShow.add(spell.getName());
+        for (Item item : deck.getItems())
+            cardsToShow.add(item.getName());
+        updateLabels();
+        updatePowers(account);
+        for (int i = 0; i < 10; i++) {
+            int number = 1;
+            String label = ((Label) ((StackPane) gridPane.getChildren().get(i)).getChildren().get(1)).getText();
+            if (account.getCollection().findItemByName(label) != null
+                    || account.getCollection().findCardByName(label) instanceof Spell) number = 2;
+            ((ImageView) ((StackPane) gridPane.getChildren().get(i)).getChildren().get(0)).setImage(getCardTheme(number));
+        }
+    }
+
     static void deleteDeckProcess() throws FileNotFoundException {
         account.getCollection().deleteDeck(aboutToDelete);
+        if (visibleDeckName.equals(aboutToDelete)) gridPane.setVisible(false);
+        aboutToDelete = "";
         decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
         drawDecks(decksVBox, scene);
         decksBackground.get(visibleDeckName).setImage(new Image(new FileInputStream("src/view/sources/collectionMenu/button_primary_middle_glow.png")));
+    }
+
+    private void addEventHandlerOnArrows(ImageView leftArrow, ImageView rightArrow) {
+        leftArrow.setOnMouseEntered(event -> leftArrow.setEffect(new Glow(0.4)));
+        leftArrow.setOnMouseExited(event -> leftArrow.setEffect(new Glow(0)));
+
+        rightArrow.setOnMouseEntered(event -> rightArrow.setEffect(new Glow(0.4)));
+        rightArrow.setOnMouseExited(event -> rightArrow.setEffect(new Glow(0)));
+
+        leftArrow.setOnMouseClicked(event -> {
+            pageNumber--;
+            if (pageNumber == 0)
+                pageNumber++;
+            else {
+                updateLabels();
+                updatePowers(account);
+            }
+            pageSetText();
+        });
+
+        rightArrow.setOnMouseClicked(event -> {
+            pageNumber++;
+            if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
+            else {
+                updateLabels();
+                try {
+                    updatePowers(account);
+                } catch (ClassCastException ex) {
+//                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
+                }
+            }
+            pageSetText();
+        });
     }
 }
