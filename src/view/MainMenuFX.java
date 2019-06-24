@@ -92,6 +92,15 @@ public class MainMenuFX {
         textGlowEffect(shop, mainMenuScene, root);
         textGlowEffect(watch, mainMenuScene, root);
         textGlowEffect(save, mainMenuScene, root);
+
+
+
+        Animation ani = new AnimatedGif("Arash/attack.gif",1000);
+        ani.setCycleCount(1);
+        ani.play();
+
+        root.getChildren().addAll(ani.getView());
+
         return root;
     }
 

@@ -29,14 +29,17 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
+import static view.GraphicalCommonUsages.soundEffectPlay;
 import static view.GraphicalCommonUsages.yesCancelPopUp;
 import static view.ShopMenu.handleErrors;
+import static view.ShopMenu.scan;
 
 public class ShopMenuFX {
     private Text page = new Text();
     private boolean isInShop = true;
     private boolean isInCollection = false;
     private static ArrayList<String> cardsToShow = new ArrayList<>();
+    private static ArrayList<Pane> panesOfGifs = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
     private static HashMap<Integer, Label> cardPowers = new HashMap<>();
     private static HashMap<Integer, Label> cardPrices = new HashMap<>();
@@ -47,12 +50,14 @@ public class ShopMenuFX {
     private static Account account;
     private static Label money;
     private static Pane root = new Pane();
+    private static Stage stage;
 
     ShopMenuFX(Account account) {
         ShopMenuFX.account = account;
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+        ShopMenuFX.stage = primaryStage;
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
         final Font trump_reg_small = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 28);
@@ -78,7 +83,6 @@ public class ShopMenuFX {
         gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
         gridPane.setHgap(5);
         gridPane.setVgap(5);
-
         for (int i = 0; i < 10; i++) {
             StackPane stackPane = new StackPane();
             ImageView imageView = new ImageView(getCardTheme(3));
@@ -88,6 +92,7 @@ public class ShopMenuFX {
             cardName.setTextFill(Color.WHITE);
             card_AP_HP.setFont(trump_small);
             card_AP_HP.setTextFill(Color.WHITE);
+
             cardLabels.put(i, cardName);
             cardPowers.put(i, card_AP_HP);
             cardImages.put(i, imageView);
@@ -132,6 +137,21 @@ public class ShopMenuFX {
 //                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
         }
         root.getChildren().addAll(gridPane);
+    }
+
+    private Animation getGif(String  cardName) {
+        String address = "src/view/sources/gifs/";
+        UsableItem item = Shop.findItemByName(cardName);
+        if(item != null)
+            return new AnimatedGif(address+"items/"+cardName+"/idle.gif",1000);
+        Card card = Shop.findCardByName(cardName);
+        if(card instanceof  Spell)
+            return  new AnimatedGif(address+"spells/"+cardName+"/idle.gif",1000);
+        if(card instanceof  Minion)
+            return new AnimatedGif(address+"minions/"+cardName+"/idle.gif",1000);
+        if(card instanceof Hero)
+            return new AnimatedGif(address+"heroes/"+cardName+"/idle.gif",1000);
+        return null;
     }
 
     void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
@@ -423,9 +443,23 @@ public class ShopMenuFX {
     private void updateLabels() {
         removeLabels();
         for (int i = 0; i < 10; i++) {
+
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
+
+
+                Animation animation = getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                animation.getView().setFitWidth(stage.getScene().getWidth() /20);
+                animation.getView().setFitHeight(stage.getScene().getHeight()/10);
+                animation.setCycleCount(99);
+                animation.play();
+
+
+
                 cardLabels.get(i).setText("\n" + cardsToShow.get(i + (10 * (pageNumber - 1))));
                 cardPanes.get(i).setVisible(true);
+                if(cardPanes.get(i).getChildren().get(cardPanes.get(i).getChildren().size()-1) instanceof ImageView)
+                    cardPanes.get(i).getChildren().remove(cardPanes.get(i).getChildren().size()-1);
+                cardPanes.get(i).getChildren().add(animation.getView());
             } else {
                 cardPanes.get(i).setVisible(false);
                 cardLabels.get(i).setText("");
