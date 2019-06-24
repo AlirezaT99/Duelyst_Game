@@ -2,7 +2,6 @@ package model;
 
 import com.google.gson.Gson;
 
-import javax.accessibility.AccessibleEditableText;
 import java.util.ArrayList;
 
 public class ImportBasedDeck {
@@ -16,7 +15,7 @@ public class ImportBasedDeck {
         deckName = deck.getName();
     }
 
-    public Deck getImportedDeck() {
+    public Deck importDeck() {
         return gson.fromJson(gsonString, Deck.class);
     }
 

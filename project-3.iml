@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="WEB_MODULE" version="4">
+<module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -7,12 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="org.json" level="project" />
-    <orderEntry type="library" name="gson-2.8" level="project" />
-    <orderEntry type="library" name="testng-6.14.3" level="project" />
-    <orderEntry type="library" name="gson-2.2.2.jar" level="application" />
-    <orderEntry type="library" name="gson-2.8.5" level="project" />
-    <orderEntry type="library" name="gson-2.8.2" level="project" />
-    <orderEntry type="library" name="com.googlecode.plist:dd-plist:1.21" level="project" />
+    <orderEntry type="library" name="com.google.code.gson:gson:2.8.5" level="project" />
   </component>
 </module>
