@@ -9,9 +9,11 @@ public class ImportBasedDeck {
     private Gson gson = new Gson();
     private String gsonString = "";
     private Deck deck;
+    private String deckName = "";
 
     public ImportBasedDeck(Deck deck){
         gsonString = gson.toJson(deck);
+        deckName = deck.getName();
     }
 
     public Deck getImportedDeck() {
