@@ -4,8 +4,10 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Glow;
@@ -20,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Account;
 import model.Deck;
+import model.ImportBasedDeck;
 import presenter.ShopMenuProcess;
 
 import java.io.FileInputStream;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import static view.GraphicalCommonUsages.okPopUp;
 import static view.GraphicalCommonUsages.yesCancelPopUp;
 import static view.ShopMenuFX.drawBackButton;
 
@@ -129,25 +133,67 @@ public class CollectionMenuFX {
         Rectangle titleUnderline = new Rectangle(250, 2);
         titleUnderline.setFill(Color.WHITE);
 
-
-        StackPane createDeck = new StackPane();
         decksVBox.setAlignment(Pos.TOP_CENTER);
-        StackPane.setAlignment(decksVBox, Pos.TOP_CENTER);
-        StackPane.setAlignment(createDeck, Pos.BOTTOM_CENTER);
 
         decksVBox.getChildren().addAll(new Text(""), label, titleUnderline, new Text("\n"));
         drawDecks(decksVBox, scene);
 
-        ImageView createDeckView = new ImageView(new Image(new FileInputStream("src/view/sources/collectionMenu/gauntlet_control_bar_bg.png")));
+        Image gauntletControlBg = new Image(new FileInputStream("src/view/sources/collectionMenu/gauntlet_control_bar_bg.png"));
+        VBox deckBarButtons = new VBox();
+        deckBarButtons.setAlignment(Pos.BOTTOM_CENTER);
+        deckBarButtons.setPadding(new Insets(0));
+        deckBarButtons.setMaxHeight(scene.getHeight() / 4);
+
+        StackPane createDeck = new StackPane();
+        ImageView createDeckView = new ImageView(gauntletControlBg);
         Label createDeckLabel = new Label("CREATE DECK");
         createDeckLabel.setFont(averta);
         createDeckLabel.setTextFill(Color.WHITE);
         createDeck.getChildren().addAll(createDeckView, createDeckLabel);
         createDeck.setMaxHeight(82);
         createDeck.setOnMouseEntered(event -> createDeckView.setEffect(new Glow(0.5)));
-        createDeck.setOnMouseExited(event -> createDeckView.setEffect(new Glow(0))); // savior
+        createDeck.setOnMouseExited(event -> createDeckView.setEffect(new Glow(0)));
 
-        manageDecksBar.getChildren().addAll(background, decksVBox, createDeck);
+        StackPane importDeck = new StackPane();
+        ImageView importDeckView = new ImageView(gauntletControlBg);
+        Label importDeckLabel = new Label("IMPORT DECK");
+        importDeckLabel.setFont(averta);
+        importDeckLabel.setTextFill(Color.WHITE);
+        importDeck.getChildren().addAll(importDeckView, importDeckLabel);
+        importDeck.setMaxHeight(82);
+        importDeck.setOnMouseEntered(event -> importDeckView.setEffect(new Glow(0.5)));
+        importDeck.setOnMouseExited(event -> importDeckView.setEffect(new Glow(0))); // SAVIOR
+
+        StackPane exportDeck = new StackPane();
+        ImageView exportDeckView = new ImageView(gauntletControlBg);
+        Label exportDeckLabel = new Label("EXPORT DECK");
+        exportDeckLabel.setFont(averta);
+        exportDeckLabel.setTextFill(Color.WHITE);
+        exportDeck.getChildren().addAll(exportDeckView, exportDeckLabel);
+        exportDeck.setMaxHeight(82);
+        exportDeck.setOnMouseEntered(event -> exportDeckView.setEffect(new Glow(0.5)));
+        exportDeck.setOnMouseExited(event -> exportDeckView.setEffect(new Glow(0)));
+        exportDeck.setOnMouseClicked(event -> {
+            try {
+                exportDeckProcess();
+            } catch (FileNotFoundException e) {
+            }
+        });
+
+        deckBarButtons.getChildren().addAll(createDeck, importDeck, exportDeck);
+        manageDecksBar.getChildren().addAll(background, decksVBox, deckBarButtons);
+
+        StackPane.setAlignment(decksVBox, Pos.TOP_CENTER);
+        StackPane.setAlignment(deckBarButtons, Pos.BOTTOM_CENTER);
+    }
+
+    private void exportDeckProcess() throws FileNotFoundException {
+        if (visibleDeckName.equals(""))
+            okPopUp("no deck selected" , scene, root);
+        else {
+//            new ImportBasedDeck(account.getCollection().getDeckHashMap().get(visibleDeckName));
+            okPopUp("deck \"" + visibleDeckName +"\" successfully exported." , scene, root);
+        }
     }
 
     private void drawCollectionLabels(Pane root, Font font, Scene scene) throws FileNotFoundException {
@@ -174,20 +220,10 @@ public class CollectionMenuFX {
         StackPane manageDeckPane = new StackPane();
         Label collectionLabel = new Label("MANAGE DECKS");
         collectionLabel.setTextFill(Color.WHITE);
-
-        StackPane importPane = new StackPane();
-        Label importLabel = new Label("IMPORT DECK");
-        importLabel.setTextFill(Color.WHITE);
-
+        root.getChildren().addAll(manageDeckPane);
         Image collectionBackground = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeck.png"));
         Image collectionBackgroundGlow = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeckGlow.png"));
         ImageView collectionButton = new ImageView(collectionBackground);
-
-        Image importBackground = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeck.png"));
-        Image importBackgroundGlow = new Image(new FileInputStream("src/view/sources/collectionMenu/backDeckGlow.png"));
-        ImageView importButton = new ImageView(importBackground);
-
-        importPane.getChildren().addAll(importButton,importLabel);
 
         StackPane manageDecksBar = new StackPane();
         manageDecksBar.setVisible(false);
@@ -254,9 +290,6 @@ public class CollectionMenuFX {
         manageDeckPane.setLayoutX(scene.getWidth() * 30 / 40);
         manageDeckPane.setLayoutY(scene.getHeight() * 4 / 40);
         manageDeckPane.getChildren().addAll(collectionButton, collectionLabel);
-        importPane.setLayoutX(scene.getWidth() * 30 / 40);
-        importPane.setLayoutY(scene.getHeight() * 8 / 40);
-        root.getChildren().addAll(manageDeckPane,importPane);
     }
 
     private static void drawDecks(VBox decksVBox, Scene scene) throws FileNotFoundException {
@@ -282,7 +315,7 @@ public class CollectionMenuFX {
         name.setTextFill(Color.WHITE);
         deck.setOnMouseClicked(event -> {
             for (ImageView imageView : decksBackground.values())
-                    imageView.setImage(deckBackground);
+                imageView.setImage(deckBackground);
             deckBg.setImage(deckBackgroundGlow);
             visibleDeckName = deckName;
             // TODO show deck
