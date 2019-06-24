@@ -159,6 +159,7 @@ public class ShopMenuFX {
         ImageView minionsCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle2.png")));
         ImageView itemsCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle3.png")));
         ImageView searchCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle4.png")));
+        ImageView spellsCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle5.png")));
         searchCircle.setFitWidth(90);
         searchCircle.setFitHeight(90);
         heroesCircle.setFitWidth(90);
@@ -167,19 +168,22 @@ public class ShopMenuFX {
         minionsCircle.setFitHeight(90);
         itemsCircle.setFitWidth(90);
         itemsCircle.setFitHeight(90);
+        spellsCircle.setFitWidth(90);
+        spellsCircle.setFitHeight(90);
 
         Label heroes = new Label("HEROES");
         Label minions = new Label("MINIONS");
         Label items = new Label("ITEMS");
+        Label spells = new Label("SPELLS");
         Label search = new Label("SEARCH");
-        Label[] labels = new Label[]{heroes, minions, items, search};
+        Label[] labels = new Label[]{heroes, minions, items, spells, search};
         for (Label label : labels) {
             label.setFont(font);
             label.setTextFill(Color.WHITESMOKE);
         }
 
-        HBox[] hBoxes = new HBox[4];
-        for (int i = 0; i < 4; i++) {
+        HBox[] hBoxes = new HBox[5];
+        for (int i = 0; i < 5; i++) {
             hBoxes[i] = new HBox();
             hBoxes[i].setSpacing(20);
             hBoxes[i].setStyle("-fx-background-color: rgba(0,0,0,0);");
@@ -191,8 +195,9 @@ public class ShopMenuFX {
         hBoxes[0].getChildren().addAll(heroesCircle, heroes);
         hBoxes[1].getChildren().addAll(minionsCircle, minions);
         hBoxes[2].getChildren().addAll(itemsCircle, items);
+        hBoxes[3].getChildren().addAll(spellsCircle, spells);
 
-        hBoxes[3].getChildren().addAll(searchCircle, search);
+        hBoxes[4].getChildren().addAll(searchCircle, search);
         TextField searchTextField = new TextField();
         searchTextField.setPromptText("Enter card/item ID");
         ImageView searchButton = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/searchButton.png")));
@@ -210,7 +215,7 @@ public class ShopMenuFX {
                 }
             } else if (isInCollection) {
                 try {
-                    int collectionSearchResult = ShopMenuProcess.searchCollection(command,account);
+                    int collectionSearchResult = ShopMenuProcess.searchCollection(command, account);
                     handleErrors(collectionSearchResult);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -234,7 +239,8 @@ public class ShopMenuFX {
 
         listView.relocate(scene.getWidth() / 30, scene.getHeight() / 5);
         listView.getItems().addAll(hBoxes);
-        listView.setMaxHeight(388);
+//        listView.setMaxHeight(scene.getHeight() / 2);
+        listView.setPrefHeight(450);
         listView.setStyle("-fx-control-inner-background: rgba(0,46,72,0.3);-fx-border-color: rgba(0,46,72,0.3);" +
                 "-fx-control-outer-background: rgba(0,46,72,0.3);-fx-background-color: transparent;"); // -fx-border-radius: 10;-fx-background-radius: 10;
         for (HBox item : listView.getItems())
@@ -257,6 +263,10 @@ public class ShopMenuFX {
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[3]":
+                    moveToSpellTab();
+                    showSearchBar(searchTextField, searchButton, false);
+                    break;
+                case "[4]":
                     showSearchBar(searchTextField, searchButton, true);
                     break;
             }
@@ -279,26 +289,47 @@ public class ShopMenuFX {
         moveToHeroTab();
         try {
             goGetTheCardsFromWantedGroup(cardName, result);
-        }catch (Exception ignored){ }
-        try{
+        } catch (Exception ignored) {
+        }
+        try {
             moveToMinionTab();
             goGetTheCardsFromWantedGroup(cardName, result);
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         try {
             moveToItemTab();
             goGetTheCardsFromWantedGroup(cardName, result);
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         cardsToShow.clear();
         cardsToShow.addAll(result);
         updateLabels();
     }
 
     private void goGetTheCardsFromWantedGroup(String cardName, ArrayList<String> result) {
-        for (String card:cardsToShow ) {
+        for (String card : cardsToShow) {
             if (card.equalsIgnoreCase(cardName))
                 result.add(card);
         }
 
+    }
+
+    private void moveToSpellTab() {
+        cardsToShow.clear();
+        if (isInShop)
+            for (Spell spell : Shop.getShopSpells())
+                cardsToShow.add(spell.getName());
+        else if (isInCollection)
+            for (Spell spell : account.getCollection().getSpells())
+                cardsToShow.add(spell.getName());
+        pageNumber = 1;
+        updateLabels();
+        removePowers();
+        updatePrices();
+        try {
+            setImages(2);
+        } catch (FileNotFoundException e) {
+        }
     }
 
     private void moveToItemTab() {
@@ -312,7 +343,7 @@ public class ShopMenuFX {
         pageNumber = 1;
         updateLabels();
         removePowers();
-        removePrices();
+        updatePrices();
         try {
             setImages(2);
         } catch (FileNotFoundException e) {
@@ -405,7 +436,7 @@ public class ShopMenuFX {
         collectionPane.getChildren().addAll(collectionButton, collectionLabel);
 
 //      <!-- PageDefinedHere -->
-        page.relocate(50, 650);
+        page.relocate(50, scene.getHeight() * 0.95);
         page.setFont(font);
         page.setFill(Color.WHITE);
 
@@ -472,7 +503,11 @@ public class ShopMenuFX {
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
                 updateLabels();
-                updatePowers(account);
+                try {
+                    updatePowers(account);
+                } catch (ClassCastException ex) {
+//                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
+                }
                 updatePrices();
             }
             pageSetText();
@@ -487,16 +522,14 @@ public class ShopMenuFX {
     private void updateLabels() {
         removeLabels();
         for (int i = 0; i < 10; i++) {
-
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-
                 Animation animation = getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
                 animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
                 animation.setCycleCount(Integer.MAX_VALUE);
                 animation.play();
 
-                cardLabels.get(i).setText("\n" + cardsToShow.get(i + (10 * (pageNumber - 1))));
+                cardLabels.get(i).setText(/*"\n" + */cardsToShow.get(i + (10 * (pageNumber - 1))));
                 cardPanes.get(i).setVisible(true);
                 if (cardPanes.get(i).getChildren().get(cardPanes.get(i).getChildren().size() - 1) instanceof ImageView)
                     cardPanes.get(i).getChildren().remove(cardPanes.get(i).getChildren().size() - 1);
@@ -529,13 +562,19 @@ public class ShopMenuFX {
         removePrices();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-                MovableCard card = null;
-                if (isInCollection)
-                    card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                else if (isInShop)
-                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                if (card == null) continue; // TODO ??
-                cardPrices.get(i).setText(card.getCost() + "");
+                Card card = null;
+                UsableItem item = null;
+                if (isInCollection) {
+                    card = account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    item = account.getCollection().findItemByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                } else if (isInShop) {
+                    card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    item = Shop.findItemByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                }
+                if (card != null)
+                    cardPrices.get(i).setText(card.getCost() + "");
+                else if (item != null)
+                    cardPrices.get(i).setText(item.getCost() + "");
             }
             /*label->stackPane[i].setVisible(false)*/
         }

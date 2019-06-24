@@ -41,7 +41,7 @@ public class CollectionMenuFX {
     private static HashMap<ImageView, String> deleteDeckHMap = new HashMap<>();
     private static HashMap<ImageView, String> selectDeckHMap = new HashMap<>();
     private static HashMap<String, ImageView> decksBackground = new HashMap<>();
-    private static String visibleDeckName = null;
+    private static String visibleDeckName = "";
     private static Scene scene;
     private static VBox decksVBox;
     private static String aboutToDelete = "";
@@ -189,10 +189,12 @@ public class CollectionMenuFX {
 
     private void exportDeckProcess() throws FileNotFoundException {
         if (visibleDeckName.equals(""))
-            okPopUp("no deck selected" , scene, root);
+            okPopUp("no deck is selected", scene, root);
         else {
 //            new ImportBasedDeck(account.getCollection().getDeckHashMap().get(visibleDeckName));
-            okPopUp("deck \"" + visibleDeckName +"\" successfully exported." , scene, root);
+            okPopUp("deck \"" + visibleDeckName + "\" successfully exported.", scene, root);
+            decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
+            drawDecks(decksVBox, scene);
         }
     }
 
