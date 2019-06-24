@@ -139,20 +139,6 @@ public class ShopMenuFX {
         root.getChildren().addAll(gridPane);
     }
 
-    public static Animation getGif(String  cardName) {
-        String address = "src/view/sources/gifs/";
-        UsableItem item = Shop.findItemByName(cardName);
-        if(item != null)
-            return new AnimatedGif(address+"items/"+cardName+"/idle.gif",1000);
-        Card card = Shop.findCardByName(cardName);
-        if(card instanceof  Spell)
-            return  new AnimatedGif(address+"spells/"+cardName+"/idle.gif",1000);
-        if(card instanceof  Minion)
-            return new AnimatedGif(address+"minions/"+cardName+"/idle.gif",1000);
-        if(card instanceof Hero)
-            return new AnimatedGif(address+"heroes/"+cardName+"/idle.gif",1000);
-        return null;
-    }
 
     void drawLeftBox(Font font, Pane root, Scene scene) throws FileNotFoundException {
         ImageView heroesCircle = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/shopMenuCircle1.png")));
@@ -446,7 +432,7 @@ public class ShopMenuFX {
 
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
 
-                Animation animation = getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 animation.getView().setFitWidth(stage.getScene().getWidth() /20);
                 animation.getView().setFitHeight(stage.getScene().getHeight()/10);
                 animation.setCycleCount(Integer.MAX_VALUE);

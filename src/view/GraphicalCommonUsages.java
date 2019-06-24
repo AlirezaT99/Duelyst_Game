@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.Account;
+import model.*;
 
 import java.awt.*;
 import java.beans.EventHandler;
@@ -219,6 +219,20 @@ public class GraphicalCommonUsages {
         cancelStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
     }
 
+    public static Animation getGif(String  cardName) {
+        String address = "src/view/sources/gifs/";
+        UsableItem item = Shop.findItemByName(cardName);
+        if(item != null)
+            return new AnimatedGif(address+"items/"+cardName+"/idle.gif",1000);
+        Card card = Shop.findCardByName(cardName);
+        if(card instanceof Spell)
+            return  new AnimatedGif(address+"spells/"+cardName+"/idle.gif",1000);
+        if(card instanceof  Minion)
+            return new AnimatedGif(address+"minions/"+cardName+"/idle.gif",1000);
+        if(card instanceof Hero)
+            return new AnimatedGif(address+"heroes/"+cardName+"/idle.gif",1000);
+        return null;
+    }
     static void popUpInCommonConfigs(Scene scene, Pane root, Rectangle bgRectangle, VBox popUp, Text messageText, Font font) {
         soundEffectPlay("error");
         bgRectangle.relocate(0.0, 0.0);

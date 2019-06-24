@@ -35,12 +35,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
 
+
 public class BattleFX {
     private static double screenWidth;
     private static double screenHeight;
     private static Rectangle[][] rectangles = new Rectangle[7][11];
     private static StackPane[][] gameMap = new StackPane[7][11];
     private static Object draggedFromNode = new Object();
+
     private static int objectInHandIndex;
     private HBox bottomRow = new HBox();
     private HBox firstPlayer = new HBox();
@@ -74,32 +76,27 @@ public class BattleFX {
             }
     }
 
-    private void setGif(Card card, int x, int y, Scene scene, Pane root, Match match) {
-        Animation animation = ShopMenuFX.getGif(card.getName());
+    private void setGif(Card card, int x, int y, Scene scene, Pane root, Match match) throws FileNotFoundException {
+        Animation animation = GraphicalCommonUsages.getGif(card.getName());
         animation.getView().setFitWidth(scene.getWidth() / 18.8);
         animation.getView().setPreserveRatio(true);
         // animation.getView().setFitHeight(scene.getHeight()/10);
         animation.setCycleCount(Integer.MAX_VALUE);
         animation.play();
-        //root.getChildren().add(animation.getView());
+        // root.getChildren().add(animation.getView());
         gameMap[x][y].getChildren().add(animation.getView());
         gameMap[x][y].getChildren().get(0).setLayoutX(0);
         gameMap[x][y].getChildren().get(0).setLayoutY(0);
+        ImageView hpView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/hp.png")));
+        Label hpLabel = new Label()
+        ImageView apView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/ap.png")));
 
         if (card.getPlayer().equals(match.getPlayer2()))
             rotateImageView(animation.getView());
         int finalX = x;
         int finalY = y;
         EventHandler<MouseEvent> handler = MouseEvent::consume;
-        animation.getView().addEventFilter(MouseEvent.ANY,handler);
-//        animation.getView().setOnMouseEntered(event -> {
-//            rectangles[finalX][finalY].setFill(Color.WHITE);
-//            rectangles[finalX][finalY].setOpacity(0.2);
-//        });
-//        animation.getView().setOnMouseExited(event -> {
-//            rectangles[finalX][finalY].setFill(Color.rgb(50, 50, 50));
-//            rectangles[finalX][finalY].setOpacity(0.3);
-//        });
+        animation.getView().addEventFilter(MouseEvent.ANY, handler);
     }
 
     private void rotateImageView(ImageView imageView) {
@@ -247,7 +244,7 @@ public class BattleFX {
                         updateMana(match, root, scene);
                         bottomRow = drawHand(player, root, scene);
                         ((ImageView) endTurn.getChildren().get(0)).setImage(endTurnEnemyInitialImage);
-                        updtdateSoldiers(match,scene,rectanglesPane);
+                        updtdateSoldiers(match, scene, rectanglesPane);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -325,19 +322,27 @@ public class BattleFX {
                 manaView.setEffect(grayscale);
             }
             StackPane imageStackPane = new StackPane();
-            javafx.scene.control.Label cardName = new Label();
-            if (player.getHand().getCards().get(i) != null)
-                cardName = new Label(player.getHand().getCards().get(i).getName());
-            cardName.setTextFill(Color.WHITE);
-            imageStackPane.getChildren().addAll(cardHolderView, cardName);
+            Label cardName = player.getHand().getCards().get(i) != null ? new Label(player.getHand().getCards().get(i).getName()) : new Label("");
+            if (cardName != null)
+                cardName.setVisible(false);
+            Animation animation = null;
+            if (player.getHand().getCards().get(i) != null) {
+                animation = GraphicalCommonUsages.getGif(player.getHand().getCards().get(i).getName());
+                animation.getView().setFitWidth(scene.getWidth() / 20);
+                animation.getView().setFitHeight(scene.getHeight() / 10);
+                animation.setCycleCount(Integer.MAX_VALUE);
+                animation.play();
+            }
+
+            imageStackPane.getChildren().addAll(cardHolderView, animation!=null?animation.getView():new Label(""));
             manaView.setFitHeight(scene.getHeight() / 20);
             manaView.setPreserveRatio(true);
             StackPane manaStackPane = new StackPane();
             manaStackPane.getChildren().addAll(manaView, new Text(player.getHand().getCards().get(i) != null ? player.getHand().getCards().get(i).getManaCost() + "" : ""));
-            cardContainer.getChildren().addAll(imageStackPane, manaStackPane);
+            cardContainer.getChildren().addAll(imageStackPane, manaStackPane, cardName);
             cardContainer.setAlignment(Pos.BOTTOM_CENTER);
             cardContainer.setSpacing((-1) * (scene.getHeight()) / 30);
-            if (!cardName.getText().equals("")) {
+            if (animation != null) {
                 final String descriptionString = player.getHand().getCards().get(i).getDescription();
 
                 final String AP = player.getHand().getCards().get(i) instanceof MovableCard ? ((MovableCard) player.getHand().getCards().get(i)).getDamage() + "" : "";
@@ -350,7 +355,6 @@ public class BattleFX {
                             cardContainer.startFullDrag();
                             draggedFromNode = cardContainer;
                             objectInHandIndex = finalI;
-                            //  System.out.println("fuck you");
                         }
                     }
                 });
@@ -455,16 +459,19 @@ public class BattleFX {
         double height = (scene.getHeight() / 2 - width / 5) / 5;
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 9; j++) {
+
                 rectangles[i][j] = new Rectangle((width + margin) * (j - 1), (height + margin) * (i - 1), width, height);
                 rectangles[i][j].setFill(Color.rgb(50, 50, 50));
                 rectangles[i][j].setOpacity(0.3);
+                Rectangle rectangle = new Rectangle((width + margin) * (j - 1), (height + margin) * (i - 1), width, height);
+                rectangle.setVisible(false);
                 // rectangles[i][j].setOpacity(0.6);
                 final int finalJ = j;
                 final int finalI = i;
                 rectangles[i][j].setArcWidth(rectangles[i][j].getWidth() / 20);
                 rectangles[i][j].setArcHeight(rectangles[i][j].getHeight() / 20);
                 gameMap[i][j] = new StackPane();
-                gameMap[i][j].getChildren().add(rectangles[i][j]);
+                gameMap[i][j].getChildren().add(rectangle);
                 gameMap[i][j].relocate((width + margin) * (j - 1), (height + margin) * (i - 1));
                 gameMap[i][j].setOnMouseEntered(event -> {
                     rectangles[finalI][finalJ].setFill(Color.WHITE);
@@ -480,12 +487,12 @@ public class BattleFX {
                 gameMap[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
                     @Override
                     public void handle(MouseDragEvent event) {
-                        System.out.println("actual map:" + finalI + " " + finalJ);
+                       // System.out.println("actual map:" + finalI + " " + finalJ);
                         if (draggedFromNode != null && draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
                             // group.getChildren().remove(draggedFromNode);
                             // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
-                            String cardName = ((Label) ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().get(1)).getText();
-                            ((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
+                            String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
+                            //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
                             player.getHand().findCardByName(cardName)
                                     .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
                             player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
@@ -498,7 +505,7 @@ public class BattleFX {
                             try {
                                 bottomRow = drawHand(player, mainPane, scene);
                                 updateMana(match, mainPane, scene);
-                                updtdateSoldiers(match,scene,group);
+                                updtdateSoldiers(match, scene, group);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -515,7 +522,7 @@ public class BattleFX {
                 group.setPrefWidth(scene.getWidth() * 3 / 5);
                 group.setPrefHeight(scene.getHeight() / 2);
                 group.relocate(ulx, uly);
-                group.getChildren().addAll(gameMap[i][j]);
+                group.getChildren().addAll(rectangles[i][j],gameMap[i][j]);
             }
         }
 //        backgroundRectangle.setOnMouseMoved(new EventHandler<MouseEvent>() {
