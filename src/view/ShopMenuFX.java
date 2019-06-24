@@ -432,7 +432,7 @@ public class ShopMenuFX {
 
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
 
-                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))),"idle");
                 animation.getView().setFitWidth(stage.getScene().getWidth() /20);
                 animation.getView().setFitHeight(stage.getScene().getHeight()/10);
                 animation.setCycleCount(Integer.MAX_VALUE);

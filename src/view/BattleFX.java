@@ -1,13 +1,13 @@
 package view;
 
 
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
+import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
@@ -21,6 +21,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -72,57 +75,83 @@ public class BattleFX {
     private void updtdateSoldiers(Match match, Scene scene, Pane root) throws FileNotFoundException {
         for (int i = 1; i <= 5; i++)
             for (int j = 1; j <= 9; j++) {
-                if (match.getTable().getCellByCoordination(i, j).getMovableCard() != null)
-                    setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match);
-            }
+                //if (match.getTable().getCellByCoordination(i, j).getMovableCard() != null)
+                    setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match, "idle");
+              //  else {
+//                    gameMap[i][j].getChildren().clear();
+//                    double width = scene.getWidth() * 3 / 47;
+//                    double margin = width / 20;
+//                    double height = (scene.getHeight() / 2 - width / 5) / 5;
+//                    Rectangle rectangle = new Rectangle((width + margin) * (j - 1), (height + margin) * (i - 1), width, height);
+//                    rectangle.setVisible(false);
+//                    createGameMapPane(rectanglesPane, scene, match.getPlayer1(), root, match, width, margin, height, i, j,rectangle , j, i);
+//                }
+                }
     }
+    private void setGif(Card card, int x, int y, Scene scene, Pane root, Match match, String type) throws FileNotFoundException {
+        Animation animation = null;
+        if (card != null) {
+            animation = GraphicalCommonUsages.getGif(card.getName(),type);
+            animation.getView().setFitWidth(scene.getWidth() / 18.8);
+            animation.getView().setPreserveRatio(true);
+            // animation.getView().setFitHeight(scene.getHeight()/10);
+            animation.setCycleCount(Integer.MAX_VALUE);
+            animation.play();
+            //gameMap[x][y].getChildren().clear();
+            for(int i = 1; i < gameMap[x][y].getChildren().size(); i++){
+                gameMap[x][y].getChildren().remove(i);
+            }
+           // rectanglesPane.
+            gameMap[x][y].getChildren().add(animation.getView());
+            gameMap[x][y].setPrefHeight((rectangles[x][y].getHeight()));
+            gameMap[x][y].setPrefWidth((rectangles[x][y].getWidth()));
 
-    private void setGif(Card card, int x, int y, Scene scene, Pane root, Match match) throws FileNotFoundException {
-        Animation animation = GraphicalCommonUsages.getGif(card.getName());
-        animation.getView().setFitWidth(scene.getWidth() / 18.8);
-        animation.getView().setPreserveRatio(true);
-        // animation.getView().setFitHeight(scene.getHeight()/10);
-        animation.setCycleCount(Integer.MAX_VALUE);
-        animation.play();
-        // root.getChildren().add(animation.getView());
-        gameMap[x][y].getChildren().add(animation.getView());
+            gameMap[x][y].getChildren().get(0).setLayoutX(0);
+            gameMap[x][y].getChildren().get(0).setLayoutY(0);
+            StackPane hp = new StackPane();
+            ImageView hpView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/hp.png")));
+            Label hpLabel = new Label();
+            hpLabel.setTextFill(Color.WHITE);
+            hpView.setFitHeight(gameMap[x][y].getPrefHeight() / 3);
+            hpView.setPreserveRatio(true);
+            hpView.setOpacity(0.5);
+            hp.getChildren().addAll(hpView, hpLabel);
 
-        gameMap[x][y].setPrefHeight((rectangles[x][y].getHeight()));
-        gameMap[x][y].setPrefWidth((rectangles[x][y].getWidth()));
+            StackPane ap = new StackPane();
+            ImageView apView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/ap.png")));
+            Label apLabel = new Label();
+            apLabel.setTextFill(Color.WHITE);
+            apView.setFitHeight(gameMap[x][y].getPrefHeight() / 3);
+            apView.setPreserveRatio(true);
+            apView.setOpacity(0.5);
+            ap.getChildren().addAll(apView, apLabel);
 
-        gameMap[x][y].getChildren().get(0).setLayoutX(0);
-        gameMap[x][y].getChildren().get(0).setLayoutY(0);
-        StackPane hp = new StackPane();
-        ImageView hpView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/hp.png")));
-        Label hpLabel = new Label();
-        hpLabel.setTextFill(Color.WHITE);
-        hpView.setFitHeight(gameMap[x][y].getPrefHeight()/3);
-        hpView.setPreserveRatio(true);
-        hpView.setOpacity(0.5);
-        hp.getChildren().addAll(hpView,hpLabel);
+            if (card instanceof MovableCard) {
+                hpLabel.setText(((MovableCard) card).getHealth() + "");
+                apLabel.setText(((MovableCard) card).getDamage() + "");
+            }
 
-        StackPane ap = new StackPane();
-        ImageView apView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/ap.png")));
-        Label apLabel = new Label();
-        apLabel.setTextFill(Color.WHITE);
-        apView.setFitHeight(gameMap[x][y].getPrefHeight()/3);
-        apView.setPreserveRatio(true);
-        apView.setOpacity(0.5);
-        ap.getChildren().addAll(apView,apLabel);
+            Label cardName = new Label(card.getName());
+            cardName.setVisible(false);
+            gameMap[x][y].getChildren().addAll(ap, hp, cardName);
+            ap.relocate(0, gameMap[x][y].getPrefHeight() * 2 / 3);
+            hp.relocate(gameMap[x][y].getPrefWidth() / 2, gameMap[x][y].getPrefHeight() * 2 / 3);
 
-        if (card instanceof MovableCard) {
-            hpLabel.setText(((MovableCard) card).getHealth() + "");
-            apLabel.setText(((MovableCard) card).getDamage()+"");
+            if (card.getPlayer().equals(match.getPlayer2()))
+                rotateImageView(animation.getView());
         }
-        gameMap[x][y].getChildren().addAll(hp,ap);
-        hp.relocate(0,gameMap[x][y].getPrefHeight()*2/3);
-        ap.relocate(gameMap[x][y].getPrefWidth()/2,gameMap[x][y].getPrefHeight()*2/3);
+        else
+        {
+            Rectangle rectangle = (Rectangle) gameMap[x][y].getChildren().get(0);
+            gameMap[x][y].getChildren().clear();
+            gameMap[x][y].getChildren().add(rectangle);
+        }
+        // root.getChildren().add(animation.getView());
 
-        if (card.getPlayer().equals(match.getPlayer2()))
-            rotateImageView(animation.getView());
 
-        EventHandler<MouseEvent> handler = MouseEvent::consume;
-        animation.getView().addEventFilter(MouseEvent.ANY, handler);
+//
+//        EventHandler<MouseEvent> handler = MouseEvent::consume;
+//        animation.getView().addEventFilter(MouseEvent.ANY, handler);
     }
 
     private void rotateImageView(ImageView imageView) {
@@ -353,7 +382,7 @@ public class BattleFX {
                 cardName.setVisible(false);
             Animation animation = null;
             if (player.getHand().getCards().get(i) != null) {
-                animation = GraphicalCommonUsages.getGif(player.getHand().getCards().get(i).getName());
+                animation = GraphicalCommonUsages.getGif(player.getHand().getCards().get(i).getName(), "idle");
                 animation.getView().setFitWidth(scene.getWidth() / 20);
                 animation.getView().setFitHeight(scene.getHeight() / 10);
                 animation.setCycleCount(Integer.MAX_VALUE);
@@ -524,11 +553,6 @@ public class BattleFX {
                             player.getHand().findCardByName(cardName)
                                     .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
                             player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
-                            //   ((VBox) draggedFromNode).getChildren().remove(0);
-                            // match.getPlayer2().getHand().removeCardFromHand();
-//                            Text text = new Text(cardName);
-//                            text.setFont(Font.font(10));
-//                            text.setFill(Color.WHITE);
                             draggedFromNode = null;
                             try {
                                 bottomRow = drawHand(player, mainPane, scene);
@@ -540,8 +564,66 @@ public class BattleFX {
 //                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
 //                            group.getChildren().addAll(text);
                         }
-                        if(draggedFromNode !=null && draggedFromNode instanceof Pane ){
-                            
+                        if (draggedFromNode != null && draggedFromNode instanceof Pane && ((Pane) draggedFromNode).getChildren().size() >= 3) {
+                            Coordination coordination = getPaneFromMap((Pane) draggedFromNode);
+                            System.out.println(match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)));
+                            if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)) == 0) {
+                                match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().move(match.getTable().getCell(finalI, finalJ));
+                                ImageView movableCard = (ImageView)(((Pane) draggedFromNode).getChildren().get(1));
+                                StackPane ap = (StackPane)(((Pane) draggedFromNode).getChildren().get(2));
+                                StackPane hp = (StackPane) (((Pane) draggedFromNode).getChildren().get(3));
+
+                                ((Pane) draggedFromNode).getChildren().remove(movableCard);
+                                ((Pane) draggedFromNode).getChildren().remove(ap);
+                                ((Pane) draggedFromNode).getChildren().remove(hp);
+
+                                rectanglesPane.getChildren().addAll(movableCard,ap,hp);
+                                movableCard.relocate( (coordination.getY()-1) *( width +margin),  (coordination.getX()-1) *( height+margin));
+                                hp.relocate((coordination.getY()-1) *( width +margin)+rectangles[finalI][finalJ].getWidth() / 2, (coordination.getX()-1) *( height+margin)+rectangles[finalI][finalJ].getHeight()* 2 / 3);
+                                ap.relocate((coordination.getY()-1) *( width +margin), (coordination.getX()-1) *( height+margin)+rectangles[finalI][finalJ].getHeight() * 2 / 3);
+
+                                KeyValue xValueAP = new KeyValue(ap.layoutXProperty(), rectangles[finalI][finalJ].getX());
+                                KeyValue yValueAP = new KeyValue(ap.layoutYProperty(), rectangles[finalI][finalJ].getY()+rectangles[finalI][finalJ].getHeight() * 2 / 3);
+                                KeyFrame keyFrameAP = new KeyFrame(Duration.millis(1000), xValueAP, yValueAP);
+
+                                KeyValue xValueHP = new KeyValue(hp.layoutXProperty(), rectangles[finalI][finalJ].getX()+rectangles[finalI][finalJ].getWidth() / 2);
+                                KeyValue yValueHP = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY()+rectangles[finalI][finalJ].getHeight()* 2 / 3);
+                                KeyFrame keyFrameHP = new KeyFrame(Duration.millis(1000), xValueHP, yValueHP);
+
+                                KeyValue xValue = new KeyValue(movableCard.layoutXProperty(), rectangles[finalI][finalJ].getX());
+                                KeyValue yValue = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY());
+                                KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), xValue, yValue);
+                                Timeline timeline = new Timeline(keyFrame);
+                                Timeline timeLineAP = new Timeline(keyFrameAP);
+                                Timeline timeLineHP = new Timeline(keyFrameHP);
+                                Animation animation = GraphicalCommonUsages.getGif(((Label) (((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1))).getText(), "run");
+                               // ((Pane) draggedFromNode).getChildren().remove(0);
+                               // ((Pane) draggedFromNode).getChildren().add(0, animation.getView());
+                                animation.getView().setFitWidth(scene.getWidth() / 18.8);
+                                if (coordination.getX() < finalI)
+                                    rotateImageView(animation.getView());
+                                animation.getView().setPreserveRatio(true);
+
+
+
+                                // animation.getView().setFitHeight(scene.getHeight()/10);
+                                animation.setCycleCount(1);
+                                animation.play();
+                                timeline.play();
+                                timeLineAP.play();
+                                timeLineHP.play();
+                                timeline.setOnFinished(event1 -> {
+                                    try {
+                                        rectanglesPane.getChildren().remove(movableCard);
+                                        rectanglesPane.getChildren().remove(ap);
+                                        rectanglesPane.getChildren().remove(hp);
+                                        updtdateSoldiers(match, scene, group);
+                                        updtdateSoldiers(match, scene, group);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+                            }
                         }
                     }
                 });
@@ -549,7 +631,6 @@ public class BattleFX {
                     rectangles[finalI][finalJ].setFill(Color.rgb(50, 50, 50));
                     rectangles[finalI][finalJ].setOpacity(0.3);
                 });
-
                 group.setPrefWidth(scene.getWidth() * 3 / 5);
                 group.setPrefHeight(scene.getHeight() / 2);
                 group.relocate(ulx, uly);
@@ -565,7 +646,18 @@ public class BattleFX {
 
     }
 
+    private void createGameMapPane(Pane group, Scene scene, Player player, Pane mainPane, Match match, double width, double margin, double height, int i, int j, Rectangle rectangle, int finalJ, int finalI) {
+
+    }
+
     //create Table graphics
+    private Coordination getPaneFromMap(Pane pane) {
+        for (int i = 1; i <= 5; i++)
+            for (int j = 1; j <= 9; j++)
+                if (pane.equals(gameMap[i][j]))
+                    return new Coordination(i, j);
+        return null;
+    }
 
     private void setScreenVariables(Stage stage) {
         screenHeight = stage.getHeight();
