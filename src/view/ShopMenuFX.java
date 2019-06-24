@@ -210,8 +210,7 @@ public class ShopMenuFX {
                 }
             } else if (isInCollection) {
                 try {
-                    int collectionSearchResult = ShopMenuProcess.searchCollection(command, account);
-                    handleErrors(collectionSearchResult);
+                    handleErrors(ShopMenuProcess.searchCollection(command, account));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -482,7 +481,7 @@ public class ShopMenuFX {
                 pageNumber++;
             else {
                 updateLabels();
-                updatePowers();
+                updatePowers(account);
                 updatePrices();
             }
             pageSetText();
@@ -492,7 +491,7 @@ public class ShopMenuFX {
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
                 updateLabels();
-                updatePowers();
+                updatePowers(account);
                 updatePrices();
             }
             pageSetText();
@@ -537,7 +536,7 @@ public class ShopMenuFX {
                 if (isInCollection)
                     card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 else if (isInShop)
-                    card = (MovableCard) findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 if (card == null) continue; // TODO ??
                 cardPowers.get(i).setText("\n" + card.getDamage() + "\t\t\t" + card.getHealth());
             }
@@ -585,7 +584,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(false);
             shopAndCollectionGlowHandler(collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
             updateLabels();
-            updatePowers();
+            updatePowers(account);
             updatePrices();
         });
         shopPane.setOnMouseClicked(event -> {
@@ -593,7 +592,7 @@ public class ShopMenuFX {
                 shopAndCollectionBarManager(true);
             shopAndCollectionGlowHandler(shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
             updateLabels();
-            updatePowers();
+            updatePowers(account);
             updatePrices();
         });
     }

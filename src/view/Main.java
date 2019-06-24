@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Account;
 import model.Match;
-import presenter.BattleInitProcess;
 import presenter.BattleMenuProcess;
 
 import java.io.FileInputStream;
