@@ -4,6 +4,7 @@ import model.*;
 import view.CollectionMenu;
 import view.MainMenu;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -52,13 +53,13 @@ public class CollectionMenuProcess {
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return addToDeck(commandParts[1], commandParts[4]);
+                    return addToDeck(account, commandParts[1], commandParts[4]);
                 }
             },
             new DoCommand() {
                 @Override
                 public int doIt() {
-                    return removeFromDeck(commandParts[1], commandParts[4]);
+                    return removeFromDeck(account, commandParts[1], commandParts[4]);
                 }
             },
             new DoCommand() {
@@ -69,13 +70,13 @@ public class CollectionMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws FileNotFoundException {
                     return validateDeck(commandParts[2]);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws FileNotFoundException {
                     if (commandParts.length == 5)
                         return search(commandParts[1] + " " + commandParts[2] + " " + commandParts[3] + " " + commandParts[4], account);
                     if (commandParts.length == 4)
@@ -89,43 +90,21 @@ public class CollectionMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws FileNotFoundException {
                     return showAllDecks(account);
                 }
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws FileNotFoundException {
                     return showDeck(commandParts[2], account);
                 }
             },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return show();
-                }
-            },
+            this::show,
+            this::save,
+            CollectionMenu::help,
 
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return save();
-                }
-            },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return CollectionMenu.help();
-                }
-            },
-
-            //sdfsafsf
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return exit();
-                }
-            }
+            this::exit
     };
 
     private int save() throws IOException {
@@ -151,7 +130,16 @@ public class CollectionMenuProcess {
         return account.getCollection().deleteDeck(deckName);
     }
 
-    private int addToDeck(String idStr, String deckName) { // is id an integer or a string after all???
+    public int addToDeck(Account account, String name, String deckName) {
+        // changed idStr from an argument
+        // to a local variable to work with card/item name
+        String idStr;
+        try {
+            idStr = account.getCollection().findCardByName(name).getCollectionID();
+        } catch (NullPointerException ex) {
+            idStr = account.getCollection().findItemByName(name).getCollectionID();
+        }
+
         if (!account.getCollection().getDeckHashMap().containsKey(deckName))
             return 9;
         Deck deck = account.getCollection().getDeckHashMap().get(deckName);
@@ -212,8 +200,15 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private int removeFromDeck(String idStr, String deckName) {
+    public int removeFromDeck(Account account, String name, String deckName) { // changed idStr from an argument
+        // to a local variable to work with card/item name
         Deck deck = account.getCollection().getDeckHashMap().get(deckName);
+        String idStr;
+        try {
+        idStr = account.getCollection().findCardByName(name).getCollectionID();
+        } catch (NullPointerException ex) {
+            idStr = account.getCollection().findItemByName(name).getCollectionID();
+        }
         if (deck == null)
             return 9;
         if (deck.findCardByID(idStr) == null && !deck.getItems().isEmpty()
@@ -252,7 +247,7 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    private int validateDeck(String deckName) {
+    private int validateDeck(String deckName) throws FileNotFoundException {
         boolean isValid = account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName));
         if (isValid) {
             CollectionMenu.showMessage("Deck is Valid");
@@ -270,12 +265,12 @@ public class CollectionMenuProcess {
         return 8;
     }
 
-    private int show() {
+    private int show() throws FileNotFoundException {
         CollectionMenu.showMessage(account.getCollection().show(true));
         return 0;
     }
 
-    private static int showDeck(String deckName, Account account) {
+    private static int showDeck(String deckName, Account account) throws FileNotFoundException {
         if (account.getCollection().getDeckHashMap().get(deckName) != null)
             CollectionMenu.showMessage(account.getCollection().getDeckHashMap().get(deckName).show());
         else
@@ -283,7 +278,7 @@ public class CollectionMenuProcess {
         return 0;
     }
 
-    public static int showAllDecks(Account account) {
+    public static int showAllDecks(Account account) throws FileNotFoundException {
         if (account.getCollection().getSelectedDeck() != null) {
             CollectionMenu.showMessage("1 : " + account.getCollection().getSelectedDeck().getName() + " :");
             showDeck(account.getCollection().getSelectedDeck().getName(), account);
@@ -326,7 +321,7 @@ public class CollectionMenuProcess {
         return "";
     }
 
-    public static int search(String name, Account account) {
+    public static int search(String name, Account account) throws FileNotFoundException {
         if (account.getCollection().findItemByName(name) == null && account.getCollection().findCardByName(name) == null)
             return 10;
         String result = "";

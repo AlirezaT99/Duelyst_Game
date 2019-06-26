@@ -54,7 +54,7 @@ public class ShopMenuProcess {
             },
             new DoCommand() {
                 @Override
-                public int doIt() {
+                public int doIt() throws FileNotFoundException {
                     if (commandParts.length == 6)
                         return searchCollection(commandParts[2] + " " + commandParts[3] + " " + commandParts[4] + " " + commandParts[5], currentAccount);
                     if (commandParts.length == 5)
@@ -114,7 +114,7 @@ public class ShopMenuProcess {
         return 0;
     }
 
-    public static int showCollection() {
+    public static int showCollection() throws FileNotFoundException {
         CollectionMenu.showMessage(currentAccount.getCollection().show(true));
         return 0;
     }
@@ -128,7 +128,7 @@ public class ShopMenuProcess {
         return i;
     }
 
-    public static int searchCollection(String name, Account currentAccount) {
+    public static int searchCollection(String name, Account currentAccount) throws FileNotFoundException {
         if (Shop.searchCollection(name, currentAccount).equals("Item/Card not found in collection"))
             return 2;
         return CollectionMenuProcess.search(name, currentAccount);
