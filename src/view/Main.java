@@ -5,6 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Account;
 import model.Match;
@@ -128,6 +129,18 @@ public class Main extends Application {
                 break;
         }
     }
+
+    public static void setSceneForAPeriodOfTime(Pane root, long time){
+      //  Scene scene = currentScene;
+        Pane pane = ((Pane)currentScene.getRoot());
+        currentScene.setRoot(root);
+        long timeOfNow = System.currentTimeMillis();
+        while (System.currentTimeMillis() - timeOfNow < time){
+        }
+
+        currentScene.setRoot(pane);
+    }
+
 
     private void backgroundMusicPlay() {
         javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());

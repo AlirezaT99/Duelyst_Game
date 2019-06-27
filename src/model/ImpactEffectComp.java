@@ -22,7 +22,7 @@ public class ImpactEffectComp {
     private int impactQuantity;
     private ArrayList<Cell> impactArea;
     private Impact fatherImpact;
-    private Match match;
+    Match match;
 
     public ImpactEffectComp(ArrayList<Cell> impactArea, Impact fatherImpact, Match match, String impactWayOfAssigning, String impactTypeIdComp) {
         this.impactArea = impactArea;
@@ -53,15 +53,17 @@ public class ImpactEffectComp {
     }
 
     private void setAllImpactTypeCompVariables() {
-        doesHaveAntiHolyBuff = impactTypeIdComp.charAt(0) == '1';
-        doesHaveHolyBuffCanceler = impactTypeIdComp.charAt(1) == '1';
-        doesHaveAntiNegativeImpact = impactTypeIdComp.charAt(2) == '1';
-        doesHaveAntiPoison = impactTypeIdComp.charAt(3) == '1';
-        killIt = impactTypeIdComp.charAt(4) == '1';
-        doesHaveRisingDamage = impactTypeIdComp.charAt(5) != '0';
-        difRisingDamage = impactTypeIdComp.charAt(5) == '2';
-        doesHaveAntiDisarm = impactTypeIdComp.charAt(7) == '1';
-        immuneToMinDamage = impactTypeIdComp.charAt(6) == '1';
+        try {
+            doesHaveAntiHolyBuff = impactTypeIdComp.charAt(0) == '1';
+            doesHaveHolyBuffCanceler = impactTypeIdComp.charAt(1) == '1';
+            doesHaveAntiNegativeImpact = impactTypeIdComp.charAt(2) == '1';
+            doesHaveAntiPoison = impactTypeIdComp.charAt(3) == '1';
+            killIt = impactTypeIdComp.charAt(4) == '1';
+            doesHaveRisingDamage = impactTypeIdComp.charAt(5) != '0';
+            difRisingDamage = impactTypeIdComp.charAt(5) == '2';
+            doesHaveAntiDisarm = impactTypeIdComp.charAt(7) == '1';
+            immuneToMinDamage = impactTypeIdComp.charAt(6) == '1';
+        }catch (Exception e){}
     }
 
     private void setAllTheWayOfAssigningVariables() {
@@ -74,6 +76,7 @@ public class ImpactEffectComp {
 
 
     void doImpactComp(MovableCard target, Cell castingCell) {
+
         setAllImpactTypeCompVariables();
         setAllTheWayOfAssigningVariables();
         if (killIt)

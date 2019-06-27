@@ -16,10 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -76,8 +73,8 @@ public class BattleFX {
         for (int i = 1; i <= 5; i++)
             for (int j = 1; j <= 9; j++) {
                 //if (match.getTable().getCellByCoordination(i, j).getMovableCard() != null)
-                    setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match, "idle");
-              //  else {
+                setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match, "idle");
+                //  else {
 //                    gameMap[i][j].getChildren().clear();
 //                    double width = scene.getWidth() * 3 / 47;
 //                    double margin = width / 20;
@@ -86,22 +83,23 @@ public class BattleFX {
 //                    rectangle.setVisible(false);
 //                    createGameMapPane(rectanglesPane, scene, match.getPlayer1(), root, match, width, margin, height, i, j,rectangle , j, i);
 //                }
-                }
+            }
     }
+
     private void setGif(Card card, int x, int y, Scene scene, Pane root, Match match, String type) throws FileNotFoundException {
         Animation animation = null;
         if (card != null) {
-            animation = GraphicalCommonUsages.getGif(card.getName(),type);
+            animation = GraphicalCommonUsages.getGif(card.getName(), type);
             animation.getView().setFitWidth(scene.getWidth() / 18.8);
             animation.getView().setPreserveRatio(true);
             // animation.getView().setFitHeight(scene.getHeight()/10);
             animation.setCycleCount(Integer.MAX_VALUE);
             animation.play();
             //gameMap[x][y].getChildren().clear();
-            for(int i = 1; i < gameMap[x][y].getChildren().size(); i++){
+            for (int i = gameMap[x][y].getChildren().size()-1; i > 0; i--) {
                 gameMap[x][y].getChildren().remove(i);
             }
-           // rectanglesPane.
+            // rectanglesPane.
             gameMap[x][y].getChildren().add(animation.getView());
             gameMap[x][y].setPrefHeight((rectangles[x][y].getHeight()));
             gameMap[x][y].setPrefWidth((rectangles[x][y].getWidth()));
@@ -139,15 +137,12 @@ public class BattleFX {
 
             if (card.getPlayer().equals(match.getPlayer2()))
                 rotateImageView(animation.getView());
-        }
-        else
-        {
+        } else {
             Rectangle rectangle = (Rectangle) gameMap[x][y].getChildren().get(0);
             gameMap[x][y].getChildren().clear();
             gameMap[x][y].getChildren().add(rectangle);
         }
         // root.getChildren().add(animation.getView());
-
 
 //
 //        EventHandler<MouseEvent> handler = MouseEvent::consume;
@@ -402,6 +397,7 @@ public class BattleFX {
 
                 final String AP = player.getHand().getCards().get(i) instanceof MovableCard ? ((MovableCard) player.getHand().getCards().get(i)).getDamage() + "" : "";
                 final String HP = player.getHand().getCards().get(i) instanceof MovableCard ? ((MovableCard) player.getHand().getCards().get(i)).getHealth() + "" : "";
+                final String name = player.getHand().getCards().get(i).getName();
                 final int finalI = i;
                 cardContainer.setOnDragDetected(new EventHandler<MouseEvent>() {
                     @Override
@@ -441,12 +437,21 @@ public class BattleFX {
                             HPLabel.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 + (descriptionView.getFitWidth() / 4), boundsInScene.getMinY() - descriptionView.getFitHeight() / 2.35);
                             HPLabel.setTextFill(Color.WHITE);
 
+                            Label nameLabel = new Label(name);
+                            nameLabel.setAlignment(Pos.CENTER);
+
+//                            nameLabel.layoutXProperty().bind(description.widthProperty().subtract(nameLabel.widthProperty()).divide(2));
+//                            nameLabel.layoutYProperty().bind(description.heightProperty().subtract(nameLabel.heightProperty()).divide(2));
+
+                            nameLabel.relocate(APLabel.getLayoutX() , boundsInScene.getMinY() - descriptionView.getFitHeight() / 1.5);
+                            nameLabel.setTextFill(Color.WHITE);
+
                             text.setWrappingWidth(descriptionView.getFitWidth() * 3 / 4);
                             text.relocate((boundsInScene.getMinX() + boundsInScene.getMaxX()) / 2 - (text.getWrappingWidth()) / 2, boundsInScene.getMinY() - descriptionView.getFitHeight() / 3.1);
                             text.setFill(Color.WHITE);
                             text.setFont(Font.font(10));
 
-                            description.getChildren().addAll(APLabel, HPLabel);
+                            description.getChildren().addAll(APLabel, HPLabel,nameLabel);
 
                             fadeInPane(description);
                             root.getChildren().addAll(description);
@@ -549,6 +554,29 @@ public class BattleFX {
                             // group.getChildren().remove(draggedFromNode);
                             // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
                             String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
+                            if(player.getHand().getCards().get(objectInHandIndex) instanceof Spell)
+                            {
+                                System.out.println("fuck sepehr");
+
+                                mainPane.getChildren().add(new Rectangle(scene.getWidth(),scene.getHeight(),Color.ORANGE));
+                                long time = System.currentTimeMillis();
+                                FadeTransition fadeTransition = new FadeTransition();
+                                fadeTransition.setDuration(Duration.millis(1000));
+                                fadeTransition.setFromValue(1);
+                                fadeTransition.setToValue(0);
+                                fadeTransition.setNode(mainPane.getChildren().get(mainPane.getChildren().size()-1));
+                                fadeTransition.play();
+                                fadeTransition.setOnFinished(event1 -> mainPane.getChildren().remove(mainPane.getChildren().size()-1));
+                                ((Rectangle)gameMap[finalI][finalJ].getChildren().get(0)).setFill(Color.GOLD);
+                                //while (System.currentTimeMillis() - time < 2000){}
+                                //rectangles[finalI][finalJ].setFill(Color.WHITE);
+                               // while (System.currentTimeMillis() - time < ){}
+//                                Pane tempPane = new Pane();
+//                                tempPane.getChildren()
+//                                tempPane.setBackground(new Background(new BackgroundFill(Color.ORANGE,CornerRadii.EMPTY,new Insets(0,0,0,0))));
+//                                Main.setSceneForAPeriodOfTime(tempPane,1000);
+
+                            }
                             //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
                             player.getHand().findCardByName(cardName)
                                     .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
@@ -564,61 +592,66 @@ public class BattleFX {
 //                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
 //                            group.getChildren().addAll(text);
                         }
-                        if (draggedFromNode != null && draggedFromNode instanceof Pane && ((Pane) draggedFromNode).getChildren().size() >= 3) {
+                        if (draggedFromNode != null && draggedFromNode instanceof Pane && !(draggedFromNode instanceof VBox) && ((Pane) draggedFromNode).getChildren().size() >= 3) {
+                            System.out.println("in movemnet part");
                             Coordination coordination = getPaneFromMap((Pane) draggedFromNode);
+                            System.out.println(coordination.getX() + " " + coordination.getY() + " fuck");
                             System.out.println(match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)));
                             if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)) == 0) {
                                 match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().move(match.getTable().getCell(finalI, finalJ));
-                                ImageView movableCard = (ImageView)(((Pane) draggedFromNode).getChildren().get(1));
-                                StackPane ap = (StackPane)(((Pane) draggedFromNode).getChildren().get(2));
+                               // ImageView movableCard = (ImageView) (((Pane) draggedFromNode).getChildren().get(1));
+
+                                ImageView movableCard = GraphicalCommonUsages.getGif(((Label)((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size()-1)).getText(),"run").getView();
+                                StackPane ap = (StackPane) (((Pane) draggedFromNode).getChildren().get(2));
                                 StackPane hp = (StackPane) (((Pane) draggedFromNode).getChildren().get(3));
 
-                                ((Pane) draggedFromNode).getChildren().remove(movableCard);
+                             //   ((Pane) draggedFromNode).getChildren().clear();
+                                ((Pane) draggedFromNode).getChildren().remove(1);
                                 ((Pane) draggedFromNode).getChildren().remove(ap);
                                 ((Pane) draggedFromNode).getChildren().remove(hp);
 
-                                rectanglesPane.getChildren().addAll(movableCard,ap,hp);
-                                movableCard.relocate( (coordination.getY()-1) *( width +margin),  (coordination.getX()-1) *( height+margin));
-                                hp.relocate((coordination.getY()-1) *( width +margin)+rectangles[finalI][finalJ].getWidth() / 2, (coordination.getX()-1) *( height+margin)+rectangles[finalI][finalJ].getHeight()* 2 / 3);
-                                ap.relocate((coordination.getY()-1) *( width +margin), (coordination.getX()-1) *( height+margin)+rectangles[finalI][finalJ].getHeight() * 2 / 3);
+                                rectanglesPane.getChildren().addAll(movableCard, ap, hp);
+                                movableCard.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin));
+                                hp.relocate((coordination.getY() - 1) * (width + margin) + rectangles[finalI][finalJ].getWidth() / 2, (coordination.getX() - 1) * (height + margin) + rectangles[finalI][finalJ].getHeight() * 2 / 3);
+                                ap.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin) + rectangles[finalI][finalJ].getHeight() * 2 / 3);
 
                                 KeyValue xValueAP = new KeyValue(ap.layoutXProperty(), rectangles[finalI][finalJ].getX());
-                                KeyValue yValueAP = new KeyValue(ap.layoutYProperty(), rectangles[finalI][finalJ].getY()+rectangles[finalI][finalJ].getHeight() * 2 / 3);
+                                KeyValue yValueAP = new KeyValue(ap.layoutYProperty(), rectangles[finalI][finalJ].getY() + rectangles[finalI][finalJ].getHeight() * 2 / 3);
                                 KeyFrame keyFrameAP = new KeyFrame(Duration.millis(1000), xValueAP, yValueAP);
 
-                                KeyValue xValueHP = new KeyValue(hp.layoutXProperty(), rectangles[finalI][finalJ].getX()+rectangles[finalI][finalJ].getWidth() / 2);
-                                KeyValue yValueHP = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY()+rectangles[finalI][finalJ].getHeight()* 2 / 3);
+                                KeyValue xValueHP = new KeyValue(hp.layoutXProperty(), rectangles[finalI][finalJ].getX() + rectangles[finalI][finalJ].getWidth() / 2);
+                                KeyValue yValueHP = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY() + rectangles[finalI][finalJ].getHeight() * 2 / 3);
                                 KeyFrame keyFrameHP = new KeyFrame(Duration.millis(1000), xValueHP, yValueHP);
 
                                 KeyValue xValue = new KeyValue(movableCard.layoutXProperty(), rectangles[finalI][finalJ].getX());
                                 KeyValue yValue = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY());
+
                                 KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), xValue, yValue);
                                 Timeline timeline = new Timeline(keyFrame);
                                 Timeline timeLineAP = new Timeline(keyFrameAP);
                                 Timeline timeLineHP = new Timeline(keyFrameHP);
                                 Animation animation = GraphicalCommonUsages.getGif(((Label) (((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1))).getText(), "run");
-                               // ((Pane) draggedFromNode).getChildren().remove(0);
-                               // ((Pane) draggedFromNode).getChildren().add(0, animation.getView());
+                                // ((Pane) draggedFromNode).getChildren().remove(0);
+                                // ((Pane) draggedFromNode).getChildren().add(0, animation.getView());
                                 animation.getView().setFitWidth(scene.getWidth() / 18.8);
                                 if (coordination.getX() < finalI)
                                     rotateImageView(animation.getView());
                                 animation.getView().setPreserveRatio(true);
-
-
-
                                 // animation.getView().setFitHeight(scene.getHeight()/10);
                                 animation.setCycleCount(1);
                                 animation.play();
                                 timeline.play();
                                 timeLineAP.play();
                                 timeLineHP.play();
-                                timeline.setOnFinished(event1 -> {
+                                timeLineHP.setOnFinished(event1 -> {
                                     try {
+                                        updtdateSoldiers(match, scene, group);
                                         rectanglesPane.getChildren().remove(movableCard);
                                         rectanglesPane.getChildren().remove(ap);
                                         rectanglesPane.getChildren().remove(hp);
                                         updtdateSoldiers(match, scene, group);
-                                        updtdateSoldiers(match, scene, group);
+
+                                        //updtdateSoldiers(match, scene, group);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -637,12 +670,6 @@ public class BattleFX {
                 group.getChildren().addAll(rectangles[i][j], gameMap[i][j]);
             }
         }
-//        backgroundRectangle.setOnMouseMoved(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//
-//            }
-//        });
 
     }
 

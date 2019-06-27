@@ -514,17 +514,17 @@ public class ShopMenuFX {
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
 
-//                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
-//                animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
-//                animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
-//                animation.setCycleCount(Integer.MAX_VALUE);
-//                animation.play();
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))),"idle");
+                animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
+                animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
+                animation.setCycleCount(Integer.MAX_VALUE);
+                animation.play();
 
                 cardLabels.get(i).setText(/*"\n" + */cardsToShow.get(i + (10 * (pageNumber - 1))));
                 cardPanes.get(i).setVisible(true);
                 if (cardPanes.get(i).getChildren().get(cardPanes.get(i).getChildren().size() - 1) instanceof ImageView)
                     cardPanes.get(i).getChildren().remove(cardPanes.get(i).getChildren().size() - 1);
-//                cardPanes.get(i).getChildren().add(animation.getView());
+                cardPanes.get(i).getChildren().add(animation.getView());
             } else {
                 cardPanes.get(i).setVisible(false);
                 cardLabels.get(i).setText("");
