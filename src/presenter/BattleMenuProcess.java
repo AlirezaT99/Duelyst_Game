@@ -300,15 +300,15 @@ public class BattleMenuProcess {
         outer:
         for (int i = 0; i < player.getHand().getCards().size(); i++) {
             if (player.getHand().getCards().get(i) instanceof Spell) {
-                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
-                if (arrayList != null && arrayList.size() >= 1)
-                    if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
-                            arrayList.get(0).getCellCoordination().getY())) {
-                        ((Spell) card).castCard(arrayList.get(0), player);
-                        BattleMenu.showMessage(card.getCardID() + " inserted to ("
-                                + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
-                        break outer;
-                    }
+//                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
+//                if (arrayList != null && arrayList.size() >= 1)
+//                    if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
+//                            arrayList.get(0).getCellCoordination().getY())) {
+//                        ((Spell) card).castCard(arrayList.get(0), player);
+//                        BattleMenu.showMessage(card.getCardID() + " inserted to ("
+//                                + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
+//                        break outer;
+//                    }
             } else {
                 String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
                 for (int j = 1; j <= 5; j++) {
@@ -323,20 +323,20 @@ public class BattleMenuProcess {
                     }
                 }
             }
-            for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
-                for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
-                    MovableCard movableCard = allSoldier.getMovableCard();
-                    if (soldier.getMovableCard() != null) {
-                        Cell destination = match.getTable().getCellByCoordination(soldier.getCellCoordination().getX(), soldier.getCellCoordination().getY() - 2);
-                        movableCard.move(destination);
-                        int result = movableCard.attack(soldier.getMovableCard());
-                        if (result == 0) {
-                            if (movableCard != null && soldier.getMovableCard() != null)
-                                BattleMenu.showMessage(movableCard.getCardID() + " has attacked " + soldier.getMovableCard().getCardID() + ".");
-                        }
-                    }
-                }
-            }
+//            for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
+//                for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
+//                    MovableCard movableCard = allSoldier.getMovableCard();
+//                    if (soldier.getMovableCard() != null) {
+//                        Cell destination = match.getTable().getCellByCoordination(soldier.getCellCoordination().getX(), soldier.getCellCoordination().getY() - 2);
+//                        movableCard.move(destination);
+//                        int result = movableCard.attack(soldier.getMovableCard());
+//                        if (result == 0) {
+//                            if (movableCard != null && soldier.getMovableCard() != null)
+//                                BattleMenu.showMessage(movableCard.getCardID() + " has attacked " + soldier.getMovableCard().getCardID() + ".");
+//                        }
+//                    }
+//                }
+//            }
         }
         if (endGameReached())
             endingProcedure();
