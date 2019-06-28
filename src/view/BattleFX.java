@@ -576,33 +576,28 @@ public class BattleFX {
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
-//                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
-//                            group.getChildren().addAll(text);
+//
                         }
                         if (draggedFromNode != null && draggedFromNode instanceof Pane && !(draggedFromNode instanceof VBox) && ((Pane) draggedFromNode).getChildren().size() >= 3) {
                             System.out.println("in movemnet part");
                             Coordination coordination = getPaneFromMap((Pane) draggedFromNode);
                             System.out.println(coordination.getX() + " " + coordination.getY() + " fuck");
                             System.out.println(match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)));
-                            if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)) == 0) {
-                                match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().move(match.getTable().getCell(finalI, finalJ));
-                               // ImageView movableCard = (ImageView) (((Pane) draggedFromNode).getChildren().get(1));
+                            if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)) == 0 &&
+                                    match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().getPlayer().equals(match.currentTurnPlayer())) {
 
-                                ImageView movableCard = GraphicalCommonUsages.getGif(((Label)((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size()-1)).getText(),"run").getView();
+                                match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().move(match.getTable().getCell(finalI, finalJ));
+                                Animation runAnimation = GraphicalCommonUsages.getGif(((Label)((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size()-1)).getText(),"run");
+                                ImageView movableCard = runAnimation.getView();
                                 movableCard.setFitWidth(scene.getWidth()/18.8);
                                 movableCard.setPreserveRatio(true);
                                 StackPane ap = (StackPane) (((Pane) draggedFromNode).getChildren().get(2));
                                 StackPane hp = (StackPane) (((Pane) draggedFromNode).getChildren().get(3));
-
-                             //   ((Pane) draggedFromNode).getChildren().clear();
                                 ((Pane) draggedFromNode).getChildren().remove(1);
                                 ((Pane) draggedFromNode).getChildren().remove(ap);
                                 ((Pane) draggedFromNode).getChildren().remove(hp);
 
                                 rectanglesPane.getChildren().addAll(movableCard, ap, hp);
-                                //coordination.getY() - 1) * (width + margin)
-
-                               // Bounds boundsInScene = gameMap[coordination.getX()-1][coordination.getY()-1].localToScene(gameMap[coordination.getX()-1][coordination.getY()-1].getBoundsInLocal());
 
                                 movableCard.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin));
                                 hp.relocate((coordination.getY() - 1) * (width + margin) + rectangles[finalI][finalJ].getWidth() / 2, (coordination.getX() - 1) * (height + margin) + rectangles[finalI][finalJ].getHeight() * 2 / 3);
@@ -623,14 +618,14 @@ public class BattleFX {
                                 Timeline timeline = new Timeline(keyFrame);
                                 Timeline timeLineAP = new Timeline(keyFrameAP);
                                 Timeline timeLineHP = new Timeline(keyFrameHP);
-                                Animation animation = GraphicalCommonUsages.getGif(((Label) (((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1))).getText(), "run");
 
-                                animation.getView().setFitWidth(scene.getWidth() / 18.8);
-                                if (coordination.getX() > finalJ )
-                                    rotateImageView(animation.getView());
-                                animation.getView().setPreserveRatio(true);
-                                animation.setCycleCount(1);
-                                animation.play();
+
+                                movableCard.setFitWidth(scene.getWidth() / 18.8);
+                                if (coordination.getY() > finalJ )
+                                    rotateImageView(movableCard);
+                                movableCard.setPreserveRatio(true);
+                                runAnimation.setCycleCount(100);
+                                runAnimation.play();
                                 timeline.play();
                                 timeLineAP.play();
                                 timeLineHP.play();
