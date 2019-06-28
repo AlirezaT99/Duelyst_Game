@@ -49,14 +49,16 @@ public class ShopMenuFX {
     private static int selectedIndex = 0;
     private static Account account;
     private static Label money;
-    private static Pane root = new Pane();
+    private static Pane root;
     private static Stage stage;
+    private static Scene shopScene;
 
     ShopMenuFX(Account account) {
         ShopMenuFX.account = account;
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+        root = new Pane();
         ShopMenuFX.stage = primaryStage;
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
@@ -64,6 +66,7 @@ public class ShopMenuFX {
         final Font averta = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/averta-light-webfont.ttf"), 40);
 
         Scene scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
+        shopScene = scene;
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
@@ -83,7 +86,7 @@ public class ShopMenuFX {
         if (shopMenuOrCollection)
             gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
         else
-            gridPane.relocate(scene.getWidth() / 6, scene.getHeight() * 7.5 / 24);
+            gridPane.relocate(scene.getWidth() * 3 / 24, scene.getHeight() * 7 / 24);
         drawGridPane(gridPane, scene, trump, trump_small, shopMenuOrCollection);
         root.getChildren().addAll(gridPane);
     }
@@ -293,7 +296,7 @@ public class ShopMenuFX {
         }
         cardsToShow.clear();
         cardsToShow.addAll(result);
-        updateLabels();
+        updateLabels(shopScene);
     }
 
     private void goGetTheCardsFromWantedGroup(String cardName, ArrayList<String> result) {
@@ -313,7 +316,7 @@ public class ShopMenuFX {
             for (Spell spell : account.getCollection().getSpells())
                 cardsToShow.add(spell.getName());
         pageNumber = 1;
-        updateLabels();
+        updateLabels(shopScene);
         removePowers();
         updatePrices();
         try {
@@ -331,7 +334,7 @@ public class ShopMenuFX {
             for (Item item : account.getCollection().getItems())
                 cardsToShow.add(item.getName());
         pageNumber = 1;
-        updateLabels();
+        updateLabels(shopScene);
         removePowers();
         updatePrices();
         try {
@@ -349,7 +352,7 @@ public class ShopMenuFX {
             for (Minion minion : account.getCollection().getMinions())
                 cardsToShow.add(minion.getName());
         pageNumber = 1;
-        updateLabels();
+        updateLabels(shopScene);
         updatePrices();
         updatePowers(account);
         try {
@@ -367,7 +370,7 @@ public class ShopMenuFX {
             for (Hero hero : account.getCollection().getHeroes())
                 cardsToShow.add(hero.getName());
         pageNumber = 1;
-        updateLabels();
+        updateLabels(shopScene);
         updatePowers(account);
         updatePrices();
         try {
@@ -482,7 +485,7 @@ public class ShopMenuFX {
             if (pageNumber == 0)
                 pageNumber++;
             else {
-                updateLabels();
+                updateLabels(shopScene);
                 updatePowers(account);
                 updatePrices();
             }
@@ -492,7 +495,7 @@ public class ShopMenuFX {
             pageNumber++;
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
-                updateLabels();
+                updateLabels(shopScene);
                 try {
                     updatePowers(account);
                 } catch (ClassCastException ex) {
@@ -509,14 +512,14 @@ public class ShopMenuFX {
         searchTextField.setVisible(show);
     }
 
-    static void updateLabels() {
+    static void updateLabels(Scene scene) {
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
 
-                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))),"idle");
-                animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
-                animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))), "idle");
+                animation.getView().setFitWidth(scene.getWidth() / 20);
+                animation.getView().setFitHeight(scene.getHeight() / 10);
                 animation.setCycleCount(Integer.MAX_VALUE);
                 animation.play();
 
@@ -593,7 +596,7 @@ public class ShopMenuFX {
             if (!isInCollection)
                 shopAndCollectionBarManager(false);
             shopAndCollectionGlowHandler(collectionButton, collectionBackgroundGlow, shopButton, shopBackground);
-            updateLabels();
+            updateLabels(shopScene);
             updatePowers(account);
             updatePrices();
         });
@@ -601,7 +604,7 @@ public class ShopMenuFX {
             if (!isInShop)
                 shopAndCollectionBarManager(true);
             shopAndCollectionGlowHandler(shopButton, shopBackgroundGlow, collectionButton, collectionBackground);
-            updateLabels();
+            updateLabels(shopScene);
             updatePowers(account);
             updatePrices();
         });

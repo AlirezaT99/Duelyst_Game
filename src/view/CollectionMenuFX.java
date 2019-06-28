@@ -36,7 +36,7 @@ import static view.ShopMenuFX.*;
 
 public class CollectionMenuFX {
     private static Account account;
-    private static Pane root = new Pane();
+    private static Pane root;
     private static GridPane gridPane = new GridPane();
     private static HashMap<ImageView, String> deleteDeckHMap = new HashMap<>();
     private static HashMap<ImageView, String> selectDeckHMap = new HashMap<>();
@@ -50,12 +50,14 @@ public class CollectionMenuFX {
     private static String cardToRemove = "";
     private static ArrayList<String> cardsToAddToDeck = new ArrayList<>();
     private static Deck deckToBe = new Deck("new deck");
+    private static Timeline timeline5;
 
     CollectionMenuFX(Account account) {
         CollectionMenuFX.account = account;
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+        root = new Pane();
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
         final Font trump_reg_small = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 28);
@@ -83,8 +85,8 @@ public class CollectionMenuFX {
         leftArrow.setScaleY(1.5);
         rightArrow.setScaleX(1.5);
         rightArrow.setScaleY(1.5);
-        leftArrow.relocate((scene.getWidth() / 20), (scene.getHeight() * 0.8));
-        rightArrow.relocate((scene.getWidth() / 20 + 50), (scene.getHeight() * 0.8));
+        leftArrow.relocate((scene.getWidth() / 20), (scene.getHeight() * 0.85));
+        rightArrow.relocate((scene.getWidth() / 20 + 50), (scene.getHeight() * 0.85));
         root.getChildren().addAll(leftArrow, rightArrow);
         leftArrow.setVisible(false);
         rightArrow.setVisible(false);
@@ -155,7 +157,7 @@ public class CollectionMenuFX {
 
         KeyValue moveBackXCreate = new KeyValue(createDeckBar.layoutXProperty(), scene.getWidth());
         KeyFrame keyFrame5 = new KeyFrame(Duration.millis(501), moveBackXCreate);
-        Timeline timeline5 = new Timeline();
+        timeline5 = new Timeline();
         timeline5.getKeyFrames().add(keyFrame5);
         //
         ImageView closeBar = new ImageView(new Image(new FileInputStream("src/view/sources/collectionMenu/button_back_corner.png")));
@@ -343,8 +345,10 @@ public class CollectionMenuFX {
                 }
             } else {
                 deck = new Deck(deckNameField.getText());
-                addCardsToDeck(deck);
                 account.getCollection().addDeck(deck);
+                addCardsToDeck(deck);
+                timeline5.play();
+                creatingDeck = false;
             }
             decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
             try {
@@ -415,7 +419,7 @@ public class CollectionMenuFX {
             }
         });
         ImageView selectDeckView = new ImageView(selectDeckGray);
-        if (account.getCollection().getSelectedDeck().getName().equals(deckName))
+        if (account.getCollection().getSelectedDeck()!=null && account.getCollection().getSelectedDeck().getName().equals(deckName))
             selectDeckView.setImage(selectDeck);
         selectDeckView.setOnMouseClicked(event -> {
             if (account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName))) {
@@ -462,7 +466,7 @@ public class CollectionMenuFX {
             for (UsableItem item : account.getCollection().getItemsHashMap().values())
                 cardsToShow.add(item.getName());
         }
-        updateLabels();
+        updateLabels(scene);
         updatePowers(account);
         gridPane.setVisible(true);
         root.getChildren().get(2).setVisible(true); // left arrow
@@ -488,7 +492,7 @@ public class CollectionMenuFX {
             if (pageNumber == 0)
                 pageNumber++;
             else {
-                updateLabels();
+                updateLabels(scene);
                 updatePowers(account);
             }
             pageSetText();
@@ -498,7 +502,7 @@ public class CollectionMenuFX {
             pageNumber++;
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
-                updateLabels();
+                updateLabels(scene);
                 try {
                     updatePowers(account);
                 } catch (ClassCastException ex) {

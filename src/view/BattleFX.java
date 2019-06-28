@@ -7,7 +7,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
@@ -16,11 +15,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,7 +27,6 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
-import org.w3c.dom.css.Rect;
 import presenter.BattleMenuProcess;
 
 import java.io.FileInputStream;
@@ -72,17 +70,7 @@ public class BattleFX {
     private void updtdateSoldiers(Match match, Scene scene, Pane root) throws FileNotFoundException {
         for (int i = 1; i <= 5; i++)
             for (int j = 1; j <= 9; j++) {
-                //if (match.getTable().getCellByCoordination(i, j).getMovableCard() != null)
                 setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match, "idle");
-                //  else {
-//                    gameMap[i][j].getChildren().clear();
-//                    double width = scene.getWidth() * 3 / 47;
-//                    double margin = width / 20;
-//                    double height = (scene.getHeight() / 2 - width / 5) / 5;
-//                    Rectangle rectangle = new Rectangle((width + margin) * (j - 1), (height + margin) * (i - 1), width, height);
-//                    rectangle.setVisible(false);
-//                    createGameMapPane(rectanglesPane, scene, match.getPlayer1(), root, match, width, margin, height, i, j,rectangle , j, i);
-//                }
             }
     }
 
@@ -602,6 +590,8 @@ public class BattleFX {
                                // ImageView movableCard = (ImageView) (((Pane) draggedFromNode).getChildren().get(1));
 
                                 ImageView movableCard = GraphicalCommonUsages.getGif(((Label)((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size()-1)).getText(),"run").getView();
+                                movableCard.setFitWidth(scene.getWidth()/18.8);
+                                movableCard.setPreserveRatio(true);
                                 StackPane ap = (StackPane) (((Pane) draggedFromNode).getChildren().get(2));
                                 StackPane hp = (StackPane) (((Pane) draggedFromNode).getChildren().get(3));
 
@@ -611,22 +601,24 @@ public class BattleFX {
                                 ((Pane) draggedFromNode).getChildren().remove(hp);
 
                                 rectanglesPane.getChildren().addAll(movableCard, ap, hp);
+                                //coordination.getY() - 1) * (width + margin)
+
                                 movableCard.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin));
                                 hp.relocate((coordination.getY() - 1) * (width + margin) + rectangles[finalI][finalJ].getWidth() / 2, (coordination.getX() - 1) * (height + margin) + rectangles[finalI][finalJ].getHeight() * 2 / 3);
                                 ap.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin) + rectangles[finalI][finalJ].getHeight() * 2 / 3);
 
                                 KeyValue xValueAP = new KeyValue(ap.layoutXProperty(), rectangles[finalI][finalJ].getX());
                                 KeyValue yValueAP = new KeyValue(ap.layoutYProperty(), rectangles[finalI][finalJ].getY() + rectangles[finalI][finalJ].getHeight() * 2 / 3);
-                                KeyFrame keyFrameAP = new KeyFrame(Duration.millis(1000), xValueAP, yValueAP);
+                                KeyFrame keyFrameAP = new KeyFrame(Duration.millis(500), xValueAP, yValueAP);
 
                                 KeyValue xValueHP = new KeyValue(hp.layoutXProperty(), rectangles[finalI][finalJ].getX() + rectangles[finalI][finalJ].getWidth() / 2);
                                 KeyValue yValueHP = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY() + rectangles[finalI][finalJ].getHeight() * 2 / 3);
-                                KeyFrame keyFrameHP = new KeyFrame(Duration.millis(1000), xValueHP, yValueHP);
+                                KeyFrame keyFrameHP = new KeyFrame(Duration.millis(500), xValueHP, yValueHP);
 
                                 KeyValue xValue = new KeyValue(movableCard.layoutXProperty(), rectangles[finalI][finalJ].getX());
                                 KeyValue yValue = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY());
 
-                                KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), xValue, yValue);
+                                KeyFrame keyFrame = new KeyFrame(Duration.millis(500), xValue, yValue);
                                 Timeline timeline = new Timeline(keyFrame);
                                 Timeline timeLineAP = new Timeline(keyFrameAP);
                                 Timeline timeLineHP = new Timeline(keyFrameHP);
