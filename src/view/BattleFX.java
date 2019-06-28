@@ -126,9 +126,10 @@ public class BattleFX {
             if (card.getPlayer().equals(match.getPlayer2()))
                 rotateImageView(animation.getView());
         } else {
-            Rectangle rectangle = (Rectangle) gameMap[x][y].getChildren().get(0);
-            gameMap[x][y].getChildren().clear();
-            gameMap[x][y].getChildren().add(rectangle);
+           // Rectangle rectangle = (Rectangle) gameMap[x][y].getChildren().get(0);
+            for (int i = gameMap[x][y].getChildren().size()-1; i > 0; i--) {
+                gameMap[x][y].getChildren().remove(i);
+            }
         }
         // root.getChildren().add(animation.getView());
 
@@ -230,8 +231,6 @@ public class BattleFX {
 
         nextCard.getChildren().addAll(nextBackGround, nextBorderShine, nextLabel);
         nextCard.relocate(0, scene.getHeight() * 2 / 3);
-
-
         return nextCard;
     }
 
@@ -603,6 +602,8 @@ public class BattleFX {
                                 rectanglesPane.getChildren().addAll(movableCard, ap, hp);
                                 //coordination.getY() - 1) * (width + margin)
 
+                               // Bounds boundsInScene = gameMap[coordination.getX()-1][coordination.getY()-1].localToScene(gameMap[coordination.getX()-1][coordination.getY()-1].getBoundsInLocal());
+
                                 movableCard.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin));
                                 hp.relocate((coordination.getY() - 1) * (width + margin) + rectangles[finalI][finalJ].getWidth() / 2, (coordination.getX() - 1) * (height + margin) + rectangles[finalI][finalJ].getHeight() * 2 / 3);
                                 ap.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin) + rectangles[finalI][finalJ].getHeight() * 2 / 3);
@@ -612,38 +613,33 @@ public class BattleFX {
                                 KeyFrame keyFrameAP = new KeyFrame(Duration.millis(500), xValueAP, yValueAP);
 
                                 KeyValue xValueHP = new KeyValue(hp.layoutXProperty(), rectangles[finalI][finalJ].getX() + rectangles[finalI][finalJ].getWidth() / 2);
-                                KeyValue yValueHP = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY() + rectangles[finalI][finalJ].getHeight() * 2 / 3);
+                                KeyValue yValueHP = new KeyValue(hp.layoutYProperty(), rectangles[finalI][finalJ].getY() + rectangles[finalI][finalJ].getHeight() * 2 / 3);
                                 KeyFrame keyFrameHP = new KeyFrame(Duration.millis(500), xValueHP, yValueHP);
-
+                                System.out.println("final I "+finalI+" , finalJ: "+finalJ);
                                 KeyValue xValue = new KeyValue(movableCard.layoutXProperty(), rectangles[finalI][finalJ].getX());
-                                KeyValue yValue = new KeyValue(movableCard.layoutYProperty(), rectangles[finalI][finalJ].getY());
+                                KeyValue yValue = new KeyValue(movableCard.layoutYProperty(),rectangles[finalI][finalJ].getY() );
 
                                 KeyFrame keyFrame = new KeyFrame(Duration.millis(500), xValue, yValue);
                                 Timeline timeline = new Timeline(keyFrame);
                                 Timeline timeLineAP = new Timeline(keyFrameAP);
                                 Timeline timeLineHP = new Timeline(keyFrameHP);
                                 Animation animation = GraphicalCommonUsages.getGif(((Label) (((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1))).getText(), "run");
-                                // ((Pane) draggedFromNode).getChildren().remove(0);
-                                // ((Pane) draggedFromNode).getChildren().add(0, animation.getView());
+
                                 animation.getView().setFitWidth(scene.getWidth() / 18.8);
-                                if (coordination.getX() < finalI)
+                                if (coordination.getX() > finalJ )
                                     rotateImageView(animation.getView());
                                 animation.getView().setPreserveRatio(true);
-                                // animation.getView().setFitHeight(scene.getHeight()/10);
                                 animation.setCycleCount(1);
                                 animation.play();
                                 timeline.play();
                                 timeLineAP.play();
                                 timeLineHP.play();
-                                timeLineHP.setOnFinished(event1 -> {
+                                timeline.setOnFinished(event1 -> {
                                     try {
                                         updtdateSoldiers(match, scene, group);
                                         rectanglesPane.getChildren().remove(movableCard);
                                         rectanglesPane.getChildren().remove(ap);
                                         rectanglesPane.getChildren().remove(hp);
-                                        updtdateSoldiers(match, scene, group);
-
-                                        //updtdateSoldiers(match, scene, group);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
