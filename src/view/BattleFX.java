@@ -56,12 +56,12 @@ public class BattleFX {
         setBackGround(match, isStoryMode, root);
         setGeneralIcons(account, match, root, new Scene(new Group(), screenWidth, screenHeight));
         root.getChildren().addAll(setTable(rectanglesPane, stage.getScene(), match.getPlayer1(), root, match));
-        updtdateSoldiers(match, new Scene(new Group(), screenWidth, screenHeight), rectanglesPane);
+        updateSoldiers(match, new Scene(new Group(), screenWidth, screenHeight), rectanglesPane);
         return root;
     }
 
     //create table graphics
-    private static void updtdateSoldiers(Match match, Scene scene, Pane root) throws FileNotFoundException {
+    private static void updateSoldiers(Match match, Scene scene, Pane root) throws FileNotFoundException {
         for (int i = 1; i <= 5; i++)
             for (int j = 1; j <= 9; j++) {
                 setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match, "idle");
@@ -275,7 +275,7 @@ public class BattleFX {
                         updateMana(match, root, scene);
                         bottomRow = drawHand(player, root, scene);
                         ((ImageView) endTurn.getChildren().get(0)).setImage(endTurnEnemyInitialImage);
-                        updtdateSoldiers(match, scene, rectanglesPane);
+                        updateSoldiers(match, scene, rectanglesPane);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -565,7 +565,7 @@ public class BattleFX {
                             try {
                                 bottomRow = drawHand(player, mainPane, scene);
                                 updateMana(match, mainPane, scene);
-                                updtdateSoldiers(match, scene, group);
+                                updateSoldiers(match, scene, group);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -607,14 +607,34 @@ public class BattleFX {
             ((Pane) draggedFromNode).getChildren().remove(1);
             ((Pane) draggedFromNode).getChildren().add(1,imageView);
             imageView.setFitWidth(scene.getWidth()/18.8);
+            imageView.setPreserveRatio(true);
+            if(match.currentTurnPlayer().equals(match.getPlayer2()))
+                rotateImageView(imageView);
             attackAnimation.setCycleCount(1);
             attackAnimation.play();
             attackAnimation.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
-                        updtdateSoldiers(match, scene, group);
-                    } catch (FileNotFoundException e) {
+                        Animation counterAttackAnimation = GraphicalCommonUsages.getGif(((Label)gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size()-1)).getText(), "attack");
+                        ImageView imageView = counterAttackAnimation.getView();
+                        gameMap[finalI][finalJ].getChildren().remove(1);
+                        gameMap[finalI][finalJ].getChildren().add(1,imageView);
+                        imageView.setFitWidth(scene.getWidth()/18.8);
+                        imageView.setPreserveRatio(true);
+                        if(match.currentTurnPlayer().equals(match.getPlayer1()))
+                            rotateImageView(imageView);
+                        counterAttackAnimation.setCycleCount(1);
+                        counterAttackAnimation.play();
+                        counterAttackAnimation.setOnFinished(event1 -> {
+                            try {
+                                updateSoldiers(match, scene, group);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -668,7 +688,7 @@ public class BattleFX {
         timeLineHP.play();
         timeline.setOnFinished(event1 -> {
             try {
-                updtdateSoldiers(match, scene, group);
+                updateSoldiers(match, scene, group);
                 rectanglesPane.getChildren().remove(movableCard);
                 rectanglesPane.getChildren().remove(ap);
                 rectanglesPane.getChildren().remove(hp);
