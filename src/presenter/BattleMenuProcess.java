@@ -186,7 +186,7 @@ public class BattleMenuProcess {
             impactGoThroughTime();
             impactGoThroughTime();
         } else {
-           // match.handleMana();
+            // match.handleMana();
             match.switchTurn();
             impactGoThroughTime();
         }
@@ -298,8 +298,9 @@ public class BattleMenuProcess {
         Card card = player.getHand().getSelectedCard();
         //
         outer:
-        for (int i = 0; i < player.getHand().getCards().size(); i++) {
-            if (player.getHand().getCards().get(i) instanceof Spell) {
+        for (int i = 0; i < 5; i++) {
+            if (player.getHand().getCards().get(i) != null)
+                if (player.getHand().getCards().get(i) instanceof Spell) {
 //                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
 //                if (arrayList != null && arrayList.size() >= 1)
 //                    if (spellCastCheck((Spell) card, arrayList.get(0).getCellCoordination().getX(),
@@ -309,20 +310,20 @@ public class BattleMenuProcess {
 //                                + arrayList.get(0).getCellCoordination().getX() + "," + arrayList.get(0).getCellCoordination().getY() + ")");
 //                        break outer;
 //                    }
-            } else {
-                String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
-                for (int j = 1; j <= 5; j++) {
-                    for (int k = 1; k <= 9; k++) {
-                        if (isCoordinationValidToInsert(j, k)) {
-                            match.currentTurnPlayer().getHand().findCardByName(card.getName())
-                                    .castCard(match.getTable().getCellByCoordination(j, k));
-                            BattleMenu.showMessage(card.getCardID() + " inserted to ("
-                                    + j + "," + k + ")");
-                            break outer;
+                } else {
+                    String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
+                    for (int j = 1; j <= 5; j++) {
+                        for (int k = 1; k <= 9; k++) {
+                            if (isCoordinationValidToInsert(j, k)) {
+                                match.currentTurnPlayer().getHand().findCardByName(card.getName())
+                                        .castCard(match.getTable().getCellByCoordination(j, k));
+                                BattleMenu.showMessage(card.getCardID() + " inserted to ("
+                                        + j + "," + k + ")");
+                                break outer;
+                            }
                         }
                     }
                 }
-            }
 //            for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
 //                for (Cell soldier : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer())) {
 //                    MovableCard movableCard = allSoldier.getMovableCard();
@@ -453,7 +454,7 @@ public class BattleMenuProcess {
         String cardID = match.currentTurnPlayer().getHand().findCardByName(cardName).getCardID();
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
             match.currentTurnPlayer().getHand().findCardByName(cardName)
-                .castCard(match.getTable().getCellByCoordination(x, y));
+                    .castCard(match.getTable().getCellByCoordination(x, y));
         else if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell) // ok?
             ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
                     .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
@@ -547,15 +548,16 @@ public class BattleMenuProcess {
         //
         ArrayList<Cell> toRemove = new ArrayList<>();
         for (Cell cell : wantedCells)
-            if (!cell.isCellFree() || cell.getCellCoordination().getY() ==0 || cell.getCellCoordination().getX() == 0 ||
-            cell.getCellCoordination().getX() == 6 || cell.getCellCoordination().getY() == 10)
+            if (!cell.isCellFree() || cell.getCellCoordination().getY() == 0 || cell.getCellCoordination().getX() == 0 ||
+                    cell.getCellCoordination().getX() == 6 || cell.getCellCoordination().getY() == 10)
                 toRemove.add(cell);
         wantedCells.removeAll(toRemove);
         //
-        for (Cell cell : wantedCells){
-            System.out.println(cell.getCellCoordination().getX()+" "+cell.getCellCoordination().getY());
+        for (Cell cell : wantedCells) {
+            System.out.println(cell.getCellCoordination().getX() + " " + cell.getCellCoordination().getY());
             if (cell.getCellCoordination().equals(new Coordination(x, y)))
-                return true;}
+                return true;
+        }
         return false;
     }
 

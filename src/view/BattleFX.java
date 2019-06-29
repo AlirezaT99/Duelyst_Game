@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -66,6 +67,7 @@ public class BattleFX {
             for (int j = 1; j <= 9; j++) {
                 setGif(match.getTable().getCellByCoordination(i, j).getMovableCard(), i, j, scene, root, match, "idle");
             }
+
     }
 
     private static void setGif(Card card, int x, int y, Scene scene, Pane root, Match match, String type) throws FileNotFoundException {
@@ -578,13 +580,17 @@ public class BattleFX {
                                 if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)) == 0 &&
                                         match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().getPlayer().equals(match.currentTurnPlayer())) {
                                     moveProcess(coordination, match, finalI, finalJ, scene, width, margin, height, group, rectanglesPane);
+//                                    try {
+//                                        setGeneralIcons(player.getAccount(),match,(Pane)scene.getRoot(),scene);
+//                                    } catch (FileNotFoundException e) {
+//                                        e.printStackTrace();
+//                                    }
                                 }
                             } else {
                                 attackProcess(coordination, match, finalI, finalJ, scene, width, margin, height, group, rectanglesPane);
 
                             }
                         }
-
                     }
                 });
                 gameMap[i][j].setOnMouseExited(event -> {
@@ -612,6 +618,7 @@ public class BattleFX {
                 rotateImageView(imageView);
             attackAnimation.setCycleCount(1);
             attackAnimation.play();
+            movableCardAttackSFX(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(),true);
             attackAnimation.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -626,6 +633,7 @@ public class BattleFX {
                             rotateImageView(imageView);
                         counterAttackAnimation.setCycleCount(1);
                         counterAttackAnimation.play();
+                        movableCardAttackSFX(((Label)gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size()-1)).getText(),false);
                         counterAttackAnimation.setOnFinished(event1 -> {
                             try {
                                 updateSoldiers(match, scene, group);
@@ -639,6 +647,72 @@ public class BattleFX {
                     }
                 }
             });
+        }
+    }
+
+    private static void movableCardAttackSFX(String cardName, boolean attacker){
+        AudioClip audioClip;
+        if(Hero.getHeroByName(cardName) != null){
+            if(cardName.toLowerCase().equals("afsaane") || cardName.toLowerCase().equals("simorgh"))
+            {
+                audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_general_hit.m4a").toString());
+                audioClip.setCycleCount(1);
+                audioClip.play();
+                return;
+            }
+            if(cardName.toLowerCase().equals("aarash") || cardName.toLowerCase().equals("rostam") || cardName.toLowerCase().equals("esfandiar") || cardName.toLowerCase().equals("kaave")){
+                if(attacker)
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_hit.m4a").toString());
+                else
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_attack_swing.m4a").toString());
+                audioClip.setCycleCount(1);
+                audioClip.play();
+                return;
+            }
+            else
+            {
+                if(attacker)
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_hit.m4a").toString());
+                else
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_attack_swing.m4a").toString());
+                audioClip.setCycleCount(1);
+                audioClip.play();
+                return;
+            }
+        }
+        else
+        {
+            Minion minion = Minion.getMinionByName(cardName);
+            if (minion.isMelee())
+            {
+                if(attacker)
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_impact_1.m4a").toString());
+                else
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_swing_2.m4a").toString());
+                audioClip.setCycleCount(1);
+                audioClip.play();
+                return;
+            }
+            if(minion.isHybrid())
+            {
+                if(attacker)
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_impact.m4a").toString());
+                else
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_swing.m4a").toString());
+                audioClip.setCycleCount(1);
+                audioClip.play();
+                return;
+            }
+            else
+            {
+                if(attacker)
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_impact.m4a").toString());
+                else
+                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_swing.m4a").toString());
+                audioClip.setCycleCount(1);
+                audioClip.play();
+                return;
+            }
         }
     }
 
