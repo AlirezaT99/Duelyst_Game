@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Collection {
     private ArrayList<UsableItem> items = new ArrayList<>();
-    private  ArrayList<Deck> decks = new ArrayList<>(); // just changed all of these to static 6/13/2019 12:37
+    private  ArrayList<Deck> decks = new ArrayList<>();
     private  ArrayList<Hero> heroes = new ArrayList<>();
     private  ArrayList<Minion> minions = new ArrayList<>();
     private  ArrayList<Spell> spells = new ArrayList<>();

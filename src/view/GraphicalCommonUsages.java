@@ -190,7 +190,6 @@ public class GraphicalCommonUsages {
         confirmStackPane.setOnMouseExited(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(confirmButton));
         confirmStackPane.setOnMouseClicked(event -> {
             root.getChildren().removeAll(bgRectangle, popUp);
-            // TODO buy/sell/deleteDeck process
             switch (confirmText.getText()) {
                 case "BUY":
                     try {
@@ -211,6 +210,12 @@ public class GraphicalCommonUsages {
                     } catch (FileNotFoundException e) {
                     }
                     break;
+                case "REMOVE":
+                    try {
+                        CollectionMenuFX.removeFromDeckProcess();
+                    } catch (Exception e) {
+                    }
+                    break;
             }
         });
 
@@ -219,23 +224,18 @@ public class GraphicalCommonUsages {
         cancelStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
     }
 
-    public static Animation getGif(String cardName) {
-        return getGif(cardName, "idle");
-    }
-
-
-    public static Animation getGif(String cardName, String gifYouWanted) {
+    public static Animation getGif(String cardName, String typeYouWant) {
         String address = "src/view/sources/gifs/";
         UsableItem item = Shop.findItemByName(cardName);
         if (item != null)
-            return new AnimatedGif(address + "items/" + cardName + "/" + gifYouWanted + ".gif", 1000);
+            return new AnimatedGif(address + "items/" + cardName + "/" + typeYouWant + ".gif", 1000);
         Card card = Shop.findCardByName(cardName);
         if (card instanceof Spell)
-            return new AnimatedGif(address + "spells/" + cardName + "/" + gifYouWanted + ".gif", 1000);
+            return new AnimatedGif(address + "spells/" + cardName + "/" + typeYouWant + ".gif", 1000);
         if (card instanceof Minion)
-            return new AnimatedGif(address + "minions/" + cardName + "/" + gifYouWanted + ".gif", 1000);
+            return new AnimatedGif(address + "minions/" + cardName + "/" + typeYouWant + ".gif", 1000);
         if (card instanceof Hero)
-            return new AnimatedGif(address + "heroes/" + cardName + "/" + gifYouWanted + ".gif", 1000);
+            return new AnimatedGif(address + "heroes/" + cardName + "/" + typeYouWant + ".gif", 1000);
         return null;
     }
 
@@ -273,8 +273,8 @@ public class GraphicalCommonUsages {
         audioClip.play();
     }
 
-    public void mouseClickAudioPlay() {
-        AudioClip audioClip = new AudioClip(this.getClass().getResource("sources/common/music/onclick.m4a").toString());
+    public static void mouseClickAudioPlay() {
+        AudioClip audioClip = new AudioClip(GraphicalCommonUsages.class.getResource("sources/common/music/onclick.m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play(1);
         System.gc();
@@ -311,5 +311,4 @@ public class GraphicalCommonUsages {
         primaryStage.setFullScreen(true);
         return primaryScreenBounds;
     }
-
 }

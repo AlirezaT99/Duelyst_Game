@@ -199,11 +199,7 @@ public class ShopMenuFX {
             String command = searchTextField.getText();
             if (isInShop) {
                 try {
-                    int index = ShopMenuProcess.search(command);
-                    if (index == -1)
-                        handleErrors(ShopMenuProcess.search(command));
-                    else
-                        doSomeThingsAfterFindingThingsInShop(command);
+                    handleErrors(ShopMenuProcess.search(command));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -293,11 +289,6 @@ public class ShopMenuFX {
             moveToItemTab();
             goGetTheCardsFromWantedGroup(cardName, result);
         } catch (Exception ignored) {
-        }
-        try {
-            moveToSpellTab();
-            goGetTheCardsFromWantedGroup(cardName, result);
-        } catch (Exception igonred) {
         }
         cardsToShow.clear();
         cardsToShow.addAll(result);

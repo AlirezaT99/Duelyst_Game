@@ -4,6 +4,7 @@ import model.Account;
 import model.Collection;
 import presenter.CollectionMenuProcess;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -37,7 +38,7 @@ public class CollectionMenu {
         scanner.close();
     }
 
-    private static void handleErrors(int messageID) {
+    private static void handleErrors(int messageID) throws FileNotFoundException {
         switch (messageID) {
             case 1:
                 CollectionMenu.showMessage("A deck with this name already exists");
@@ -76,7 +77,7 @@ public class CollectionMenu {
         }
     }
 
-    public static int help() {
+    public static int help() throws FileNotFoundException {
         showMessage("exit");
         showMessage("show");
         showMessage("search [card name | item name]");
@@ -96,7 +97,8 @@ public class CollectionMenu {
         this.isInCollectionMenu = isInCollectionMenu;
     }
 
-    public static void showMessage(String message) {
+    public static void showMessage(String message) throws FileNotFoundException {
+//        GraphicalCommonUsages.okPopUp(message, Main.getCurrentScene(), CollectionMenuFX.getRoot());
         System.out.println(message);
     }
 }

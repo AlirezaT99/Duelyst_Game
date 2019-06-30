@@ -22,7 +22,7 @@ public class ImpactEffectComp {
     private int impactQuantity;
     private ArrayList<Cell> impactArea;
     private Impact fatherImpact;
-    private Match match;
+    Match match;
 
     public ImpactEffectComp(ArrayList<Cell> impactArea, Impact fatherImpact, Match match, String impactWayOfAssigning, String impactTypeIdComp) {
         this.impactArea = impactArea;
@@ -78,6 +78,7 @@ public class ImpactEffectComp {
 
 
     void doImpactComp(MovableCard target, Cell castingCell) {
+
         setAllImpactTypeCompVariables();
         setAllTheWayOfAssigningVariables();
         if (killIt)
