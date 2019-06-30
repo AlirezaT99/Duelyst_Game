@@ -17,7 +17,8 @@ public class Hand {
     public Card findCardByName(String name) {
         for (Card card : cards){
             if (card != null && card.getName().equals(name))
-                return card;}
+                return card;
+        }
         return null;
     }
 
@@ -37,6 +38,10 @@ public class Hand {
             cards.set(cards.indexOf(card), null);
         }catch (Exception ignored){}
 //        cards.remove(card);
+    }
+
+    public void removeCardFromHand(int index){
+        cards.set(index,null);
     }
 
     //switching

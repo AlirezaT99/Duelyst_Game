@@ -1,11 +1,15 @@
 package presenter;
 
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import model.*;
+import view.BattleFX;
 import view.BattleMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class BattleMenuProcess {
@@ -172,6 +176,7 @@ public class BattleMenuProcess {
             endingProcedure();
         if (match.notCurrentTurnPlayer().isAI()) {
             match.switchTurn();
+            impactGoThroughTime(match);
             match.handleMana();
             playAI(match.currentTurnPlayer());
             match.currentTurnPlayer().fillHand();
@@ -182,11 +187,13 @@ public class BattleMenuProcess {
                 endingProcedure();
             match.switchTurn();
             match.handleMana();
+            impactGoThroughTime(match);
+//            impactGoThroughTime(match);
         } else {
             // match.handleMana();
             match.switchTurn();
+            impactGoThroughTime(match);
         }
-        impactGoThroughTime();
         return 0;
     }
 
@@ -269,7 +276,7 @@ public class BattleMenuProcess {
                     LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         }
-        battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true); //todo nullPointerException
+        battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
         battleMenu.getBattleInit().setInBattleInit(false);
         battleMenu.setInBattleMenu(false);
         battleMenu.getBattleInit().getMainMenu().run();
@@ -291,11 +298,9 @@ public class BattleMenuProcess {
     }
 
     private void playAI(Player player) throws IOException {
-        player.getHand().selectCard(0);
-        Card card = player.getHand().getSelectedCard();
         //
         outer:
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++)
             if (player.getHand().getCards().get(i) != null)
                 if (player.getHand().getCards().get(i) instanceof Spell) {
 //                ArrayList<Cell> arrayList = ((Spell) card).getValidCoordination();
@@ -308,6 +313,7 @@ public class BattleMenuProcess {
 //                        break outer;
 //                    }
                 } else {
+                    Card card = player.getHand().getCards().get(i);
                     String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
                     for (int j = 1; j <= 5; j++) {
                         for (int k = 1; k <= 9; k++) {
@@ -316,6 +322,7 @@ public class BattleMenuProcess {
                                         .castCard(match.getTable().getCellByCoordination(j, k));
                                 BattleMenu.showMessage(card.getCardID() + " inserted to ("
                                         + j + "," + k + ")");
+                                BattleFX.updateSoldiers(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()));
                                 break outer;
                             }
                         }
@@ -335,12 +342,23 @@ public class BattleMenuProcess {
 //                    }
 //                }
 //            }
+        for (Cell allSoldier : match.getTable().findAllSoldiers(match.currentTurnPlayer())) {
+            if (Math.abs(new Random().nextInt() % 2) == 1) {
+                MovableCard movableCard = allSoldier.getMovableCard();
+                if (match.getTable().getCell(movableCard.getCardCell().getCellCoordination().getX(), movableCard.getCardCell().getCellCoordination().getY() - 1).getMovableCard() == null) {
+                    Cell destination = match.getTable().getCell(movableCard.getCardCell().getCellCoordination().getX(), movableCard.getCardCell().getCellCoordination().getY() - 1);
+                    BattleFX.setDraggedFromNode(BattleFX.getGameMap()[allSoldier.getCellCoordination().getX()][allSoldier.getCellCoordination().getY()]);
+                    BattleFX.moveProcess(allSoldier.getCellCoordination(), match, destination.getCellCoordination().getX(), destination.getCellCoordination().getY(), new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), BattleFX.getRectanglesPane());
+                    System.out.println("in battlemenuprocess move process");
+                }
+            }
         }
+
         if (endGameReached())
             endingProcedure();
     }
 
-    private void impactGoThroughTime() {
+    private static void impactGoThroughTime(Match match) {
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 9; j++) {
                 Cell cell = match.getTable().getCellByCoordination(i, j);
