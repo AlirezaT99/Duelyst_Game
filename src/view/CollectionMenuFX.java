@@ -69,7 +69,7 @@ public class CollectionMenuFX {
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 
         gridPane.setVisible(false);
-        drawCards(gridPane, scene, root, trump_reg, trump_reg_small, false);
+        drawCards( scene, root, trump_reg, trump_reg_small, false);
         drawArrows();
 
         drawBackButton(root, scene, account);
@@ -466,8 +466,8 @@ public class CollectionMenuFX {
             for (UsableItem item : account.getCollection().getItemsHashMap().values())
                 cardsToShow.add(item.getName());
         }
-        updateLabels(scene);
-        updatePowers(account);
+//        updateLabels(scene); //todo
+//        updatePowers(account);//todo
         gridPane.setVisible(true);
         root.getChildren().get(2).setVisible(true); // left arrow
         root.getChildren().get(3).setVisible(true); // right arrow
@@ -492,24 +492,24 @@ public class CollectionMenuFX {
             if (pageNumber == 0)
                 pageNumber++;
             else {
-                updateLabels(scene);
-                updatePowers(account);
+//                updateLabels(scene);  //todo
+//                updatePowers(account); //todo
             }
-            pageSetText();
+//            pageSetText(); //todo
         });
 
         rightArrow.setOnMouseClicked(event -> {
             pageNumber++;
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
-                updateLabels(scene);
+//                updateLabels(scene); //todo
                 try {
-                    updatePowers(account);
+//                    updatePowers(account); //todo
                 } catch (ClassCastException ex) {
 //                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
                 }
             }
-            pageSetText();
+//            pageSetText(); //todo
         });
     }
 

@@ -29,6 +29,7 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import org.w3c.dom.css.Rect;
 import presenter.BattleMenuProcess;
 
 import java.io.FileInputStream;
@@ -556,7 +557,7 @@ public class BattleFX {
                                 //rectangles[finalI][finalJ].setFill(Color.WHITE);
                                 // while (System.currentTimeMillis() - time < ){}
 //                                Pane tempPane = new Pane();
-//                                tempPane.getChildren()
+//                                tempPane.getChildren()5
 //                                tempPane.setBackground(new Background(new BackgroundFill(Color.ORANGE,CornerRadii.EMPTY,new Insets(0,0,0,0))));
 //                                Main.setSceneForAPeriodOfTime(tempPane,1000);
 
@@ -603,6 +604,7 @@ public class BattleFX {
                     rectangles[finalI][finalJ].setFill(Color.rgb(50, 50, 50));
                     rectangles[finalI][finalJ].setOpacity(0.3);
                 });
+
                 group.setPrefWidth(scene.getWidth() * 3 / 5);
                 group.setPrefHeight(scene.getHeight() / 2);
                 group.relocate(ulx, uly);

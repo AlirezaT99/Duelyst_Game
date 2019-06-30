@@ -30,6 +30,9 @@ public class Impact {
         this.impactWayOfAssigning = impactWayOfAssigning;
         this.targetTypeId = targetTypeId;
         this.impactTypeId = impactTypeId;
+        impactAreaClass = new ImpactArea(targetTypeId, null);
+        impactEffectComp = new ImpactEffectComp();
+
         impactEffectComp = new ImpactEffectComp(impactArea, this, null, impactWayOfAssigning, impactTypeComp);
     }
 
@@ -105,10 +108,10 @@ public class Impact {
     void doImpact(Player friendlyPlayer, MovableCard target, Cell targetCell, Cell castingCell) {
         setAllVariablesNeeded();
         match = target.match;
-        impactEffectComp.match = match;
         impactAreaClass = new ImpactArea(targetTypeId, match);
         impactAreaClass.setImpactArea(friendlyPlayer, targetCell, castingCell);
         impactArea = impactAreaClass.getImpactArea();
+        impactEffectComp = new ImpactEffectComp(impactArea, this, match, impactWayOfAssigning, impactTypeComp);
         if (impactEffectComp.doesItHaveToBeSetOnSoldiersFourImpacts(targetCell))
             return;
         impactEffectComp.doImpactComp(target, castingCell);

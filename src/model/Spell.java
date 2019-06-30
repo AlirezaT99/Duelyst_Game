@@ -24,31 +24,40 @@ public class Spell extends Card {
 
     public boolean isCastingValid(Player castingPlayer, Cell cell, Impact impact) {
         String targetsType = impact.getTargetTypeId();
-        if (targetsType.charAt(0) == '1')
-            return true;
-        if (targetsType.charAt(1) == '0')
-            return true;
-        if (targetsType.charAt(2) == '1')
-            return true;
-        if (targetsType.charAt(3) == '2')
-            return true;
-        if (targetsType.charAt(4) == '0')
-            return true;
-        if (targetsType.charAt(4) == '2') {
-            if (targetsType.charAt(3) == '0')
-                return cell.getMovableCard() != null && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
-            else if (targetsType.charAt(3) == '1')
-                return cell.getMovableCard() != null && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+        ArrayList<Cell> cells = primaryImpact.getImpactAreaClass().getValidCells(castingPlayer);
+        for (Cell celll: cells
+             ) {
+        System.out.println("--------------------------");
+            if(cell.getCellCoordination().getY() == celll.getCellCoordination().getY() && cell.getCellCoordination().getX() == celll.getCellCoordination().getX())
+                return true;
         }
-        if (targetsType.charAt(4) == '1') {
-            if (targetsType.charAt(3) == '0')
-                return cell.getMovableCard() instanceof Minion && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
-            else if (targetsType.charAt(3) == '1')
-                return cell.getMovableCard() instanceof Minion && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
-        }
-        if (targetsType.charAt(8) == '1')
-            return castingPlayer.findPlayerHero().cardCell.isTheseCellsAdjacent(cell);
+        System.out.println("***********************");
         return false;
+//        if (targetsType.charAt(0) == '1')
+//            return true;
+//        if (targetsType.charAt(1) == '0')
+//            return true;
+//        if (targetsType.charAt(2) == '1')
+//            return true;
+//        if (targetsType.charAt(3) == '2')
+//            return true;
+//        if (targetsType.charAt(4) == '0')
+//            return true;
+//        if (targetsType.charAt(4) == '2') {
+//            if (targetsType.charAt(3) == '0')
+//                return cell.getMovableCard() != null && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+//            else if (targetsType.charAt(3) == '1')
+//                return cell.getMovableCard() != null && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+//        }
+//        if (targetsType.charAt(4) == '1') {
+//            if (targetsType.charAt(3) == '0')
+//                return cell.getMovableCard() instanceof Minion && cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+//            else if (targetsType.charAt(3) == '1')
+//                return cell.getMovableCard() instanceof Minion && !cell.getMovableCard().player.getUserName().equals(castingPlayer.getUserName());
+//        }
+//        if (targetsType.charAt(8) == '1')
+//            return castingPlayer.findPlayerHero().cardCell.isTheseCellsAdjacent(cell);
+//        return false;
     }
 
     public void castCard(Cell cell, Player castingPlayer) {
@@ -79,8 +88,7 @@ public class Spell extends Card {
 
     public ArrayList<Cell> getValidCoordination(){
 
-     //   return primaryImpact.getImpactAreaClass().getValidCells(player);
-        return null;
+        return primaryImpact.getImpactAreaClass().getValidCells(player);
     }
 
     //getters

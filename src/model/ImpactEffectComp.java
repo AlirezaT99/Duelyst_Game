@@ -67,11 +67,13 @@ public class ImpactEffectComp {
     }
 
     private void setAllTheWayOfAssigningVariables() {
-        putItOnDefend = impactWayOfAssigning.charAt(0) == '2';
-        putItOnAttack = impactWayOfAssigning.charAt(0) == '1';
-        putItOnDyingWish = impactWayOfAssigning.charAt(0) == '3';
-        putItOnSummonImpact = impactWayOfAssigning.charAt(0) == '4';
-        getterTeam = impactWayOfAssigning.charAt(1) == '1' ? match.getPlayer1().getUserName() : match.getPlayer2().getUserName();
+        try {
+            putItOnDefend = impactWayOfAssigning.charAt(0) == '2';
+            putItOnAttack = impactWayOfAssigning.charAt(0) == '1';
+            putItOnDyingWish = impactWayOfAssigning.charAt(0) == '3';
+            putItOnSummonImpact = impactWayOfAssigning.charAt(0) == '4';
+            getterTeam = impactWayOfAssigning.charAt(1) == '1' ? match.getPlayer1().getUserName() : match.getPlayer2().getUserName();
+        }catch (Exception e){}
     }
 
 
