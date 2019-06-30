@@ -71,7 +71,7 @@ public abstract class MovableCard extends Card {
     //attack & counterAttack
     public int attack(MovableCard opponent) {
         int returnValue = isAttackValid(opponent);
-        if (returnValue == 0) {
+        if (returnValue == 0 && didAttackInThisTurn == false) {
             didAttackInThisTurn = true;
             try {
                 if (!opponent.onDefendImpact.getImpactEffectComp().doesHaveAntiNegativeImpact()) {
@@ -111,6 +111,7 @@ public abstract class MovableCard extends Card {
     }
 
     int isAttackValid(MovableCard opponent) {
+        if(didAttackInThisTurn) return 20;
         int returnValue = counterAttackAndNormalAttackSameParameters(opponent);
         if (returnValue != 0)
             return returnValue;
