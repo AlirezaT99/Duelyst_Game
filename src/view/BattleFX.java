@@ -555,7 +555,7 @@ public class BattleFX {
                                 //rectangles[finalI][finalJ].setFill(Color.WHITE);
                                 // while (System.currentTimeMillis() - time < ){}
 //                                Pane tempPane = new Pane();
-//                                tempPane.getChildren()
+//                                tempPane.getChildren()5
 //                                tempPane.setBackground(new Background(new BackgroundFill(Color.ORANGE,CornerRadii.EMPTY,new Insets(0,0,0,0))));
 //                                Main.setSceneForAPeriodOfTime(tempPane,1000);
 

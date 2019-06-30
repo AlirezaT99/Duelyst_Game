@@ -38,14 +38,14 @@ public class ShopMenuFX {
     private Text page = new Text();
     private static boolean isInShop = true;
     private boolean isInCollection = false;
-    private static ArrayList<String> cardsToShow = new ArrayList<>();
+    static ArrayList<String> cardsToShow = new ArrayList<>();
     private static ArrayList<Pane> panesOfGifs = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
     private static HashMap<Integer, Label> cardPowers = new HashMap<>();
     private static HashMap<Integer, Label> cardPrices = new HashMap<>();
     private static HashMap<Integer, StackPane> cardPanes = new HashMap<>();
     private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
-    private static int pageNumber = 1;
+    static int pageNumber = 1;
     private static int selectedIndex = 0;
     private static Account account;
     private static Label money;
@@ -433,7 +433,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(page, shopPane, collectionPane);
     }
 
-    private static Image getCardTheme(int number) throws FileNotFoundException {
+    static Image getCardTheme(int number) throws FileNotFoundException {
         Image cardTheme1 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme1.png"));
         Image cardTheme2 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme2.png"));
         Image cardTheme3 = new Image(new FileInputStream("src/view/sources/shopMenu/cardTheme3.png"));
