@@ -199,7 +199,11 @@ public class ShopMenuFX {
             String command = searchTextField.getText();
             if (isInShop) {
                 try {
-                    handleErrors(ShopMenuProcess.search(command));
+                    int index = ShopMenuProcess.search(command);
+                    if (index == -1)
+                        handleErrors(ShopMenuProcess.search(command));
+                    else
+                        doSomeThingsAfterFindingThingsInShop(command);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -289,6 +293,11 @@ public class ShopMenuFX {
             moveToItemTab();
             goGetTheCardsFromWantedGroup(cardName, result);
         } catch (Exception ignored) {
+        }
+        try {
+            moveToSpellTab();
+            goGetTheCardsFromWantedGroup(cardName, result);
+        } catch (Exception igonred) {
         }
         cardsToShow.clear();
         cardsToShow.addAll(result);
@@ -512,10 +521,14 @@ public class ShopMenuFX {
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-
+                Card card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                animation.getView().setFitWidth(stage.getScene().getWidth() /20);
-                animation.getView().setFitHeight(stage.getScene().getHeight()/10);
+                animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
+                animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
+                if (card instanceof MovableCard) {
+                    animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5);
+                    animation.getView().setFitWidth(animation.getView().getFitWidth() * 1.5);
+                }
                 animation.setCycleCount(Integer.MAX_VALUE);
                 animation.play();
 
@@ -539,8 +552,10 @@ public class ShopMenuFX {
                 MovableCard card = null;
                 if (isInCollection)
                     card = (MovableCard) account.getCollection().findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                else if (isInShop)
-                    card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                else if (isInShop) {
+                    if (Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1)))) instanceof MovableCard)
+                        card = (MovableCard) Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                }
                 if (card == null) continue; // TODO ??
                 cardPowers.get(i).setText("\n" + card.getDamage() + "\t\t\t" + card.getHealth());
             }

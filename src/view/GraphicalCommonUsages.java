@@ -61,11 +61,11 @@ public class GraphicalCommonUsages {
         Text messageText = new Text(message);
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 20);
         Image image = new Image(new FileInputStream("src/view/sources/shopMenu/popUpPictures/yes.jpg"));
-        if(mode == 2)
+        if (mode == 2)
             image = new Image(new FileInputStream("src/view/sources/shopMenu/popUpPictures/no.jpg"));
         Circle circle = new Circle();
         circle.setFill(new ImagePattern(image));
-        circle.setRadius(scene.getWidth()/15);
+        circle.setRadius(scene.getWidth() / 15);
 
         bgRectangle.relocate(0.0, 0.0);
         root.getChildren().addAll(bgRectangle);
@@ -92,9 +92,9 @@ public class GraphicalCommonUsages {
         popUp.layoutXProperty().bind(root.widthProperty().subtract(popUp.widthProperty()).divide(2));
         popUp.layoutYProperty().bind(root.heightProperty().subtract(popUp.heightProperty()).divide(2));
 
-        popUp.getChildren().addAll(new Text(""),circle,popUpLeft,new Text(""));
+        popUp.getChildren().addAll(new Text(""), circle, popUpLeft, new Text(""));
         popUp.setAlignment(Pos.CENTER);
-        popUp.setSpacing(popUp.getPrefWidth()/8);
+        popUp.setSpacing(popUp.getPrefWidth() / 8);
         root.getChildren().addAll(popUp);
         soundEffectPlay("error");
         //
@@ -112,8 +112,8 @@ public class GraphicalCommonUsages {
         confirmStackPane.getChildren().addAll(okButtonView, okText);
         HBox secondLine = new HBox(confirmStackPane);
         secondLine.setAlignment(Pos.CENTER);
-        popUpLeft.getChildren().addAll(secondLine,new Text(""));
-        popUpLeft.setSpacing(popUp.getPrefHeight()/4);
+        popUpLeft.getChildren().addAll(secondLine, new Text(""));
+        popUpLeft.setSpacing(popUp.getPrefHeight() / 4);
 
         confirmStackPane.setOnMouseEntered(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(okButtonGlow));
         confirmStackPane.setOnMouseExited(event -> ((ImageView) confirmStackPane.getChildren().get(0)).setImage(okButton));
@@ -219,20 +219,26 @@ public class GraphicalCommonUsages {
         cancelStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
     }
 
-    public static Animation getGif(String  cardName) {
+    public static Animation getGif(String cardName) {
+        return getGif(cardName, "idle");
+    }
+
+
+    public static Animation getGif(String cardName, String gifYouWanted) {
         String address = "src/view/sources/gifs/";
         UsableItem item = Shop.findItemByName(cardName);
-        if(item != null)
-            return new AnimatedGif(address+"items/"+cardName+"/idle.gif",1000);
+        if (item != null)
+            return new AnimatedGif(address + "items/" + cardName + "/" + gifYouWanted + ".gif", 1000);
         Card card = Shop.findCardByName(cardName);
-        if(card instanceof Spell)
-            return  new AnimatedGif(address+"spells/"+cardName+"/idle.gif",1000);
-        if(card instanceof  Minion)
-            return new AnimatedGif(address+"minions/"+cardName+"/idle.gif",1000);
-        if(card instanceof Hero)
-            return new AnimatedGif(address+"heroes/"+cardName+"/idle.gif",1000);
+        if (card instanceof Spell)
+            return new AnimatedGif(address + "spells/" + cardName + "/" + gifYouWanted + ".gif", 1000);
+        if (card instanceof Minion)
+            return new AnimatedGif(address + "minions/" + cardName + "/" + gifYouWanted + ".gif", 1000);
+        if (card instanceof Hero)
+            return new AnimatedGif(address + "heroes/" + cardName + "/" + gifYouWanted + ".gif", 1000);
         return null;
     }
+
     static void popUpInCommonConfigs(Scene scene, Pane root, Rectangle bgRectangle, VBox popUp, Text messageText, Font font) {
         soundEffectPlay("error");
         bgRectangle.relocate(0.0, 0.0);

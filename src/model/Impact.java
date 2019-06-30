@@ -30,6 +30,9 @@ public class Impact {
         this.impactWayOfAssigning = impactWayOfAssigning;
         this.targetTypeId = targetTypeId;
         this.impactTypeId = impactTypeId;
+        impactAreaClass = new ImpactArea(targetTypeId, null);
+        impactEffectComp = new ImpactEffectComp();
+
     }
 
 
@@ -103,7 +106,7 @@ public class Impact {
 
     void doImpact(Player friendlyPlayer, MovableCard target, Cell targetCell, Cell castingCell) {
         setAllVariablesNeeded();
-        match = target.match;
+        match = friendlyPlayer.match;
         impactAreaClass = new ImpactArea(targetTypeId, match);
         impactAreaClass.setImpactArea(friendlyPlayer, targetCell, castingCell);
         impactArea = impactAreaClass.getImpactArea();
@@ -330,7 +333,8 @@ public class Impact {
     }
 
     public String getTargetTypeId() {
-        return impactAreaClass.getTargetTypeId();
+
+        return targetTypeId;
     }
 
     private int getImpactQuantityWithSign() {

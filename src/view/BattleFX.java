@@ -96,27 +96,27 @@ public class BattleFX {
         ImageView hpView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/hp.png")));
         Label hpLabel = new Label();
         hpLabel.setTextFill(Color.WHITE);
-        hpView.setFitHeight(gameMap[x][y].getPrefHeight()/3);
+        hpView.setFitHeight(gameMap[x][y].getPrefHeight() / 3);
         hpView.setPreserveRatio(true);
         hpView.setOpacity(0.5);
-        hp.getChildren().addAll(hpView,hpLabel);
+        hp.getChildren().addAll(hpView, hpLabel);
 
         StackPane ap = new StackPane();
         ImageView apView = new ImageView(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/ap.png")));
         Label apLabel = new Label();
         apLabel.setTextFill(Color.WHITE);
-        apView.setFitHeight(gameMap[x][y].getPrefHeight()/3);
+        apView.setFitHeight(gameMap[x][y].getPrefHeight() / 3);
         apView.setPreserveRatio(true);
         apView.setOpacity(0.5);
-        ap.getChildren().addAll(apView,apLabel);
+        ap.getChildren().addAll(apView, apLabel);
 
         if (card instanceof MovableCard) {
             hpLabel.setText(((MovableCard) card).getHealth() + "");
-            apLabel.setText(((MovableCard) card).getDamage()+"");
+            apLabel.setText(((MovableCard) card).getDamage() + "");
         }
-        gameMap[x][y].getChildren().addAll(hp,ap);
-        hp.relocate(0,gameMap[x][y].getPrefHeight()*2/3);
-        ap.relocate(gameMap[x][y].getPrefWidth()/2,gameMap[x][y].getPrefHeight()*2/3);
+        gameMap[x][y].getChildren().addAll(hp, ap);
+        hp.relocate(0, gameMap[x][y].getPrefHeight() * 2 / 3);
+        ap.relocate(gameMap[x][y].getPrefWidth() / 2, gameMap[x][y].getPrefHeight() * 2 / 3);
 
         if (card.getPlayer().equals(match.getPlayer2()))
             rotateImageView(animation.getView());
@@ -515,33 +515,45 @@ public class BattleFX {
                 gameMap[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
                     @Override
                     public void handle(MouseDragEvent event) {
-                        // System.out.println("actual map:" + finalI + " " + finalJ);
-                        if (draggedFromNode != null && draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
-                            // group.getChildren().remove(draggedFromNode);
-                            // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
-                            String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
-                            //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
-                            player.getHand().findCardByName(cardName)
-                                    .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
-                            player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
-                            //   ((VBox) draggedFromNode).getChildren().remove(0);
-                            // match.getPlayer2().getHand().removeCardFromHand();
-//                            Text text = new Text(cardName);
-//                            text.setFont(Font.font(10));
-//                            text.setFill(Color.WHITE);
-                            draggedFromNode = null;
-                            try {
-                                bottomRow = drawHand(player, mainPane, scene);
-                                updateMana(match, mainPane, scene);
-                                updtdateSoldiers(match, scene, group);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
+                        Card card = match.getPlayer1().getHand().getCards().get(objectInHandIndex);
+                        if (card != null)
+                            if (draggedFromNode != null && draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) {//todo : ehtemalan shartaye bishatri mikhad
+                                if (card instanceof MovableCard &&
+                                        BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) {
+                                    String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
+                                    player.getHand().findCardByName(cardName)
+                                            .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
+                                    player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
+                                    draggedFromNode = null;
+                                    try {
+                                        bottomRow = drawHand(player, mainPane, scene);
+                                        updateMana(match, mainPane, scene);
+                                        updtdateSoldiers(match, scene, group);
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
 //                            text.relocate(rectangles[finalI][finalJ].getX(), rectangles[finalI][finalJ].getY());
 //                            group.getChildren().addAll(text);
-                        }
-                        if(draggedFromNode !=null && draggedFromNode instanceof Pane ){
-                            
+                                }
+                            } else if (card instanceof Spell) {
+                                Spell spell = (Spell) card;
+                                if (spell.isCastingValid(match.getPlayer1(), match.getTable().getCellByCoordination(finalI, finalJ), spell.getPrimaryImpact())) {
+                                    spell.castCard(match.getTable().getCellByCoordination(finalI, finalJ));
+                                    spell.getPrimaryImpact().getImpactAreaClass().setTargetTypeId(spell.getPrimaryImpact().getTargetTypeId());
+                                    for (Cell cell : spell.getValidCoordination()) {
+        mainPane.getChildren().clear();
+                                        Animation ani = new AnimatedGif("src/view/sources/gifs/spells/"+card.getName()+"/impact.gif",1000);
+                                        ani.setCycleCount(100);
+                                        ani.play();
+                                        ani.getView().setFitHeight(1000);
+                                        ani.getView().setFitHeight(1000);
+                                        mainPane.getChildren().add(ani.getView() );
+                                    }
+                                }
+                            }
+
+                        if (draggedFromNode != null && draggedFromNode instanceof Pane) {
+
                         }
                     }
                 });

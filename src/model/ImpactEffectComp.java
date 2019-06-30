@@ -53,23 +53,27 @@ public class ImpactEffectComp {
     }
 
     private void setAllImpactTypeCompVariables() {
-        doesHaveAntiHolyBuff = impactTypeIdComp.charAt(0) == '1';
-        doesHaveHolyBuffCanceler = impactTypeIdComp.charAt(1) == '1';
-        doesHaveAntiNegativeImpact = impactTypeIdComp.charAt(2) == '1';
-        doesHaveAntiPoison = impactTypeIdComp.charAt(3) == '1';
-        killIt = impactTypeIdComp.charAt(4) == '1';
-        doesHaveRisingDamage = impactTypeIdComp.charAt(5) != '0';
-        difRisingDamage = impactTypeIdComp.charAt(5) == '2';
-        doesHaveAntiDisarm = impactTypeIdComp.charAt(7) == '1';
-        immuneToMinDamage = impactTypeIdComp.charAt(6) == '1';
+        try {
+            doesHaveAntiHolyBuff = impactTypeIdComp.charAt(0) == '1';
+            doesHaveHolyBuffCanceler = impactTypeIdComp.charAt(1) == '1';
+            doesHaveAntiNegativeImpact = impactTypeIdComp.charAt(2) == '1';
+            doesHaveAntiPoison = impactTypeIdComp.charAt(3) == '1';
+            killIt = impactTypeIdComp.charAt(4) == '1';
+            doesHaveRisingDamage = impactTypeIdComp.charAt(5) != '0';
+            difRisingDamage = impactTypeIdComp.charAt(5) == '2';
+            doesHaveAntiDisarm = impactTypeIdComp.charAt(7) == '1';
+            immuneToMinDamage = impactTypeIdComp.charAt(6) == '1';
+        }catch (Exception e){}
     }
 
     private void setAllTheWayOfAssigningVariables() {
-        putItOnDefend = impactWayOfAssigning.charAt(0) == '2';
-        putItOnAttack = impactWayOfAssigning.charAt(0) == '1';
-        putItOnDyingWish = impactWayOfAssigning.charAt(0) == '3';
-        putItOnSummonImpact = impactWayOfAssigning.charAt(0) == '4';
-        getterTeam = impactWayOfAssigning.charAt(1) == '1' ? match.getPlayer1().getUserName() : match.getPlayer2().getUserName();
+        try {
+            putItOnDefend = impactWayOfAssigning.charAt(0) == '2';
+            putItOnAttack = impactWayOfAssigning.charAt(0) == '1';
+            putItOnDyingWish = impactWayOfAssigning.charAt(0) == '3';
+            putItOnSummonImpact = impactWayOfAssigning.charAt(0) == '4';
+            getterTeam = impactWayOfAssigning.charAt(1) == '1' ? match.getPlayer1().getUserName() : match.getPlayer2().getUserName();
+        }catch (Exception e){}
     }
 
 
