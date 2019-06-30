@@ -154,7 +154,7 @@ public class BattleFX {
 
     private void setGeneralIcons(Account account, Match match, Pane root, Scene scene) throws FileNotFoundException {
         //  System.out.println(match.getPlayer1());
-
+        rectanglesPane = new Pane();
         Image firstPlayerImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/generals/" + deleteWhiteSpaces(match.getPlayer1().getDeck().getHero().getName()).toLowerCase() + ".png"));
         Image secondPlayerImage = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/generals/" + deleteWhiteSpaces(match.getPlayer2().getDeck().getHero().getName()).toLowerCase() + ".png"));
 
@@ -275,7 +275,6 @@ public class BattleFX {
                 try {
                     if (match.currentTurnPlayer().getUserName().equals(player.getUserName())) {
                         new BattleMenuProcess().endTurn();
-                        System.out.println("fuck " + player.getMana());
                         updateMana(match, root, scene);
                         bottomRow = drawHand(player, root, scene);
                         ((ImageView) endTurn.getChildren().get(0)).setImage(endTurnEnemyInitialImage);
@@ -344,6 +343,9 @@ public class BattleFX {
         Image cardHolder = new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/Arena/mutual/game-hand-card-container-hover.png"));
         bottomRow.setSpacing(scene.getWidth() / 60);
         for (int i = 0; i < 5; i++) {
+            String ff = player.getHand().getCards().get(i) == null ? "null" : player.getHand().getCards().get(i).getName();
+            System.out.println(ff);
+//            System.out.println(ff+" "+i+" ,id "+ player.getHand().getCards().get(i)!=null?player.getHand().getCards().get(i).getCardID():"null");
             VBox cardContainer = new VBox();
             ImageView cardHolderView = new ImageView(cardHolder);
             cardHolderView.setFitHeight(scene.getWidth() / 10);
@@ -540,8 +542,6 @@ public class BattleFX {
                             // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
                             String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
                             if (player.getHand().getCards().get(objectInHandIndex) instanceof Spell) {
-                                System.out.println("fuck sepehr");
-
                                 mainPane.getChildren().add(new Rectangle(scene.getWidth(), scene.getHeight(), Color.ORANGE));
                                 long time = System.currentTimeMillis();
                                 FadeTransition fadeTransition = new FadeTransition();
@@ -562,9 +562,13 @@ public class BattleFX {
 
                             }
                             //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
-                            player.getHand().findCardByName(cardName)
-                                    .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
-                            player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
+                            if (player.getHand().getCards().get(objectInHandIndex) instanceof Minion)
+                                ((Minion) (player.getHand().getCards().get(objectInHandIndex))).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ), objectInHandIndex);
+                            else
+                                ((Spell)player.getHand().getCards().get(objectInHandIndex)).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ));
+//                            player.getHand().findCardByName(cardName)
+//                                    .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
+                            player.getHand().removeCardFromHand(objectInHandIndex);
                             draggedFromNode = null;
                             try {
                                 bottomRow = drawHand(player, mainPane, scene);
@@ -771,7 +775,7 @@ public class BattleFX {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });
+            });  //
         }
     }
 
