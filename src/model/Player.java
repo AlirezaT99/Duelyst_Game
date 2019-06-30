@@ -22,25 +22,6 @@ public class Player {
         return isAI;
     }
 
-    public boolean hasLoggedIn() {
-        return hasLoggedIn;
-    }
-
-    private boolean hasLoggedIn;
-
-    public void login() {
-        hasLoggedIn = true;
-    }
-
-    private void logout() {
-        hasLoggedIn = false;
-        //todo go to LoginMenu
-    }
-
-    public void endTurn() {
-        match.switchTurn();
-    }
-
     public void fillHand() {
         if (deck.getNextCard() == null)
             deck.refreshNextCard();

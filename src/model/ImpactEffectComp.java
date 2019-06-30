@@ -49,8 +49,6 @@ public class ImpactEffectComp {
     private boolean putItOnSummonImpact;
     private String getterTeam;
 
-    public ImpactEffectComp() {
-    }
 
     private void setAllImpactTypeCompVariables() {
         try {
@@ -63,7 +61,8 @@ public class ImpactEffectComp {
             difRisingDamage = impactTypeIdComp.charAt(5) == '2';
             doesHaveAntiDisarm = impactTypeIdComp.charAt(7) == '1';
             immuneToMinDamage = impactTypeIdComp.charAt(6) == '1';
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     private void setAllTheWayOfAssigningVariables() {
@@ -73,7 +72,8 @@ public class ImpactEffectComp {
             putItOnDyingWish = impactWayOfAssigning.charAt(0) == '3';
             putItOnSummonImpact = impactWayOfAssigning.charAt(0) == '4';
             getterTeam = impactWayOfAssigning.charAt(1) == '1' ? match.getPlayer1().getUserName() : match.getPlayer2().getUserName();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
 
@@ -90,8 +90,10 @@ public class ImpactEffectComp {
 
     boolean doesItHaveToBeSetOnSoldiersFourImpacts(Cell targetCell) {
         MovableCard movableCard = targetCell.getMovableCard();
-        if (putItOnAttack || putItOnDefend || putItOnDyingWish || putItOnSummonImpact)
+        if (putItOnAttack || putItOnDefend || putItOnDyingWish || putItOnSummonImpact) {
+
             impactWayOfAssigning = fatherImpact.changeCharAtDesiredIndex(0, '0', impactWayOfAssigning);
+        }
         if (putItOnAttack) {
             if (movableCard != null)
                 movableCard.onDefendImpact = fatherImpact;

@@ -530,67 +530,52 @@ public class BattleFX {
                         draggedFromNode = gameMap[finalI][finalJ];
                     }
                 });
-                gameMap[i][j].setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
-                    @Override
-                    public void handle(MouseDragEvent event) {
-                        // System.out.println("actual map:" + finalI + " " + finalJ);
-                        if (draggedFromNode != null && draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
-                            // group.getChildren().remove(draggedFromNode);
-                            // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
-                            String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
-                            if (player.getHand().getCards().get(objectInHandIndex) instanceof Spell) {
-                                System.out.println("fuck sepehr");
-
-                                mainPane.getChildren().add(new Rectangle(scene.getWidth(), scene.getHeight(), Color.ORANGE));
-                                long time = System.currentTimeMillis();
-                                FadeTransition fadeTransition = new FadeTransition();
-                                fadeTransition.setDuration(Duration.millis(1000));
-                                fadeTransition.setFromValue(1);
-                                fadeTransition.setToValue(0);
-                                fadeTransition.setNode(mainPane.getChildren().get(mainPane.getChildren().size() - 1));
-                                fadeTransition.play();
-                                fadeTransition.setOnFinished(event1 -> mainPane.getChildren().remove(mainPane.getChildren().size() - 1));
-                                ((Rectangle) gameMap[finalI][finalJ].getChildren().get(0)).setFill(Color.GOLD);
-                                //while (System.currentTimeMillis() - time < 2000){}
-                                //rectangles[finalI][finalJ].setFill(Color.WHITE);
-                                // while (System.currentTimeMillis() - time < ){}
-//                                Pane tempPane = new Pane();
-//                                tempPane.getChildren()5
-//                                tempPane.setBackground(new Background(new BackgroundFill(Color.ORANGE,CornerRadii.EMPTY,new Insets(0,0,0,0))));
-//                                Main.setSceneForAPeriodOfTime(tempPane,1000);
-
-                            }
-                            //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
-                            player.getHand().findCardByName(cardName)
-                                    .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
-                            player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
-                            draggedFromNode = null;
-                            try {
-                                bottomRow = drawHand(player, mainPane, scene);
-                                updateMana(match, mainPane, scene);
-                                updateSoldiers(match, scene, group);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-//
+                gameMap[i][j].setOnMouseDragReleased(event -> {
+                    if (draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
+                        String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
+                        if (player.getHand().getCards().get(objectInHandIndex) instanceof Spell) {
+                           Spell spell = (Spell) player.getHand().getCards().get(objectInHandIndex);
+                           spell.castCard(match.getTable().getCellByCoordination(finalI,finalJ),match.getPlayer1());
+                            mainPane.getChildren().add(new Rectangle(scene.getWidth(), scene.getHeight(), Color.ORANGE));
+                            System.out.println("fuuuck");
+                            FadeTransition fadeTransition = new FadeTransition();
+                            fadeTransition.setDuration(Duration.millis(1000));
+                            fadeTransition.setFromValue(1);
+                            fadeTransition.setToValue(0);
+                            fadeTransition.setNode(mainPane.getChildren().get(mainPane.getChildren().size() - 1));
+                            fadeTransition.play();
+                            fadeTransition.setOnFinished(event1 -> mainPane.getChildren().remove(mainPane.getChildren().size() - 1));
+                            ((Rectangle) gameMap[finalI][finalJ].getChildren().get(0)).setFill(Color.GOLD);
                         }
-                        if (draggedFromNode != null && draggedFromNode instanceof Pane &&
-                                !(draggedFromNode instanceof VBox) && ((Pane) draggedFromNode).getChildren().size() >= 3) {
-                            Coordination coordination = getPaneFromMap((Pane) draggedFromNode);
-                            if (gameMap[finalI][finalJ].getChildren().size() == 1) {
-                                if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)) == 0 &&
-                                        match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().getPlayer().equals(match.currentTurnPlayer())) {
-                                    moveProcess(coordination, match, finalI, finalJ, scene, width, margin, height, group, rectanglesPane);
+                        player.getHand().findCardByName(cardName)
+                                .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
+                        player.getHand().removeCardFromHand(player.getHand().selectCard(objectInHandIndex));
+                        draggedFromNode = null;
+                        try {
+                            bottomRow = drawHand(player, mainPane, scene);
+                            updateMana(match, mainPane, scene);
+                            updateSoldiers(match, scene, group);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+//
+                    }
+                    if (draggedFromNode != null && draggedFromNode instanceof Pane &&
+                            !(draggedFromNode instanceof VBox) && ((Pane) draggedFromNode).getChildren().size() >= 3) {
+                        Coordination coordination = getPaneFromMap((Pane) draggedFromNode);
+                        if (gameMap[finalI][finalJ].getChildren().size() == 1) {
+                            if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCellByCoordination(finalI, finalJ)) == 0 &&
+                                    match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().getPlayer().equals(match.currentTurnPlayer())) {
+                                moveProcess(coordination, match, finalI, finalJ, scene, width, margin, height, group, rectanglesPane);
 //                                    try {
 //                                        setGeneralIcons(player.getAccount(),match,(Pane)scene.getRoot(),scene);
 //                                    } catch (FileNotFoundException e) {
 //                                        e.printStackTrace();
 //                                    }
-                                }
-                            } else {
-                                attackProcess(coordination, match, finalI, finalJ, scene, width, margin, height, group, rectanglesPane);
-
                             }
+                        } else {
+                            attackProcess(coordination, match, finalI, finalJ, scene, width, margin, height, group, rectanglesPane);
+
                         }
                     }
                 });

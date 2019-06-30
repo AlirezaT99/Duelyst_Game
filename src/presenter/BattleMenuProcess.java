@@ -172,7 +172,6 @@ public class BattleMenuProcess {
             endingProcedure();
         if (match.notCurrentTurnPlayer().isAI()) {
             match.switchTurn();
-            impactGoThroughTime();
             match.handleMana();
             playAI(match.currentTurnPlayer());
             match.currentTurnPlayer().fillHand();
@@ -183,13 +182,11 @@ public class BattleMenuProcess {
                 endingProcedure();
             match.switchTurn();
             match.handleMana();
-            impactGoThroughTime();
-            impactGoThroughTime();
         } else {
             // match.handleMana();
             match.switchTurn();
-            impactGoThroughTime();
         }
+        impactGoThroughTime();
         return 0;
     }
 
@@ -272,7 +269,7 @@ public class BattleMenuProcess {
                     LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         }
-        battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true);
+        battleMenu.getBattleInit().getMainMenu().setIsInMainMenu(true); //todo nullPointerException
         battleMenu.getBattleInit().setInBattleInit(false);
         battleMenu.setInBattleMenu(false);
         battleMenu.getBattleInit().getMainMenu().run();
