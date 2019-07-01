@@ -35,9 +35,9 @@ import static view.ShopMenu.handleErrors;
 import static view.ShopMenu.scan;
 
 public class ShopMenuFX {
-    private Text page = new Text();
+    private static Text page = new Text();
     private static boolean isInShop = true;
-    private boolean isInCollection = false;
+    private static boolean isInCollection = false;
     static ArrayList<String> cardsToShow = new ArrayList<>();
     private static ArrayList<Pane> panesOfGifs = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
@@ -458,7 +458,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(imageView, money);
     }
 
-    private void pageSetText() {
+    static void pageSetText() {
         page.setText("Page = " + pageNumber + "/" + (cardsToShow.size() / 10 + (cardsToShow.size() % 10 != 0 ? 1 : 0)));
     }
 
@@ -509,7 +509,7 @@ public class ShopMenuFX {
         searchTextField.setVisible(show);
     }
 
-    private void updateLabels() {
+    static void updateLabels() {
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
@@ -537,7 +537,7 @@ public class ShopMenuFX {
         pageSetText();
     }
 
-    private void updatePowers(Account account) {
+    static void updatePowers(Account account) {
         removePowers();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
@@ -577,13 +577,13 @@ public class ShopMenuFX {
         }
     }
 
-    private void removeLabels() {
+    private static void removeLabels() {
         for (int i = 0; i < 10; i++)
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
                 cardPowers.get(i).setText("");
     }
 
-    private void removePowers() {
+    private static void removePowers() {
         for (int i = 0; i < 10; i++)
             cardPowers.get(i).setText("");
     }
