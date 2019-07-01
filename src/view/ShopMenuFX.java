@@ -35,9 +35,9 @@ import static view.ShopMenu.handleErrors;
 import static view.ShopMenu.scan;
 
 public class ShopMenuFX {
-    private Text page = new Text();
+    private static Text page = new Text();
     private static boolean isInShop = true;
-    private boolean isInCollection = false;
+    private static boolean isInCollection = false;
     static ArrayList<String> cardsToShow = new ArrayList<>();
     private static ArrayList<Pane> panesOfGifs = new ArrayList<>();
     private static HashMap<Integer, Label> cardLabels = new HashMap<>();
@@ -49,26 +49,27 @@ public class ShopMenuFX {
     private static int selectedIndex = 0;
     private static Account account;
     private static Label money;
-    private static Pane root = new Pane();
-    private static Stage stage;
+    private static Pane root;
+    private static Scene scene;
 
     ShopMenuFX(Account account) {
         ShopMenuFX.account = account;
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
-        ShopMenuFX.stage = primaryStage;
+        root = new Pane();
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
         final Font trump_reg_small = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 28);
         final Font averta = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/averta-light-webfont.ttf"), 40);
 
-        Scene scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
+        scene = new Scene(new Group(), primaryStage.getWidth(), primaryStage.getHeight());
         root.setPrefWidth(primaryStage.getWidth());
         root.setPrefHeight(primaryStage.getHeight());
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 
-        drawCards(scene, root, trump_reg, trump_reg_small, true);
+        GridPane gridPane = new GridPane();
+        drawCards(gridPane, scene, root, trump_reg, trump_reg_small, true);
         drawShopLabels(root, averta, scene);
         drawLeftBox(trump_med, root, scene);
         drawBackButton(root, scene, account);
@@ -77,8 +78,7 @@ public class ShopMenuFX {
         return root;
     }
 
-    static void drawCards(Scene scene, Pane root, Font trump, Font trump_small, Boolean shopMenuOrCollection) throws FileNotFoundException {
-        GridPane gridPane = new GridPane();
+    static void drawCards(GridPane gridPane ,Scene scene, Pane root, Font trump, Font trump_small, Boolean shopMenuOrCollection) throws FileNotFoundException {
         if (shopMenuOrCollection)
             gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
         else
@@ -120,24 +120,26 @@ public class ShopMenuFX {
 
             int finalI = i;
             stackPane.setOnMouseEntered(event -> stackPane.setEffect(new Glow(0.2)));
-            stackPane.setOnMouseClicked(event -> {
-                try {
-                    selectedIndex = finalI;
-                    String str = isInShop ? "BUY" : "SELL";
-                    if (str.equals("BUY")) {
-                        if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
-                            //todo : drake(no) popUp
-                            GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
+            if (showPrice) // equals accessing the function from shopMenu
+                stackPane.setOnMouseClicked(event -> {
+                    try {
+                        selectedIndex = finalI;
+                        String str = isInShop ? "BUY" : "SELL";
+                        if (str.equals("BUY")) {
+                            if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
+                                GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
+                            } else {
+                                yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                            }
                         } else {
+
                             yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
                         }
-                    } else {
-
-                        yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
+                    } catch (FileNotFoundException e) {
                     }
-                } catch (FileNotFoundException e) {
-                }
-            });
+                });
+            else // accessing the function from collectionMenu
+                CollectionMenuFX.addEventForCollectionMenu(stackPane);
             stackPane.setOnMouseExited(event -> stackPane.setEffect(new Glow(0)));
 
             stackPane.getChildren().addAll(imageView, cardName, card_AP_HP, price);
@@ -457,7 +459,7 @@ public class ShopMenuFX {
         root.getChildren().addAll(imageView, money);
     }
 
-    private void pageSetText() {
+    static void pageSetText() {
         page.setText("Page = " + pageNumber + "/" + (cardsToShow.size() / 10 + (cardsToShow.size() % 10 != 0 ? 1 : 0)));
     }
 
@@ -508,14 +510,15 @@ public class ShopMenuFX {
         searchTextField.setVisible(show);
     }
 
-    private void updateLabels() {
+    static void updateLabels() {
+        Scene currentScene = scene == null ? CollectionMenuFX.scene : scene;
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 Card card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))),"idle");
-                animation.getView().setFitWidth(stage.getScene().getWidth() / 20);
-                animation.getView().setFitHeight(stage.getScene().getHeight() / 10);
+                animation.getView().setFitWidth(currentScene.getWidth() / 20);
+                animation.getView().setFitHeight(currentScene.getHeight() / 10);
                 if (card instanceof MovableCard) {
                     animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5);
                     animation.getView().setFitWidth(animation.getView().getFitWidth() * 1.5);
@@ -536,7 +539,7 @@ public class ShopMenuFX {
         pageSetText();
     }
 
-    private void updatePowers(Account account) {
+    static void updatePowers(Account account) {
         removePowers();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
@@ -576,13 +579,13 @@ public class ShopMenuFX {
         }
     }
 
-    private void removeLabels() {
+    private static void removeLabels() {
         for (int i = 0; i < 10; i++)
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size())
                 cardPowers.get(i).setText("");
     }
 
-    private void removePowers() {
+    private static void removePowers() {
         for (int i = 0; i < 10; i++)
             cardPowers.get(i).setText("");
     }

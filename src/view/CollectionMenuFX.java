@@ -42,7 +42,6 @@ public class CollectionMenuFX {
     private static HashMap<ImageView, String> selectDeckHMap = new HashMap<>();
     private static HashMap<String, ImageView> decksBackground = new HashMap<>();
     private static String visibleDeckName = "";
-    private static Scene scene;
     private static VBox decksVBox;
     private static VBox cardsVBox;
     private static String aboutToDelete = "";
@@ -51,6 +50,7 @@ public class CollectionMenuFX {
     private static ArrayList<String> cardsToAddToDeck = new ArrayList<>();
     private static Deck deckToBe = new Deck("new deck");
     private static Timeline timeline5;
+    static Scene scene;
 
     CollectionMenuFX(Account account) {
         CollectionMenuFX.account = account;
@@ -69,7 +69,7 @@ public class CollectionMenuFX {
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 
         gridPane.setVisible(false);
-        drawCards( scene, root, trump_reg, trump_reg_small, false);
+        drawCards(gridPane, scene, root, trump_reg, trump_reg_small, false);
         drawArrows();
 
         drawBackButton(root, scene, account);
@@ -449,7 +449,8 @@ public class CollectionMenuFX {
         cardsToShow.clear();
         if (!creatingDeck) {
             Deck deck = account.getCollection().getDeckHashMap().get(visibleDeckName);
-            cardsToShow.add(deck.getHero().getName());
+            if (deck.getHero() != null)
+                cardsToShow.add(deck.getHero().getName());
             for (Minion minion : deck.getMinions())
                 cardsToShow.add(minion.getName());
             for (Spell spell : deck.getSpells())
@@ -466,8 +467,8 @@ public class CollectionMenuFX {
             for (UsableItem item : account.getCollection().getItemsHashMap().values())
                 cardsToShow.add(item.getName());
         }
-//        updateLabels(scene); //todo
-//        updatePowers(account);//todo
+        updateLabels();
+        updatePowers(account);
         gridPane.setVisible(true);
         root.getChildren().get(2).setVisible(true); // left arrow
         root.getChildren().get(3).setVisible(true); // right arrow
@@ -492,24 +493,24 @@ public class CollectionMenuFX {
             if (pageNumber == 0)
                 pageNumber++;
             else {
-//                updateLabels(scene);  //todo
-//                updatePowers(account); //todo
+                updateLabels();
+                updatePowers(account);
             }
-//            pageSetText(); //todo
+            pageSetText();
         });
 
         rightArrow.setOnMouseClicked(event -> {
             pageNumber++;
             if ((pageNumber - 1) * 10 >= cardsToShow.size()) pageNumber--;
             else {
-//                updateLabels(scene); //todo
+                updateLabels();
                 try {
-//                    updatePowers(account); //todo
+                    updatePowers(account);
                 } catch (ClassCastException ex) {
 //                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
                 }
             }
-//            pageSetText(); //todo
+            pageSetText();
         });
     }
 
