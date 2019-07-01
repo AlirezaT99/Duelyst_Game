@@ -30,6 +30,8 @@ public class Impact {
         this.impactWayOfAssigning = impactWayOfAssigning;
         this.targetTypeId = targetTypeId;
         this.impactTypeId = impactTypeId;
+        impactAreaClass = new ImpactArea(targetTypeId, null);
+        impactEffectComp = new ImpactEffectComp(impactArea, this, null, impactWayOfAssigning, impactTypeComp);
     }
 
 
@@ -95,7 +97,6 @@ public class Impact {
 
     public void setAllVariablesNeeded() {
         setImpactTypeIdVariables();
-//        setAllImpactTypeCompVariables();
     }
     //needed id variables
 

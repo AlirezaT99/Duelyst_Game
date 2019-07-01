@@ -50,6 +50,7 @@ public class CollectionMenuFX {
     private static String cardToRemove = "";
     private static ArrayList<String> cardsToAddToDeck = new ArrayList<>();
     private static Deck deckToBe = new Deck("new deck");
+    private static Timeline timeline5;
 
     CollectionMenuFX(Account account) {
         CollectionMenuFX.account = account;
@@ -68,7 +69,7 @@ public class CollectionMenuFX {
         GraphicalCommonUsages.setBackGroundImage("src/view/sources/mainMenu/backgrounds/" + (Math.abs(new Random().nextInt() % 2) + 1) + ".jpg", root, true);
 
         gridPane.setVisible(false);
-        drawCards(gridPane, scene, root, trump_reg, trump_reg_small, false);
+        drawCards( scene, root, trump_reg, trump_reg_small, false);
         drawArrows();
 
         drawBackButton(root, scene, account);
@@ -84,8 +85,8 @@ public class CollectionMenuFX {
         leftArrow.setScaleY(1.5);
         rightArrow.setScaleX(1.5);
         rightArrow.setScaleY(1.5);
-        leftArrow.relocate((scene.getWidth() / 20), (scene.getHeight() * 0.8));
-        rightArrow.relocate((scene.getWidth() / 20 + 50), (scene.getHeight() * 0.8));
+        leftArrow.relocate((scene.getWidth() / 20), (scene.getHeight() * 0.85));
+        rightArrow.relocate((scene.getWidth() / 20 + 50), (scene.getHeight() * 0.85));
         root.getChildren().addAll(leftArrow, rightArrow);
         leftArrow.setVisible(false);
         rightArrow.setVisible(false);
@@ -156,7 +157,7 @@ public class CollectionMenuFX {
 
         KeyValue moveBackXCreate = new KeyValue(createDeckBar.layoutXProperty(), scene.getWidth());
         KeyFrame keyFrame5 = new KeyFrame(Duration.millis(501), moveBackXCreate);
-        Timeline timeline5 = new Timeline();
+        timeline5 = new Timeline();
         timeline5.getKeyFrames().add(keyFrame5);
         //
         ImageView closeBar = new ImageView(new Image(new FileInputStream("src/view/sources/collectionMenu/button_back_corner.png")));
@@ -346,6 +347,8 @@ public class CollectionMenuFX {
                 deck = new Deck(deckNameField.getText());
                 account.getCollection().addDeck(deck);
                 addCardsToDeck(deck);
+                timeline5.play();
+                creatingDeck = false;
             }
             decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
             try {
@@ -392,7 +395,6 @@ public class CollectionMenuFX {
                 imageView.setImage(deckBackground);
             deckBg.setImage(deckBackgroundGlow);
             visibleDeckName = deckName;
-            System.out.println(deckName);
             gridPane.setVisible(true);
             root.getChildren().get(2).setVisible(true); // left arrow
             root.getChildren().get(3).setVisible(true); // right arrow
@@ -417,7 +419,7 @@ public class CollectionMenuFX {
             }
         });
         ImageView selectDeckView = new ImageView(selectDeckGray);
-        if (account.getCollection().getSelectedDeck().getName().equals(deckName))
+        if (account.getCollection().getSelectedDeck()!=null && account.getCollection().getSelectedDeck().getName().equals(deckName))
             selectDeckView.setImage(selectDeck);
         selectDeckView.setOnMouseClicked(event -> {
             if (account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName))) {

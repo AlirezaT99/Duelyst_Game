@@ -221,7 +221,7 @@ public class MainMenuFX {
     }
 
     private void mouseHoverAudioPlay() {
-        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/mainMenu/music/sfx_ui_booster_huming_tail.m4a").toString());
+        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(MainMenuFX.class.getResource("sources/mainMenu/music/sfx_ui_booster_huming_tail.m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play(1);
     }

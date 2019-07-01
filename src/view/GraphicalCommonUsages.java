@@ -273,8 +273,8 @@ public class GraphicalCommonUsages {
         audioClip.play();
     }
 
-    public void mouseClickAudioPlay() {
-        AudioClip audioClip = new AudioClip(this.getClass().getResource("sources/common/music/onclick.m4a").toString());
+    public static void mouseClickAudioPlay() {
+        AudioClip audioClip = new AudioClip(GraphicalCommonUsages.class.getResource("sources/common/music/onclick.m4a").toString());
         audioClip.setCycleCount(1);
         audioClip.play(1);
         System.gc();

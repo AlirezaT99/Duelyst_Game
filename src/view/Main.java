@@ -5,6 +5,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.Account;
 import model.Match;
@@ -28,6 +30,7 @@ public class Main extends Application {
     private static Stage primaryStage;
     private static Scene currentScene;
     private static Rectangle2D primaryScreenBounds;
+    private static AudioClip audioClip;
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
@@ -49,7 +52,7 @@ public class Main extends Application {
 //        currentScene = login.start(primaryStage);
         primaryStage.setScene(currentScene);
         primaryStage.setOnCloseRequest(event -> System.exit(0));
-        backgroundMusicPlay();
+        //backgroundMusicNotBattlePlay();
         primaryStage.show();
     }
 
@@ -65,6 +68,7 @@ public class Main extends Application {
         Main.mainMenuFX = new MainMenuFX();
         currentScene.setRoot(mainMenuFX.start(primaryStage, account));
         primaryStage.setScene(currentScene);
+        backgroundMusicNotBattlePlay();
     }
 
     public static void setLoginMenu() throws FileNotFoundException {
@@ -115,6 +119,7 @@ public class Main extends Application {
     public static void setBattleFX(Account firstPlayer, Match match, boolean storyMode) throws FileNotFoundException {
         battleFx = new BattleFX();
         BattleMenuProcess.setMatch(match);
+        backgroundMusicBattlePlay();
         currentScene.setRoot(battleFx.start(match, storyMode, getPrimaryStage(), firstPlayer));
     }
 
@@ -129,10 +134,21 @@ public class Main extends Application {
         }
     }
 
-    private void backgroundMusicPlay() {
-        javafx.scene.media.AudioClip audioClip = new javafx.scene.media.AudioClip(this.getClass().getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
+    private static void backgroundMusicNotBattlePlay() {
+        if (audioClip!=null && audioClip.isPlaying())
+            audioClip.stop();
+        audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
         audioClip.setCycleCount(Integer.MAX_VALUE);
         audioClip.play();
     }
+
+    private static void backgroundMusicBattlePlay() {
+        audioClip.stop();
+        audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/music_battlemap_songhai.m4a").toString());
+        audioClip.setCycleCount(Integer.MAX_VALUE);
+        audioClip.setVolume(0.7);
+        audioClip.play();
+    }
+
 
 }

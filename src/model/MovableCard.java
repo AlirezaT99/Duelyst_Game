@@ -51,6 +51,17 @@ public abstract class MovableCard extends Card {
         this.isAlive = true;
     }
 
+    public void castCard(Cell cell, int index) {
+        cell.setMovableCard(this);
+        this.cardCell = cell;
+        if (!(this instanceof Hero))
+            player.getHand().removeCardFromHand(index);
+        if (!(this instanceof Hero))
+            player.setMana(player.getMana() - this.manaCost);
+        this.isAlive = true;
+    }
+
+
     @Override
     public boolean isCastingCoordinationValid(Cell cell) {
         return cell.getMovableCard() == null;
@@ -60,7 +71,7 @@ public abstract class MovableCard extends Card {
     //attack & counterAttack
     public int attack(MovableCard opponent) {
         int returnValue = isAttackValid(opponent);
-        if (returnValue == 0) {
+        if (returnValue == 0 && didAttackInThisTurn == false) {
             didAttackInThisTurn = true;
             try {
                 if (!opponent.onDefendImpact.getImpactEffectComp().doesHaveAntiNegativeImpact()) {
@@ -71,7 +82,7 @@ public abstract class MovableCard extends Card {
             opponent.counterAttack(this);
             this.manageCasualties();
             opponent.manageCasualties();
-            BattleMenuProcess.buryTheDead();
+            //BattleMenuProcess.buryTheDead();
         }
         return returnValue;
     }
@@ -100,6 +111,7 @@ public abstract class MovableCard extends Card {
     }
 
     int isAttackValid(MovableCard opponent) {
+        if(didAttackInThisTurn) return 20;
         int returnValue = counterAttackAndNormalAttackSameParameters(opponent);
         if (returnValue != 0)
             return returnValue;
@@ -131,7 +143,7 @@ public abstract class MovableCard extends Card {
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             this.manageCasualties();
             opponent.manageCasualties();
-            BattleMenuProcess.buryTheDead();
+
             if (onDefendImpact == null)
                 return;
             onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
@@ -189,7 +201,6 @@ public abstract class MovableCard extends Card {
 
     //move
     public void move(Cell destination) {
-        System.out.println("sssssssss");
         if (isMoveValid(destination) == 0) {
             didMoveInThisTurn = true;
             this.cardCell.setMovableCard(null);
@@ -249,6 +260,8 @@ public abstract class MovableCard extends Card {
             y = 1;
         x += start.getCellCoordination().getX();
         y += start.getCellCoordination().getY();
+        if(this.player.match.table.getCellByCoordination(x, y) == null)
+            return true;
         MovableCard movableCard = this.player.match.table.getCellByCoordination(x, y).getMovableCard();
         if (movableCard != null)
             return !movableCard.player.equals(this.player);

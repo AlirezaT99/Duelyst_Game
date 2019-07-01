@@ -185,7 +185,16 @@ public class Main {
         int health = scanner.nextInt();
         System.out.println("damage:");
         int damage = scanner.nextInt();
-        return new Hero(name, health, damage, spell, spellCoolDown);
+        System.out.println("Attack Type : (melee(m)/ranged(r)/hybrid(h)");
+        String  c = scanner.next();
+        Hero hero = new Hero(name, health, damage, spell, spellCoolDown);
+        if(c.equalsIgnoreCase("m"))
+            hero.isMelee = true;
+        else if(c.equalsIgnoreCase("r"))
+            hero.isRanged = true;
+        else if(c.equalsIgnoreCase("h"))
+            hero.isHybrid = true;
+        return hero;
     }
 
     private static Minion minionCreator(Scanner scanner, String name) {
@@ -195,6 +204,14 @@ public class Main {
         System.out.println("damage:");
         int damage = scanner.nextInt();
         Minion minion = new Minion();
+        System.out.println("Attack Type : (melee(m)/ranged(r)/hybrid(h)");
+        String c = scanner.next();
+        if(c.equalsIgnoreCase("m"))
+            minion.isMelee = true;
+        else if(c.equalsIgnoreCase("r"))
+            minion.isRanged = true;
+        else if(c.equalsIgnoreCase("h"))
+            minion.isHybrid = true;
         minion.setName(name);
         minion.setHealth(health);//dup
         minion.setDamage(damage);
