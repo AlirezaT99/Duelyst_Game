@@ -82,7 +82,7 @@ public abstract class MovableCard extends Card {
             opponent.counterAttack(this);
             this.manageCasualties();
             opponent.manageCasualties();
-            BattleMenuProcess.buryTheDead();
+            //BattleMenuProcess.buryTheDead();
         }
         return returnValue;
     }
@@ -143,7 +143,7 @@ public abstract class MovableCard extends Card {
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             this.manageCasualties();
             opponent.manageCasualties();
-            BattleMenuProcess.buryTheDead();
+
             if (onDefendImpact == null)
                 return;
             onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
@@ -201,7 +201,6 @@ public abstract class MovableCard extends Card {
 
     //move
     public void move(Cell destination) {
-        System.out.println("sssssssss");
         if (isMoveValid(destination) == 0) {
             didMoveInThisTurn = true;
             this.cardCell.setMovableCard(null);

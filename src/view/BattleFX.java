@@ -279,7 +279,7 @@ public class BattleFX {
                         updateMana(match, root, scene);
                         bottomRow = drawHand(player, root, scene);
                         ((ImageView) endTurn.getChildren().get(0)).setImage(endTurnEnemyInitialImage);
-                        //updateSoldiers(match, scene);
+
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -614,6 +614,26 @@ public class BattleFX {
 
     }
 
+    public static void deathProcess (Coordination coordination, Match match, Scene scene, Pane rectanglesPane){
+        Animation deathAnimation = GraphicalCommonUsages.getGif(match.getTable().getCellByCoordination(coordination.getX(),coordination.getY()).getMovableCard().getName(),"death");
+        gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
+        ImageView deathView = deathAnimation.getView();
+        deathView.setPreserveRatio(true);
+        deathView.setFitWidth(scene.getWidth()/18.8);
+        gameMap[coordination.getX()][coordination.getY()].getChildren().add(1,deathView);
+        deathAnimation.setCycleCount(1);
+        deathAnimation.play();
+        match.getTable().getCellByCoordination(coordination.getX(),coordination.getY()).setMovableCard(null);
+        deathAnimation.setOnFinished(event -> {
+            try {
+                updateSoldiers(match,scene);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
     private static void attackProcess(Coordination coordination, Match match, int finalI, int finalJ, Scene scene, double width, double margin, double height, Pane group, Pane rectanglesPane) {
         int result = match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().attack(match.getTable().getCell(finalI, finalJ).getMovableCard());
         if (result == 0) {
@@ -645,8 +665,8 @@ public class BattleFX {
                         movableCardAttackSFX(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), false);
                         counterAttackAnimation.setOnFinished(event1 -> {
                             try {
-                                updateSoldiers(match, scene);
-                            } catch (FileNotFoundException e) {
+                                BattleMenuProcess.buryTheDead();
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         });
@@ -724,7 +744,7 @@ public class BattleFX {
             double height = (scene.getHeight() / 2 - width / 5) / 5;
             if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCell(finalI, finalJ)) == 0)
             {
-                match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().move(match.getTable().getCell(finalI, finalJ));
+
                 Animation runAnimation = GraphicalCommonUsages.getGif(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(), "run");
                 ImageView movableCard = runAnimation.getView();
                 movableCard.setFitWidth(scene.getWidth() / 18.8);
@@ -732,11 +752,13 @@ public class BattleFX {
 
                 StackPane ap = (StackPane) (((Pane) draggedFromNode).getChildren().get(2));
                 StackPane hp = (StackPane) (((Pane) draggedFromNode).getChildren().get(3));
-                ((Pane) draggedFromNode).getChildren().remove(1);
-                ((Pane) draggedFromNode).getChildren().remove(ap);
-                ((Pane) draggedFromNode).getChildren().remove(hp);
+                for(int k = ((Pane) draggedFromNode).getChildren().size()-1; k>0;k--)
+                    ((Pane) draggedFromNode).getChildren().remove(k);
+//                ((Pane) draggedFromNode).getChildren().remove(1);
+//                ((Pane) draggedFromNode).getChildren().remove(ap);
+//                ((Pane) draggedFromNode).getChildren().remove(hp);
 
-
+                match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().move(match.getTable().getCell(finalI, finalJ));
                 rectanglesPane.getChildren().addAll(movableCard, ap, hp);
 
                 movableCard.relocate((coordination.getY() - 1) * (width + margin), (coordination.getX() - 1) * (height + margin));

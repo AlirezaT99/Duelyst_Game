@@ -1,6 +1,9 @@
 package model;
 
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import presenter.StoryMenuProcess;
+import view.BattleFX;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -73,13 +76,16 @@ public class Match {
     }
 
     public void moveToGraveYard(MovableCard card, Player player) {
+        BattleFX.deathProcess(new Coordination(card.getCardCell().getCellCoordination().getX(), card.getCardCell().
+                getCellCoordination().getY()), card.getPlayer().getMatch(), new Scene(new Group()
+                , BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), BattleFX.getRectanglesPane());
+
         if (player.getUserName().equals(player1.getUserName()))
             player1_graveyard.add(card);
         else
             player2_graveyard.add(card);
-        card.cardCell.setMovableCard(null);
+
     }
-    
 
 
     public void setup(Account account, String deckName, int numberOfFlags, Deck deck) {

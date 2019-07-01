@@ -6,6 +6,7 @@ import model.*;
 import view.BattleFX;
 import view.BattleMenu;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -182,7 +183,7 @@ public class BattleMenuProcess {
             match.currentTurnPlayer().fillHand();
             secondModeProcedure(match);
             resetFlags();
-            buryTheDead();
+            //buryTheDead();
             if (endGameReached())
                 endingProcedure();
             match.switchTurn();
@@ -283,18 +284,28 @@ public class BattleMenuProcess {
     }
 
     public static void buryTheDead() {
+        boolean isSomeOneDead = false;
         for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
             if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
                 if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
                     cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
+                isSomeOneDead = true;
             }
         for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
             if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
                 if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
                     cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
+                isSomeOneDead = true;
             }
+        if(!isSomeOneDead) {
+            try {
+                BattleFX.updateSoldiers(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void playAI(Player player) throws IOException {
@@ -314,7 +325,6 @@ public class BattleMenuProcess {
 //                    }
                 } else {
                     Card card = player.getHand().getCards().get(i);
-                    String cardID = match.currentTurnPlayer().getHand().findCardByName(card.getName()).getCardID();
                     for (int j = 1; j <= 5; j++) {
                         for (int k = 1; k <= 9; k++) {
                             if (isCoordinationValidToInsert(j, k)) {
@@ -350,6 +360,7 @@ public class BattleMenuProcess {
                     BattleFX.setDraggedFromNode(BattleFX.getGameMap()[allSoldier.getCellCoordination().getX()][allSoldier.getCellCoordination().getY()]);
                     BattleFX.moveProcess(allSoldier.getCellCoordination(), match, destination.getCellCoordination().getX(), destination.getCellCoordination().getY(), new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), BattleFX.getRectanglesPane());
                     System.out.println("in battlemenuprocess move process");
+
                 }
             }
         }
