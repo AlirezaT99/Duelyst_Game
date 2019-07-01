@@ -16,10 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -35,6 +32,7 @@ import presenter.BattleMenuProcess;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -317,6 +315,46 @@ public class BattleFX {
         graveYard.setOnMouseEntered(event -> graveYardView.setImage(graveYardGlow));
         graveYard.setOnMouseExited(event -> graveYardView.setImage(graveYardInitial));
 
+        graveYard.setOnMouseClicked(event -> {
+            Pane graveYard_sher = new Pane();
+            // long time = System.currentTimeMillis();
+            graveYard_sher.setPrefHeight(scene.getHeight());
+            graveYard_sher.setPrefWidth(scene.getWidth());
+
+            BackgroundFill background_fill = new BackgroundFill(Color.grayRgb(20, 0.5),
+                    new CornerRadii(15), new javafx.geometry.Insets(0, 0, 0, 0));
+            graveYard_sher.setBackground(new Background(background_fill));
+
+            root.getChildren().addAll(graveYard_sher);
+            ArrayList<Card> graveYard_list = new ArrayList<>();
+            if (player.equals(match.getPlayer1()))
+                graveYard_list = match.player1_graveyard;
+            else
+                graveYard_list = match.player2_graveyard;
+            VBox graveVBox = new VBox();
+            graveVBox.setAlignment(Pos.CENTER);
+            graveYard_sher.getChildren().add(graveVBox);
+            graveVBox.setSpacing(scene.getHeight() / 25);
+            graveVBox.layoutXProperty().bind(root.widthProperty().subtract(graveVBox.widthProperty()).divide(2));
+            graveVBox.layoutYProperty().bind(root.heightProperty().subtract(graveVBox.heightProperty()).divide(2));
+
+            for (Card card : graveYard_list) {
+                Label label1 = new Label(card.getName());
+                label1.setFont(Font.font(30));
+                label1.setTextFill(Color.WHITE);
+                graveVBox.getChildren().add(label1);
+                label1.setAlignment(Pos.CENTER);
+            }
+            graveYard_sher.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                                 @Override
+                                                 public void handle(MouseEvent event) {
+                                                     // root.getChildren().remove(graveYard_sher);
+                                                     root.getChildren().remove(graveYard_sher);
+                                                 }
+                                             }
+            );
+        });
+
         menu.getChildren().addAll(menuView, menuLabel);
         graveYard.getChildren().addAll(graveYardView, graveYardLabel);
         lowerPart.getChildren().addAll(menu, graveYard);
@@ -542,24 +580,34 @@ public class BattleFX {
                             // group.getChildren().remove(draggedFromNode);
                             // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
                             String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
-                            if (player.getHand().getCards().get(objectInHandIndex) instanceof Spell) {
-                                mainPane.getChildren().add(new Rectangle(scene.getWidth(), scene.getHeight(), Color.ORANGE));
-                                long time = System.currentTimeMillis();
-                                FadeTransition fadeTransition = new FadeTransition();
-                                fadeTransition.setDuration(Duration.millis(1000));
-                                fadeTransition.setFromValue(1);
-                                fadeTransition.setToValue(0);
-                                fadeTransition.setNode(mainPane.getChildren().get(mainPane.getChildren().size() - 1));
-                                fadeTransition.play();
-                                fadeTransition.setOnFinished(event1 -> mainPane.getChildren().remove(mainPane.getChildren().size() - 1));
-                                ((Rectangle) gameMap[finalI][finalJ].getChildren().get(0)).setFill(Color.GOLD);
-                                //while (System.currentTimeMillis() - time < 2000){}
-                                //rectangles[finalI][finalJ].setFill(Color.WHITE);
-                                // while (System.currentTimeMillis() - time < ){}
-//                                Pane tempPane = new Pane();
-//                                tempPane.getChildren()5
-//                                tempPane.setBackground(new Background(new BackgroundFill(Color.ORANGE,CornerRadii.EMPTY,new Insets(0,0,0,0))));
-//                                Main.setSceneForAPeriodOfTime(tempPane,1000);
+                            Card selectedCardFromHand = player.getHand().getCards().get(objectInHandIndex);
+                            if (selectedCardFromHand instanceof Spell) {
+
+                                Animation spellAnimation = GraphicalCommonUsages.getGif(selectedCardFromHand.getName(), "impact");
+                                ImageView impactView = spellAnimation.getView();
+                                gameMap[finalI][finalJ].getChildren().add(impactView);
+                                impactView.setFitWidth((scene.getWidth() / 18.8) * 4);
+                                impactView.setFitHeight(scene.getHeight() / 5);
+                                impactView.layoutXProperty().bind(gameMap[finalI][finalJ].widthProperty().subtract(impactView.fitWidthProperty()).divide(2));
+                                impactView.layoutYProperty().bind(gameMap[finalI][finalJ].heightProperty().subtract(impactView.fitHeightProperty()).divide(2));
+                                spellAnimation.setCycleCount(1);
+                                spellAnimation.play();
+                                spellAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        gameMap[finalI][finalJ].getChildren().remove(gameMap[finalI][finalJ].getChildren().size() - 1);
+                                    }
+                                });
+//                                mainPane.getChildren().add(new Rectangle(scene.getWidth(), scene.getHeight(), Color.ORANGE));
+//                                long time = System.currentTimeMillis();
+//                                FadeTransition fadeTransition = new FadeTransition();
+//                                fadeTransition.setDuration(Duration.millis(1000));
+//                                fadeTransition.setFromValue(1);
+//                                fadeTransition.setToValue(0);
+//                                fadeTransition.setNode(mainPane.getChildren().get(mainPane.getChildren().size() - 1));
+//                                fadeTransition.play();
+//                                fadeTransition.setOnFinished(event1 -> mainPane.getChildren().remove(mainPane.getChildren().size() - 1));
+//                                ((Rectangle) gameMap[finalI][finalJ].getChildren().get(0)).setFill(Color.GOLD);
 
                             }
                             //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
@@ -574,7 +622,8 @@ public class BattleFX {
                             try {
                                 bottomRow = drawHand(player, mainPane, scene);
                                 updateMana(match, mainPane, scene);
-                                updateSoldiers(match, scene);
+                                if (!(selectedCardFromHand instanceof Spell))
+                                    updateSoldiers(match, scene);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -614,19 +663,19 @@ public class BattleFX {
 
     }
 
-    public static void deathProcess (Coordination coordination, Match match, Scene scene, Pane rectanglesPane){
-        Animation deathAnimation = GraphicalCommonUsages.getGif(match.getTable().getCellByCoordination(coordination.getX(),coordination.getY()).getMovableCard().getName(),"death");
+    public static void deathProcess(Coordination coordination, Match match, Scene scene, Pane rectanglesPane) {
+        Animation deathAnimation = GraphicalCommonUsages.getGif(match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard().getName(), "death");
         gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
         ImageView deathView = deathAnimation.getView();
         deathView.setPreserveRatio(true);
-        deathView.setFitWidth(scene.getWidth()/18.8);
-        gameMap[coordination.getX()][coordination.getY()].getChildren().add(1,deathView);
+        deathView.setFitWidth(scene.getWidth() / 18.8);
+        gameMap[coordination.getX()][coordination.getY()].getChildren().add(1, deathView);
         deathAnimation.setCycleCount(1);
         deathAnimation.play();
-        match.getTable().getCellByCoordination(coordination.getX(),coordination.getY()).setMovableCard(null);
+        match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).setMovableCard(null);
         deathAnimation.setOnFinished(event -> {
             try {
-                updateSoldiers(match,scene);
+                updateSoldiers(match, scene);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -742,8 +791,7 @@ public class BattleFX {
             double width = scene.getWidth() * 3 / 47;
             double margin = width / 20;
             double height = (scene.getHeight() / 2 - width / 5) / 5;
-            if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCell(finalI, finalJ)) == 0)
-            {
+            if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCell(finalI, finalJ)) == 0) {
 
                 Animation runAnimation = GraphicalCommonUsages.getGif(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(), "run");
                 ImageView movableCard = runAnimation.getView();
@@ -752,7 +800,7 @@ public class BattleFX {
 
                 StackPane ap = (StackPane) (((Pane) draggedFromNode).getChildren().get(2));
                 StackPane hp = (StackPane) (((Pane) draggedFromNode).getChildren().get(3));
-                for(int k = ((Pane) draggedFromNode).getChildren().size()-1; k>0;k--)
+                for (int k = ((Pane) draggedFromNode).getChildren().size() - 1; k > 0; k--)
                     ((Pane) draggedFromNode).getChildren().remove(k);
 //                ((Pane) draggedFromNode).getChildren().remove(1);
 //                ((Pane) draggedFromNode).getChildren().remove(ap);
