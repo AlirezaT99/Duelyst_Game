@@ -49,7 +49,7 @@ public class ShopMenuFX {
     private static int selectedIndex = 0;
     private static Account account;
     private static Label money;
-    private static Pane root = new Pane();
+    private static Pane root;
     private static Stage stage;
 
     ShopMenuFX(Account account) {
@@ -57,6 +57,7 @@ public class ShopMenuFX {
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+        root = new Pane();
         ShopMenuFX.stage = primaryStage;
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);

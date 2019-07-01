@@ -36,7 +36,7 @@ import static view.ShopMenuFX.*;
 
 public class CollectionMenuFX {
     private static Account account;
-    private static Pane root = new Pane();
+    private static Pane root;
     private static GridPane gridPane = new GridPane();
     private static HashMap<ImageView, String> deleteDeckHMap = new HashMap<>();
     private static HashMap<ImageView, String> selectDeckHMap = new HashMap<>();
@@ -56,6 +56,7 @@ public class CollectionMenuFX {
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+        root = new Pane();
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
         final Font trump_reg_small = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 28);
@@ -343,8 +344,8 @@ public class CollectionMenuFX {
                 }
             } else {
                 deck = new Deck(deckNameField.getText());
-                addCardsToDeck(deck);
                 account.getCollection().addDeck(deck);
+                addCardsToDeck(deck);
             }
             decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
             try {
@@ -391,6 +392,7 @@ public class CollectionMenuFX {
                 imageView.setImage(deckBackground);
             deckBg.setImage(deckBackgroundGlow);
             visibleDeckName = deckName;
+            System.out.println(deckName);
             gridPane.setVisible(true);
             root.getChildren().get(2).setVisible(true); // left arrow
             root.getChildren().get(3).setVisible(true); // right arrow
