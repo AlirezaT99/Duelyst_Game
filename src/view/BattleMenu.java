@@ -17,7 +17,7 @@ public class BattleMenu {
     public BattleMenu(BattleInit battleInit, Match match) {
         isInBattleMenu = true;
         this.battleInit = battleInit;
-       // battleMenuProcess = new BattleMenuProcess(this);
+        battleMenuProcess = new BattleMenuProcess(); // todo : why was this commented ?
         BattleMenuProcess.setMatch(match);
     }
 

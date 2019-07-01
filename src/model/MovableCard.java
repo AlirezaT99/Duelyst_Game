@@ -78,7 +78,8 @@ public abstract class MovableCard extends Card {
                     passDamage(opponent);
                     doOnAttackImpacts(opponent);
                 }
-            }catch (NullPointerException ignored){}
+            } catch (NullPointerException ignored) {
+            }
             opponent.counterAttack(this);
             this.manageCasualties();
             opponent.manageCasualties();
@@ -111,7 +112,7 @@ public abstract class MovableCard extends Card {
     }
 
     int isAttackValid(MovableCard opponent) {
-        if(didAttackInThisTurn) return 20;
+        if (didAttackInThisTurn) return 20;
         int returnValue = counterAttackAndNormalAttackSameParameters(opponent);
         if (returnValue != 0)
             return returnValue;
@@ -224,7 +225,7 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
-        System.out.println(didMoveInThisTurn+" "+this.name);
+        System.out.println(didMoveInThisTurn + " " + this.name);
         if (cell == null)
             return 18;
         moveRange = 2;
@@ -260,7 +261,7 @@ public abstract class MovableCard extends Card {
             y = 1;
         x += start.getCellCoordination().getX();
         y += start.getCellCoordination().getY();
-        if(this.player.match.table.getCellByCoordination(x, y) == null)
+        if (this.player.match.table.getCellByCoordination(x, y) == null)
             return true;
         MovableCard movableCard = this.player.match.table.getCellByCoordination(x, y).getMovableCard();
         if (movableCard != null)
