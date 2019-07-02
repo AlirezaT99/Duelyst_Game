@@ -150,7 +150,7 @@ public abstract class MovableCard extends Card {
         }
     }
 
-    private boolean isCounterAttackValid(MovableCard opponent) {
+    public boolean isCounterAttackValid(MovableCard opponent) {
         if (counterAttackAndNormalAttackSameParameters(opponent) == 0) {
             if (isHybrid)
                 return true;

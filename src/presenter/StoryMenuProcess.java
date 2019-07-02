@@ -173,7 +173,7 @@ public class StoryMenuProcess {
             int num = 0;
             for (int j = 0; j < deck.getMinions().size(); j++) {
                 if (deck.getMinions().get(j).getName().equals(deck.getMinions().get(i).getName())
-                        && deck.getMinions().get(j).getCardID()!="")
+                        && !deck.getMinions().get(j).getCardID().equals(""))
                     num++;
             }
             deck.getMinions().get(i).setCardID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getMinions().get(i).getName())+"_"+(num+1));

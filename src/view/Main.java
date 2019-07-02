@@ -29,6 +29,7 @@ public class Main extends Application {
     private static BattleFX battleFx;
     private static Stage primaryStage;
     private static Scene currentScene;
+    private static AddCardFX addCardFX;
     private static Rectangle2D primaryScreenBounds;
     private static AudioClip audioClip;
 
@@ -116,6 +117,12 @@ public class Main extends Application {
         primaryStage.setScene(currentScene);
     }
 
+    public static void setAddCardFX(Account account) throws FileNotFoundException {
+        addCardFX = new AddCardFX();
+        currentScene.setRoot(addCardFX.start(primaryStage, account));
+        primaryStage.setScene(currentScene);
+    }
+
     public static void setBattleFX(Account firstPlayer, Match match, boolean storyMode) throws FileNotFoundException {
         battleFx = new BattleFX();
         BattleMenuProcess.setMatch(match);
@@ -131,6 +138,8 @@ public class Main extends Application {
             case "battleInit":
                 setBattleMenuFX(account);
                 break;
+            case "mainMenu":
+                setMainMenuFX(account);
         }
     }
 

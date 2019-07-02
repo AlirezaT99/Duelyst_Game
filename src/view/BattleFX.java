@@ -684,6 +684,7 @@ public class BattleFX {
     }
 
     private static void attackProcess(Coordination coordination, Match match, int finalI, int finalJ, Scene scene, double width, double margin, double height, Pane group, Pane rectanglesPane) {
+        boolean isCounterAttackValid = match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isCounterAttackValid(match.getTable().getCell(finalI, finalJ).getMovableCard());
         int result = match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().attack(match.getTable().getCell(finalI, finalJ).getMovableCard());
         if (result == 0) {
             Animation attackAnimation = GraphicalCommonUsages.getGif(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(), "attack");
@@ -701,6 +702,7 @@ public class BattleFX {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
+                        if (isCounterAttackValid) {
                         Animation counterAttackAnimation = GraphicalCommonUsages.getGif(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), "attack");
                         ImageView imageView = counterAttackAnimation.getView();
                         gameMap[finalI][finalJ].getChildren().remove(1);
@@ -719,6 +721,15 @@ public class BattleFX {
                                 e.printStackTrace();
                             }
                         });
+                        }
+                        else {
+                            try {
+                                BattleMenuProcess.buryTheDead();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
