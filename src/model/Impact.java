@@ -31,7 +31,7 @@ public class Impact {
         this.targetTypeId = targetTypeId;
         this.impactTypeId = impactTypeId;
         impactAreaClass = new ImpactArea(targetTypeId, null);
-        impactEffectComp = new ImpactEffectComp(impactArea, this, null, impactWayOfAssigning, impactTypeComp);
+        impactEffectComp = new ImpactEffectComp(impactArea, null, null, impactWayOfAssigning, impactTypeComp);
     }
 
 
@@ -104,7 +104,7 @@ public class Impact {
 
     void doImpact(Player friendlyPlayer, MovableCard target, Cell targetCell, Cell castingCell) {
         setAllVariablesNeeded();
-        match = target.match;
+//        match = target.match;
         impactAreaClass = new ImpactArea(targetTypeId, match);
         impactAreaClass.setImpactArea(friendlyPlayer, targetCell, castingCell);
         impactArea = impactAreaClass.getImpactArea();

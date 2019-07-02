@@ -168,7 +168,9 @@ public class BattleMenu {
 
     private static void doSumKasifJob(Hero hero1) {
         if(hero1.getHeroSpell().getName().equals("Esfandiar")) {
-            hero1.getHeroSpell().castCard(hero1.getCardCell(), hero1.getPlayer());
+            hero1.getImpactsAppliedToThisOne().add(hero1.getHeroSpell().getPrimaryImpact());
+            hero1.getHeroSpell().setPlayer(hero1.getPlayer());
+            hero1.getHeroSpell().castCard(hero1.getCardCell());
             System.out.println("esfandiar");
 
         }

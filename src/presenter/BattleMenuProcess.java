@@ -470,9 +470,11 @@ public class BattleMenuProcess {
         if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof MovableCard)
             match.currentTurnPlayer().getHand().findCardByName(cardName)
                     .castCard(match.getTable().getCellByCoordination(x, y));
-        else if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell) // ok?
+        else if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell) {// ok?
+             match.currentTurnPlayer().getHand().findCardByName(cardName).setPlayer(match.currentTurnPlayer());
             ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
-                    .castCard(match.getTable().getCellByCoordination(x, y), match.currentTurnPlayer());
+                    .castCard(match.getTable().getCellByCoordination(x, y));
+        }
         //
 //        match.currentTurnPlayer().fillHand();
         BattleMenu.showMessage(cardName + " with " + cardID + " inserted to (" + x + "," + y + ")");
