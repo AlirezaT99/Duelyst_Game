@@ -227,6 +227,8 @@ public class GraphicalCommonUsages {
     public static Animation getGif(String cardName, String typeYouWant) {
         String address = "src/view/sources/gifs/";
         UsableItem item = Shop.findItemByName(cardName);
+        if (cardName.equals("Flag"))
+            return new AnimatedGif(address + "items/" + cardName + "/" + typeYouWant + ".gif", 1000);
         if (item != null)
             return new AnimatedGif(address + "items/" + cardName + "/" + typeYouWant + ".gif", 1000);
         Card card = Shop.findCardByName(cardName);

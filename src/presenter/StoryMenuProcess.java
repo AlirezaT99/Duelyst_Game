@@ -40,12 +40,7 @@ public class StoryMenuProcess {
 
     public DoCommand[] DoCommands = new DoCommand[]{
             this::exit,
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return storyMenu.help();
-                }
-            }
+            StoryMenu::help
     };
 
     public static Match enterFirstLevel(Account account) throws IOException {
@@ -86,7 +81,7 @@ public class StoryMenuProcess {
         deck.addSpellToDeck(Spell.getSpellByName("All Disarm"));
         deck.addSpellToDeck(Spell.getSpellByName("Dispel"));
         deck.addSpellToDeck(Spell.getSpellByName("Power Up"));
-        deck.addSpellToDeck(Spell.getSpellByName("All power"));
+        deck.addSpellToDeck(Spell.getSpellByName("All Power"));
         deck.addSpellToDeck(Spell.getSpellByName("All Attack"));
         deck.addSpellToDeck(Spell.getSpellByName("Weakening"));
         deck.addMinionToDeck(Minion.getMinionByName("Persian WarLord"));
@@ -108,8 +103,8 @@ public class StoryMenuProcess {
         setDeckCardIDs("computer", deck);
         Match match = new Match(true, 2, -1);
         match.setup(account, account.getCollection().getSelectedDeck().getName(), 1, deck);
-        Flag flag = new Flag(match, match.getTable().getCellByCoordination(3,5));
-        match.getTable().getCellByCoordination(3,5).setItem(flag);
+        Flag flag = new Flag(match, match.getTable().getCellByCoordination(3, 5));
+        match.getTable().getCellByCoordination(3, 5).setItem(flag);
         match.getPlayer2().setDeck(deck);
         return match;
     }
@@ -163,9 +158,9 @@ public class StoryMenuProcess {
 
     public static void setDeckCardIDs(String playerName, Deck deck) { //only use it for story mode.
         if (deck.getHero() != null)
-            deck.getHero().setCardID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getHero().getName())+"_1");
-        if(deck.getItems()!= null && deck.getItems().size()>=1)
-            deck.getItems().get(0).setItemID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getItems().get(0).getName())+"_1");
+            deck.getHero().setCardID(playerName + "_" + CollectionMenuProcess.nameCreator(deck.getHero().getName()) + "_1");
+        if (deck.getItems() != null && deck.getItems().size() >= 1)
+            deck.getItems().get(0).setItemID(playerName + "_" + CollectionMenuProcess.nameCreator(deck.getItems().get(0).getName()) + "_1");
         for (int i = 0; i < deck.getMinions().size(); i++) {
             deck.getMinions().get(i).setCardID("");
         }
@@ -176,7 +171,7 @@ public class StoryMenuProcess {
                         && !deck.getMinions().get(j).getCardID().equals(""))
                     num++;
             }
-            deck.getMinions().get(i).setCardID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getMinions().get(i).getName())+"_"+(num+1));
+            deck.getMinions().get(i).setCardID(playerName + "_" + CollectionMenuProcess.nameCreator(deck.getMinions().get(i).getName()) + "_" + (num + 1));
         }
         for (int i = 0; i < deck.getSpells().size(); i++) {
             deck.getSpells().get(i).setCardID("");
@@ -185,10 +180,10 @@ public class StoryMenuProcess {
             int num = 0;
             for (int j = 0; j < deck.getSpells().size(); j++) {
                 if (deck.getSpells().get(j).getName().equals(deck.getSpells().get(i).getName())
-                && deck.getSpells().get(j).getCardID()!="")
+                        && !deck.getSpells().get(j).getCardID().equals(""))
                     num++;
             }
-            deck.getSpells().get(i).setCardID(playerName+"_"+CollectionMenuProcess.nameCreator(deck.getSpells().get(i).getName())+"_"+(num+1));
+            deck.getSpells().get(i).setCardID(playerName + "_" + CollectionMenuProcess.nameCreator(deck.getSpells().get(i).getName()) + "_" + (num + 1));
         }
     }
 }

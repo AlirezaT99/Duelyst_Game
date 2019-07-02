@@ -35,7 +35,7 @@ public class StoryMenu {
         scanner.close();
     }
 
-    public int help() {
+    public static int help() {
         showMessage("1. Hero : Div -e- Sefid  mode : 1   reward : 0500");
         showMessage("2. Hero : Zahhak         mode : 2   reward : 1000");
         showMessage("3. Hero : Arash          mode : 3   reward : 1500");
@@ -44,7 +44,7 @@ public class StoryMenu {
         return 0;
     }
 
-    public void showMessage(String message) {
+    public static void showMessage(String message) {
         System.out.println(message);
     }
 
