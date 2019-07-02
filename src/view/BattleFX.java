@@ -1,6 +1,5 @@
 package view;
 
-
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +13,6 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
@@ -363,13 +361,10 @@ public class BattleFX {
                 graveVBox.getChildren().add(label1);
                 label1.setAlignment(Pos.CENTER);
             }
-            graveYard_sher.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                                 @Override
-                                                 public void handle(MouseEvent event) {
-                                                     // root.getChildren().remove(graveYard_sher);
-                                                     root.getChildren().remove(graveYard_sher);
-                                                 }
-                                             }
+            graveYard_sher.setOnMouseClicked(event1 -> {
+                // root.getChildren().remove(graveYard_sher);
+                root.getChildren().remove(graveYard_sher);
+            }
             );
         });
 
@@ -740,24 +735,24 @@ public class BattleFX {
         AudioClip audioClip;
         if (Hero.getHeroByName(cardName) != null) {
             if (cardName.toLowerCase().equals("afsaane") || cardName.toLowerCase().equals("simorgh")) {
-                audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_general_hit.m4a").toString());
+                audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_general_hit.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             }
             if (cardName.toLowerCase().equals("aarash") || cardName.toLowerCase().equals("rostam") || cardName.toLowerCase().equals("esfandiar") || cardName.toLowerCase().equals("kaave")) {
                 if (attacker)
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_hit.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_hit.m4a").toString());
                 else
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_attack_swing.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             } else {
                 if (attacker)
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_hit.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_hit.m4a").toString());
                 else
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_attack_swing.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
@@ -766,26 +761,26 @@ public class BattleFX {
             Minion minion = Minion.getMinionByName(cardName);
             if (minion.isMelee()) {
                 if (attacker)
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_impact_1.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_impact_1.m4a").toString());
                 else
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_swing_2.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_swing_2.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             }
             if (minion.isHybrid()) {
                 if (attacker)
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_impact.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_impact.m4a").toString());
                 else
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_swing.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             } else {
                 if (attacker)
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_impact.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_impact.m4a").toString());
                 else
-                    audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_swing.m4a").toString());
+                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
