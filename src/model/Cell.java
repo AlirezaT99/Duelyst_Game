@@ -25,7 +25,7 @@ public class Cell {
     boolean isTheseCellsAdjacent(Cell cell) {
         int x = Math.abs(this.coordination.getX() - cell.coordination.getX());
         int y = Math.abs(this.coordination.getY() - cell.coordination.getY());
-        return x + y <= 2 && ((x == 0 && y != 2) || (y == 0 && x != 2) || (x == 1 && y == 1));
+        return x + y <= 2 && (x == 0 || y == 0 || (x == 1 && y == 1));
     }
 
     void addCellToAdjacentCells(Cell cell) {

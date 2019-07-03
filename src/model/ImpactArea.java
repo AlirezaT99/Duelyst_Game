@@ -52,7 +52,7 @@ public class ImpactArea {
     private int distance;
     //targetTypeId variables
 
-    void setAllTargetTypeIdVariables() {
+    private void setAllTargetTypeIdVariables() {
         isSelectedCellImportant = targetTypeId.charAt(0) == '1';
         validOnAll = targetTypeId.charAt(1) == '1';
         validOnAWholeTeam = targetTypeId.charAt(2) == '1';
@@ -336,13 +336,12 @@ public class ImpactArea {
     }
 
     ArrayList<Cell> getValidCells(Player friendlyPlayer) {
-        setAllTargetTypeIdVariables();
         ArrayList<Cell> cellArrayList = new ArrayList<>();
         match = friendlyPlayer.match;
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 9; j++) {
                 Cell cell = match.table.getCell(i, j);
-                if (!isSelectedCellImportant || oneColumn || oneRow || isImpactAreaSquare ) {
+                if (!isSelectedCellImportant || oneColumn || oneRow || isImpactAreaSquare || validOnAll || validOnAWholeTeam) {
                     cellArrayList.add(cell);
                     continue;
                 }
@@ -358,7 +357,6 @@ public class ImpactArea {
                 cellArrayList.add(cell);
             }
         }
-        System.out.println(cellArrayList.size()+" in getting valid cells for casting spell");
         return cellArrayList;
     }
 

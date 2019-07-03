@@ -97,11 +97,6 @@ public class Impact {
 
     public void setAllVariablesNeeded() {
         setImpactTypeIdVariables();
-        impactAreaClass.setTargetTypeId(targetTypeId);
-        impactAreaClass.setAllTargetTypeIdVariables();
-        impactEffectComp.setImpactTypeIdComp(impactTypeComp);
-        impactEffectComp.setImpactWayOfAssigning(impactWayOfAssigning);
-        impactEffectComp.setCompVariables();
     }
     //needed id variables
 
@@ -143,7 +138,6 @@ public class Impact {
     }
 
     private void healthChange() {
-        System.out.println("In Health Change");
         for (Cell cell : impactArea) {
             MovableCard movableCard = cell.getMovableCard();
             if (movableCard == null)
@@ -216,20 +210,17 @@ public class Impact {
 
     static void holyBuff(MovableCard movableCard, int damageTaken) {
         for (Impact impact : movableCard.getImpactsAppliedToThisOne()) {
-            impact.setAllVariablesNeeded();
-            System.out.println("///////////////////"+impact.impactTypeId);
             if (impact.holyBuff) {
-                System.out.println("holy buff is real --------------");
-                int maxHeal = Math.min(Math.abs(impact.impactQuantity),Math.abs(damageTaken));
+                System.out.println("In Impact: Holy Buff is working (hope so)");
+                int maxHeal = Math.min(impact.impactQuantity, damageTaken);
                 movableCard.setHealth(movableCard.getHealth() + maxHeal);
             }
         }
     }
 
     private void doPoisonBuff(MovableCard movableCard) {
-        setAllVariablesNeeded();
         if (poisonBuff)
-            movableCard.setHealth(movableCard.getHealth() + impactQuantity);
+            movableCard.setHealth(movableCard.getHealth() - impactQuantity);
     }
 
 
@@ -261,6 +252,9 @@ public class Impact {
             return;
         if (turnsActive != 0)
             turnsActive--;
+        System.out.println("turns " + turnsActive + " " + turnsToBeActivated);
+        if (turnsToBeActivated == 0)
+            doImpact(movableCard.player, movableCard, movableCard.cardCell, movableCard.cardCell);
         if (this.isPoisonBuff())
             doPoisonBuff(movableCard);
         if (this.passive)
@@ -280,8 +274,6 @@ public class Impact {
     }
 
     public void doAntiImpact(MovableCard movableCard) {
-        if(movableCard == null)
-            return;
         if (healthChange)
             movableCard.dispelableHealthChange -= impactQuantity;
         if (damageChange)
@@ -323,12 +315,10 @@ public class Impact {
     }
 
     boolean isStunBuff() {
-        setAllVariablesNeeded();
         return stunBuff;
     }
 
     boolean isDisarmBuff() {
-        setAllVariablesNeeded();
         return disarmBuff;
     }
 
@@ -358,7 +348,6 @@ public class Impact {
     }
 
     boolean isImmuneToMinDamage() {
-        setAllVariablesNeeded();
         return impactEffectComp.isImmuneToMinDamage();
     }
 
@@ -396,14 +385,6 @@ public class Impact {
 
     public void setImpactTypeId(String impactTypeId) {
         this.impactTypeId = impactTypeId;
-    }
-
-    public String getImpactEffectCompId() {
-        return impactTypeComp;
-    }
-
-    public String getWayOfAssigningId() {
-        return impactWayOfAssigning;
     }
 
 

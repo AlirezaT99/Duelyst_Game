@@ -659,28 +659,23 @@ public class BattleFX {
     }
 
 
-    public static void deathProcess(Coordination coordination, Match match, Scene scene) {
-        String dyingCardName = match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard().getName();
-        try {
-            Animation deathAnimation = GraphicalCommonUsages.getGif(dyingCardName, "death");
-            gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
-            ImageView deathView = deathAnimation.getView();
-            deathView.setPreserveRatio(true);
-            deathView.setFitWidth(scene.getWidth() / 18.8);
-            gameMap[coordination.getX()][coordination.getY()].getChildren().add(1, deathView);
-            deathAnimation.setCycleCount(1);
-            deathAnimation.play();
-            match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).setMovableCard(null);
-            deathAnimation.setOnFinished(event -> {
-                try {
-                    updateSoldiers(match, scene);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
-        } catch (Exception e) {
-            System.out.println(dyingCardName + "*************************");
-        }
+    public static void deathProcess(Coordination coordination, Match match, Scene scene, Pane rectanglesPane) {
+        Animation deathAnimation = GraphicalCommonUsages.getGif(match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard().getName(), "death");
+        gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
+        ImageView deathView = deathAnimation.getView();
+        deathView.setPreserveRatio(true);
+        deathView.setFitWidth(scene.getWidth() / 18.8);
+        gameMap[coordination.getX()][coordination.getY()].getChildren().add(1, deathView);
+        deathAnimation.setCycleCount(1);
+        deathAnimation.play();
+        match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).setMovableCard(null);
+        deathAnimation.setOnFinished(event -> {
+            try {
+                updateSoldiers(match, scene);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 
