@@ -97,7 +97,7 @@ public class CollectionMenuFX {
         if (visibleDeckName.equals(""))
             okPopUp("no deck is selected", scene, root);
         else {
-//            new ImportBasedDeck(account.getCollection().getDeckHashMap().get(visibleDeckName));
+           account.getImportedDecks().add(new ImportBasedDeck(account.getCollection().getDeckHashMap().get(visibleDeckName)));
             okPopUp("deck \"" + visibleDeckName + "\" successfully exported.", scene, root);
             decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
             drawDecks(decksVBox, scene);

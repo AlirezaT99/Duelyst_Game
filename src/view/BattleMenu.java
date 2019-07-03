@@ -171,12 +171,12 @@ public class BattleMenu {
             hero1.getImpactsAppliedToThisOne().add(hero1.getHeroSpell().getPrimaryImpact());
             hero1.getHeroSpell().setPlayer(hero1.getPlayer());
             hero1.getHeroSpell().castCard(hero1.getCardCell());
-            System.out.println("esfandiar");
+            System.out.println("esfandiar!!!!!!!");
 
         }
         if(hero1.getHeroSpell().getName().equals("Zahhak")) {
             hero1.setOnAttackImpact(hero1.getHeroSpell().getPrimaryImpact());
-            System.out.println("Zahhak");
+            System.out.println("Zahhak!!!!!!!");
         }
     }
 
