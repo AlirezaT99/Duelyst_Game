@@ -364,6 +364,13 @@ public abstract class MovableCard extends Card {
         return isAlive;
     }
 
+    public Impact getOnAttackImpact(){
+        return onAttackImpact;
+    }
+
+    public Impact getOnDefendImpact(){
+        return onDefendImpact;
+    }
 
     //getters
 
