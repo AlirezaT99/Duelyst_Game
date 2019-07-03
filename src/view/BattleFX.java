@@ -676,46 +676,47 @@ public class BattleFX {
                         setActivationImageView(gameMap[finalI][finalJ], onDeathView);
                         setActivationImageView(gameMap[finalI][finalJ], onAttackView);
                         setActivationImageView(gameMap[finalI][finalJ], onDefendView);
-
-                        String cardName = ((Label) (gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1))).getText();
-                        Minion minion;
-                        minion = Minion.getMinionByName(cardName);
-                        if (minion != null) {
-                            if (minion.getSummonImpact() != null) {
-                                try {
-                                    onSpawnView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onSpawn.png")));
-                                    horizonalActiationHBox.getChildren().addAll(onSpawnView);
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
+                        if (gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1) instanceof Label) {
+                            String cardName = ((Label) (gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1))).getText();
+                            Minion minion;
+                            minion = Minion.getMinionByName(cardName);
+                            if (minion != null) {
+                                if (minion.getSummonImpact() != null) {
+                                    try {
+                                        onSpawnView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onSpawn.png")));
+                                        horizonalActiationHBox.getChildren().addAll(onSpawnView);
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                            if (minion.getDyingWishImpact() != null) {
-                                try {
-                                    onDeathView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onDeath.png")));
-                                    horizonalActiationHBox.getChildren().addAll(onDeathView);
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
+                                if (minion.getDyingWishImpact() != null) {
+                                    try {
+                                        onDeathView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onDeath.png")));
+                                        horizonalActiationHBox.getChildren().addAll(onDeathView);
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                            if (minion.getOnAttackImpact() != null) {
-                                try {
-                                    onAttackView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onAttack.png")));
-                                    horizonalActiationHBox.getChildren().addAll(onAttackView);
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
+                                if (minion.getOnAttackImpact() != null) {
+                                    try {
+                                        onAttackView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onAttack.png")));
+                                        horizonalActiationHBox.getChildren().addAll(onAttackView);
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                            if (minion.getOnDefendImpact() != null) {
-                                try {
-                                    onDefendView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onDefend.png")));
-                                    horizonalActiationHBox.getChildren().addAll(onDefendView);
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
+                                if (minion.getOnDefendImpact() != null) {
+                                    try {
+                                        onDefendView.setImage(new Image(new FileInputStream("src/view/sources/Battle/BattlePictures/activation/onDefend.png")));
+                                        horizonalActiationHBox.getChildren().addAll(onDefendView);
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                            rectanglesPane.getChildren().addAll(horizonalActiationHBox);
-                            horizonalActiationHBox.relocate(gameMap[finalI][finalJ].getLayoutX(),gameMap[finalI][finalJ].getLayoutY());
+                                rectanglesPane.getChildren().addAll(horizonalActiationHBox);
+                                horizonalActiationHBox.relocate(gameMap[finalI][finalJ].getLayoutX(), gameMap[finalI][finalJ].getLayoutY());
 //                            gameMap[finalI][finalJ].getChildren().addAll(horizonalActiationHBox);
+                            }
                         }
                     }
                     rectangles[finalI][finalJ].setFill(Color.WHITE);
@@ -726,14 +727,15 @@ public class BattleFX {
                     draggedFromNode = gameMap[finalI][finalJ];
                 });
                 gameMap[i][j].setOnMouseDragReleased(event -> {
-                    // System.out.println("actual map:" + finalI + " " + finalJ);
-                    if (draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
-                        // group.getChildren().remove(draggedFromNode);
-                        // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
-                        String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
+                    if (draggedFromNode instanceof VBox) { //todo : ehtemalan shartaye bishatri mikhad
+                        boolean removeFromHand = false;
                         Card selectedCardFromHand = player.getHand().getCards().get(objectInHandIndex);
-                        if (selectedCardFromHand instanceof Spell) {
+                        if (selectedCardFromHand instanceof Minion && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) {
+                            ((Minion) (player.getHand().getCards().get(objectInHandIndex))).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ), objectInHandIndex);
 
+                        }
+                        if (selectedCardFromHand instanceof Spell && ((Spell) selectedCardFromHand).isCastingValid(match.currentTurnPlayer(), match.getTable().getCellByCoordination(finalI, finalJ))) {
+                            ((Spell) player.getHand().getCards().get(objectInHandIndex)).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ));
                             Animation spellAnimation = GraphicalCommonUsages.getGif(selectedCardFromHand.getName(), "impact");
                             ImageView impactView = spellAnimation.getView();
                             gameMap[finalI][finalJ].getChildren().add(impactView);
@@ -746,24 +748,11 @@ public class BattleFX {
                             spellAnimation.setOnFinished(event1 -> gameMap[finalI][finalJ].getChildren().remove(gameMap[finalI][finalJ].getChildren().size() - 1));
 
                         }
-                        //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
-                        if (player.getHand().getCards().get(objectInHandIndex) instanceof Minion)
-                            ((Minion) (player.getHand().getCards().get(objectInHandIndex))).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ), objectInHandIndex);
-                        else
-                            ((Spell) player.getHand().getCards().get(objectInHandIndex)).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ));
-//                            player.getHand().findCardByName(cardName)
-//                                    .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
-                        player.getHand().removeCardFromHand(objectInHandIndex);
-                        draggedFromNode = null;
-                        try {
-                            bottomRow = drawHand(player, mainPane, scene);
-                            updateMana(match, mainPane, scene);
-                            if (!(selectedCardFromHand instanceof Spell))
-                                updateSoldiers(match, scene);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-//
+//                        if (player.getHand().getCards().get(objectInHandIndex) instanceof Minion)
+//                        else
+                        removeFromHand(scene, player, mainPane, match, selectedCardFromHand);
+                        //BattleMenuProcess.buryTheDead();
+
                     }
                     if (draggedFromNode instanceof Pane && !(draggedFromNode instanceof VBox)
                             && ((Pane) draggedFromNode).getChildren().size() >= 3) {
@@ -779,8 +768,8 @@ public class BattleFX {
                     }
                 });
                 gameMap[i][j].setOnMouseExited(event -> {
-                    if(rectanglesPane.getChildren().get(rectanglesPane.getChildren().size()-1) instanceof HBox)
-                        rectanglesPane.getChildren().remove(rectanglesPane.getChildren().size()-1);
+                    if (rectanglesPane.getChildren().get(rectanglesPane.getChildren().size() - 1) instanceof HBox)
+                        rectanglesPane.getChildren().remove(rectanglesPane.getChildren().size() - 1);
                     rectangles[finalI][finalJ].setFill(Color.rgb(50, 50, 50));
                     rectangles[finalI][finalJ].setOpacity(0.3);
                 });
@@ -794,8 +783,21 @@ public class BattleFX {
 
     }
 
+    private void removeFromHand(Scene scene, Player player, Pane mainPane, Match match, Card selectedCardFromHand) {
+        player.getHand().removeCardFromHand(objectInHandIndex);
+        draggedFromNode = null;
+        try {
+            bottomRow = drawHand(player, mainPane, scene);
+            updateMana(match, mainPane, scene);
+            if (!(selectedCardFromHand instanceof Spell))
+                updateSoldiers(match, scene);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setActivationImageView(Pane pane, ImageView onSpawnView) {
-        onSpawnView.setFitWidth(pane.getWidth()/3);
+        onSpawnView.setFitWidth(pane.getWidth() / 3);
         onSpawnView.setPreserveRatio(true);
     }
 

@@ -192,6 +192,11 @@ public class ImpactEffectComp {
         this.impactWayOfAssigning = impactWayOfAssigning;
     }
 
+    public void setfatherImpact(Impact onDefendImpact)
+    {
+        fatherImpact = onDefendImpact;
+    }
+
 
     //special impacts manager
 

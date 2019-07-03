@@ -291,9 +291,11 @@ public abstract class MovableCard extends Card {
     }
 
     private void antiHolyBuffHandler() {
-        if (this.onDefendImpact != null)
+        if (this.onDefendImpact != null) {
+            this.onDefendImpact.getImpactEffectComp().setfatherImpact(this.onDefendImpact);
             if (this.onDefendImpact.getImpactEffectComp().doesHaveAntiHolyBuff())
                 this.health -= Math.abs(this.onDefendImpact.impactQuantity);
+        }
     }
 
     //previous targets manager
