@@ -288,14 +288,14 @@ public class BattleMenuProcess {
     public static void buryTheDead() {
         boolean isSomeOneDead = false;
         for (Cell cell : match.getTable().findAllSoldiers(match.currentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() + cell.getMovableCard().dispelableHealthChange <= 0) {
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
                 if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
                     cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.currentTurnPlayer());
                 isSomeOneDead = true;
             }
         for (Cell cell : match.getTable().findAllSoldiers(match.notCurrentTurnPlayer()))
-            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() + cell.getMovableCard().dispelableHealthChange <= 0) {
+            if (!cell.getMovableCard().isAlive() || cell.getMovableCard().getHealth() <= 0) {
                 if (!cell.getMovableCard().getPlayer().getCollectibleItems().isEmpty())
                     cell.setItem(cell.getMovableCard().getPlayer().getCollectibleItems().get(0));
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
