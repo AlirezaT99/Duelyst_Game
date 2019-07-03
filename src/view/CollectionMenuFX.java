@@ -537,17 +537,17 @@ public class CollectionMenuFX {
 
     private static StackPane addCardView() throws FileNotFoundException {
         Image cardBackground = new Image(new FileInputStream("src/view/sources/collectionMenu/button_primary.png"));
-        final Font cardNameFont = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 24);
+        final Font cardNameFont = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 18);
 
         StackPane card = new StackPane();
         ImageView deckBg = new ImageView(cardBackground);
         deckBg.setFitWidth(scene.getWidth() / 8);
+        deckBg.setFitHeight(scene.getHeight()/40);
         Label name = new Label("\t\t" + cardToRemove);
         name.setFont(cardNameFont);
         name.setTextFill(Color.WHITE);
         card.setAlignment(Pos.CENTER_LEFT);
         card.getChildren().addAll(deckBg, name);
-
         return card;
     }
 

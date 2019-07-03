@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -38,14 +39,14 @@ public class AddCardFX {
         String[] firstTargetSetting = {"One Movable Card", " The Entire Team", " Hero"};
         String[] secondTargetSetting = {"Friendly Team", "Opponent Team", "Both Teams"};
         String[] attackType = {"Melee", "Ranged", "Hybrid"};
-        String[] buffTypes = {"Holy","Power","Poison","Weakness","Stun","Disarm"};
-        String[] buffTarget ={"Friendly Team","Enemy Team"};
+        String[] buffTypes = {"Holy", "Power", "Poison", "Weakness", "Stun", "Disarm"};
+        String[] buffTarget = {"Friendly Team", "Enemy Team"};
 
         ComboBox<String> typeBox = new ComboBox(FXCollections.observableArrayList(typesStringArray));
         typeBox.relocate(createCardScene.getWidth() / 16, nameTextField.getLayoutY() + nameTextField.getPrefHeight() + createCardScene.getHeight() / 10);
         comboBoxSetting(createCardScene, typeBox);
 
-        GraphicalCommonUsages.backSetting(root,createCardScene,account,"mainMenu");
+        GraphicalCommonUsages.backSetting(root, createCardScene, account, "mainMenu");
         Image selectCard = new Image(new FileInputStream("src/view/sources/loginMenu/buttons/login.png"));
         Image selectCardGlow = new Image(new FileInputStream("src/view/sources/loginMenu/buttons/login_glow.png"));
         ImageView selectCardViewSpell = new ImageView(selectCard);
@@ -59,9 +60,9 @@ public class AddCardFX {
         Label addBuffLAbel = new Label("Add Buff");
         addBuffLAbel.setTextFill(Color.WHITE);
 
-        StackPane addCardSpell = new StackPane(selectCardViewSpell,addCardSpellLabel);
-        StackPane addCardMovable = new StackPane(selectCardViewMovable,addCardMOvableLabel);
-        StackPane addBuff = new StackPane(addBuffView,addBuffLAbel);
+        StackPane addCardSpell = new StackPane(selectCardViewSpell, addCardSpellLabel);
+        StackPane addCardMovable = new StackPane(selectCardViewMovable, addCardMOvableLabel);
+        StackPane addBuff = new StackPane(addBuffView, addBuffLAbel);
 
         addCardMovable.setOnMouseEntered(event -> selectCardViewMovable.setImage(selectCardGlow));
         addCardMovable.setOnMouseExited(event -> selectCardViewMovable.setImage(selectCard));
@@ -80,14 +81,15 @@ public class AddCardFX {
         ComboBox<String> secondTarget = new ComboBox(FXCollections.observableArrayList(secondTargetSetting));
         comboBoxSetting(createCardScene, firstTarget);
         comboBoxSetting(createCardScene, secondTarget);
-        spellBox.getChildren().addAll(firstTarget, secondTarget,addCardSpell);
+        spellBox.getChildren().addAll(firstTarget, secondTarget, addCardSpell);
         spellBox.setSpacing(createCardScene.getHeight() / 10);
         spellBox.relocate(createCardScene.getWidth() / 16, typeBox.getLayoutY() + typeBox.getPrefHeight() + createCardScene.getHeight() / 10);
-        selectCardViewSpell.setFitWidth(createCardScene.getWidth()/10);
+        selectCardViewSpell.setFitWidth(createCardScene.getWidth() / 10);
         selectCardViewSpell.setPreserveRatio(true);
         //spells
 
         //movable cards
+
         VBox movableCardMutualSetting = new VBox();
         movableCardMutualSetting.setVisible(false);
         TextField apTextField = new TextField();
@@ -104,18 +106,18 @@ public class AddCardFX {
         rangeTextField.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
         specialPower.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
         specialPowerSetting.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
-        if(!typeBox.getValue().equals("Spell"))
+        if (!typeBox.getValue().equals("Spell"))
             movableCardMutualSetting.setVisible(true);
 
         ComboBox<String> attackTypeCombo = new ComboBox(FXCollections.observableArrayList(attackType));
         comboBoxSetting(createCardScene, attackTypeCombo);
 
-        movableCardMutualSetting.getChildren().addAll(apTextField, hpTextField, rangeTextField, specialPower, specialPowerSetting, attackTypeCombo,addCardMovable);
+        movableCardMutualSetting.getChildren().addAll(apTextField, hpTextField, rangeTextField, specialPower, specialPowerSetting, attackTypeCombo, addCardMovable);
 
         movableCardMutualSetting.relocate(createCardScene.getWidth() / 16, typeBox.getLayoutY() + typeBox.getPrefHeight() + createCardScene.getHeight() / 10);
-        movableCardMutualSetting.setSpacing(createCardScene.getHeight()/35);
+        movableCardMutualSetting.setSpacing(createCardScene.getHeight() / 35);
 
-        selectCardViewMovable.setFitWidth(createCardScene.getWidth()/10);
+        selectCardViewMovable.setFitWidth(createCardScene.getWidth() / 10);
         selectCardViewMovable.setPreserveRatio(true);
         //movable cards
 
@@ -123,18 +125,18 @@ public class AddCardFX {
         //doing buffs
         VBox buffVBox = new VBox();
         TextField buffnameField = getTextField(createCardScene, "buff name");
-        TextField effectValueField = getTextField(createCardScene,"effect value");
-        TextField delayField = getTextField(createCardScene,"delay");
-        TextField lastField = getTextField(createCardScene,"last");
+        TextField effectValueField = getTextField(createCardScene, "effect value");
+        TextField delayField = getTextField(createCardScene, "delay");
+        TextField lastField = getTextField(createCardScene, "last");
         ComboBox<String> buffTypeCombo = new ComboBox(FXCollections.observableArrayList(buffTypes));
         ComboBox<String> buffTargetCombo = new ComboBox(FXCollections.observableArrayList(buffTarget));
-        comboBoxSetting(createCardScene,buffTypeCombo);
-        comboBoxSetting(createCardScene,buffTargetCombo);
-        buffVBox.relocate(createCardScene.getWidth()*8 / 10, createCardScene.getHeight() / 5);
-        buffVBox.setSpacing(createCardScene.getHeight()/20);
+        comboBoxSetting(createCardScene, buffTypeCombo);
+        comboBoxSetting(createCardScene, buffTargetCombo);
+        buffVBox.relocate(createCardScene.getWidth() * 8 / 10, createCardScene.getHeight() / 5);
+        buffVBox.setSpacing(createCardScene.getHeight() / 20);
         addBuffView.setPreserveRatio(true);
-        addBuffView.setFitWidth(createCardScene.getWidth()/10);
-        buffVBox.getChildren().addAll(buffnameField,effectValueField,delayField,lastField,buffTypeCombo,buffTargetCombo,addBuff);
+        addBuffView.setFitWidth(createCardScene.getWidth() / 10);
+        buffVBox.getChildren().addAll(buffnameField, effectValueField, delayField, lastField, buffTypeCombo, buffTargetCombo, addBuff);
 
 
         root.getChildren().addAll(buffVBox);
@@ -162,13 +164,33 @@ public class AddCardFX {
                         // selected.setText(combo_box.getValue() + " selected");
                     }
                 };
-
         typeBox.setOnAction(event);
+
+        addBuff.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                      @Override
+                                      public void handle(MouseEvent event) {
+                                          // todo : create buff
+                                      }
+                                  }
+        );
+        addCardMovable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                //todo : create movable card
+            }
+        });
+
+        addCardSpell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                //todo : create spell
+            }
+        });
 
 
         comboBoxSetting(createCardScene, typeBox);
 
-        root.getChildren().addAll(nameTextField, typeBox, spellBox,movableCardMutualSetting);
+        root.getChildren().addAll(nameTextField, typeBox, spellBox, movableCardMutualSetting);
 
 
         return root;
