@@ -223,7 +223,7 @@ public class BattleMenuProcess {
                 BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
             } else {
                 MatchHistory matchHistory = new MatchHistory();
-                if (!match.getPlayer2().isAI()) {
+                if (!match.getPlayer2().isAI()) { //sljkdfjl
                     BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer2(),true);
                     if (!match.getPlayer1().isAI()) {
                         BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer1(),false);
