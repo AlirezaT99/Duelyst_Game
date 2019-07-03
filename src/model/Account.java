@@ -20,6 +20,7 @@ public class Account {
         this.friends = new ArrayList<>();
         this.numberOfWins = 0;
         this.collection = new Collection();
+        this.importedDecks = new ArrayList<>();
     }
 
     static {
@@ -145,6 +146,8 @@ public class Account {
     }
 
     public ArrayList<ImportBasedDeck> getImportedDecks() {
+        if(importedDecks == null)
+            importedDecks = new ArrayList<>();
         return importedDecks;
     }
 

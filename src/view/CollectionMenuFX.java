@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Import;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -23,9 +24,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 import presenter.CollectionMenuProcess;
+import presenter.LoginMenuProcess;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -97,10 +100,20 @@ public class CollectionMenuFX {
         if (visibleDeckName.equals(""))
             okPopUp("no deck is selected", scene, root);
         else {
-           account.getImportedDecks().add(new ImportBasedDeck(account.getCollection().getDeckHashMap().get(visibleDeckName)));
-            okPopUp("deck \"" + visibleDeckName + "\" successfully exported.", scene, root);
-            decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
-            drawDecks(decksVBox, scene);
+            if (!ImportBasedDeck.isThisDeckValidToExport(account.getCollection().getDeckHashMap().get(visibleDeckName), account)) {
+                okPopUp("deck is invalid to export", scene, root);
+            } else {
+                ImportBasedDeck importBasedDeck = new ImportBasedDeck(account.getCollection().getDeckHashMap().get(visibleDeckName));
+                account.getImportedDecks().add(importBasedDeck);
+                try {
+                    LoginMenuProcess.save(account);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                okPopUp("deck \"" + visibleDeckName + "\" successfully exported.", scene, root);
+                decksVBox.getChildren().remove(4, decksVBox.getChildren().size());
+                drawDecks(decksVBox, scene);
+            }
         }
     }
 
@@ -290,6 +303,7 @@ public class CollectionMenuFX {
             }
         });
 
+
         deckBarButtons.getChildren().addAll(createDeck, importDeck, exportDeck);
         manageDecksBar.getChildren().addAll(background, decksVBox, deckBarButtons);
 
@@ -419,7 +433,7 @@ public class CollectionMenuFX {
             }
         });
         ImageView selectDeckView = new ImageView(selectDeckGray);
-        if (account.getCollection().getSelectedDeck()!=null && account.getCollection().getSelectedDeck().getName().equals(deckName))
+        if (account.getCollection().getSelectedDeck() != null && account.getCollection().getSelectedDeck().getName().equals(deckName))
             selectDeckView.setImage(selectDeck);
         selectDeckView.setOnMouseClicked(event -> {
             if (account.getCollection().validateDeck(account.getCollection().getDeckHashMap().get(deckName))) {
@@ -542,7 +556,7 @@ public class CollectionMenuFX {
         StackPane card = new StackPane();
         ImageView deckBg = new ImageView(cardBackground);
         deckBg.setFitWidth(scene.getWidth() / 8);
-        deckBg.setFitHeight(scene.getHeight()/40);
+        deckBg.setFitHeight(scene.getHeight() / 40);
         Label name = new Label("\t\t" + cardToRemove);
         name.setFont(cardNameFont);
         name.setTextFill(Color.WHITE);

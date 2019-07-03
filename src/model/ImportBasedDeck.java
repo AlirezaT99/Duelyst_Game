@@ -19,7 +19,7 @@ public class ImportBasedDeck {
         return gson.fromJson(gsonString, Deck.class);
     }
 
-    public boolean isThisDeckValidToExport(Deck deck, Account account) {
+    public static boolean isThisDeckValidToExport(Deck deck, Account account) {
         if (!doesItHaveTheHero(deck.getHero().getName(), account.getCollection().getHeroes()))
             return false;
         if (!doesItHaveTheItems(deck.getItems().get(0), account.getCollection().getItems()))
@@ -33,7 +33,7 @@ public class ImportBasedDeck {
 
     //validate Deck
 
-    private boolean doesItHaveTheHero(String heroName, ArrayList<Hero> heroes) {
+    private static boolean doesItHaveTheHero(String heroName, ArrayList<Hero> heroes) {
         for (Hero hero : heroes) {
             if (hero.getName().equalsIgnoreCase(heroName))
                 return true;
@@ -41,7 +41,7 @@ public class ImportBasedDeck {
         return false;
     }
 
-    private boolean doesItHaveTheItems(UsableItem usableItem, ArrayList<UsableItem> items) {
+    private static boolean doesItHaveTheItems(UsableItem usableItem, ArrayList<UsableItem> items) {
         if (usableItem == null)
             return true;
         for (UsableItem item : items) {
@@ -51,7 +51,7 @@ public class ImportBasedDeck {
         return false;
     }
 
-    private boolean doesItHaveTheCards(ArrayList<Card> deckCards, ArrayList<Card> collectionCards) {
+    private static boolean doesItHaveTheCards(ArrayList<Card> deckCards, ArrayList<Card> collectionCards) {
         for (int i = 0; i < deckCards.size(); i++) {
             String card = deckCards.get(i).name;
             int counter = 0;
