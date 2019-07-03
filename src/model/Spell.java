@@ -58,8 +58,8 @@ public class Spell extends Card {
 //        return false;
     }
 
-    public void castCard(Cell cell, Player castingPlayer) {
-        if (isCastingValid(castingPlayer, cell, primaryImpact))
+    public void castCard(Cell cell) {
+        if (isCastingValid(this.player, cell, primaryImpact))
             primaryImpact.doImpact(this.player,cell.getMovableCard(),cell,cell);
         if (secondaryImpact != null )
             secondaryImpact.doImpact(this.player,cell.getMovableCard(),cell,cell);

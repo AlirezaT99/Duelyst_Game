@@ -65,7 +65,8 @@ public class Hero extends MovableCard {
         // if check
         // cast spell
         // put the impact of spell in all targets impacts applied to this one
-        this.heroSpell.castCard(cell, this.player);
+        heroSpell.player = this.player;
+        this.heroSpell.castCard(cell);
     }
 
     // getters

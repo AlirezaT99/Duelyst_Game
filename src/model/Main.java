@@ -181,13 +181,19 @@ public class Main {
         Spell spell = spellCreator(scanner);
         System.out.println("spell cool down:");
         int spellCoolDown = scanner.nextInt();
+        System.out.println("spell mana cost:");
+        int manaCost = scanner.nextInt();
+        spell.manaCost = manaCost;
         System.out.println("health:");
         int health = scanner.nextInt();
         System.out.println("damage:");
         int damage = scanner.nextInt();
         System.out.println("Attack Type : (melee(m)/ranged(r)/hybrid(h)");
         String  c = scanner.next();
+        System.out.println("Attack Range:");
+        int range = scanner.nextInt();
         Hero hero = new Hero(name, health, damage, spell, spellCoolDown);
+        hero.maxAttackRange = range;
         if(c.equalsIgnoreCase("m"))
             hero.isMelee = true;
         else if(c.equalsIgnoreCase("r"))
@@ -203,7 +209,10 @@ public class Main {
         int health = scanner.nextInt();
         System.out.println("damage:");
         int damage = scanner.nextInt();
+        System.out.println("attack range: ");
+        int attackRange = scanner.nextInt();
         Minion minion = new Minion();
+        minion.maxAttackRange = attackRange;
         System.out.println("Attack Type : (melee(m)/ranged(r)/hybrid(h)");
         String c = scanner.next();
         if(c.equalsIgnoreCase("m"))
@@ -294,6 +303,8 @@ public class Main {
         System.out.println("does It have Comp?(y/n)");
         String c = scanner.next();
         if (c.equals("y")) {
+            impactIdComp = new StringBuilder();
+            wayOfAssigning = new StringBuilder();
             // 0.antiHolyBuff
             // 1.holyBuffCanceler
             // 2.antiNegativeImpactOnDefend(0,1)
