@@ -49,12 +49,7 @@ public class LoginMenuProcess {
                     return login(commandParts[1], "");
                 }
             },
-            new DoCommand() {
-                @Override
-                public int doIt() throws IOException {
-                    return showLeaderBoard();
-                }
-            },
+            LoginMenuProcess::showLeaderBoard,
             new DoCommand() {
                 @Override
                 public int doIt() throws IOException {
@@ -67,12 +62,7 @@ public class LoginMenuProcess {
                     return logout(currentAccount);
                 }
             },
-            new DoCommand() {
-                @Override
-                public int doIt() {
-                    return LoginMenu.help();
-                }
-            }
+            LoginMenu::help
     };
 
     public static int findPatternIndex(String command, String[] commandParts) {

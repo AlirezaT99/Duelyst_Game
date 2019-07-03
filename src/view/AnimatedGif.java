@@ -11,20 +11,20 @@ import javafx.util.Duration;
 import java.awt.image.BufferedImage;
 
 public class AnimatedGif extends Animation {
-    public AnimatedGif( String filename, double durationMs) {
+    public AnimatedGif(String filename, double durationMs) {
 
         GifDecoder d = new GifDecoder();
-        d.read( filename);
+        d.read(filename);
 
-        Image[] sequence = new Image[ d.getFrameCount()];
-        for( int i=0; i < d.getFrameCount(); i++) {
+        Image[] sequence = new Image[d.getFrameCount()];
+        for (int i = 0; i < d.getFrameCount(); i++) {
 
             WritableImage wimg = null;
             BufferedImage bimg = d.getFrame(i);
-            sequence[i] = SwingFXUtils.toFXImage( bimg, wimg);
+            sequence[i] = SwingFXUtils.toFXImage(bimg, wimg);
         }
 
-        super.init( sequence, durationMs);
+        super.init(sequence, durationMs);
     }
 
 }
@@ -41,11 +41,11 @@ class Animation extends Transition {
     Animation() {
     }
 
-    public Animation( Image[] sequence, double durationMs) {
-        init( sequence, durationMs);
+    public Animation(Image[] sequence, double durationMs) {
+        init(sequence, durationMs);
     }
 
-    void init( Image[] sequence, double durationMs) {
+    void init(Image[] sequence, double durationMs) {
         this.imageView = new ImageView(sequence[0]);
         this.sequence = sequence;
         this.count = sequence.length;
@@ -57,7 +57,6 @@ class Animation extends Transition {
     }
 
     protected void interpolate(double k) {
-
         final int index = Math.min((int) Math.floor(k * count), count - 1);
         if (index != lastIndex) {
             imageView.setImage(sequence[index]);

@@ -50,7 +50,7 @@ public class StoryMenuFX {
         // battleInitPrimary.setPadding(new Insets(50,0,50,0));
         storyMenuHBox.setBackground(new Background(new BackgroundFill(Color.grayRgb(20, 0.8),
                 new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0))));
-        handleSetOnMouseClicked(level1, level2, level3,account);
+        handleSetOnMouseClicked(level1, level2, level3, account);
         //  return battleInitScene;
         return root;
     }
@@ -58,21 +58,21 @@ public class StoryMenuFX {
     private void handleSetOnMouseClicked(VBox level1, VBox level2, VBox level3, Account account) {
         level1.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(account, StoryMenuProcess.enterFirstLevel(account),true);
+                Main.setBattleFX(account, StoryMenuProcess.enterFirstLevel(account), true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         level2.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(account, StoryMenuProcess.enterSecondLevel(account),true);
+                Main.setBattleFX(account, StoryMenuProcess.enterSecondLevel(account), true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         level3.setOnMouseClicked(event -> {
             try {
-                Main.setBattleFX(account, StoryMenuProcess.enterThirdLevel(account),true);
+                Main.setBattleFX(account, StoryMenuProcess.enterThirdLevel(account), true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,7 +81,7 @@ public class StoryMenuFX {
 
     private void mouseMovementHandling(StackPane view, Text text, VBox vBox) {
         vBox.setOnMouseEntered(event -> {
-            System.out.println(vBox.getLayoutX()+" "+vBox.getLayoutY() + text.getText().split("\n")[0]);
+            System.out.println(vBox.getLayoutX() + " " + vBox.getLayoutY() + text.getText().split("\n")[0]);
             switch (text.getText().split("\n")[0]) {
                 case "DIV-E-SEFID":
                     try {

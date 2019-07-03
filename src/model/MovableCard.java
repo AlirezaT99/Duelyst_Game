@@ -78,11 +78,12 @@ public abstract class MovableCard extends Card {
                     passDamage(opponent);
                     doOnAttackImpacts(opponent);
                 }
-            }catch (NullPointerException ignored){}
+            } catch (NullPointerException ignored) {
+            }
             opponent.counterAttack(this);
             this.manageCasualties();
             opponent.manageCasualties();
-            BattleMenuProcess.buryTheDead();
+            //BattleMenuProcess.buryTheDead();
         }
         return returnValue;
     }
@@ -111,7 +112,7 @@ public abstract class MovableCard extends Card {
     }
 
     int isAttackValid(MovableCard opponent) {
-        if(didAttackInThisTurn) return 20;
+        if (didAttackInThisTurn) return 20;
         int returnValue = counterAttackAndNormalAttackSameParameters(opponent);
         if (returnValue != 0)
             return returnValue;
@@ -143,14 +144,14 @@ public abstract class MovableCard extends Card {
                 Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
             this.manageCasualties();
             opponent.manageCasualties();
-            BattleMenuProcess.buryTheDead();
+
             if (onDefendImpact == null)
                 return;
             onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
         }
     }
 
-    private boolean isCounterAttackValid(MovableCard opponent) {
+    public boolean isCounterAttackValid(MovableCard opponent) {
         if (counterAttackAndNormalAttackSameParameters(opponent) == 0) {
             if (isHybrid)
                 return true;
@@ -201,7 +202,6 @@ public abstract class MovableCard extends Card {
 
     //move
     public void move(Cell destination) {
-        System.out.println("sssssssss");
         if (isMoveValid(destination) == 0) {
             didMoveInThisTurn = true;
             this.cardCell.setMovableCard(null);
@@ -225,7 +225,7 @@ public abstract class MovableCard extends Card {
     }
 
     public int isMoveValid(Cell cell) {
-        System.out.println(didMoveInThisTurn+" "+this.name);
+        System.out.println(didMoveInThisTurn + " " + this.name);
         if (cell == null)
             return 18;
         moveRange = 2;
@@ -261,7 +261,7 @@ public abstract class MovableCard extends Card {
             y = 1;
         x += start.getCellCoordination().getX();
         y += start.getCellCoordination().getY();
-        if(this.player.match.table.getCellByCoordination(x, y) == null)
+        if (this.player.match.table.getCellByCoordination(x, y) == null)
             return true;
         MovableCard movableCard = this.player.match.table.getCellByCoordination(x, y).getMovableCard();
         if (movableCard != null)

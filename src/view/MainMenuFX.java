@@ -86,6 +86,8 @@ public class MainMenuFX {
         settingAddNewCard(fontSmall, mainMenuScene, addCard, addCardText, addCardImage);
 
         root.getChildren().add(addCard);
+
+        addCardHandle(addCard);
         root.getChildren().addAll(brandView);
         textGlowEffect(play, mainMenuScene, root);
         textGlowEffect(collection, mainMenuScene, root);
@@ -93,6 +95,19 @@ public class MainMenuFX {
         textGlowEffect(watch, mainMenuScene, root);
         textGlowEffect(save, mainMenuScene, root);
         return root;
+    }
+
+    private void addCardHandle(VBox addCard) {
+        addCard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    Main.setAddCardFX(currentAccount);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void settingAddNewCard(Font fontSmall, Scene mainMenuScene, VBox addCard, Text addCardText, Image addCardImage) {

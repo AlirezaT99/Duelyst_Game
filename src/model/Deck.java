@@ -1,11 +1,8 @@
 package model;
 
-import presenter.StoryMenuProcess;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.RandomAccess;
 
 public class Deck {
     private String name;
@@ -64,23 +61,19 @@ public class Deck {
         this.name = name;
     }
 
-    public int addItemToDeck(UsableItem item) { // only used for computer Decks
-        this.getItemsHashMap()
-                .put(item.getItemID(), item);
-        this.getItems().add(item);
-        return 0;
+    public void addItemToDeck(UsableItem item) { // only used for computer Decks
+        itemsHashMap.put(item.getItemID(), item);
+        items.add(item);
     }
 
-    public int addSpellToDeck(Spell spell) { // only used for computer Decks
-        this.getSpells().add(spell);
+    public void addSpellToDeck(Spell spell) { // only used for computer Decks
+        spells.add(spell);
         cards.add(spell);
-        return 0;
     }
 
-    public int addMinionToDeck(Minion minion) { // only used for computer Decks
-        this.getMinions().add(minion);
+    public void addMinionToDeck(Minion minion) { // only used for computer Decks
+        minions.add(minion);
         cards.add(minion);
-        return 0;
     }
 
     void putTheCardBackInTheQueue(Card card) {
@@ -99,18 +92,16 @@ public class Deck {
         for (Spell spell : spells)
             if (spell.getCollectionID().equals(id))
                 return spell;
-        for (Minion minion : minions) {
-            if (minion.getCollectionID().equals(id)) {
+        for (Minion minion : minions)
+            if (minion.getCollectionID().equals(id))
                 return minion;
-            }
-        }
         return null;
     }
 
     public Card getNextCard() {
         return nextCard;
-
     }
+
     public void refreshNextCard(){
         ArrayList<Card> possibleCards = new ArrayList<>();
         possibleCards.addAll(spells);
