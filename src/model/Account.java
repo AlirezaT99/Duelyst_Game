@@ -11,7 +11,7 @@ public class Account {
     private Collection collection;
     private ArrayList<model.Account> friends;
     private int numberOfWins;
-    private ArrayList<String> importedDecks = new ArrayList<>();
+    private ArrayList<ImportBasedDeck> importedDecks = new ArrayList<>();
 
     public Account(String userName, String password) {
         this.userName = userName;
@@ -142,6 +142,10 @@ public class Account {
 
     public void increaseNumberOfWins(){
         numberOfWins++;
+    }
+
+    public ArrayList<ImportBasedDeck> getImportedDecks() {
+        return importedDecks;
     }
 
     //setters
