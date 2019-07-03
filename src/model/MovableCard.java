@@ -1,7 +1,5 @@
 package model;
 
-import presenter.BattleMenuProcess;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,49 +60,51 @@ public abstract class MovableCard extends Card {
     }
 
 
-    @Override
-    public boolean isCastingCoordinationValid(Cell cell) {
-        return cell.getMovableCard() == null;
-    }
     //card casting
 
     //attack & counterAttack
     public int attack(MovableCard opponent) {
         int returnValue = isAttackValid(opponent);
-        if (returnValue == 0 && didAttackInThisTurn == false) {
+        if (returnValue == 0) {
             didAttackInThisTurn = true;
-            try {
-                if (!opponent.onDefendImpact.getImpactEffectComp().doesHaveAntiNegativeImpact()) {
-                    passDamage(opponent);
-                    doOnAttackImpacts(opponent);
-                }
-            } catch (NullPointerException ignored) {
+            if (opponent.onDefendImpact == null || !opponent.onDefendImpact.getImpactEffectComp().doesHaveAntiNegativeImpact()) {
+                passDamageToOpponent(opponent);
+                doOnAttackImpacts(opponent);
             }
             opponent.counterAttack(this);
             this.manageCasualties();
             opponent.manageCasualties();
-            //BattleMenuProcess.buryTheDead();
         }
         return returnValue;
     }
 
     private void doOnAttackImpacts(MovableCard opponent) {
-        if (!ImpactEffectComp.doesHaveHolyBuffCanceler(this))
-            Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
+        if (onAttackImpact == null)
+            return;
         if (onAttackImpact.isPoisonBuff() && !opponent.onDefendImpact.getImpactEffectComp().isDoesHaveAntiPoison())
             doOnAttackImpact(opponent, this);
         else if (onAttackImpact.isDisarmBuff() && !opponent.onDefendImpact.getImpactEffectComp().isDoesHaveAntiDisarm())
             doOnAttackImpact(opponent, this);
-        else {
+        else
             doOnAttackImpact(opponent, this);
-        }
+
     }
 
-    private void passDamage(MovableCard opponent) {
+    private void handleHolyBuff(MovableCard damageTakingMovableCard , int damage) {
+//        if (!ImpactEffectComp.doesHaveHolyBuffCanceler(this)) {
+            Impact.holyBuff(damageTakingMovableCard, damage);
+//        }
+    }
+
+    private void passDamageToOpponent(MovableCard opponent) {
+        if (opponent.onDefendImpact == null) {
+            opponent.takeDamage(this.damage + this.dispelableDamageChange,true);
+            return;
+        }
         if (!opponent.onDefendImpact.isImmuneToMinDamage())
-            opponent.takeDamage(this.damage + this.dispelableDamageChange);
+            opponent.takeDamage(this.damage + this.dispelableDamageChange,true);
         else if (!this.player.match.table.doesHaveLowestDamage(this))
-            opponent.takeDamage(this.damage + this.dispelableDamageChange);
+            opponent.takeDamage(this.damage + this.dispelableDamageChange, true);
     }
 
     private void doOnAttackImpact(MovableCard opponent, MovableCard movableCard) {
@@ -126,29 +126,34 @@ public abstract class MovableCard extends Card {
 
     private int counterAttackAndNormalAttackSameParameters(MovableCard opponent) {
         int distance = findDistanceBetweenTwoCells(this.cardCell, opponent.cardCell);
-        if (isMelee)
-            maxAttackRange = 2;
-        if (isMelee && !this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
-            return 14;
-        else if (distance > maxAttackRange)
-            return 14;
-        if (this.player.equals(opponent.player))
-            return 15;
+        if (isMelee) {
+            if (!this.cardCell.isTheseCellsAdjacent(opponent.cardCell))
+                return 14;
+            if (this.player.equals(opponent.player))
+                return 15;
+        } else {
+            if (distance > maxAttackRange)
+                return 14;
+            if (this.player.equals(opponent.player))
+                return 15;
+        }
         return 0;
     }
 
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent)) {
-            opponent.takeDamage(this.damage);
-            if (!ImpactEffectComp.doesHaveHolyBuffCanceler(this))
-                Impact.holyBuff(opponent, this.damage + this.dispelableDamageChange);
+            int damage = this.damage + this.dispelableDamageChange;
+            opponent.takeDamage(damage,false);
+            doOnDefendImpact(opponent);
             this.manageCasualties();
             opponent.manageCasualties();
-
-            if (onDefendImpact == null)
-                return;
-            onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
         }
+    }
+
+    private void doOnDefendImpact(MovableCard opponent) {
+        if (onDefendImpact == null)
+            return;
+        onDefendImpact.doImpact(this.player, this, opponent.cardCell, this.cardCell);
     }
 
     public boolean isCounterAttackValid(MovableCard opponent) {
@@ -157,7 +162,6 @@ public abstract class MovableCard extends Card {
                 return true;
             for (Impact impact : impactsAppliedToThisOne)
                 if (impact.isDisarmBuff()) {
-                    printMessage("Disarmed. Can't CounterAttack");
                     return false;
                 }
         } else
@@ -278,11 +282,20 @@ public abstract class MovableCard extends Card {
         System.out.println(message);
     }
 
-    protected void takeDamage(int damage) {
-        if (this.onDefendImpact != null)
-            if (this.onDefendImpact.getImpactEffectComp().isDoesHaveAntiHolyBuff())
-                this.health -= this.onDefendImpact.impactQuantity;
+    protected void takeDamage(int damage , boolean attack) {
+        antiHolyBuffHandler();
         this.health -= damage;
+        if(attack)
+            handleHolyBuff(this,damage);
+
+    }
+
+    private void antiHolyBuffHandler() {
+        if (this.onDefendImpact != null) {
+            this.onDefendImpact.getImpactEffectComp().setfatherImpact(this.onDefendImpact);
+            if (this.onDefendImpact.getImpactEffectComp().doesHaveAntiHolyBuff())
+                this.health -= Math.abs(this.onDefendImpact.impactQuantity);
+        }
     }
 
     //previous targets manager
