@@ -23,11 +23,13 @@ import model.Minion;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 public class AddCardFX {
+    private static HashMap<String,String> buffs = new HashMap<>();
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
         Pane root = new Pane();
-
+        buffs = new HashMap<>();
         Scene createCardScene = new Scene(new Pane(), primaryStage.getWidth(), primaryStage.getHeight());
         root.setPrefWidth(createCardScene.getWidth());
         root.setPrefHeight(createCardScene.getHeight());
@@ -170,6 +172,41 @@ public class AddCardFX {
         addBuff.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                       @Override
                                       public void handle(MouseEvent event) {
+                                          String buff = "";
+                                          switch (buffTypeCombo.getValue()){
+                                              case "Holy":
+                                                  buff+="0";
+                                                  break;
+                                              case "Power":
+                                                  buff+="1";
+                                                  break;
+                                              case "Poison":
+                                                  buff+="2";
+                                                  break;
+                                              case "Weakness":
+                                                  buff+="3";
+                                                  break;
+                                              case "Stun":
+                                                  buff+="4";
+                                                  break;
+                                              case "Disarm":
+                                                  buff+="5";
+                                                  break;
+                                          }
+                                          if(effectValueField.getText().length()<2)
+                                              buff+=("0"+effectValueField.getText());
+                                          buff+=delayField.getText();
+                                          buff+=lastField.getText();
+                                          if(buffTargetCombo.getValue().equals("Friendly Team"))
+                                              buff+="0";
+                                          else
+                                              buff+="1";
+                                          buffs.put(buffnameField.getText(),buff);
+                                          try {
+                                              GraphicalCommonUsages.okPopUp(buffnameField.getText()+" added",createCardScene,root);
+                                          } catch (FileNotFoundException e) {
+                                              e.printStackTrace();
+                                          }
                                           // todo : create buff
                                       }
                                   }
@@ -183,7 +220,18 @@ public class AddCardFX {
                     minion.setHealth(Integer.parseInt(hpTextField.getText()));
                     minion.setDamage(Integer.parseInt(apTextField.getText()));
                     minion.setMaxAttackRange(Integer.parseInt(rangeTextField.getText()));
-
+                    String buff = buffs.get(specialPower.getText());
+                    switch (attackTypeCombo.getValue()){
+                        case "Melee":
+                            minion.setMelee(true);
+                            break;
+                        case "Ranged":
+                            minion.setRanged(true);
+                            break;
+                        case "Hybrid":
+                            minion.setHybrid(true);
+                            break;
+                    }
                 }
                 if(typeBox.getValue().equals("Hero")){
 
