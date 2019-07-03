@@ -79,12 +79,16 @@ public class ImpactEffectComp {
 
     void doImpactComp(MovableCard target, Cell castingCell) {
 
-        setAllImpactTypeCompVariables();
-        setAllTheWayOfAssigningVariables();
+        setCompVariables();
         if (killIt)
             kill();
         else if (doesHaveRisingDamage)
             attackOnPreviousTargets(target, castingCell.getMovableCard());
+    }
+
+     void setCompVariables() {
+        setAllImpactTypeCompVariables();
+        setAllTheWayOfAssigningVariables();
     }
 
 
@@ -173,9 +177,21 @@ public class ImpactEffectComp {
         return doesHaveAntiDisarm;
     }
 
-    public boolean isDoesHaveAntiHolyBuff() {
+    public boolean doesHaveAntiHolyBuff() {
+        fatherImpact.setAllVariablesNeeded();
+        setImpactTypeIdComp(fatherImpact.getImpactEffectCompId());
+        setImpactWayOfAssigning(fatherImpact.getWayOfAssigningId());
         return doesHaveAntiHolyBuff;
     }
+
+    public void setImpactTypeIdComp(String impactTypeIdComp) {
+        this.impactTypeIdComp = impactTypeIdComp;
+    }
+
+    public void setImpactWayOfAssigning(String impactWayOfAssigning) {
+        this.impactWayOfAssigning = impactWayOfAssigning;
+    }
+
 
     //special impacts manager
 

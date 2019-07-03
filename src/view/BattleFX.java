@@ -2,7 +2,6 @@ package view;
 
 
 import javafx.animation.*;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -130,8 +129,8 @@ public class BattleFX {
             ap.getChildren().addAll(apView, apLabel);
 
             if (card instanceof MovableCard) {
-                hpLabel.setText(((MovableCard) card).getHealth() + "");
-                apLabel.setText(((MovableCard) card).getDamage() + "");
+                hpLabel.setText(((MovableCard) card).getHealth()+((MovableCard)card).dispelableHealthChange + "");
+                apLabel.setText(((MovableCard) card).getDamage()+((MovableCard) card).dispelableDamageChange + "");
             }
 
             Label cardName = new Label(card.getName());
@@ -363,9 +362,9 @@ public class BattleFX {
                 label1.setAlignment(Pos.CENTER);
             }
             graveYard_sher.setOnMouseClicked(event1 -> {
-                // root.getChildren().remove(graveYard_sher);
-                root.getChildren().remove(graveYard_sher);
-            }
+                        // root.getChildren().remove(graveYard_sher);
+                        root.getChildren().remove(graveYard_sher);
+                    }
             );
         });
 
@@ -584,14 +583,19 @@ public class BattleFX {
                     draggedFromNode = gameMap[finalI][finalJ];
                 });
                 gameMap[i][j].setOnMouseDragReleased(event -> {
-                    // System.out.println("actual map:" + finalI + " " + finalJ);
-                    if (draggedFromNode instanceof VBox && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) { //todo : ehtemalan shartaye bishatri mikhad
-                        // group.getChildren().remove(draggedFromNode);
-                        // ((StackPane) (((VBox) draggedFromNode).getChildren().get(1))).getChildren().remove(1);
-                        String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
-                        Card selectedCardFromHand = player.getHand().getCards().get(objectInHandIndex);
-                        if (selectedCardFromHand instanceof Spell) {
-
+                    Card selectedCardFromHand = player.getHand().getCards().get(objectInHandIndex);
+                    if (draggedFromNode instanceof VBox) {
+                        boolean deleteFromHand = false;
+                        if (selectedCardFromHand instanceof Minion && BattleMenuProcess.isCoordinationValidToInsert(finalI, finalJ)) {
+                            String cardName = ((Label) (((VBox) draggedFromNode).getChildren().get(2))).getText();
+                            deleteFromHand = true;
+                            if (player.getHand().getCards().get(objectInHandIndex) instanceof Minion)
+                                ((Minion) (player.getHand().getCards().get(objectInHandIndex))).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ), objectInHandIndex);
+                        }
+                        if (selectedCardFromHand instanceof Spell &&((Spell) selectedCardFromHand).isCastingValid(match.currentTurnPlayer(),match.getTable().getCellByCoordination(finalI,finalJ))) {
+                            ((Spell) player.getHand().getCards().get(objectInHandIndex)).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ));
+                            BattleMenuProcess.buryTheDead();
+                            deleteFromHand = true;
                             Animation spellAnimation = GraphicalCommonUsages.getGif(selectedCardFromHand.getName(), "impact");
                             ImageView impactView = spellAnimation.getView();
                             gameMap[finalI][finalJ].getChildren().add(impactView);
@@ -602,37 +606,13 @@ public class BattleFX {
                             spellAnimation.setCycleCount(1);
                             spellAnimation.play();
                             spellAnimation.setOnFinished(event1 -> gameMap[finalI][finalJ].getChildren().remove(gameMap[finalI][finalJ].getChildren().size() - 1));
-//                                mainPane.getChildren().add(new Rectangle(scene.getWidth(), scene.getHeight(), Color.ORANGE));
-//                                long time = System.currentTimeMillis();
-//                                FadeTransition fadeTransition = new FadeTransition();
-//                                fadeTransition.setDuration(Duration.millis(1000));
-//                                fadeTransition.setFromValue(1);
-//                                fadeTransition.setToValue(0);
-//                                fadeTransition.setNode(mainPane.getChildren().get(mainPane.getChildren().size() - 1));
-//                                fadeTransition.play();
-//                                fadeTransition.setOnFinished(event1 -> mainPane.getChildren().remove(mainPane.getChildren().size() - 1));
-//                                ((Rectangle) gameMap[finalI][finalJ].getChildren().get(0)).setFill(Color.GOLD);
 
                         }
-                        //((StackPane) (((VBox) draggedFromNode).getChildren().get(0))).getChildren().remove(1);
-                        if (player.getHand().getCards().get(objectInHandIndex) instanceof Minion)
-                            ((Minion) (player.getHand().getCards().get(objectInHandIndex))).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ), objectInHandIndex);
-                        else
-                            ((Spell) player.getHand().getCards().get(objectInHandIndex)).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ));
-//                            player.getHand().findCardByName(cardName)
-//                                    .castCard(match.getTable().getCellByCoordination(finalI, finalJ));
-                        player.getHand().removeCardFromHand(objectInHandIndex);
-                        draggedFromNode = null;
-                        try {
-                            bottomRow = drawHand(player, mainPane, scene);
-                            updateMana(match, mainPane, scene);
-                            if (!(selectedCardFromHand instanceof Spell))
-                                updateSoldiers(match, scene);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-//
+                        if (deleteFromHand)
+                            deleteCardFromHand(scene, player, mainPane, match, selectedCardFromHand);
+
                     }
+
                     if (draggedFromNode instanceof Pane && !(draggedFromNode instanceof VBox)
                             && ((Pane) draggedFromNode).getChildren().size() >= 3) {
                         Coordination coordination = getPaneFromMap((Pane) draggedFromNode);
@@ -665,24 +645,42 @@ public class BattleFX {
 
     }
 
+    private void deleteCardFromHand(Scene scene, Player player, Pane mainPane, Match match, Card selectedCardFromHand) {
+        player.getHand().removeCardFromHand(objectInHandIndex);
+        draggedFromNode = null;
+        try {
+            bottomRow = drawHand(player, mainPane, scene);
+            updateMana(match, mainPane, scene);
+            if (!(selectedCardFromHand instanceof Spell))
+                updateSoldiers(match, scene);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void deathProcess(Coordination coordination, Match match, Scene scene, Pane rectanglesPane) {
-        Animation deathAnimation = GraphicalCommonUsages.getGif(match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard().getName(), "death");
-        gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
-        ImageView deathView = deathAnimation.getView();
-        deathView.setPreserveRatio(true);
-        deathView.setFitWidth(scene.getWidth() / 18.8);
-        gameMap[coordination.getX()][coordination.getY()].getChildren().add(1, deathView);
-        deathAnimation.setCycleCount(1);
-        deathAnimation.play();
-        match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).setMovableCard(null);
-        deathAnimation.setOnFinished(event -> {
-            try {
-                updateSoldiers(match, scene);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
+        String dyingCardName = match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard().getName();
+        try {
+            Animation deathAnimation = GraphicalCommonUsages.getGif(dyingCardName, "death");
+            gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
+            ImageView deathView = deathAnimation.getView();
+            deathView.setPreserveRatio(true);
+            deathView.setFitWidth(scene.getWidth() / 18.8);
+            gameMap[coordination.getX()][coordination.getY()].getChildren().add(1, deathView);
+            deathAnimation.setCycleCount(1);
+            deathAnimation.play();
+            match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).setMovableCard(null);
+            deathAnimation.setOnFinished(event -> {
+                try {
+                    updateSoldiers(match, scene);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            System.out.println(dyingCardName + "*************************");
+        }
 
     }
 
@@ -703,19 +701,17 @@ public class BattleFX {
             attackAnimation.setCycleCount(1);
             attackAnimation.play();
             movableCardAttackSFX(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(), true);
-            attackAnimation.setOnFinished(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        if (isCounterAttackValid) {
+            attackAnimation.setOnFinished(event -> {
+                try {
+                    if (isCounterAttackValid) {
                         Animation counterAttackAnimation = GraphicalCommonUsages.getGif(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), "attack");
-                        ImageView imageView = counterAttackAnimation.getView();
+                        ImageView imageView1 = counterAttackAnimation.getView();
                         gameMap[finalI][finalJ].getChildren().remove(1);
-                        gameMap[finalI][finalJ].getChildren().add(1, imageView);
-                        imageView.setFitWidth(scene.getWidth() / 18.8);
-                        imageView.setPreserveRatio(true);
+                        gameMap[finalI][finalJ].getChildren().add(1, imageView1);
+                        imageView1.setFitWidth(scene.getWidth() / 18.8);
+                        imageView1.setPreserveRatio(true);
                         if (match.currentTurnPlayer().equals(match.getPlayer1()))
-                            rotateImageView(imageView);
+                            rotateImageView(imageView1);
                         counterAttackAnimation.setCycleCount(1);
                         counterAttackAnimation.play();
                         movableCardAttackSFX(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), false);
@@ -726,19 +722,17 @@ public class BattleFX {
                                 e.printStackTrace();
                             }
                         });
+                    } else {
+                        try {
+                            BattleMenuProcess.buryTheDead();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        else {
-                            try {
-                                BattleMenuProcess.buryTheDead();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -748,24 +742,24 @@ public class BattleFX {
         AudioClip audioClip;
         if (Hero.getHeroByName(cardName) != null) {
             if (cardName.toLowerCase().equals("afsaane") || cardName.toLowerCase().equals("simorgh")) {
-                audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_general_hit.m4a").toString());
+                audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_general_hit.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             }
             if (cardName.toLowerCase().equals("aarash") || cardName.toLowerCase().equals("rostam") || cardName.toLowerCase().equals("esfandiar") || cardName.toLowerCase().equals("kaave")) {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_hit.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_hit.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             } else {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_hit.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_hit.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
@@ -774,26 +768,26 @@ public class BattleFX {
             Minion minion = Minion.getMinionByName(cardName);
             if (minion.isMelee()) {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_impact_1.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_impact_1.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_swing_2.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_swing_2.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             }
             if (minion.isHybrid()) {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_impact.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_impact.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             } else {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_impact.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_impact.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
