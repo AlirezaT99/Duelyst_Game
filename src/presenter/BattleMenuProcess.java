@@ -204,9 +204,9 @@ public class BattleMenuProcess {
             if (match.getPlayer1().getDeck().getHero().isAlive()) {
                 MatchHistory matchHistory = new MatchHistory();
                 if (!match.getPlayer1().isAI()) {
-                    BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer1(),true);
+//                    BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer1(),true);
                     if (!match.getPlayer2().isAI()) {
-                        BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer2(),false);
+//                        BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer2(),false);
                         match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 1500);
                         matchHistory.setMatchHistory(match.getPlayer2(), match, false);
 
@@ -224,9 +224,9 @@ public class BattleMenuProcess {
             } else {
                 MatchHistory matchHistory = new MatchHistory();
                 if (!match.getPlayer2().isAI()) { //sljkdfjl
-                    BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer2(),true);
+//                    BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer2(),true);
                     if (!match.getPlayer1().isAI()) {
-                        BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer1(),false);
+//                        BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer1(),false);
                         match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
                         matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());

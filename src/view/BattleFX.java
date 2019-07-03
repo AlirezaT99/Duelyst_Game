@@ -659,7 +659,7 @@ public class BattleFX {
     }
 
 
-    public static void deathProcess(Coordination coordination, Match match, Scene scene, Pane rectanglesPane) {
+    public static void deathProcess(Coordination coordination, Match match, Scene scene) {
         Animation deathAnimation = GraphicalCommonUsages.getGif(match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard().getName(), "death");
         gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
         ImageView deathView = deathAnimation.getView();
