@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Account;
+import model.Minion;
 
 
 import java.io.File;
@@ -177,6 +178,16 @@ public class AddCardFX {
             @Override
             public void handle(MouseEvent event) {
                 //todo : create movable card
+                if(typeBox.getValue().equals("Minion")){
+                    Minion minion = new Minion();
+                    minion.setHealth(Integer.parseInt(hpTextField.getText()));
+                    minion.setDamage(Integer.parseInt(apTextField.getText()));
+                    minion.setMaxAttackRange(Integer.parseInt(rangeTextField.getText()));
+
+                }
+                if(typeBox.getValue().equals("Hero")){
+
+                }
             }
         });
 
