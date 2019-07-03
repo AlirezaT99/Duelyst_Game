@@ -133,8 +133,8 @@ public class BattleFX {
             ap.getChildren().addAll(apView, apLabel);
 
             if (card instanceof MovableCard) {
-                hpLabel.setText(((MovableCard) card).getHealth() + "");
-                apLabel.setText(((MovableCard) card).getDamage() + "");
+                hpLabel.setText(((MovableCard) card).getHealth() + ((MovableCard) card).dispelableHealthChange + "");
+                apLabel.setText(((MovableCard) card).getDamage()+((MovableCard) card).dispelableDamageChange + "");
             }
 
             Label cardName = new Label(card.getName());
