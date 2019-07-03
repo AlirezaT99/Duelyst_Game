@@ -143,6 +143,10 @@ public class Main extends Application {
         }
     }
 
+    public static Scene getScene(){
+        return currentScene;
+    }
+
     private static void backgroundMusicNotBattlePlay() {
         if (audioClip!=null && audioClip.isPlaying())
             audioClip.stop();

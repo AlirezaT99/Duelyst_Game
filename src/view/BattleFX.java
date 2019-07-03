@@ -10,10 +10,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
@@ -212,8 +214,49 @@ public class BattleFX {
 
         secondPlayerImageView.setOnMouseEntered(event -> scaleIcon(secondPlayerImageView, 1, 1.1));
         secondPlayerImageView.setOnMouseExited(event -> scaleIcon(secondPlayerImageView, 1.1, 1));
-        // this.bottomRow = bottomRow;
 
+        final TextField cheatField = new TextField();
+        cheatField.setStyle("-fx-background-color:rgba(175, 175, 175, 0.8);");
+        cheatField.setPrefWidth(scene.getWidth() / 20);
+        cheatField.relocate(0, scene.getHeight() / 10);
+        cheatField.layoutYProperty().bind(root.heightProperty().subtract(cheatField.heightProperty()).divide(2));
+        cheatField.setVisible(false);
+        root.getChildren().addAll(cheatField);
+
+        ArrayList<String> onKeyPressed = new ArrayList<>();
+        Scene scene1 = Main.getScene();
+        if (match.getPlayer1().getAccount().equals(account))
+            cheatField.layoutXProperty().bind(firstPlayerImageView.fitWidthProperty().subtract(cheatField.widthProperty()).divide(2));
+        else
+            cheatField.layoutXProperty().bind(secondPlayerImageView.fitWidthProperty().subtract(cheatField.widthProperty()).divide(2));
+        scene1.setOnKeyPressed(event -> {
+            if(!onKeyPressed.contains(event.getCode().toString()))
+                onKeyPressed.add(event.getCode().toString());
+            if(onKeyPressed.contains("ALT") && (onKeyPressed.contains("c")||onKeyPressed.contains("C")))
+                cheatField.setVisible(true);
+            if(cheatField.isVisible() && onKeyPressed.contains("ENTER"))
+                processCheatCode(scene,root,match,match.getPlayer1().getAccount().equals(account)?match.getPlayer1():match.getPlayer2(),cheatField.getText());
+        });
+        scene1.setOnKeyReleased(event -> {
+            onKeyPressed.remove(event.getCode().toString());
+        });
+
+
+    }
+
+    private void processCheatCode(Scene scene,Pane root,Match match,Player player, String cheatCode){
+        switch (cheatCode.toLowerCase()){
+            case "mana":
+                player.setMana(9);
+                try {
+                    updateMana(match,root,scene);
+                    drawHand(player,root,scene);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+        System.out.println(player.getUserName()+" : "+cheatCode);
     }
 
     private StackPane getNextStackPane(Scene scene, Player player) throws FileNotFoundException {
@@ -363,9 +406,9 @@ public class BattleFX {
                 label1.setAlignment(Pos.CENTER);
             }
             graveYard_sher.setOnMouseClicked(event1 -> {
-                // root.getChildren().remove(graveYard_sher);
-                root.getChildren().remove(graveYard_sher);
-            }
+                        // root.getChildren().remove(graveYard_sher);
+                        root.getChildren().remove(graveYard_sher);
+                    }
             );
         });
 
@@ -708,26 +751,25 @@ public class BattleFX {
                 public void handle(ActionEvent event) {
                     try {
                         if (isCounterAttackValid) {
-                        Animation counterAttackAnimation = GraphicalCommonUsages.getGif(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), "attack");
-                        ImageView imageView = counterAttackAnimation.getView();
-                        gameMap[finalI][finalJ].getChildren().remove(1);
-                        gameMap[finalI][finalJ].getChildren().add(1, imageView);
-                        imageView.setFitWidth(scene.getWidth() / 18.8);
-                        imageView.setPreserveRatio(true);
-                        if (match.currentTurnPlayer().equals(match.getPlayer1()))
-                            rotateImageView(imageView);
-                        counterAttackAnimation.setCycleCount(1);
-                        counterAttackAnimation.play();
-                        movableCardAttackSFX(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), false);
-                        counterAttackAnimation.setOnFinished(event1 -> {
-                            try {
-                                BattleMenuProcess.buryTheDead();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        }
-                        else {
+                            Animation counterAttackAnimation = GraphicalCommonUsages.getGif(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), "attack");
+                            ImageView imageView = counterAttackAnimation.getView();
+                            gameMap[finalI][finalJ].getChildren().remove(1);
+                            gameMap[finalI][finalJ].getChildren().add(1, imageView);
+                            imageView.setFitWidth(scene.getWidth() / 18.8);
+                            imageView.setPreserveRatio(true);
+                            if (match.currentTurnPlayer().equals(match.getPlayer1()))
+                                rotateImageView(imageView);
+                            counterAttackAnimation.setCycleCount(1);
+                            counterAttackAnimation.play();
+                            movableCardAttackSFX(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), false);
+                            counterAttackAnimation.setOnFinished(event1 -> {
+                                try {
+                                    BattleMenuProcess.buryTheDead();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        } else {
                             try {
                                 BattleMenuProcess.buryTheDead();
                             } catch (Exception e) {
@@ -748,24 +790,24 @@ public class BattleFX {
         AudioClip audioClip;
         if (Hero.getHeroByName(cardName) != null) {
             if (cardName.toLowerCase().equals("afsaane") || cardName.toLowerCase().equals("simorgh")) {
-                audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_general_hit.m4a").toString());
+                audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_general_hit.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             }
             if (cardName.toLowerCase().equals("aarash") || cardName.toLowerCase().equals("rostam") || cardName.toLowerCase().equals("esfandiar") || cardName.toLowerCase().equals("kaave")) {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_hit.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_hit.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f1_general_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             } else {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_hit.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_hit.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f5_general_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
@@ -774,26 +816,26 @@ public class BattleFX {
             Minion minion = Minion.getMinionByName(cardName);
             if (minion.isMelee()) {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_impact_1.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_impact_1.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_swing_2.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2melee_attack_swing_2.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             }
             if (minion.isHybrid()) {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_impact.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_impact.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f2_celestialphantom_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
             } else {
                 if (attacker)
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_impact.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_impact.m4a").toString());
                 else
-                    audioClip = new  AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_swing.m4a").toString());
+                    audioClip = new AudioClip(Main.class.getResource("sources/Battle/music/sfx_f4_engulfingshadow_attack_swing.m4a").toString());
                 audioClip.setCycleCount(1);
                 audioClip.play();
                 return;
