@@ -1,5 +1,6 @@
 package view;
 
+import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,17 +17,19 @@ import javafx.scene.text.Font;
 
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import model.Account;
-import model.Minion;
+import model.*;
+import model.Main;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class AddCardFX {
-    private static HashMap<String,String> buffs = new HashMap<>();
+    private static HashMap<String, String> buffs = new HashMap<>();
+    private static HashMap<String, Spell> spells = new HashMap<>();
+
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
         Pane root = new Pane();
         buffs = new HashMap<>();
@@ -44,6 +47,8 @@ public class AddCardFX {
         String[] attackType = {"Melee", "Ranged", "Hybrid"};
         String[] buffTypes = {"Holy", "Power", "Poison", "Weakness", "Stun", "Disarm"};
         String[] buffTarget = {"Friendly Team", "Enemy Team"};
+        String[] activationTypeCombo = {"on Spawn", "on Attack", "on Defend", "on Death"};
+
 
         ComboBox<String> typeBox = new ComboBox(FXCollections.observableArrayList(typesStringArray));
         typeBox.relocate(createCardScene.getWidth() / 16, nameTextField.getLayoutY() + nameTextField.getPrefHeight() + createCardScene.getHeight() / 10);
@@ -62,6 +67,13 @@ public class AddCardFX {
         addCardMOvableLabel.setTextFill(Color.WHITE);
         Label addBuffLAbel = new Label("Add Buff");
         addBuffLAbel.setTextFill(Color.WHITE);
+        TextField costMovableCard = new TextField();
+        costMovableCard.setPromptText("Cost");
+        costMovableCard.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
+
+        TextField costSpell = new TextField();
+        costSpell.setPromptText("Cost");
+        costSpell.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
 
         StackPane addCardSpell = new StackPane(selectCardViewSpell, addCardSpellLabel);
         StackPane addCardMovable = new StackPane(selectCardViewMovable, addCardMOvableLabel);
@@ -84,7 +96,7 @@ public class AddCardFX {
         ComboBox<String> secondTarget = new ComboBox(FXCollections.observableArrayList(secondTargetSetting));
         comboBoxSetting(createCardScene, firstTarget);
         comboBoxSetting(createCardScene, secondTarget);
-        spellBox.getChildren().addAll(firstTarget, secondTarget, addCardSpell);
+        spellBox.getChildren().addAll(firstTarget, secondTarget, costSpell, addCardSpell);
         spellBox.setSpacing(createCardScene.getHeight() / 10);
         spellBox.relocate(createCardScene.getWidth() / 16, typeBox.getLayoutY() + typeBox.getPrefHeight() + createCardScene.getHeight() / 10);
         selectCardViewSpell.setFitWidth(createCardScene.getWidth() / 10);
@@ -101,6 +113,7 @@ public class AddCardFX {
         TextField specialPower = new TextField();
         TextField specialPowerSetting = new TextField();
 
+
         apTextField.setPromptText("AP");
         apTextField.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
         hpTextField.setPromptText("HP");
@@ -109,16 +122,19 @@ public class AddCardFX {
         rangeTextField.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
         specialPower.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
         specialPowerSetting.setStyle("-fx-background-color:rgba(175, 175, 175, 0.3);");
+
         if (!typeBox.getValue().equals("Spell"))
             movableCardMutualSetting.setVisible(true);
+        ComboBox<String> activationCombo = new ComboBox(FXCollections.observableArrayList(activationTypeCombo));
+        comboBoxSetting(createCardScene, activationCombo);
 
         ComboBox<String> attackTypeCombo = new ComboBox(FXCollections.observableArrayList(attackType));
         comboBoxSetting(createCardScene, attackTypeCombo);
 
-        movableCardMutualSetting.getChildren().addAll(apTextField, hpTextField, rangeTextField, specialPower, specialPowerSetting, attackTypeCombo, addCardMovable);
+        movableCardMutualSetting.getChildren().addAll(apTextField, hpTextField, rangeTextField, specialPower, specialPowerSetting, costMovableCard, attackTypeCombo, addCardMovable);
 
         movableCardMutualSetting.relocate(createCardScene.getWidth() / 16, typeBox.getLayoutY() + typeBox.getPrefHeight() + createCardScene.getHeight() / 10);
-        movableCardMutualSetting.setSpacing(createCardScene.getHeight() / 35);
+        movableCardMutualSetting.setSpacing(createCardScene.getHeight() / 40);
 
         selectCardViewMovable.setFitWidth(createCardScene.getWidth() / 10);
         selectCardViewMovable.setPreserveRatio(true);
@@ -160,7 +176,7 @@ public class AddCardFX {
                                 if (typeBox.getValue().equals("Hero"))
                                     specialPowerSetting.setPromptText("Cooldown");
                                 else
-                                    specialPowerSetting.setPromptText("Activation");
+                                    specialPowerSetting.setPromptText("on Death/Spawn/Attack/Defend");
                             }
                             movableCardMutualSetting.setVisible(true);
                         }
@@ -169,59 +185,96 @@ public class AddCardFX {
                 };
         typeBox.setOnAction(event);
 
-        addBuff.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                      @Override
-                                      public void handle(MouseEvent event) {
-                                          String buff = "";
-                                          switch (buffTypeCombo.getValue()){
-                                              case "Holy":
-                                                  buff+="0";
-                                                  break;
-                                              case "Power":
-                                                  buff+="1";
-                                                  break;
-                                              case "Poison":
-                                                  buff+="2";
-                                                  break;
-                                              case "Weakness":
-                                                  buff+="3";
-                                                  break;
-                                              case "Stun":
-                                                  buff+="4";
-                                                  break;
-                                              case "Disarm":
-                                                  buff+="5";
-                                                  break;
-                                          }
-                                          if(effectValueField.getText().length()<2)
-                                              buff+=("0"+effectValueField.getText());
-                                          buff+=delayField.getText();
-                                          buff+=lastField.getText();
-                                          if(buffTargetCombo.getValue().equals("Friendly Team"))
-                                              buff+="0";
-                                          else
-                                              buff+="1";
-                                          buffs.put(buffnameField.getText(),buff);
-                                          try {
-                                              GraphicalCommonUsages.okPopUp(buffnameField.getText()+" added",createCardScene,root);
-                                          } catch (FileNotFoundException e) {
-                                              e.printStackTrace();
-                                          }
-                                          // todo : create buff
-                                      }
-                                  }
+        addBuff.setOnMouseClicked(event12 -> {
+                    String buff = "";
+                    switch (buffTypeCombo.getValue()) {
+                        case "Holy":
+                            buff += "1101";
+                            break;
+                        case "Power":
+                            buff += "1231";
+                            break;
+                        case "Poison":
+                            buff += "0320";
+                            break;
+                        case "Weakness":
+                            buff += "0420";
+                            break;
+                        case "Stun":
+                            buff += "0500";
+                            break;
+                        case "Disarm":
+                            buff += "0600";
+                            break;
+                    }
+                    if (effectValueField.getText().length() < 2 && effectValueField.getText().matches("\\d+"))
+                        buff += ("0" + effectValueField.getText());
+                    if (effectValueField.getText().length() == 2 && effectValueField.getText().matches("\\d+"))
+                        buff += effectValueField.getText();
+                    if (effectValueField.getText().length() > 2 || !effectValueField.getText().matches("\\d+")) {
+                        try {
+                            GraphicalCommonUsages.okPopUp("effect value invalid", createCardScene, root);
+                            return;
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    buff += "0"; //passive permanent
+                    if (delayField.getText().length() > 1 || !delayField.getText().matches("\\d+")) {
+                        try {
+                            GraphicalCommonUsages.okPopUp("delay field invalid", createCardScene, root);
+                            return;
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    buff += delayField.getText(); //turns to be activated
+                    if (lastField.getText().length() < 2 && lastField.getText().matches("\\d+"))
+                        buff += "0" + lastField.getText();
+                    if (lastField.getText().length() == 2 && lastField.getText().matches("\\d+"))
+                        buff += lastField.getText(); // turns active
+                    if (lastField.getText().length() > 2 && !lastField.getText().matches("\\d+")) {
+                        try {
+                            GraphicalCommonUsages.okPopUp("effect value invalid", createCardScene, root);
+                            return;
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    buff += "000g100"; //entering target type id
+                    if (buffTargetCombo.getValue().equals("Friendly Team"))
+                        buff += "0200000000";
+                    else
+                        buff += "1200000000";
+                    buffs.put(buffnameField.getText(), buff);
+                    try {
+                        GraphicalCommonUsages.okPopUp(buffnameField.getText() + " added", createCardScene, root);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
         );
-        addCardMovable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //todo : create movable card
-                if(typeBox.getValue().equals("Minion")){
+
+        addCardMovable.setOnMouseClicked(event1 -> {
+            if (typeBox.getValue().equals("Minion")) {
+                try {
                     Minion minion = new Minion();
                     minion.setHealth(Integer.parseInt(hpTextField.getText()));
                     minion.setDamage(Integer.parseInt(apTextField.getText()));
+
                     minion.setMaxAttackRange(Integer.parseInt(rangeTextField.getText()));
+                    if (!buffs.containsKey(specialPower.getText())) {
+                        try {
+                            GraphicalCommonUsages.okPopUp("no such buff found", createCardScene, root);
+                            return;
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     String buff = buffs.get(specialPower.getText());
-                    switch (attackTypeCombo.getValue()){
+                    String[] impactComponents = buff.split("g");
+                    Impact impact = new Impact("000000000", "000", impactComponents[1], impactComponents[0]);
+                    switch (attackTypeCombo.getValue()) {
                         case "Melee":
                             minion.setMelee(true);
                             break;
@@ -232,26 +285,141 @@ public class AddCardFX {
                             minion.setHybrid(true);
                             break;
                     }
+                    switch (specialPowerSetting.getText().toLowerCase()) {
+                        case "on death":
+                            minion.setDyingWishImpact(impact);
+                            break;
+                        case "on defend":
+                            minion.setOnDefendImpact(impact);
+                            break;
+                        case "on attack":
+                            minion.setOnAttackImpact(impact);
+                            break;
+                        case "on spawn":
+                            minion.setSummonImpact(impact);
+                            break;
+                    }
+                    minion.setCost(Integer.parseInt(costMovableCard.getText()));
+                    GraphicalCommonUsages.drakePopUp("minion created", createCardScene, root, 1);
+                    buffs.clear();
+                    minion.isCostume(true);
+                    Shop.getShopMinions().add(minion);
+                    Minion.addToMinions(minion);
+                    Main.addCardToFiles(minion);
+                    GraphicalCommonUsages.drakePopUp("minion added", createCardScene, root, 1);
+                    //todo : add minion to everywhere :/
+                } catch (Exception e) {
+                    try {
+                        GraphicalCommonUsages.drakePopUp("invalid setting for minion", createCardScene, root, 2);
+                        return;
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
                 }
-                if(typeBox.getValue().equals("Hero")){
+            }
+            if (typeBox.getValue().equals("Hero")) {
+                try {
+                    String name;
+                    int health, damage, range, coolDown;
+                    name = nameTextField.getText();
+                    health = Integer.parseInt(hpTextField.getText());
+                    damage = Integer.parseInt(apTextField.getText());
+                    range = Integer.parseInt(rangeTextField.getText());
+                    coolDown = Integer.parseInt(specialPowerSetting.getText());
+                    Spell spell = Spell.getSpellByName(specialPower.getText());
+                    Hero hero = new Hero(name, health, damage, spell, coolDown);
+                    hero.isCostume(true);
+                    Shop.getShopHeroes().add(hero);
+                    Hero.addToHeroes(hero);
+                    Main.addCardToFiles(hero);
+                    GraphicalCommonUsages.drakePopUp("hero added", createCardScene, root, 1);
+                } catch (Exception e) {
+                    try {
+                        GraphicalCommonUsages.drakePopUp("invalid setting for hero", createCardScene, root, 2);
+                        return;
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                }
 
-                }
+                //todo : add hero to everywhere
             }
         });
 
         addCardSpell.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //todo : create spell
+                try {
+                    String targetTypeID = "";
+                    Impact primaryImpact, secondaryImpact;
+                    String primaryImpactTypeID = "", secondaryImpactTypeID = "";
+                    if (firstTarget.getValue().trim().equals("One Movable Card"))
+                        targetTypeID += "1";
+                    else
+                        targetTypeID += "0";
+
+                    if (secondTarget.getValue().trim().equals("Both Teams"))
+                        targetTypeID += "1";
+                    else
+                        targetTypeID += "0";
+
+                    if (firstTarget.getValue().equals("The Entire Team"))
+                        targetTypeID += "1";
+                    else
+                        targetTypeID += "0";
+
+                    switch ((secondTarget.getValue().toLowerCase())) {
+                        case "friendly team":
+                            targetTypeID += "0";
+                            break;
+                        case "opponent team":
+                            targetTypeID += "1";
+                            break;
+                        case "both teams":
+                            targetTypeID += "2";
+                            break;
+                    }
+                    if (firstTarget.getValue().equals("Hero"))
+                        targetTypeID += "000000000";
+                    else
+                        targetTypeID += "200000000";
+                    int count = 0;
+                    if (buffs.size() >= 1) {
+                        for (String s : buffs.keySet()) {
+                            if (count == 0)
+                                primaryImpactTypeID = buffs.get(s);
+                            if (count == 1)
+                                secondaryImpactTypeID = buffs.get(s);
+                            count++;
+                        }
+                    }
+                    primaryImpact = new Impact("000000000", "000", targetTypeID, primaryImpactTypeID);
+                    secondaryImpact = new Impact("000000000", "000", targetTypeID, secondaryImpactTypeID);
+                    Spell spell = new Spell(primaryImpact, secondaryImpact);
+                    spell.setName(nameTextField.getText());
+                    spell.setCost(Integer.parseInt(costSpell.getText()));
+                    buffs.clear();
+                    spell.isCostume(true);
+                    Shop.getShopSpells().add(spell);
+                    Spell.addToSpells(spell);
+                    Main.addCardToFiles(spell);
+                    addCardGif(spell);
+                    GraphicalCommonUsages.drakePopUp("spell added", createCardScene, root, 1);
+                    //todo : add spell to everywhere
+                } catch (Exception e) {
+                    try {
+                        e.printStackTrace();
+                        GraphicalCommonUsages.drakePopUp("invalid setting for spell", createCardScene, root, 2);
+                        return;
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                }
             }
         });
 
-
         comboBoxSetting(createCardScene, typeBox);
-
         root.getChildren().addAll(nameTextField, typeBox, spellBox, movableCardMutualSetting);
-
-
         return root;
     }
 
@@ -302,8 +470,23 @@ public class AddCardFX {
             }
         });
         typeBox.setPrefWidth(createCardScene.getWidth() / 6);
-
     }
+
+    private boolean addCardGif(Card card){
+        File stockDir = null;
+        if (card instanceof Spell)
+         stockDir = new File("src/view/sources/gifs/spells/bitch");
+         return stockDir.mkdir();
+    }
+
+//    private String suitableFileName(String name){
+//        String[] nameEditing = name.split("[ ]");
+//        String suitableName = "";
+//        for (String s : nameEditing) {
+//            suitableName+=s.toLowerCase();
+//        }
+//        return suitableName;
+//    }
 
 
 }

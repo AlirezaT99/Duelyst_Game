@@ -517,6 +517,8 @@ public class ShopMenuFX {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 Card card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))),"idle");
+                if(animation == null)
+                    System.out.println(cardsToShow.get(i + (10 * (pageNumber - 1))));
                 animation.getView().setFitWidth(currentScene.getWidth() / 20);
                 animation.getView().setFitHeight(currentScene.getHeight() / 10);
                 if (card instanceof MovableCard) {

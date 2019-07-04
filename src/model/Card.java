@@ -10,6 +10,7 @@ public abstract class Card {
     protected String cardID = "";
     protected String collectionID = "";
     protected String description = "";
+    protected boolean isCostume = false;
 
     void setCardFieldsForCopy(Card card) {
         card.cost = cost;
@@ -69,6 +70,10 @@ public abstract class Card {
         return player;
     }
 
+    public boolean isCostume() {
+        return isCostume;
+    }
+
     //getters
 
     //setters
@@ -105,6 +110,9 @@ public abstract class Card {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+    public void isCostume(boolean isCostume){ this.isCostume = isCostume;}
+
 
     //setters
 

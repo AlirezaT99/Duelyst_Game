@@ -14,15 +14,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             Card card = cardCreator(scanner);
-            Gson gson = new Gson();
-            String fileName = "src/model/temp/";
-            fileName += card instanceof Minion ? "minions/" : (card instanceof Hero ? "heroes/" : "spells/");
-            fileName += fileNameCreator(card.getName()) + ".json";
-            try (FileOutputStream fos = new FileOutputStream(fileName);
-                 OutputStreamWriter isr = new OutputStreamWriter(fos,
-                         StandardCharsets.UTF_8)) {
-                gson.toJson(card, isr);
-            }
+            addCardToFiles(card);
         }
     }
 
@@ -189,16 +181,16 @@ public class Main {
         System.out.println("damage:");
         int damage = scanner.nextInt();
         System.out.println("Attack Type : (melee(m)/ranged(r)/hybrid(h)");
-        String  c = scanner.next();
+        String c = scanner.next();
         System.out.println("Attack Range:");
         int range = scanner.nextInt();
         Hero hero = new Hero(name, health, damage, spell, spellCoolDown);
         hero.maxAttackRange = range;
-        if(c.equalsIgnoreCase("m"))
+        if (c.equalsIgnoreCase("m"))
             hero.isMelee = true;
-        else if(c.equalsIgnoreCase("r"))
+        else if (c.equalsIgnoreCase("r"))
             hero.isRanged = true;
-        else if(c.equalsIgnoreCase("h"))
+        else if (c.equalsIgnoreCase("h"))
             hero.isHybrid = true;
         return hero;
     }
@@ -215,11 +207,11 @@ public class Main {
         minion.maxAttackRange = attackRange;
         System.out.println("Attack Type : (melee(m)/ranged(r)/hybrid(h)");
         String c = scanner.next();
-        if(c.equalsIgnoreCase("m"))
+        if (c.equalsIgnoreCase("m"))
             minion.isMelee = true;
-        else if(c.equalsIgnoreCase("r"))
+        else if (c.equalsIgnoreCase("r"))
             minion.isRanged = true;
-        else if(c.equalsIgnoreCase("h"))
+        else if (c.equalsIgnoreCase("h"))
             minion.isHybrid = true;
         minion.setName(name);
         minion.setHealth(health);//dup
@@ -288,7 +280,7 @@ public class Main {
         //12.isOnCell(0,1)
         getNextThing(scanner, impactTypeId, "0.(0,1)isPositive");
         getNextThing(scanner, impactTypeId, "1.(0-6)buffType{holy,power,poison,weakness,stun,disarm}");
-        getNextThing(scanner, impactTypeId, "2.(0-3)QuantityChange{mana,health,damage}");
+        getNextThing(scanner, impactTypeId, "2.(0-3)QuantityChange{none,mana,health,damage}");
         getNextThing(scanner, impactTypeId, "3.(0,1)quantityChangeSign{negative/isPositiveImpact}");
         getNextThing(scanner, impactTypeId, "4,5.(0,n)\"impactQuantity\"");
         getNextThing(scanner, impactTypeId, "6.(0-3)PassivePermanent{none , passive , permanent , continuous}");
@@ -341,13 +333,25 @@ public class Main {
     }
 
     //
-    private static String fileNameCreator(String name) {
+    public static String fileNameCreator(String name) {
         String fileName = "";
         String[] nameCompleted = name.split("[ ]");
         for (String s : nameCompleted) {
             fileName += s.toLowerCase();
         }
         return fileName;
+    }
+
+    public static void addCardToFiles(Card card) throws IOException {
+        Gson gson = new Gson();
+        String fileName = "src/model/";
+        fileName += card instanceof Minion ? "minions/" : (card instanceof Hero ? "heroes/" : "spells/");
+        fileName += Main.fileNameCreator(card.getName()) + ".json";
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+             OutputStreamWriter isr = new OutputStreamWriter(fos,
+                     StandardCharsets.UTF_8)) {
+            gson.toJson(card, isr);
+        }
     }
 }
 

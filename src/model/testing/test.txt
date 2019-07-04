@@ -1,0 +1,55 @@
+buy Tourani Spy
+buy The Wolf
+buy Tourani Archer
+buy Goblin
+buy Bahman
+buy FireBall
+buy All Disarm
+buy Shock Hammer
+buy Esfandiar
+buy Lightning Bolt
+buy Madness
+buy The Two Headed Giant
+buy The Leopard
+buy The Great Ghoul
+buy The Witch Master
+buy Persian WarLord
+buy Piraan
+buy Iraj
+buy Cyclops
+buy Giiv
+buy Ashk Boos
+buy Tourani Prince
+buy Tourani MaceBearer
+buy Aarash
+
+-------------------------------------------
+add 0 to deck deck1
+add 1 to deck deck1
+add 2 to deck deck1
+add 3 to deck deck1
+add 4 to deck deck1
+add 5 to deck deck1
+add 6 to deck deck1
+add 7 to deck deck1
+add 8 to deck deck1
+add 9 to deck deck1
+add 10 to deck deck1
+add 11 to deck deck1
+add 12 to deck deck1
+add 13 to deck deck1
+add 14 to deck deck1
+add 15 to deck deck1
+add 16 to deck deck1
+add 17 to deck deck1
+add 18 to deck deck1
+add 19 to deck deck1
+add 20 to deck deck1
+
+--------------------------
+login ali
+ali
+3
+2
+select user sepehr
+start multiplayer game 1
