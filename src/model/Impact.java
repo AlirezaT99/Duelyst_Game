@@ -387,6 +387,14 @@ public class Impact {
         this.impactTypeId = impactTypeId;
     }
 
+    public String getImpactEffectCompId() {
+        return impactTypeComp;
+    }
+
+    public String getWayOfAssigningId() {
+        return impactWayOfAssigning;
+    }
+
 
     //setters
 }
