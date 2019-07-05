@@ -232,7 +232,6 @@ public class GraphicalCommonUsages {
         if (item != null)
             return new AnimatedGif(address + "items/" + cardName + "/" + typeYouWant + ".gif", 1000);
         Card card = Shop.findCardByName(cardName);
-        System.out.println(card.getName()+" getgif");
         if (card instanceof Spell && !card.isCostume())
             return new AnimatedGif(address + "spells/" + cardName + "/" + typeYouWant + ".gif", 1000);
         if(card instanceof Spell  && card.isCostume())

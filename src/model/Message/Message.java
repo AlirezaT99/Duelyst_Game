@@ -7,7 +7,6 @@ public class Message {
         this.authCode = authCode;
     }
 
-
     public String getAuthCode() {
         return authCode;
     }
