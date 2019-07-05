@@ -7,7 +7,6 @@ public class UpdateShopObjectGifsRequest extends Message {
     public UpdateShopObjectGifsRequest(String authCode) {
         super(authCode);
     }
-
     public String getObjectName() {
         return objectName;
     }

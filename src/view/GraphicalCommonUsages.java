@@ -232,12 +232,18 @@ public class GraphicalCommonUsages {
         if (item != null)
             return new AnimatedGif(address + "items/" + cardName + "/" + typeYouWant + ".gif", 1000);
         Card card = Shop.findCardByName(cardName);
-        if (card instanceof Spell)
+        if (card instanceof Spell && !card.isCostume())
             return new AnimatedGif(address + "spells/" + cardName + "/" + typeYouWant + ".gif", 1000);
-        if (card instanceof Minion)
+        if(card instanceof Spell  && card.isCostume())
+            return new AnimatedGif(address + "spells/spell/" + typeYouWant + ".gif", 1000);
+        if (card instanceof Minion && !card.isCostume())
             return new AnimatedGif(address + "minions/" + cardName + "/" + typeYouWant + ".gif", 1000);
-        if (card instanceof Hero)
+        if(card instanceof Minion  && card.isCostume())
+            return new AnimatedGif(address + "minions/minion/" + typeYouWant + ".gif", 1000);
+        if (card instanceof Hero && !card.isCostume())
             return new AnimatedGif(address + "heroes/" + cardName + "/" + typeYouWant + ".gif", 1000);
+        if(card instanceof Hero  && card.isCostume())
+            return new AnimatedGif(address + "heroes/hero/" + typeYouWant + ".gif", 1000);
         return null;
     }
 
