@@ -1,6 +1,9 @@
 package model.Server;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -70,15 +73,32 @@ public class ServerGraphic extends Application {
 //            }
 //        });
 //        thread.start();
-        for (String s : onlineClients.keySet()) {
-            Label label1 = new Label(onlineClients.get(s).getUserName());
-            label1.setFont(Font.font(30));
-            label1.setTextFill(Color.WHITE);
-            accountsVBox.getChildren().add(label1);
-            label1.setAlignment(Pos.CENTER);
-        }
+        final LongProperty lastUpdate = new SimpleLongProperty();
+
+        final long minUpdateInterval = 1;
+        AnimationTimer timer = new AnimationTimer() {
+
+            @Override
+            public void handle(long now) {
+                if (now - lastUpdate.get() > minUpdateInterval) {
+                    accountsVBox.getChildren().clear();
+                    for (String s : onlineClients.keySet()) {
+
+                        Label label1 = new Label(onlineClients.get(s).getUserName());
+                        label1.setFont(Font.font(30));
+                        label1.setTextFill(Color.WHITE);
+                        accountsVBox.getChildren().add(label1);
+                        label1.setAlignment(Pos.CENTER);
+                    }
+                    lastUpdate.set(now);
+                }
+            }
+        };
+
+        timer.start();
+
         onlineAccountPane.setOnMouseClicked(event1 -> {
-                   // thread.stop();
+                    // thread.stop();
                     root.getChildren().remove(onlineAccountPane);
                 }
         );
