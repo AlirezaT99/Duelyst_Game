@@ -8,6 +8,7 @@ import com.google.gson.*;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.io.Reader;
@@ -31,6 +32,8 @@ public class LoginMenuProcess {
         commandPatterns.add(Pattern.compile("logout"));
         commandPatterns.add(Pattern.compile("help"));
     }
+
+
 
     public interface DoCommand {
         int doIt() throws IOException;
@@ -116,10 +119,6 @@ public class LoginMenuProcess {
             if (user.getUserName().equals(userName)) {
                 if (user.getPassword().equals(password)) {
                     currentAccount = user;
-//                    loginMenu.setIsInLoginMenu(false);
-//                    MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
-//                    mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
-//                    mainMenu.run();
                     return 0;
                 } else
                     return 2; // message id : 2
@@ -165,6 +164,10 @@ public class LoginMenuProcess {
     //setters
 
     //getters
+
+    public ArrayList<Account> getUsers() {
+        return users;
+    }
 
     public Account getCurrentAccount() {
         return currentAccount;

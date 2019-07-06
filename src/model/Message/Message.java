@@ -1,6 +1,8 @@
 package model.Message;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
     String authCode;
 
     public Message(String authCode) {
@@ -15,4 +17,10 @@ public class Message {
         return authCode;
         //todo extract userName out of authCode
     }
+
+//    @Override
+//    public String toString(){
+//
+//    }
+
 }

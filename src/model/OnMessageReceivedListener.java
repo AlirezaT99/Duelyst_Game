@@ -1,6 +1,6 @@
-package sample;
+package model;
 
 public interface OnMessageReceivedListener
 {
-    void onMessageReceived(String message);
+    void onMessageReceived(String message) throws ClassNotFoundException;
 }

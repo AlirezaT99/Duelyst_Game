@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Reader extends Thread {
     private InputStream input;
 
-    private LinkedList<sample.OnMessageReceivedListener> listeners = new LinkedList<>();
+    private LinkedList<model.OnMessageReceivedListener> listeners = new LinkedList<>();
 
     public Reader(InputStream input) {
         this.input = input;
@@ -17,16 +17,20 @@ public class Reader extends Thread {
     public void run() {
         Scanner scanner = new Scanner(input);
         while (scanner.hasNextLine()) {
-            callOnMessageReceived(scanner.nextLine());
+            try {
+                callOnMessageReceived(scanner.nextLine());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void addListener(sample.OnMessageReceivedListener listener) {
+    public void addListener(model.OnMessageReceivedListener listener) {
         listeners.add(listener);
     }
 
-    private void callOnMessageReceived(String message) {
-        for (sample.OnMessageReceivedListener listener : listeners) {
+    private void callOnMessageReceived(String message) throws ClassNotFoundException {
+        for (model.OnMessageReceivedListener listener : listeners) {
             listener.onMessageReceived(message);
         }
     }
