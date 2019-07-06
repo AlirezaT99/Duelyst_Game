@@ -3,7 +3,7 @@ package model.Message;
 public class LoginBasedCommand extends Message {
     private String userName;
     private String password;
-    private boolean login; //if false then --> create account
+    private boolean login; // if false then --> create account
     private boolean success;
 
     public LoginBasedCommand(String userName, String password, boolean login) {

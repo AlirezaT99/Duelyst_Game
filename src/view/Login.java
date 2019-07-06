@@ -17,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Message.LoginBasedCommand;
+import model.client.Client;
 import presenter.LoginMenuProcess;
 
 import java.io.File;
@@ -176,6 +178,8 @@ public class Login {
             if (login.isVisible()) {
                 LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
                 try {
+                    LoginBasedCommand loginBasedCommand = new LoginBasedCommand(textField.getText(),passwordField.getId(),false);
+                    Client.getInstance().sendData(loginBasedCommand.toString());
                     int loginCheck = loginMenuProcess.login(textField.getText(), passwordField.getText());
                     if (loginCheck == 0) {
                         System.out.println("logged in");

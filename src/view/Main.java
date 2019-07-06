@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.Account;
+import model.client.Client;
 import model.Match;
 import presenter.BattleMenuProcess;
 
@@ -35,6 +36,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
+        Client.getInstance().start();
         launch(args);
         loginMenu.run();
     }
@@ -45,15 +47,12 @@ public class Main extends Application {
         primaryScreenBounds = GraphicalCommonUsages.initPrimaryStage(primaryStage);
         primaryStage.setTitle("Duelyst");
         primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> primaryStage.setFullScreen(true));
-        // primaryStage.setFullScreen(true);
         login = new Login();
         currentScene = new Scene(login.start(primaryStage), primaryStage.getWidth(), primaryStage.getHeight());
         javafx.scene.image.Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         currentScene.setCursor(new ImageCursor(cursor));
-//        currentScene = login.start(primaryStage);
         primaryStage.setScene(currentScene);
         primaryStage.setOnCloseRequest(event -> System.exit(0));
-        //backgroundMusicNotBattlePlay();
         primaryStage.show();
     }
 
