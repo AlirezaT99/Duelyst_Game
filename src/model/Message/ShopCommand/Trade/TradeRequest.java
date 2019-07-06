@@ -1,4 +1,4 @@
-package model.Message.ShopCommand;
+package model.Message.ShopCommand.Trade;
 
 public class TradeRequest extends TradeCommand {
     public TradeRequest(String authCode, boolean buy, String objectName) {

@@ -346,74 +346,71 @@ public class AddCardFX {
             }
         });
 
-        addCardSpell.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+        addCardSpell.setOnMouseClicked(event13 -> {
+            try {
+                String targetTypeID = "";
+                Impact primaryImpact, secondaryImpact;
+                String primaryImpactTypeID = "", secondaryImpactTypeID = "";
+                if (firstTarget.getValue().trim().equals("One Movable Card"))
+                    targetTypeID += "1";
+                else
+                    targetTypeID += "0";
+
+                if (secondTarget.getValue().trim().equals("Both Teams"))
+                    targetTypeID += "1";
+                else
+                    targetTypeID += "0";
+
+                if (firstTarget.getValue().equals("The Entire Team"))
+                    targetTypeID += "1";
+                else
+                    targetTypeID += "0";
+
+                switch ((secondTarget.getValue().toLowerCase())) {
+                    case "friendly team":
+                        targetTypeID += "0";
+                        break;
+                    case "opponent team":
+                        targetTypeID += "1";
+                        break;
+                    case "both teams":
+                        targetTypeID += "2";
+                        break;
+                }
+                if (firstTarget.getValue().equals("Hero"))
+                    targetTypeID += "000000000";
+                else
+                    targetTypeID += "200000000";
+                int count = 0;
+                if (buffs.size() >= 1) {
+                    for (String s : buffs.keySet()) {
+                        if (count == 0)
+                            primaryImpactTypeID = buffs.get(s);
+                        if (count == 1)
+                            secondaryImpactTypeID = buffs.get(s);
+                        count++;
+                    }
+                }
+                primaryImpact = new Impact("000000000", "000", targetTypeID, primaryImpactTypeID);
+                secondaryImpact = new Impact("000000000", "000", targetTypeID, secondaryImpactTypeID);
+                Spell spell = new Spell(primaryImpact, secondaryImpact);
+                spell.setName(nameTextField.getText());
+                spell.setCost(Integer.parseInt(costSpell.getText()));
+                buffs.clear();
+                spell.isCostume(true);
+                Shop.getShopSpells().add(spell);
+                Spell.addToSpells(spell);
+                Main.addCardToFiles(spell);
+                addCardGif(spell);
+                GraphicalCommonUsages.drakePopUp("spell added", createCardScene, root, 1);
+                //todo : add spell to everywhere
+            } catch (Exception e) {
                 try {
-                    String targetTypeID = "";
-                    Impact primaryImpact, secondaryImpact;
-                    String primaryImpactTypeID = "", secondaryImpactTypeID = "";
-                    if (firstTarget.getValue().trim().equals("One Movable Card"))
-                        targetTypeID += "1";
-                    else
-                        targetTypeID += "0";
-
-                    if (secondTarget.getValue().trim().equals("Both Teams"))
-                        targetTypeID += "1";
-                    else
-                        targetTypeID += "0";
-
-                    if (firstTarget.getValue().equals("The Entire Team"))
-                        targetTypeID += "1";
-                    else
-                        targetTypeID += "0";
-
-                    switch ((secondTarget.getValue().toLowerCase())) {
-                        case "friendly team":
-                            targetTypeID += "0";
-                            break;
-                        case "opponent team":
-                            targetTypeID += "1";
-                            break;
-                        case "both teams":
-                            targetTypeID += "2";
-                            break;
-                    }
-                    if (firstTarget.getValue().equals("Hero"))
-                        targetTypeID += "000000000";
-                    else
-                        targetTypeID += "200000000";
-                    int count = 0;
-                    if (buffs.size() >= 1) {
-                        for (String s : buffs.keySet()) {
-                            if (count == 0)
-                                primaryImpactTypeID = buffs.get(s);
-                            if (count == 1)
-                                secondaryImpactTypeID = buffs.get(s);
-                            count++;
-                        }
-                    }
-                    primaryImpact = new Impact("000000000", "000", targetTypeID, primaryImpactTypeID);
-                    secondaryImpact = new Impact("000000000", "000", targetTypeID, secondaryImpactTypeID);
-                    Spell spell = new Spell(primaryImpact, secondaryImpact);
-                    spell.setName(nameTextField.getText());
-                    spell.setCost(Integer.parseInt(costSpell.getText()));
-                    buffs.clear();
-                    spell.isCostume(true);
-                    Shop.getShopSpells().add(spell);
-                    Spell.addToSpells(spell);
-                    Main.addCardToFiles(spell);
-                    addCardGif(spell);
-                    GraphicalCommonUsages.drakePopUp("spell added", createCardScene, root, 1);
-                    //todo : add spell to everywhere
-                } catch (Exception e) {
-                    try {
-                        e.printStackTrace();
-                        GraphicalCommonUsages.drakePopUp("invalid setting for spell", createCardScene, root, 2);
-                        return;
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
+                    e.printStackTrace();
+                    GraphicalCommonUsages.drakePopUp("invalid setting for spell", createCardScene, root, 2);
+                    return;
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
                 }
             }
         });

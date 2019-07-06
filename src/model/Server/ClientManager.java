@@ -1,11 +1,11 @@
 package model.Server;
 
 import com.google.gson.Gson;
-import model.Account;
+import model.*;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Message.Utils;
-import model.Reader;
 import presenter.LoginMenuProcess;
 import sun.security.krb5.internal.TGSRep;
 
@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClientManager extends Thread {
+    private String authCode = "";
 
     public ClientManager(Server server, Socket socketOnServerSide) {
         this.socketOnServerSide = socketOnServerSide;
@@ -47,9 +49,9 @@ public class ClientManager extends Thread {
                     System.out.println("--------------");
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
                 }
-                if(message instanceof Utils){
+                if (message instanceof Utils) {
                     System.out.println("---- util ----");
-                    handleUtilsBasedCommand(objectOutputStream,(Utils)message);
+                    handleUtilsBasedCommand(objectOutputStream, (Utils) message);
                 }
             }
 
@@ -63,8 +65,8 @@ public class ClientManager extends Thread {
 
     //login based
 
-    private void handleUtilsBasedCommand(ObjectOutputStream objectOutputStream, Utils utils){
-        if(utils.isLogout()){
+    private void handleUtilsBasedCommand(ObjectOutputStream objectOutputStream, Utils utils) {
+        if (utils.isLogout()) {
             server.getOnlineAccounts().remove(utils.getAuthCode());
             server.getClients().remove(utils.getAuthCode());
             server.getAuthcodes().remove(utils.getAuthCode());
@@ -77,7 +79,7 @@ public class ClientManager extends Thread {
         String userName = loginBasedCommand.getUserName();
         String password = loginBasedCommand.getPassword();
         if (loginBasedCommand.isCreateAccount())
-            createAccountServerSide(objectOutputStream, userName,password);
+            createAccountServerSide(objectOutputStream, userName, password);
         else {
             loginOnServerSide(objectOutputStream, userName, password);
         }
@@ -87,17 +89,24 @@ public class ClientManager extends Thread {
     private void loginOnServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
         int loginErrorNumber = server.getLoginErrorNumber(userName, password);
         if (server.isLoginValid(userName, password)) {
-            objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, server.generateAuthCode(userName, this), true, loginErrorNumber, Account.getAccountByUserName(userName)));
+            authCode = server.generateAuthCode(userName,this);
+            objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, authCode, true, loginErrorNumber, Account.getAccountByUserName(userName)));
+            ArrayList<ArrayList<Object>> cards = Shop.getCards();
+            ArrayList<ArrayList<Object>> collectionCards = Collection.getCollectionCards(Server.getOnlineAccounts().get(authCode));
+            HashMap<String, int[]> movableCardsPowers = Shop.getMovableCardsPowers();
+            HashMap<String, Integer> costs = Shop.getCosts();
+            HashMap<String, Integer> numbers = Shop.getNumbers();
+            objectOutputStream.writeObject(new UpdateWholeShop(cards, collectionCards, movableCardsPowers, costs, numbers));
         } else {
             objectOutputStream.writeObject(new LoginBasedCommand("", "", false, "", true, loginErrorNumber, Account.getAccountByUserName(userName)));
         }
     }
 
-    private void createAccountServerSide(ObjectOutputStream objectOutputStream, String userName, String password ) throws IOException {
+    private void createAccountServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
         if (server.isAccountAvailabale(userName))
             objectOutputStream.writeObject(new LoginBasedCommand("", "", false, "", false, 0, null));
         else {
-            LoginMenuProcess.createAccount(userName,password);
+            LoginMenuProcess.createAccount(userName, password);
             objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, "", false, 0, Account.getAccountByUserName(userName)));
         }
     }

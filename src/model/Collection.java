@@ -24,6 +24,18 @@ public class Collection {
         deckHashMap = new HashMap<>();
     }
 
+    public static ArrayList<ArrayList<Object>> getCollectionCards(Account account) {
+        ArrayList<ArrayList<Object>> collectionCards = new ArrayList<>();
+        Collection collection = account.getCollection();
+        for (int i = 0; i <4 ; i++)
+            collectionCards.add(new ArrayList<>());
+        collectionCards.get(0).addAll(collection.heroes);
+        collectionCards.get(1).addAll(collection.minions);
+        collectionCards.get(2).addAll(collection.spells);
+        collectionCards.get(3).addAll(collection.items);
+        return collectionCards;
+    }
+
     public void setSelectedDeck(String name) {
         selectedDeck = deckHashMap.get(name);
     }

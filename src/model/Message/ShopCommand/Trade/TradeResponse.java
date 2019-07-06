@@ -1,4 +1,4 @@
-package model.Message.ShopCommand;
+package model.Message.ShopCommand.Trade;
 
 import model.Card;
 import model.Item;

@@ -1,8 +1,9 @@
-package model.Message.ShopCommand;
+package model.Message.ShopCommand.UpdateShop;
 
 import javafx.scene.image.Image;
 import model.Card;
 import model.Item;
+import model.Message.ShopCommand.ShopCommand;
 
 import java.util.ArrayList;
 

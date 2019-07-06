@@ -14,11 +14,9 @@ import java.io.ObjectInputStream;
 public class GetDataRunnable implements Runnable {
 
     private ObjectInputStream inputStream;
-    private runnables.MessageListener listener;
 
-    public GetDataRunnable(ObjectInputStream inputStream, runnables.MessageListener listener) {
+    public GetDataRunnable(ObjectInputStream inputStream) {
         this.inputStream = inputStream;
-        this.listener = listener;
     }
 
     @Override

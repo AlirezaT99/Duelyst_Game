@@ -25,7 +25,7 @@ public class Server {
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
         Server server = new Server();
-        server.serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
+        serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
         new ServerListener(server).start();
     }
 
