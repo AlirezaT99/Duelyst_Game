@@ -1,11 +1,17 @@
 package model.client;
 
+import com.google.gson.Gson;
+import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.MyConstants;
+import model.Reader;
+import model.Server.Lock;
+import sun.security.krb5.internal.TGSRep;
 import view.Main;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Client implements runnables.MessageListener {
     private String authCode;
@@ -13,16 +19,22 @@ public class Client implements runnables.MessageListener {
     private Socket clientSocket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
+    private LoginBasedCommand loginBasedCommand = new LoginBasedCommand("", "", true);
 
-    public void start(){
+
+    private final  Lock lock = new Lock();
+
+    public void start() {
         try {
             connect2Server();
             initIOStreams();
             startThreads();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private void connect2Server() throws IOException {
         System.out.println("connecting to server...");
@@ -32,28 +44,67 @@ public class Client implements runnables.MessageListener {
 
     private void initIOStreams() throws IOException {
         outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-        inputStream = new ObjectInputStream(clientSocket.getInputStream());
+        outputStream.flush();
+            inputStream = new ObjectInputStream(clientSocket.getInputStream());
     }
 
-    private void startThreads() {
-        new Thread(new runnables.GetDataRunnable(inputStream, this)).start();
+    private void startThreads() throws IOException {
+            new Thread(new runnables.GetDataRunnable(inputStream, this)).start();
+
     }
 
-    public void sendData(String text) {
-        Message message = new Message(text);
+    public void sendData(Message text) {
+       // Message message = new Message(text);
         try {
-            outputStream.writeObject(message);
+            outputStream.writeObject(text);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void receive(Message message) {
-       // Main.getData(message);
     }
 
     public static Client getInstance() {
         return instance;
     }
 
+    //getter & setter
+
+    public LoginBasedCommand getLoginBasedCommand() {
+        return loginBasedCommand;
+    }
+
+    public void setLoginBasedCommand(LoginBasedCommand loginBasedCommand) {
+        this.loginBasedCommand = loginBasedCommand;
+    }
+
+    public String getAuthCode() {
+        return authCode;
+    }
+
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
+    }
+
+    public Lock getLock() {
+        return lock;
+    }
+
+
+    //getter & setter
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

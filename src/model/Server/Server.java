@@ -1,28 +1,29 @@
 package model.Server;
 
-import io.joshworks.restclient.http.HttpResponse;
-import io.joshworks.restclient.http.Unirest;
-import model.client.Client;
-import model.Message.Message;
+import model.Account;
 import model.MyConstants;
-import model.Reader;
-import model.Writer;
+import model.client.Client;
+import presenter.LoginMenuProcess;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Pattern;
+import java.util.HashSet;
+import java.util.Random;
 
 public class Server {
     private ServerSocket serverSocket;
-    private HashMap<String, Socket> clients = new HashMap<>();
+    private HashSet<String > authcodes = new HashSet<>();
+    private HashMap<String, ClientManager> clients = new HashMap<>();
+    private HashMap<String , Account> onlineAccounts = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
+        presenter.MainProcess.readFiles();
         Server server = new Server();
         server.serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
         new ServerListener(server).start();
@@ -32,17 +33,63 @@ public class Server {
         return serverSocket;
     }
 
-    public void addToClients(String authCode, Socket clientSocket) {
-        clients.put(authCode, clientSocket);
+
+
+    public boolean isAccountAvailabale(String userName){
+        for (Account account : Account.getAccounts()) {
+            if(account.getUserName().equals(userName))
+                return true;
+        }
+        return false;
     }
 
-    public void removeFromCleints(String authCode) {
-        clients.remove(authCode);
+    //getters & setters
+
+    public HashMap<String, ClientManager> getClients() {
+        return clients;
     }
+
+    public void setClients(HashMap<String, ClientManager> clients) {
+        this.clients = clients;
+    }
+
+    public HashMap<String, Account> getOnlineAccounts() {
+        return onlineAccounts;
+    }
+
+    public void setOnlineAccounts(HashMap<String, Account> onlineAccounts) {
+        this.onlineAccounts = onlineAccounts;
+    }
+
+    public int getLoginErrorNumber(String userName, String password) {
+        try {
+            return   new LoginMenuProcess().login(userName,password);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public boolean isLoginValid(String userName, String password) {
+        return getLoginErrorNumber(userName, password) == 0;
+    }
+
+    public String generateAuthCode(String userName, ClientManager clientManager) {
+        Random r = new Random();
+        String tempAuthCode = (r.nextInt()%10000) + "";
+        while (authcodes.contains(tempAuthCode))
+            tempAuthCode = (r.nextInt()%10000) + "";
+        authcodes.add(tempAuthCode);
+        clients.put(tempAuthCode,clientManager);
+        onlineAccounts.put(tempAuthCode,Account.getAccountByUserName(userName));
+        return tempAuthCode;
+    }
+
+    //getters & setters
 }
 
 class ServerListener extends Thread {
-    Server server;
+    private Server server;
 
     ServerListener(Server server) {
         this.server = server;
@@ -55,8 +102,8 @@ class ServerListener extends Thread {
         while (true) {
             try {
                 Socket addedClient = server.getServerSocket().accept();
-                ClientManager clientManager = new ClientManager(addedClient);
-                clientManager.run();
+                ClientManager clientManager = new ClientManager(server,addedClient);
+                clientManager.start();
                 System.out.println("client " + addedClient.getPort() + " added");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -79,67 +126,13 @@ class ServerRequestHandler extends Thread {
         }
     }
 
-    private void handleRequest() {
-        synchronized (lock) {
-        }
-    }
-
-    private void addToAnswerQueue(DatagramPacket answer) {
-    }
-
-    private DatagramPacket getAnswer(DatagramPacket requestPacket) {
-        return new DatagramPacket(new byte[100], 100);
-    }
-
-
-    void addToWaitingPacketsToBeHandled(DatagramPacket datagramPacket) {
-        synchronized (lock) {
-        }
-    }
 
     public Lock getLock() {
         return lock;
     }
 }
 
-class ClientManager {
 
-    ClientManager(Socket socketOnServerSide) {
-        this.socketOnServerSide = socketOnServerSide;
-    }
-
-    private static HashMap<String, ClientManager> clientManagers = new HashMap<>();
-
-    private Socket socketOnServerSide;
-    private Writer clientWriter;
-    //setters
-    private void setClientWriter(Writer writer) {
-        clientWriter = writer;
-        writer.start();
-    }
-
-    //command manager
-    private boolean isACommand(String message) {
-        return message.charAt(0) == '~';
-    }
-
-//    //command manager
-
-    void run() {
-        try {
-            setClientWriter(new model.Writer(socketOnServerSide.getOutputStream()));
-            Reader reader = new model.Reader(socketOnServerSide.getInputStream());
-            reader.addListener(message -> {
-
-                //todo : idk how it works here, sepehr should help
-            });
-            reader.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-}
 
 
 

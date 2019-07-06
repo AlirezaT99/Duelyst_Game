@@ -57,7 +57,6 @@ class GameServerListener extends Thread {
             DatagramPacket packet = new DatagramPacket(receive, receive.length);
             try {
                 server.getServerSocket().receive(packet);
-                serverRequestHandler.addToWaitingPacketsToBeHandled(packet);
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -35,7 +35,7 @@ public class Main extends Application {
     private static AudioClip audioClip;
 
     public static void main(String[] args) throws IOException {
-        presenter.MainProcess.readFiles();
+
         Client.getInstance().start();
         launch(args);
         loginMenu.run();
