@@ -49,6 +49,7 @@ class ServerListener extends Thread {
     }
 
     @Override
+
     public void run() {
 //        ServerRequestHandler serverRequestHandler = new ServerRequestHandler();
 //        serverRequestHandler.start();
@@ -130,7 +131,6 @@ class ClientManager {
             setClientWriter(new model.Writer(socketOnServerSide.getOutputStream()));
             Reader reader = new model.Reader(socketOnServerSide.getInputStream());
             reader.addListener(message -> {
-
                 //todo : idk how it works here, sepehr should help
             });
             reader.start();
