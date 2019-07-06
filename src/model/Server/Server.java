@@ -17,10 +17,10 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class Server {
-    private ServerSocket serverSocket;
-    private HashSet<String > authcodes = new HashSet<>();
-    private HashMap<String, ClientManager> clients = new HashMap<>();
-    private HashMap<String , Account> onlineAccounts = new HashMap<>();
+    private static ServerSocket serverSocket;
+    private static HashSet<String > authcodes = new HashSet<>();
+    private static HashMap<String, ClientManager> clients = new HashMap<>();
+    private static HashMap<String , Account> onlineAccounts = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
@@ -49,12 +49,18 @@ public class Server {
         return clients;
     }
 
-    public void setClients(HashMap<String, ClientManager> clients) {
+
+
+    public void setClients (HashMap<String, ClientManager> clients) {
         this.clients = clients;
     }
 
-    public HashMap<String, Account> getOnlineAccounts() {
+    public static HashMap<String, Account> getOnlineAccounts() {
         return onlineAccounts;
+    }
+
+    public HashSet<String> getAuthcodes() {
+        return authcodes;
     }
 
     public void setOnlineAccounts(HashMap<String, Account> onlineAccounts) {
@@ -82,8 +88,17 @@ public class Server {
         authcodes.add(tempAuthCode);
         clients.put(tempAuthCode,clientManager);
         onlineAccounts.put(tempAuthCode,Account.getAccountByUserName(userName));
+        showOnlineClients();
         return tempAuthCode;
     }
+
+    public void showOnlineClients(){
+        System.out.println("Online clients : ");
+        for (String s : onlineAccounts.keySet()) {
+            System.out.println("\n"+onlineAccounts.get(s).getUserName()+"\n");
+        }
+    }
+
 
     //getters & setters
 }

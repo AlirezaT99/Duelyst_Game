@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.Account;
+import model.Message.Utils;
 import model.client.Client;
 import model.Match;
 import presenter.BattleMenuProcess;
@@ -35,7 +36,6 @@ public class Main extends Application {
     private static AudioClip audioClip;
 
     public static void main(String[] args) throws IOException {
-
         Client.getInstance().start();
         launch(args);
         loginMenu.run();
@@ -52,7 +52,11 @@ public class Main extends Application {
         javafx.scene.image.Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         currentScene.setCursor(new ImageCursor(cursor));
         primaryStage.setScene(currentScene);
-        primaryStage.setOnCloseRequest(event -> System.exit(0));
+        primaryStage.setOnCloseRequest(event -> {
+            Utils util = new Utils(Client.getInstance().getAuthCode(),true);
+            Client.getInstance().sendData(util);
+            System.exit(0);
+        });
         primaryStage.show();
     }
 
@@ -76,7 +80,6 @@ public class Main extends Application {
             Main.login = new Login();
         currentScene.setRoot(login.start(primaryStage));
         primaryStage.setScene(currentScene);
-        //   primaryStage.setFullScreen(true);
     }
 
     public static void setShopMenuFX(Account account) throws FileNotFoundException {
@@ -142,12 +145,12 @@ public class Main extends Application {
         }
     }
 
-    public static Scene getScene(){
+    public static Scene getScene() {
         return currentScene;
     }
 
     private static void backgroundMusicNotBattlePlay() {
-        if (audioClip!=null && audioClip.isPlaying())
+        if (audioClip != null && audioClip.isPlaying())
             audioClip.stop();
         audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
         audioClip.setCycleCount(Integer.MAX_VALUE);

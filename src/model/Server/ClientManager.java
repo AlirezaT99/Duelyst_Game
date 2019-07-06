@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import model.Account;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.Utils;
 import model.Reader;
 import presenter.LoginMenuProcess;
 import sun.security.krb5.internal.TGSRep;
@@ -46,6 +47,10 @@ public class ClientManager extends Thread {
                     System.out.println("--------------");
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
                 }
+                if(message instanceof Utils){
+                    System.out.println("---- util ----");
+                    handleUtilsBasedCommand(objectOutputStream,(Utils)message);
+                }
             }
 
         } catch (IOException e) {
@@ -58,6 +63,15 @@ public class ClientManager extends Thread {
 
     //login based
 
+    private void handleUtilsBasedCommand(ObjectOutputStream objectOutputStream, Utils utils){
+        if(utils.isLogout()){
+            server.getOnlineAccounts().remove(utils.getAuthCode());
+            server.getClients().remove(utils.getAuthCode());
+            server.getAuthcodes().remove(utils.getAuthCode());
+            server.showOnlineClients();
+        }
+    }
+
     private void handleLoginBasedCommands(ObjectOutputStream objectOutputStream, LoginBasedCommand message) throws IOException {
         LoginBasedCommand loginBasedCommand = message;
         String userName = loginBasedCommand.getUserName();
@@ -68,6 +82,7 @@ public class ClientManager extends Thread {
             loginOnServerSide(objectOutputStream, userName, password);
         }
     }
+
 
     private void loginOnServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
         int loginErrorNumber = server.getLoginErrorNumber(userName, password);

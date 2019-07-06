@@ -17,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Account;
+import model.Message.Utils;
+import model.client.Client;
 import presenter.LoginMenuProcess;
 
 import java.io.File;
@@ -157,6 +159,8 @@ public class MainMenuFX {
         backButtonAdjustment(root, mainMenuScene, backToLoginView);
         backToLoginView.setOnMouseClicked(event -> {
             try {
+                Utils util = new Utils(Client.getInstance().getAuthCode(),true);
+                Client.getInstance().sendData(util);
                 Main.setLoginMenu();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
