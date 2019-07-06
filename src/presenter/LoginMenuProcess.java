@@ -119,10 +119,6 @@ public class LoginMenuProcess {
             if (user.getUserName().equals(userName)) {
                 if (user.getPassword().equals(password)) {
                     currentAccount = user;
-//                    loginMenu.setIsInLoginMenu(false);
-//                    MainMenu mainMenu = new MainMenu(currentAccount); // correct ??
-//                    mainMenu.getMainMenuProcess().setLoginMenu(loginMenu);
-//                    mainMenu.run();
                     return 0;
                 } else
                     return 2; // message id : 2

@@ -5,6 +5,7 @@ import model.Account;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Reader;
+import presenter.LoginMenuProcess;
 import sun.security.krb5.internal.TGSRep;
 
 import javax.print.DocFlavor;
@@ -81,7 +82,7 @@ public class ClientManager extends Thread {
         if (server.isAccountAvailabale(userName))
             objectOutputStream.writeObject(new LoginBasedCommand("", "", false, "", false, 0, null));
         else {
-            Account.addToAccounts(new Account(userName,password));
+            LoginMenuProcess.createAccount(userName,password);
             objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, "", false, 0, Account.getAccountByUserName(userName)));
         }
     }
