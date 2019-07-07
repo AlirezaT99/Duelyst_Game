@@ -1,4 +1,6 @@
-package model.Message.ShopCommand;
+package model.Message.ShopCommand.Trade;
+
+import model.Message.ShopCommand.ShopCommand;
 
 public class TradeCommand extends ShopCommand {
     private boolean buy;

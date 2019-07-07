@@ -19,9 +19,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Account;
 import model.Message.LoginBasedCommand;
-import model.Message.Message;
 import model.client.Client;
-import presenter.LoginMenuProcess;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -95,7 +93,7 @@ public class Login {
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login, loginButton, onLoginButtonImage, loginButtonImage);
         handleLoginSubmission(usernameField, passwordField, login, loginScene, root);
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp, signUpButton, onSignUpButtonImage, signUpButtonImage);
-        handleSignUpSubmission(onLoginCircle, onSignUpCircle, usernameField, passwordField, login, signUp, loginScene, root);
+        handleSignUpSubmission(usernameField, passwordField, signUp, loginScene, root);
         manageCreateAccountAndLoginBars(onLogin, onSignUp, onLoginCircle, onSignUpCircle, login, signUp);
         root.getChildren().addAll(login, signUp, onLogin, onSignUp, exitView);
         //  letterbox(loginScene, root);
@@ -151,7 +149,7 @@ public class Login {
         }
     }
 
-    private void handleSignUpSubmission(Circle onLoginCircle, Circle onSignUpCircle, TextField textField, PasswordField passwordField, StackPane login, StackPane signUp, Scene scene, Pane root) {
+    private void handleSignUpSubmission(TextField textField, PasswordField passwordField, StackPane signUp, Scene scene, Pane root) {
         signUp.setOnMouseClicked(event -> {
             if (signUp.isVisible()) {
                 try {

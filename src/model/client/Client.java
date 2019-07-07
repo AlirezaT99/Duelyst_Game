@@ -1,18 +1,13 @@
 package model.client;
 
-import com.google.gson.Gson;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.MyConstants;
-import model.Reader;
 import model.Server.Lock;
-import sun.security.krb5.internal.TGSRep;
-import view.Main;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 
 public class Client implements runnables.MessageListener {
     private String authCode;
@@ -50,8 +45,8 @@ public class Client implements runnables.MessageListener {
             inputStream = new ObjectInputStream(clientSocket.getInputStream());
     }
 
-    private void startThreads() throws IOException {
-            new Thread(new runnables.GetDataRunnable(inputStream, this)).start();
+    private void startThreads() {
+            new Thread(new runnables.GetDataRunnable(inputStream)).start();
 
     }
 

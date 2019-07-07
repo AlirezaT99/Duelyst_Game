@@ -1,10 +1,11 @@
 package model.Server;
 
 import com.google.gson.Gson;
-import model.Account;
+import model.*;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
+import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Message.Utils;
 import model.Reader;
 import model.client.Client;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClientManager extends Thread {
+    private String authCode = "";
 
     public ClientManager(Server server, Socket socketOnServerSide) {
         this.socketOnServerSide = socketOnServerSide;
@@ -104,7 +106,14 @@ public class ClientManager extends Thread {
     private void loginOnServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
         int loginErrorNumber = server.getLoginErrorNumber(userName, password);
         if (server.isLoginValid(userName, password)) {
-            objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, server.generateAuthCode(userName, this), true, loginErrorNumber, Account.getAccountByUserName(userName)));
+            authCode = server.generateAuthCode(userName,this);
+            objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, authCode, true, loginErrorNumber, Account.getAccountByUserName(userName)));
+            ArrayList<ArrayList<Object>> cards = Shop.getCards();
+            ArrayList<ArrayList<Object>> collectionCards = Collection.getCollectionCards(Server.getOnlineAccounts().get(authCode));
+            HashMap<String, int[]> movableCardsPowers = Shop.getMovableCardsPowers();
+            HashMap<String, Integer> costs = Shop.getCosts();
+            HashMap<String, Integer> numbers = Shop.getNumbers();
+            objectOutputStream.writeObject(new UpdateWholeShop(cards, collectionCards, movableCardsPowers, costs, numbers));
         } else {
             objectOutputStream.writeObject(new LoginBasedCommand("", "", false, "", true, loginErrorNumber, Account.getAccountByUserName(userName)));
         }

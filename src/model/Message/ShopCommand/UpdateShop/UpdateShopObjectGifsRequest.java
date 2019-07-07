@@ -1,4 +1,4 @@
-package model.Message.ShopCommand;
+package model.Message.ShopCommand.UpdateShop;
 
 import model.Message.Message;
 
