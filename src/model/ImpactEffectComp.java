@@ -179,8 +179,8 @@ public class ImpactEffectComp {
 
     public boolean doesHaveAntiHolyBuff() {
         fatherImpact.setAllVariablesNeeded();
-        setImpactTypeIdComp(fatherImpact.getImpactEffectCompId());
-        setImpactWayOfAssigning(fatherImpact.getWayOfAssigningId());
+//        setImpactTypeIdComp(fatherImpact.getImpactEffectCompId());
+//        setImpactWayOfAssigning(fatherImpact.getWayOfAssigningId());
         return doesHaveAntiHolyBuff;
     }
 

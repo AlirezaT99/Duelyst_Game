@@ -78,7 +78,7 @@ public class ShopMenuFX {
         return root;
     }
 
-    static void drawCards(GridPane gridPane ,Scene scene, Pane root, Font trump, Font trump_small, Boolean shopMenuOrCollection) throws FileNotFoundException {
+    static void drawCards(GridPane gridPane, Scene scene, Pane root, Font trump, Font trump_small, Boolean shopMenuOrCollection) throws FileNotFoundException {
         if (shopMenuOrCollection)
             gridPane.relocate(scene.getWidth() * 7.3 / 24, scene.getHeight() * 7.5 / 24);
         else
@@ -516,23 +516,24 @@ public class ShopMenuFX {
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 Card card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))),"idle");
-                if(animation == null)
-                    System.out.println(cardsToShow.get(i + (10 * (pageNumber - 1))));
-                animation.getView().setFitWidth(currentScene.getWidth() / 20);
-                animation.getView().setFitHeight(currentScene.getHeight() / 10);
-                if (card instanceof MovableCard) {
-                    animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5);
-                    animation.getView().setFitWidth(animation.getView().getFitWidth() * 1.5);
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))), "idle");
+                if (animation != null) {
+                    animation.getView().setFitWidth(currentScene.getWidth() / 20);
+                    animation.getView().setFitHeight(currentScene.getHeight() / 10);
+
+                    if (card instanceof MovableCard) {
+                        animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5);
+                        animation.getView().setFitWidth(animation.getView().getFitWidth() * 1.5);
+                    }
+                    animation.setCycleCount(Integer.MAX_VALUE);
+                    animation.play();
                 }
-                animation.setCycleCount(Integer.MAX_VALUE);
-                animation.play();
 
                 cardLabels.get(i).setText(/*"\n" + */cardsToShow.get(i + (10 * (pageNumber - 1))));
                 cardPanes.get(i).setVisible(true);
                 if (cardPanes.get(i).getChildren().get(cardPanes.get(i).getChildren().size() - 1) instanceof ImageView)
                     cardPanes.get(i).getChildren().remove(cardPanes.get(i).getChildren().size() - 1);
-                cardPanes.get(i).getChildren().add(animation.getView());
+                if (animation != null) cardPanes.get(i).getChildren().add(animation.getView());
             } else {
                 cardPanes.get(i).setVisible(false);
                 cardLabels.get(i).setText("");

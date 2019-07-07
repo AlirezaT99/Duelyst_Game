@@ -75,7 +75,6 @@ public class Spell extends Card {
         for (Spell spell : spells)
             if (spell.getName().equals(name))
                 return spell.copy();
-        System.out.println(name);
         return null;
     }
 
