@@ -8,7 +8,7 @@ public class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
     private int number = 10;
-    private  int collectionNumber = 0;
+    private int collectionNumber = 0;
 
     @Override
     public UsableItem copy(){
@@ -60,9 +60,9 @@ public class UsableItem extends InfluentialItem {
     }
 
     public static UsableItem getUsableItemByName(String name) {
-        for (int i = 0; i < usableItems.size(); i++)
-            if (usableItems.get(i).getName().equals(name))
-                return ((UsableItem) usableItems.get(i)).copy();
+        for (UsableItem usableItem : usableItems)
+            if (usableItem.getName().equals(name))
+                return usableItem.copy();
         return null;
     }
 
