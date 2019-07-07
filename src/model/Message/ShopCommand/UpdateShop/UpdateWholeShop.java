@@ -1,38 +1,52 @@
 package model.Message.ShopCommand.UpdateShop;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import model.Card;
+import model.Message.ShopCommand.ShopCommand;
+import org.omg.CORBA.INTERNAL;
 
 import javax.swing.text.Style;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
-public class UpdateWholeShop {
-
-
-    private String cards = "";
-    private String collectionCards = "";
-    private String movableCardsPowers = "";
-    private String costs = "";
-    private String cardNumbers= "";
+public class UpdateWholeShop extends ShopCommand {
 
 
+    private String cards;
+    private String collectionCards;
+    private String movableCardsPowers;
+    private String costs;
+    private String cardNumbers;
+    private String cardCollectionNumbers;
+    private String costumeCards;
+    private long money;
 
-    public UpdateWholeShop(ArrayList<ArrayList<Object>> cards, ArrayList<ArrayList<Object>> collectionCards, HashMap<String , int[]> movableCardsPowers, HashMap<String , Integer> costs, HashMap<String ,Integer> cardsNumbers) {
-        Gson gson = new Gson();
+
+    public UpdateWholeShop(HashMap<String , Integer> collctionCardNumbers,long money,HashSet<String > costumeCards,ArrayList<ArrayList<String >> cards, ArrayList<ArrayList<String >> collectionCards, HashMap<String , int[]> movableCardsPowers, HashMap<String , Integer> costs, HashMap<String ,Integer> cardsNumbers) {
+        super("");
+        this.money = money;
+        Gson gson = new GsonBuilder().create();
         this.cards = gson.toJson(cards);
         this.collectionCards = gson.toJson(collectionCards);
         this.movableCardsPowers = gson.toJson(movableCardsPowers);
         this.costs = gson.toJson(costs);
         this.cardNumbers = gson.toJson(cardsNumbers);
-
+        this.costumeCards = gson.toJson(costumeCards);
+        this.cardCollectionNumbers = gson.toJson(collctionCardNumbers);
     }
 
     private ArrayList<String > getSomeCard(boolean collection, int index){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().create();
         Type type = new TypeToken<ArrayList<ArrayList<String >>>(){}.getType();
-        String wantedCards = collection? collectionCards:cards;
+        String wantedCards;
+        if(collection)
+            wantedCards = collectionCards;
+        else
+            wantedCards = cards;
         ArrayList< ArrayList<String>> cards2 =  gson.fromJson(wantedCards,type);
         return cards2.get(index);
     }
@@ -46,6 +60,12 @@ public class UpdateWholeShop {
         Gson gson = new Gson();
         Type type = new TypeToken<HashMap<String ,Integer>>(){}.getType();
         return gson.fromJson(cardNumbers,type);
+    }
+
+    public HashMap<String , Integer> getCollectionNumbers(){
+        Gson gson = new Gson();
+        Type type = new TypeToken<HashMap<String , Integer>>(){}.getType();
+        return gson.fromJson(cardCollectionNumbers,type);
     }
 
     public HashMap<String , int[]> getPowers(){
@@ -80,4 +100,13 @@ public class UpdateWholeShop {
         return getSomeCard(true,3);
     }
 
+    public HashSet<String> getCostumes() {
+        Gson gson = new Gson();
+        Type type = new TypeToken<HashSet<String >>(){}.getType();
+        return gson.fromJson(costumeCards,type);
+    }
+
+    public long getMoney() {
+        return money;
+    }
 }

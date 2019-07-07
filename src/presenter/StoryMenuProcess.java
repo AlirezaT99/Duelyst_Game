@@ -84,7 +84,7 @@ public class StoryMenuProcess {
         deck.addSpellToDeck(Spell.getSpellByName("All Power"));
         deck.addSpellToDeck(Spell.getSpellByName("All Attack"));
         deck.addSpellToDeck(Spell.getSpellByName("Weakening"));
-        deck.addMinionToDeck(Minion.getMinionByName("Persian WarLord"));
+        deck.addMinionToDeck(Minion.getMinionByName("Persian Warlord"));
         deck.addMinionToDeck(Minion.getMinionByName("Tourani Archer"));
         deck.addMinionToDeck(Minion.getMinionByName("Tourani Spy"));
         deck.addMinionToDeck(Minion.getMinionByName("StoneLauncher Ghoul"));
@@ -161,9 +161,8 @@ public class StoryMenuProcess {
             deck.getHero().setCardID(playerName + "_" + CollectionMenuProcess.nameCreator(deck.getHero().getName()) + "_1");
         if (deck.getItems() != null && deck.getItems().size() >= 1)
             deck.getItems().get(0).setItemID(playerName + "_" + CollectionMenuProcess.nameCreator(deck.getItems().get(0).getName()) + "_1");
-        for (int i = 0; i < deck.getMinions().size(); i++) {
+        for (int i = 0; i < deck.getMinions().size(); i++)
             deck.getMinions().get(i).setCardID("");
-        }
         for (int i = 0; i < deck.getMinions().size(); i++) {
             int num = 0;
             for (int j = 0; j < deck.getMinions().size(); j++) {
@@ -173,9 +172,8 @@ public class StoryMenuProcess {
             }
             deck.getMinions().get(i).setCardID(playerName + "_" + CollectionMenuProcess.nameCreator(deck.getMinions().get(i).getName()) + "_" + (num + 1));
         }
-        for (int i = 0; i < deck.getSpells().size(); i++) {
+        for (int i = 0; i < deck.getSpells().size(); i++)
             deck.getSpells().get(i).setCardID("");
-        }
         for (int i = 0; i < deck.getSpells().size(); i++) {
             int num = 0;
             for (int j = 0; j < deck.getSpells().size(); j++) {

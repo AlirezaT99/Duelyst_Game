@@ -20,10 +20,10 @@ public class ImportBasedDeck {
     }
 
     public static boolean isThisDeckValidToExport(Deck deck, Account account) {
-        if (!doesItHaveTheHero(deck.getHero().getName(), account.getCollection().getHeroes()))
-            return false;
-        if (!doesItHaveTheItems(deck.getItems().get(0), account.getCollection().getItems()))
-            return false;
+        if (deck.getHero() == null || !doesItHaveTheHero(deck.getHero().getName(), account.getCollection().getHeroes()))
+                return false;
+        if (deck.getItems().isEmpty() || !doesItHaveTheItems(deck.getItems().get(0), account.getCollection().getItems()))
+                return false;
         ArrayList<Card> cards = new ArrayList<>(account.getCollection().getSpells());
         cards.addAll(account.getCollection().getHeroes());
         cards.addAll(account.getCollection().getMinions());

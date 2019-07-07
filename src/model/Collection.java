@@ -24,15 +24,19 @@ public class Collection {
         deckHashMap = new HashMap<>();
     }
 
-    public static ArrayList<ArrayList<Object>> getCollectionCards(Account account) {
-        ArrayList<ArrayList<Object>> collectionCards = new ArrayList<>();
+    public static ArrayList<ArrayList<String >> getCollectionCards(Account account) {
+        ArrayList<ArrayList<String >> collectionCards = new ArrayList<>();
         Collection collection = account.getCollection();
         for (int i = 0; i <4 ; i++)
             collectionCards.add(new ArrayList<>());
-        collectionCards.get(0).addAll(collection.heroes);
-        collectionCards.get(1).addAll(collection.minions);
-        collectionCards.get(2).addAll(collection.spells);
-        collectionCards.get(3).addAll(collection.items);
+        for (Hero shopHero : collection.getHeroes())
+            collectionCards.get(0).add(shopHero.getName());
+        for (Minion shopMinion : collection.getMinions())
+            collectionCards.get(1).add(shopMinion.name);
+        for (Spell shopSpell : collection.getSpells())
+            collectionCards.get(2).add(shopSpell.name);
+        for (UsableItem shopItem : collection.getItems())
+            collectionCards.get(3).add(shopItem.name);
         return collectionCards;
     }
 
@@ -188,6 +192,23 @@ public class Collection {
 
     public HashMap<String, Spell> getSpellHashMap() {
         return spellHashMap;
+    }
+
+    public HashMap<String, Integer> getCardNumbers() {
+        HashMap<String , Integer> objects = new HashMap<>();
+        for (Hero hero : heroes) {
+            objects.put(hero.name,hero.getCollectionNumber());
+        }
+        for (Minion minion : minions) {
+            objects.put(minion.name,minion.getCollectionNumber());
+        }
+        for (Spell spell : spells) {
+            objects.put(spell.name,spell.getCollectionNumber());
+        }
+        for (UsableItem item : items) {
+            objects.put(item.name,item.getCollectionNumber());
+        }
+        return objects;
     }
     //getters
 }

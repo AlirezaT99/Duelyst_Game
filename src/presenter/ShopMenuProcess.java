@@ -144,20 +144,8 @@ public class ShopMenuProcess {
         return 0;
     }
 
-    public static boolean isDrakeEnough(int money, String name){
-        UsableItem item = findItemByName(name.trim());
-        Card card = findCardByName(name.trim());
-        if(item != null)
-            if(item.getCost()<=money)
-                return true;
-            else
-                return false;
-        if(card!=null)
-            if(card.getCost()<=money)
-                return true;
-            else
-                return false;
-        return false;
+    public static boolean isDrakeEnough(int cardPrice,long accountMoney){
+        return accountMoney >= cardPrice;
     }
 
     private int sell(String id) throws FileNotFoundException {

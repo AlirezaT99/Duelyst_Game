@@ -8,6 +8,7 @@ public class Hero extends MovableCard {
     private int spellCost;
     private int spellCoolDown;
 
+
     public Hero(String name, int health, int damage, Spell heroSpell, int spellCoolDown) {
         this.heroSpell = heroSpell;
         this.spellCost = heroSpell.manaCost;

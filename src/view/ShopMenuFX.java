@@ -20,12 +20,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Message.ShopCommand.Trade.TradeCommand;
+import model.Message.ShopCommand.Trade.TradeRequest;
+import model.Message.ShopCommand.Trade.TradeResponse;
+import model.client.Client;
 import presenter.ShopMenuProcess;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 import static view.GraphicalCommonUsages.yesCancelPopUp;
@@ -42,8 +47,10 @@ public class ShopMenuFX {
     private static ArrayList<String> collectionSpells = new ArrayList<>();
     private static ArrayList<String> collectionItems = new ArrayList<>();
     private static HashMap<String, int[]> movableCardsPowers = new HashMap<>();
-    private static HashMap<String , Integer> costs = new HashMap<>();
-    private static HashMap<String , Integer> cardNumbers = new HashMap<>();
+    private static HashMap<String, Integer> costs = new HashMap<>();
+    private static HashMap<String, Integer> cardNumbers = new HashMap<>();
+    private static HashMap<String, Integer> cardCollectionNumbers = new HashMap<>();
+    private static long acccountMoney;
 
     private static Text page = new Text();
     private static boolean isInShop = true;
@@ -55,6 +62,14 @@ public class ShopMenuFX {
     private static HashMap<Integer, Label> cardPrices = new HashMap<>();
     private static HashMap<Integer, StackPane> cardPanes = new HashMap<>();
     private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
+    private static HashSet<String> costumeCards = new HashSet<>();
+    private static TradeResponse tradeResponse;
+
+    static {
+        tradeResponseTaken();
+    }
+
+
     static int pageNumber = 1;
     private static int selectedIndex = 0;
     private static Account account;
@@ -66,7 +81,14 @@ public class ShopMenuFX {
         ShopMenuFX.account = account;
     }
 
+    public static void setResponse(TradeResponse message) {
+        tradeResponse = message;
+    }
+
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+        synchronized (Client.getInstance().getShopLock()) {
+
+        }
         root = new Pane();
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
@@ -136,7 +158,7 @@ public class ShopMenuFX {
                         selectedIndex = finalI;
                         String str = isInShop ? "BUY" : "SELL";
                         if (str.equals("BUY")) {
-                            if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
+                            if (!ShopMenuProcess.isDrakeEnough((costs.get(cardLabels.get(finalI).getText().trim())), acccountMoney)) {
                                 GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
                             } else {
                                 yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
@@ -154,8 +176,6 @@ public class ShopMenuFX {
 
             stackPane.getChildren().addAll(imageView, cardName, card_AP_HP, price);
             gridPane.add(stackPane, i % 5, i / 5 > 0 ? 1 : 0);
-//            stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
-//                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
         }
     }
 
@@ -253,10 +273,12 @@ public class ShopMenuFX {
             switch (listView.getSelectionModel().getSelectedIndices().toString()) {
                 case "[0]":
                     moveToHeroTab();
+                    updatePowers();
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[1]":
                     moveToMinionTab();
+                    updatePowers();
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[2]":
@@ -396,7 +418,7 @@ public class ShopMenuFX {
     private void drawDrake(Pane root, Scene scene, Font font) throws FileNotFoundException {
         ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/drake_verySmall.png"))); // for now
         imageView.relocate(scene.getWidth() * 0.92, scene.getHeight() / 64);
-        money = new Label(account.getMoney() + "");
+        money = new Label(acccountMoney + "");
         money.relocate(scene.getWidth() * 0.88, scene.getHeight() / 64 + 20);
         money.setFont(font);
         money.setTextFill(Color.WHITE);
@@ -440,8 +462,7 @@ public class ShopMenuFX {
                 updateLabels();
                 try {
                     updatePowers();
-                } catch (ClassCastException ex) {
-//                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
+                } catch (ClassCastException ignored) {
                 }
                 updatePrices();
             }
@@ -459,15 +480,16 @@ public class ShopMenuFX {
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-//                Card card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1)))); //todo
                 int index = i + (10 * (pageNumber - 1));
-                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))), "idle");
-                if (animation == null)
+                int cardType1 = getCardType(index);
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(index), "idle", cardType1, costumeCards.contains(cardsToShow.get(index))); //todo costumCard
+                if (animation == null && !costumeCards.contains(cardsToShow.get(index))) {
                     System.out.println(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                }
                 animation.getView().setFitWidth(currentScene.getWidth() / 20);
                 animation.getView().setFitHeight(currentScene.getHeight() / 10);
                 if (heroes.contains(cardsToShow.get(index)) || minions.contains(cardsToShow.get(index))) {
-                    animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5); //todo
+                    animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5);
                     animation.getView().setFitWidth(animation.getView().getFitWidth() * 1.5);
                 }
                 animation.setCycleCount(Integer.MAX_VALUE);
@@ -477,7 +499,7 @@ public class ShopMenuFX {
                 cardPanes.get(i).setVisible(true);
                 if (cardPanes.get(i).getChildren().get(cardPanes.get(i).getChildren().size() - 1) instanceof ImageView)
                     cardPanes.get(i).getChildren().remove(cardPanes.get(i).getChildren().size() - 1);
-                cardPanes.get(i).getChildren().add(animation.getView());
+                if (animation != null) cardPanes.get(i).getChildren().add(animation.getView());
             } else {
                 cardPanes.get(i).setVisible(false);
                 cardLabels.get(i).setText("");
@@ -486,16 +508,38 @@ public class ShopMenuFX {
         pageSetText();
     }
 
+    private static int getCardType(int index) {
+        int cardType = 5;
+        if (items.contains(cardsToShow.get(index)))
+            cardType = 3;
+        if (spells.contains(cardsToShow.get(index)))
+            cardType = 2;
+        if (minions.contains(cardsToShow.get(index)))
+            cardType = 1;
+        if (heroes.contains(cardsToShow.get(index)))
+            cardType = 0;
+        return cardType;
+    }
+
     static void updatePowers() {
         removePowers();
+        if(cardsToShow.size() == 0)
+            return;
+        if (items.contains(cardsToShow.get(0)) || spells.contains(cardsToShow.get(0)))
+            return;
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 int index = i + (10 * (pageNumber - 1));
+                if (!movableCardsPowers.containsKey(cardsToShow.get(index)))
+                    System.out.println(cardsToShow.get(index));
                 int damage = movableCardsPowers.get(cardsToShow.get(index))[0];
                 int health = movableCardsPowers.get(cardsToShow.get(index))[1];
-                cardPowers.get(i).setText("\n" + damage + "\t\t\t" + health);
+                cardPowers.get(i).setText("\n" + damage + "\t\t\t" + health+"\n");
+                if(isInShop)
+                    cardPowers.get(i).setText(cardPowers.get(i).getText()+cardNumbers.get(cardsToShow.get(index)));
+                if(isInCollection)
+                    cardPowers.get(i).setText(cardPowers.get(i).getText()+cardCollectionNumbers.get(cardsToShow.get(index)));
             }
-            /*label->stackPane[i].setVisible(false)*/
         }
     }
 
@@ -504,9 +548,8 @@ public class ShopMenuFX {
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 int index = i + (10 * (pageNumber - 1));
-                cardPrices.get(i).setText(costs.get(cardsToShow.get(index))+"");
+                cardPrices.get(i).setText(costs.get(cardsToShow.get(index)) + "");
             }
-            /*label->stackPane[i].setVisible(false)*/
         }
     }
 
@@ -569,21 +612,142 @@ public class ShopMenuFX {
         otherChangeableArea.setImage(otherFirstImage);
     }
 
-    static void buyProcess() throws FileNotFoundException {
-        handleErrors(Shop.buy(account, cardLabels.get(selectedIndex).getText()));
-//        GraphicalCommonUsages.drakePopUp("purchase was successful",);
+    private static void tradeProcess(boolean buy) throws FileNotFoundException {
+        Client.getInstance().sendData(new TradeRequest(Client.getInstance().getAuthCode(), buy, cardLabels.get(selectedIndex).getText()));
+        synchronized (Client.getInstance().getShopLock()) {
+            if (tradeResponse.getAuthCode().equals("")) {
+                try {
+                    Client.getInstance().getShopLock().wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        handleTrad();
         updateMoney();
     }
 
-    static void updateMoney() {
-        money.setText(account.getMoney() + "");
+
+    static void buyProcess() throws FileNotFoundException {
+        tradeProcess(true);
     }
 
     static void sellProcess() throws FileNotFoundException {
-        handleErrors(Shop.sell(account, cardLabels.get(selectedIndex).getText()));
-//        GraphicalCommonUsages.drakePopUp("purchase was successful",);
-        updateMoney();
+        tradeProcess(false);
     }
+
+    private static void handleTrad() throws FileNotFoundException {
+        if (!tradeResponse.isSuccessFullTrade()) {
+            handleErrors(tradeResponse.getAlertMessage());
+            tradeResponseTaken();
+            return;
+        }
+        String name = tradeResponse.getObjectName();
+        if (tradeResponse.isBuy()) {
+            acccountMoney -= tradeResponse.getCost();
+            cardNumbers.replace(name, cardNumbers.get(name) - 1);
+            if (cardCollectionNumbers.containsKey(name)) {
+                cardCollectionNumbers.replace(name, cardCollectionNumbers.get(name) + 1);
+            }
+            else {
+                newCardActions(name);
+            }
+        } else {
+            acccountMoney += tradeResponse.getCost();
+            cardNumbers.replace(name, cardNumbers.get(name) + 1);
+            cardCollectionNumbers.replace(name, cardCollectionNumbers.get(name) - 1);
+            if(cardCollectionNumbers.get(name) == 0){
+                collectionItems.remove(name);
+                collectionHeroes.remove(name);
+                collectionSpells.remove(name);
+                collectionMinions.remove(name);
+            }
+        }
+        tradeResponseTaken();
+    }
+
+    private static void newCardActions(String name) {
+        cardCollectionNumbers.put(name, 1);
+        if(heroes.contains(name))
+            collectionHeroes.add(name);
+        if(minions.contains(name))
+            collectionMinions.add(name);
+        if(spells.contains(name))
+            collectionSpells.add(name);
+        if(items.contains(name))
+            collectionItems.add(name);
+    }
+
+    static void updateMoney() {
+        //todo send a request to server
+        money.setText(acccountMoney + "");
+    }
+
+
+    private static void tradeResponseTaken() {
+        tradeResponse = new TradeResponse("", true, "", false, 0, 0);
+    }
+
+    //setters
+
+
+    public static void setAcccountMoney(long acccountMoney) {
+        ShopMenuFX.acccountMoney = acccountMoney;
+    }
+
+    public static void setHeroes(ArrayList<String> heroes) {
+        ShopMenuFX.heroes = heroes;
+    }
+
+    public static void setMinions(ArrayList<String> minions) {
+        ShopMenuFX.minions = minions;
+    }
+
+    public static void setSpells(ArrayList<String> spells) {
+        ShopMenuFX.spells = spells;
+    }
+
+    public static void setItems(ArrayList<String> items) {
+        ShopMenuFX.items = items;
+    }
+
+    public static void setCollectionHeroes(ArrayList<String> collectionHeroes) {
+        ShopMenuFX.collectionHeroes = collectionHeroes;
+    }
+
+    public static void setCollectionMinions(ArrayList<String> collectionMinions) {
+        ShopMenuFX.collectionMinions = collectionMinions;
+    }
+
+    public static void setCollectionSpells(ArrayList<String> collectionSpells) {
+        ShopMenuFX.collectionSpells = collectionSpells;
+    }
+
+    public static void setCollectionItems(ArrayList<String> collectionItems) {
+        ShopMenuFX.collectionItems = collectionItems;
+    }
+
+    public static void setMovableCardsPowers(HashMap<String, int[]> movableCardsPowers) {
+        ShopMenuFX.movableCardsPowers = movableCardsPowers;
+    }
+
+    public static void setCosts(HashMap<String, Integer> costs) {
+        ShopMenuFX.costs = costs;
+    }
+
+    public static void setCardNumbers(HashMap<String, Integer> cardNumbers) {
+        ShopMenuFX.cardNumbers = cardNumbers;
+    }
+
+    public static void setCostumeCards(HashSet<String> costumeCards) {
+        ShopMenuFX.costumeCards = costumeCards;
+    }
+
+    public static void setCardCollectionNumbers(HashMap<String, Integer> cardCollectionNumbers) {
+        ShopMenuFX.cardCollectionNumbers = cardCollectionNumbers;
+    }
+
+    //setters
 
 
     static Pane getRoot() {

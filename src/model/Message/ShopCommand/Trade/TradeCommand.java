@@ -13,5 +13,17 @@ public class TradeCommand extends ShopCommand {
         this.sell = !buy;
         this.objectName = objectName;
     }
+
+    public boolean isBuy() {
+        return buy;
+    }
+
+    public boolean isSell() {
+        return sell;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
 }
 

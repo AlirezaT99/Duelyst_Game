@@ -78,10 +78,9 @@ public class Minion extends MovableCard {
 
     //getters
     public static Minion getMinionByName(String name) {
-        for (int i = 0; i < minions.size(); i++) {
+        for (int i = 0; i < minions.size(); i++)
             if (minions.get(i).getName().equals(name))
                 return minions.get(i).copy();
-        }
         return null;
     }
 

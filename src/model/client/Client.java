@@ -1,6 +1,5 @@
 package model.client;
 
-import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
@@ -17,6 +16,11 @@ public class Client implements runnables.MessageListener {
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private LoginBasedCommand loginBasedCommand = new LoginBasedCommand("", "", true);
+    private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("",false,false,false);
+
+
+    private final  Lock loginLock = new Lock();
+    private final Lock shopLock = new Lock();
     private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("", false, false, false);
     private GlobalChatMessage globalChatMessage = new GlobalChatMessage("", "");
     private final Lock lock = new Lock();
@@ -51,7 +55,7 @@ public class Client implements runnables.MessageListener {
     }
 
     public void sendData(Message text) {
-        // Message message = new Message(text);
+       // Message message = new Message(text);
         try {
             outputStream.writeObject(text);
         } catch (IOException e) {
@@ -103,9 +107,12 @@ public class Client implements runnables.MessageListener {
     }
 
     public Lock getLock() {
-        return lock;
+        return loginLock;
     }
 
+    public Lock getShopLock() {
+        return shopLock;
+    }
 
     //getter & setter
 }
