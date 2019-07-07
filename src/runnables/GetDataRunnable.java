@@ -1,5 +1,6 @@
 package runnables;
 
+import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
@@ -41,6 +42,12 @@ public class GetDataRunnable implements Runnable {
                 if (message instanceof ScoreBoardCommand) {
                     synchronized (Client.getInstance().getLock()) {
                         Client.getInstance().setScoreBoardCommand((ScoreBoardCommand) message);
+                        Client.getInstance().getLock().notifyAll();
+                    }
+                }
+                if(message instanceof GlobalChatMessage){
+                    synchronized (Client.getInstance().getLock()) {
+                        Client.getInstance().setGlobalChatMessage((GlobalChatMessage) message);
                         Client.getInstance().getLock().notifyAll();
                     }
                 }

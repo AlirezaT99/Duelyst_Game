@@ -26,6 +26,7 @@ public class UpdateWholeShop {
         this.movableCardsPowers = gson.toJson(movableCardsPowers);
         this.costs = gson.toJson(costs);
         this.cardNumbers = gson.toJson(cardsNumbers);
+
     }
 
     private ArrayList<String > getSomeCard(boolean collection, int index){

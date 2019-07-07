@@ -155,8 +155,9 @@ public class CollectionMenuFX {
         drawCreateDeckBar(root, scene, font, createDeckBar);
 
         // Timelines
+
         KeyValue moveX = new KeyValue(manageDecksBar.layoutXProperty(), scene.getWidth() * 6 / 8);
-        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(500), moveX);
+        KeyFrame keyFrame2 = new KeyFrame (Duration.millis(500), moveX);
         Timeline timeline2 = new Timeline();
         timeline2.getKeyFrames().add(keyFrame2);
 
@@ -164,7 +165,6 @@ public class CollectionMenuFX {
         KeyFrame keyFrame3 = new KeyFrame(Duration.millis(500), moveBackX);
         Timeline timeline3 = new Timeline();
         timeline3.getKeyFrames().add(keyFrame3);
-
 
         KeyValue moveBackXCreate = new KeyValue(createDeckBar.layoutXProperty(), scene.getWidth());
         KeyFrame keyFrame5 = new KeyFrame(Duration.millis(501), moveBackXCreate);

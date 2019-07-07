@@ -60,7 +60,7 @@ public class ScoreBoardFX {
         final LongProperty lastUpdate = new SimpleLongProperty();
         VBox scoreBoard = new VBox();
         root.getChildren().addAll(scoreBoard);
-        final long minUpdateInterval = 1000;
+        final long minUpdateInterval = 100;
         AnimationTimer timer = new AnimationTimer() {
 
             @Override

@@ -1,7 +1,9 @@
 package model.Server;
 
 import com.google.gson.Gson;
+import jdk.nashorn.internal.objects.Global;
 import model.*;
+import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
@@ -60,6 +62,10 @@ public class ClientManager extends Thread {
                     System.out.println("----scorebaord-----");
                     handleScoreBoardCommands(objectOutputStream, (ScoreBoardCommand) message);
                 }
+                if (message instanceof GlobalChatMessage) {
+                    System.out.println("----globalChat----");
+                    handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
+                }
             }
 
         } catch (IOException e) {
@@ -69,11 +75,20 @@ public class ClientManager extends Thread {
         }
     }
 
+    private void handleGlobalChatMessage(ObjectOutputStream objectOutputStream, GlobalChatMessage globalChatMessage) {
+        try {
+            if (globalChatMessage.getChatMessages().size() == 0)
+                server.addToChatMessages(globalChatMessage.getMessage(), globalChatMessage.getAuthCode());
+            else
+                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), "1"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void handleScoreBoardCommands(ObjectOutputStream objectOutputStream, ScoreBoardCommand scoreBoardCommand) {
         try {
-
-            objectOutputStream.writeObject(new ScoreBoardCommand("1",server.getAccountNames(),server.getUsersOnlineStatus(),server.getNumberOfWins()));
+            objectOutputStream.writeObject(new ScoreBoardCommand("1", server.getAccountNames(), server.getUsersOnlineStatus(), server.getNumberOfWins()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,7 +121,7 @@ public class ClientManager extends Thread {
     private void loginOnServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
         int loginErrorNumber = server.getLoginErrorNumber(userName, password);
         if (server.isLoginValid(userName, password)) {
-            authCode = server.generateAuthCode(userName,this);
+            authCode = server.generateAuthCode(userName, this);
             objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, authCode, true, loginErrorNumber, Account.getAccountByUserName(userName)));
             ArrayList<ArrayList<Object>> cards = Shop.getCards();
             ArrayList<ArrayList<Object>> collectionCards = Collection.getCollectionCards(Server.getOnlineAccounts().get(authCode));

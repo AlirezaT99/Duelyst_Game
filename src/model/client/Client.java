@@ -1,5 +1,6 @@
 package model.client;
 
+import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
@@ -16,10 +17,9 @@ public class Client implements runnables.MessageListener {
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private LoginBasedCommand loginBasedCommand = new LoginBasedCommand("", "", true);
-    private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("",false,false,false);
-
-
-    private final  Lock lock = new Lock();
+    private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("", false, false, false);
+    private GlobalChatMessage globalChatMessage = new GlobalChatMessage("", "");
+    private final Lock lock = new Lock();
 
     public void start() {
         try {
@@ -42,16 +42,16 @@ public class Client implements runnables.MessageListener {
     private void initIOStreams() throws IOException {
         outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         outputStream.flush();
-            inputStream = new ObjectInputStream(clientSocket.getInputStream());
+        inputStream = new ObjectInputStream(clientSocket.getInputStream());
     }
 
     private void startThreads() {
-            new Thread(new runnables.GetDataRunnable(inputStream)).start();
+        new Thread(new runnables.GetDataRunnable(inputStream)).start();
 
     }
 
     public void sendData(Message text) {
-       // Message message = new Message(text);
+        // Message message = new Message(text);
         try {
             outputStream.writeObject(text);
         } catch (IOException e) {
@@ -76,7 +76,8 @@ public class Client implements runnables.MessageListener {
     public void setLoginBasedCommand(LoginBasedCommand loginBasedCommand) {
         this.loginBasedCommand = loginBasedCommand;
     }
-    public void setScoreBoardCommand(ScoreBoardCommand scoreBoardCommand){
+
+    public void setScoreBoardCommand(ScoreBoardCommand scoreBoardCommand) {
         this.scoreBoardCommand = scoreBoardCommand;
     }
 
@@ -84,6 +85,13 @@ public class Client implements runnables.MessageListener {
         return scoreBoardCommand;
     }
 
+    public GlobalChatMessage getGlobalChatMessage() {
+        return globalChatMessage;
+    }
+
+    public void setGlobalChatMessage(GlobalChatMessage globalChatMessage) {
+        this.globalChatMessage = globalChatMessage;
+    }
 
 
     public String getAuthCode() {

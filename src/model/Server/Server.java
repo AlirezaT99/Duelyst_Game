@@ -22,6 +22,7 @@ public class Server {
     private static HashSet<String> authcodes = new HashSet<>();
     private static HashMap<String, ClientManager> clients = new HashMap<>();
     private static HashMap<String, Account> onlineAccounts = new HashMap<>();
+    private static ArrayList<String> chatMessages = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
@@ -156,6 +157,17 @@ public class Server {
         }
     }
 
+    public ArrayList<String> getChatMessages() {
+        return chatMessages;
+    }
+
+    public void addToChatMessages(String message, String authCode){
+        String finalMessage = onlineAccounts.get(authCode).getUserName()+" "+message;
+        chatMessages.add(finalMessage);
+        System.out.println(finalMessage);
+        if(chatMessages.size()>10)
+            chatMessages.remove(0);
+    }
 
     //getters & setters
 }
