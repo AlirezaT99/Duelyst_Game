@@ -17,7 +17,8 @@ public class Client implements runnables.MessageListener {
     private LoginBasedCommand loginBasedCommand = new LoginBasedCommand("", "", true);
 
 
-    private final  Lock lock = new Lock();
+    private final  Lock loginLock = new Lock();
+    private final Lock shopLock = new Lock();
 
     public void start() {
         try {
@@ -84,9 +85,12 @@ public class Client implements runnables.MessageListener {
     }
 
     public Lock getLock() {
-        return lock;
+        return loginLock;
     }
 
+    public Lock getShopLock() {
+        return shopLock;
+    }
 
     //getter & setter
 }

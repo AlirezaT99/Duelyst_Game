@@ -224,25 +224,24 @@ public class GraphicalCommonUsages {
         cancelStackPane.setOnMouseClicked(event -> root.getChildren().removeAll(bgRectangle, popUp));
     }
 
-    public static Animation getGif(String cardName, String typeYouWant) {
+    public static Animation getGif(String cardName, String typeYouWant, int type , boolean isCostume) { //0.hero 1.minion 2.spell 3.item
         String address = "src/view/sources/gifs/";
-        UsableItem item = Shop.findItemByName(cardName);
         if (cardName.equals("Flag"))
             return new AnimatedGif(address + "items/" + cardName + "/" + typeYouWant + ".gif", 1000);
-        if (item != null)
+        if (type == 3)
             return new AnimatedGif(address + "items/" + cardName + "/" + typeYouWant + ".gif", 1000);
         Card card = Shop.findCardByName(cardName);
-        if (card instanceof Spell && !card.isCostume())
+        if (type == 2 && !isCostume)
             return new AnimatedGif(address + "spells/" + cardName + "/" + typeYouWant + ".gif", 1000);
-        if(card instanceof Spell  && card.isCostume())
+        if(type == 2)
             return new AnimatedGif(address + "spells/spell/" + typeYouWant + ".gif", 1000);
-        if (card instanceof Minion && !card.isCostume())
+        if (type ==1  && !isCostume)
             return new AnimatedGif(address + "minions/" + cardName + "/" + typeYouWant + ".gif", 1000);
-        if(card instanceof Minion  && card.isCostume())
+        if(type == 1)
             return new AnimatedGif(address + "minions/minion/" + typeYouWant + ".gif", 1000);
-        if (card instanceof Hero && !card.isCostume())
+        if (type == 0 && !isCostume)
             return new AnimatedGif(address + "heroes/" + cardName + "/" + typeYouWant + ".gif", 1000);
-        if(card instanceof Hero  && card.isCostume())
+        if(type == 0)
             return new AnimatedGif(address + "heroes/hero/" + typeYouWant + ".gif", 1000);
         return null;
     }

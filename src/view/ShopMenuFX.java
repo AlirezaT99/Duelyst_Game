@@ -20,12 +20,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.client.Client;
 import presenter.ShopMenuProcess;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 import static view.GraphicalCommonUsages.yesCancelPopUp;
@@ -55,6 +57,7 @@ public class ShopMenuFX {
     private static HashMap<Integer, Label> cardPrices = new HashMap<>();
     private static HashMap<Integer, StackPane> cardPanes = new HashMap<>();
     private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
+    private static HashSet<String > costumeCards = new HashSet<>();
     static int pageNumber = 1;
     private static int selectedIndex = 0;
     private static Account account;
@@ -67,6 +70,9 @@ public class ShopMenuFX {
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+        synchronized (Client.getInstance().getShopLock()){
+
+        }
         root = new Pane();
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
@@ -253,10 +259,12 @@ public class ShopMenuFX {
             switch (listView.getSelectionModel().getSelectedIndices().toString()) {
                 case "[0]":
                     moveToHeroTab();
+                    updatePowers();
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[1]":
                     moveToMinionTab();
+                    updatePowers();
                     showSearchBar(searchTextField, searchButton, false);
                     break;
                 case "[2]":
@@ -440,8 +448,7 @@ public class ShopMenuFX {
                 updateLabels();
                 try {
                     updatePowers();
-                } catch (ClassCastException ex) {
-//                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
+                } catch (ClassCastException ignored) {
                 }
                 updatePrices();
             }
@@ -459,15 +466,16 @@ public class ShopMenuFX {
         removeLabels();
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-//                Card card = Shop.findCardByName(cardsToShow.get(i + (10 * (pageNumber - 1)))); //todo
                 int index = i + (10 * (pageNumber - 1));
-                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(i + (10 * (pageNumber - 1))), "idle");
-                if (animation == null)
+                int cardType1 = getCardType(index);
+                Animation animation = GraphicalCommonUsages.getGif(cardsToShow.get(index), "idle", cardType1, costumeCards.contains(cardsToShow.get(index))); //todo costumCard
+                if (animation == null && !costumeCards.contains(cardsToShow.get(index))) {
                     System.out.println(cardsToShow.get(i + (10 * (pageNumber - 1))));
+                }
                 animation.getView().setFitWidth(currentScene.getWidth() / 20);
                 animation.getView().setFitHeight(currentScene.getHeight() / 10);
                 if (heroes.contains(cardsToShow.get(index)) || minions.contains(cardsToShow.get(index))) {
-                    animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5); //todo
+                    animation.getView().setFitHeight(animation.getView().getFitHeight() * 1.5);
                     animation.getView().setFitWidth(animation.getView().getFitWidth() * 1.5);
                 }
                 animation.setCycleCount(Integer.MAX_VALUE);
@@ -486,16 +494,32 @@ public class ShopMenuFX {
         pageSetText();
     }
 
+    private static int getCardType(int index) {
+        int cardType = 5;
+        if(items.contains(cardsToShow.get(index)))
+            cardType = 3;
+        if(spells.contains(cardsToShow.get(index)))
+            cardType = 2;
+        if(minions.contains(cardsToShow.get(index)))
+            cardType = 1;
+        if(heroes.contains(cardsToShow.get(index)))
+            cardType = 0;
+        return cardType;
+    }
+
     static void updatePowers() {
         removePowers();
+        if(items.contains(cardsToShow.get(0)) || spells.contains(cardsToShow.get(0)))
+            return;
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 int index = i + (10 * (pageNumber - 1));
+                if(!movableCardsPowers.containsKey(cardsToShow.get(index)))
+                    System.out.println(cardsToShow.get(index));
                 int damage = movableCardsPowers.get(cardsToShow.get(index))[0];
                 int health = movableCardsPowers.get(cardsToShow.get(index))[1];
                 cardPowers.get(i).setText("\n" + damage + "\t\t\t" + health);
             }
-            /*label->stackPane[i].setVisible(false)*/
         }
     }
 
@@ -506,7 +530,6 @@ public class ShopMenuFX {
                 int index = i + (10 * (pageNumber - 1));
                 cardPrices.get(i).setText(costs.get(cardsToShow.get(index))+"");
             }
-            /*label->stackPane[i].setVisible(false)*/
         }
     }
 
@@ -584,6 +607,58 @@ public class ShopMenuFX {
 //        GraphicalCommonUsages.drakePopUp("purchase was successful",);
         updateMoney();
     }
+
+    //setters
+
+    public static void setHeroes(ArrayList<String> heroes) {
+        ShopMenuFX.heroes = heroes;
+    }
+
+    public static void setMinions(ArrayList<String> minions) {
+        ShopMenuFX.minions = minions;
+    }
+
+    public static void setSpells(ArrayList<String> spells) {
+        ShopMenuFX.spells = spells;
+    }
+
+    public static void setItems(ArrayList<String> items) {
+        ShopMenuFX.items = items;
+    }
+
+    public static void setCollectionHeroes(ArrayList<String> collectionHeroes) {
+        ShopMenuFX.collectionHeroes = collectionHeroes;
+    }
+
+    public static void setCollectionMinions(ArrayList<String> collectionMinions) {
+        ShopMenuFX.collectionMinions = collectionMinions;
+    }
+
+    public static void setCollectionSpells(ArrayList<String> collectionSpells) {
+        ShopMenuFX.collectionSpells = collectionSpells;
+    }
+
+    public static void setCollectionItems(ArrayList<String> collectionItems) {
+        ShopMenuFX.collectionItems = collectionItems;
+    }
+
+    public static void setMovableCardsPowers(HashMap<String, int[]> movableCardsPowers) {
+        ShopMenuFX.movableCardsPowers = movableCardsPowers;
+    }
+
+    public static void setCosts(HashMap<String, Integer> costs) {
+        ShopMenuFX.costs = costs;
+    }
+
+    public static void setCardNumbers(HashMap<String, Integer> cardNumbers) {
+        ShopMenuFX.cardNumbers = cardNumbers;
+    }
+
+    public static void setCostumeCards(HashSet<String> costumeCards) {
+        ShopMenuFX.costumeCards = costumeCards;
+    }
+
+    //setters
 
 
     static Pane getRoot() {

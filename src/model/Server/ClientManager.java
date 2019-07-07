@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
@@ -91,12 +92,13 @@ public class ClientManager extends Thread {
         if (server.isLoginValid(userName, password)) {
             authCode = server.generateAuthCode(userName,this);
             objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, authCode, true, loginErrorNumber, Account.getAccountByUserName(userName)));
-            ArrayList<ArrayList<Object>> cards = Shop.getCards();
-            ArrayList<ArrayList<Object>> collectionCards = Collection.getCollectionCards(Server.getOnlineAccounts().get(authCode));
+            ArrayList<ArrayList<String >> cards = Shop.getCards();
+            ArrayList<ArrayList<String >> collectionCards = Collection.getCollectionCards(Server.getOnlineAccounts().get(authCode));
             HashMap<String, int[]> movableCardsPowers = Shop.getMovableCardsPowers();
             HashMap<String, Integer> costs = Shop.getCosts();
             HashMap<String, Integer> numbers = Shop.getNumbers();
-            objectOutputStream.writeObject(new UpdateWholeShop(cards, collectionCards, movableCardsPowers, costs, numbers));
+            HashSet<String > costumCards = Shop.getCostumeCards();
+            objectOutputStream.writeObject(new UpdateWholeShop(costumCards,cards, collectionCards, movableCardsPowers, costs, numbers));
         } else {
             objectOutputStream.writeObject(new LoginBasedCommand("", "", false, "", true, loginErrorNumber, Account.getAccountByUserName(userName)));
         }

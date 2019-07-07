@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Shop {
     private static ArrayList<Hero> shopHeroes = new ArrayList<>();
@@ -171,14 +172,18 @@ public class Shop {
         return -1;
     }
 
-    public static ArrayList<ArrayList<Object>> getCards() {
-        ArrayList<ArrayList<Object>> cards = new ArrayList<>();
+    public static ArrayList<ArrayList<String >> getCards() {
+        ArrayList<ArrayList<String >> cards = new ArrayList<>();
         for (int i = 0; i < 4; i++)
             cards.add(new ArrayList<>());
-        cards.get(0).addAll(shopHeroes);
-        cards.get(1).addAll(shopMinions);
-        cards.get(2).addAll(shopSpells);
-        cards.get(3).addAll(shopItems);
+        for (Hero shopHero : shopHeroes)
+            cards.get(0).add(shopHero.getName());
+        for (Minion shopMinion : shopMinions)
+            cards.get(1).add(shopMinion.name);
+        for (Spell shopSpell : shopSpells)
+            cards.get(2).add(shopSpell.name);
+        for (UsableItem shopItem : shopItems)
+            cards.get(3).add(shopItem.name);
         return cards;
     }
 
@@ -199,44 +204,39 @@ public class Shop {
         for (Object object : cards) {
             if (object instanceof Card)
                 tempCosts.put(((Card) object).name, ((Card) object).cost);
-            if(object instanceof  UsableItem)
-                tempCosts.put(((UsableItem)object).name, ((UsableItem)object).getCost());
+            if (object instanceof UsableItem)
+                tempCosts.put(((UsableItem) object).name, ((UsableItem) object).getCost());
         }
         return tempCosts;
     }
 
-    private static HashMap<String, Integer> getCardNumber(ArrayList<Object> objects, HashMap<String , Integer> tempCosts){
+    private static HashMap<String, Integer> getCardNumber(ArrayList<Object> objects, HashMap<String, Integer> tempCosts) {
         for (Object object : objects) {
-            if(object instanceof Card)
-                tempCosts.put(((Card)object).getName(),((Card)object).getNumbers());
-            if(object instanceof UsableItem)
-                tempCosts.put(((UsableItem)object).name,((UsableItem)object).getNumber());
+            if (object instanceof Card)
+                tempCosts.put(((Card) object).getName(), ((Card) object).getNumbers());
+            if (object instanceof UsableItem)
+                tempCosts.put(((UsableItem) object).name, ((UsableItem) object).getNumber());
         }
         return tempCosts;
     }
-
 
 
     public static HashMap<String, Integer> getCosts() {
         HashMap<String, Integer> cardCosts = new HashMap<>();
         cardCosts = new HashMap<>(getCardCost(new ArrayList<>(shopHeroes), cardCosts));
-        cardCosts = new HashMap<>(getCardCost(new ArrayList<>(shopMinions),cardCosts));
-        cardCosts = new HashMap<>(getCardCost(new ArrayList<>(shopSpells),cardCosts));
-        cardCosts = new HashMap<>( getCardCost(new ArrayList<>(shopItems),cardCosts));
+        cardCosts = new HashMap<>(getCardCost(new ArrayList<>(shopMinions), cardCosts));
+        cardCosts = new HashMap<>(getCardCost(new ArrayList<>(shopSpells), cardCosts));
+        cardCosts = new HashMap<>(getCardCost(new ArrayList<>(shopItems), cardCosts));
         return cardCosts;
     }
 
     public static HashMap<String, Integer> getNumbers() {
-        HashMap<String ,Integer> cardNum = new HashMap<>();
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopHeroes),cardNum));
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopMinions),cardNum));
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopSpells),cardNum));
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopItems),cardNum));
+        HashMap<String, Integer> cardNum = new HashMap<>();
+        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopHeroes), cardNum));
+        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopMinions), cardNum));
+        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopSpells), cardNum));
+        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopItems), cardNum));
         return cardNum;
-    }
-
-    private void printMessage(String message) {
-        System.out.println(message);
     }
 
     //getters
@@ -272,6 +272,23 @@ public class Shop {
 
     public static void addToItems(UsableItem usableItem) {
         shopItems.add(usableItem);
+    }
+
+    public static HashSet<String> getCostumeCards() {
+        HashSet<String > costumeCards = new HashSet<>();
+        for (Hero shopHero : shopHeroes) {
+            if(shopHero.isCostume)
+                costumeCards.add(shopHero.getName());
+        }
+        for (Minion shopMinion : shopMinions) {
+            if(shopMinion.isCostume)
+                costumeCards.add(shopMinion.name);
+        }
+        for (Spell shopSpell : shopSpells) {
+            if(shopSpell.isCostume)
+                costumeCards.add(shopSpell.getName());
+        }
+        return costumeCards;
     }
     //setters
 }
