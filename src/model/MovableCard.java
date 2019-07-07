@@ -90,19 +90,19 @@ public abstract class MovableCard extends Card {
 
     }
 
-    private void handleHolyBuff(MovableCard damageTakingMovableCard , int damage) {
+    private void handleHolyBuff(MovableCard damageTakingMovableCard, int damage) {
 //        if (!ImpactEffectComp.doesHaveHolyBuffCanceler(this)) {
-            Impact.holyBuff(damageTakingMovableCard, damage);
+        Impact.holyBuff(damageTakingMovableCard, damage);
 //        }
     }
 
     private void passDamageToOpponent(MovableCard opponent) {
         if (opponent.onDefendImpact == null) {
-            opponent.takeDamage(this.damage + this.dispelableDamageChange,true);
+            opponent.takeDamage(this.damage + this.dispelableDamageChange, true);
             return;
         }
         if (!opponent.onDefendImpact.isImmuneToMinDamage())
-            opponent.takeDamage(this.damage + this.dispelableDamageChange,true);
+            opponent.takeDamage(this.damage + this.dispelableDamageChange, true);
         else if (!this.player.match.table.doesHaveLowestDamage(this))
             opponent.takeDamage(this.damage + this.dispelableDamageChange, true);
     }
@@ -143,7 +143,7 @@ public abstract class MovableCard extends Card {
     protected void counterAttack(MovableCard opponent) {
         if (isCounterAttackValid(opponent)) {
             int damage = this.damage + this.dispelableDamageChange;
-            opponent.takeDamage(damage,false);
+            opponent.takeDamage(damage, false);
             doOnDefendImpact(opponent);
             this.manageCasualties();
             opponent.manageCasualties();
@@ -282,11 +282,11 @@ public abstract class MovableCard extends Card {
         System.out.println(message);
     }
 
-    protected void takeDamage(int damage , boolean attack) {
+    protected void takeDamage(int damage, boolean attack) {
         antiHolyBuffHandler();
         this.health -= damage;
-        if(attack)
-            handleHolyBuff(this,damage);
+        if (attack)
+            handleHolyBuff(this, damage);
 
     }
 
@@ -377,11 +377,11 @@ public abstract class MovableCard extends Card {
         return isAlive;
     }
 
-    public Impact getOnAttackImpact(){
+    public Impact getOnAttackImpact() {
         return onAttackImpact;
     }
 
-    public Impact getOnDefendImpact(){
+    public Impact getOnDefendImpact() {
         return onDefendImpact;
     }
 

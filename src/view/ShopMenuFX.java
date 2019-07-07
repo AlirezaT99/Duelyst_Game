@@ -499,7 +499,7 @@ public class ShopMenuFX {
                 cardPanes.get(i).setVisible(true);
                 if (cardPanes.get(i).getChildren().get(cardPanes.get(i).getChildren().size() - 1) instanceof ImageView)
                     cardPanes.get(i).getChildren().remove(cardPanes.get(i).getChildren().size() - 1);
-                cardPanes.get(i).getChildren().add(animation.getView());
+                if (animation != null) cardPanes.get(i).getChildren().add(animation.getView());
             } else {
                 cardPanes.get(i).setVisible(false);
                 cardLabels.get(i).setText("");

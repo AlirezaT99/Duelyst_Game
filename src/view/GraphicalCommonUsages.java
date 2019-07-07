@@ -243,6 +243,7 @@ public class GraphicalCommonUsages {
             return new AnimatedGif(address + "heroes/" + cardName + "/" + typeYouWant + ".gif", 1000);
         if(type == 0)
             return new AnimatedGif(address + "heroes/hero/" + typeYouWant + ".gif", 1000);
+//        System.out.println(cardName + "<-----------------------");
         return null;
     }
 

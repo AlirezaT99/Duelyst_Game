@@ -168,6 +168,7 @@ public class BattleMenuProcess {
     }
 
     public int endTurn() throws IOException {
+        resetTimeout();
         match.currentTurnPlayer().fillHand();
         secondModeProcedure(match);
         resetFlags();
@@ -198,15 +199,19 @@ public class BattleMenuProcess {
         return 0;
     }
 
+    private void resetTimeout() {
+        BattleFX.timeout = 15;
+    }
+
 
     private static void endingProcedure() throws IOException {
         if (match.getGameMode() == 1) {
             if (match.getPlayer1().getDeck().getHero().isAlive()) {
                 MatchHistory matchHistory = new MatchHistory();
                 if (!match.getPlayer1().isAI()) {
-//                    BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer1(),true);
+                    BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer1(), true);
                     if (!match.getPlayer2().isAI()) {
-//                        BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer2(),false);
+                        BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer2(), false);
                         match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 1500);
                         matchHistory.setMatchHistory(match.getPlayer2(), match, false);
 
@@ -216,17 +221,17 @@ public class BattleMenuProcess {
                         match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 500);
                     }
                     matchHistory.setMatchHistory(match.getPlayer1(), match, true);
-                        LoginMenuProcess.save(match.getPlayer1().getAccount());
+                    LoginMenuProcess.save(match.getPlayer1().getAccount());
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, false);
                 }
                 BattleMenu.showMessage(match.getPlayer1().getUserName() + " has won.");
             } else {
                 MatchHistory matchHistory = new MatchHistory();
-                if (!match.getPlayer2().isAI()) { //sljkdfjl
-//                    BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer2(),true);
+                if (!match.getPlayer2().isAI()) {
+                    BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer2(), true);
                     if (!match.getPlayer1().isAI()) {
-//                        BattleFX.endProcedure(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()),match.getPlayer1(),false);
+                        BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer1(), false);
                         match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 1500);
                         matchHistory.setMatchHistory(match.getPlayer1(), match, false);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
@@ -244,14 +249,16 @@ public class BattleMenuProcess {
                     LoginMenuProcess.save(match.getPlayer2().getAccount());
             }
         } else if (match.getGameMode() != 1) {
-            if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || match.getPlayer1().getFlags().size() >= (match.getNumberOfFlags() / 2) && match.getGameMode() == 3) {
+            if (match.getPlayer1().getFlags() != null && match.getGameMode() == 2 || (match.getPlayer1().getFlags().size() >= (match.getNumberOfFlags() / 2) && match.getGameMode() == 3)) {
                 MatchHistory matchHistory = new MatchHistory();
                 if (match.getPlayer1().isAI()) {
                     matchHistory.setMatchHistory(match.getPlayer2(), match, false);
+                    BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer2(), false);
                     LoginMenuProcess.save(match.getPlayer2().getAccount());
                 } else {
                     if (match.getPlayer2().isAI()) {
                         matchHistory.setMatchHistory(match.getPlayer1(), match, true);
+                        BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer1(), true);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
                     } else {
                         matchHistory.setMatchHistory(match.getPlayer1(), match, true);
@@ -267,14 +274,17 @@ public class BattleMenuProcess {
                     if (!match.getPlayer1().isAI()) {
                         match.getPlayer1().getAccount().setMoney(match.getPlayer1().getAccount().getMoney() + 1500); // just changed
                         matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                        BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer1(), false);
                         LoginMenuProcess.save(match.getPlayer1().getAccount());
                     }
                     if (match.getPlayer1().isAI()) {
                         match.getPlayer2().getAccount().setMoney(match.getPlayer2().getAccount().getMoney() + 500);
                     }
                     matchHistory.setMatchHistory(match.getPlayer2(), match, true);
+                    BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer2(), true);
                 } else {
                     matchHistory.setMatchHistory(match.getPlayer1(), match, false);
+                    BattleFX.endProcedure(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()), match.getPlayer1(), false);
                     LoginMenuProcess.save(match.getPlayer1().getAccount());
                 }
                 BattleMenu.showMessage(match.getPlayer2().getUserName() + " has won.");
@@ -301,9 +311,9 @@ public class BattleMenuProcess {
                 match.moveToGraveYard(cell.getMovableCard(), match.notCurrentTurnPlayer());
                 isSomeOneDead = true;
             }
-        if(!isSomeOneDead) {
+        if (!isSomeOneDead) {
             try {
-                BattleFX.updateSoldiers(match,new Scene(new Group(),BattleFX.getScreenWidth(),BattleFX.getScreenHeight()));
+                BattleFX.updateSoldiers(match, new Scene(new Group(), BattleFX.getScreenWidth(), BattleFX.getScreenHeight()));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -484,7 +494,7 @@ public class BattleMenuProcess {
             match.currentTurnPlayer().getHand().findCardByName(cardName)
                     .castCard(match.getTable().getCellByCoordination(x, y));
         else if (match.currentTurnPlayer().getHand().findCardByName(cardName) instanceof Spell) {// ok?
-             match.currentTurnPlayer().getHand().findCardByName(cardName).setPlayer(match.currentTurnPlayer());
+            match.currentTurnPlayer().getHand().findCardByName(cardName).setPlayer(match.currentTurnPlayer());
             ((Spell) match.currentTurnPlayer().getHand().findCardByName(cardName))
                     .castCard(match.getTable().getCellByCoordination(x, y));
         }
