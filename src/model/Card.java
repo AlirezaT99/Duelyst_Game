@@ -12,6 +12,7 @@ public abstract class Card {
     protected String description = "";
     protected boolean isCostume = false;
     private int numbers = 10;
+    private int collectionNumber = 0;
 
     void setCardFieldsForCopy(Card card) {
         card.cost = cost;
@@ -77,6 +78,10 @@ public abstract class Card {
 
     public int getNumbers() {
         return numbers;
+    }
+
+    public int getCollectionNumber() {
+        return collectionNumber;
     }
 
     //getters

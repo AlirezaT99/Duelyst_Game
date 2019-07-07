@@ -20,6 +20,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Message.ShopCommand.Trade.TradeCommand;
+import model.Message.ShopCommand.Trade.TradeRequest;
+import model.Message.ShopCommand.Trade.TradeResponse;
 import model.client.Client;
 import presenter.ShopMenuProcess;
 
@@ -44,8 +47,10 @@ public class ShopMenuFX {
     private static ArrayList<String> collectionSpells = new ArrayList<>();
     private static ArrayList<String> collectionItems = new ArrayList<>();
     private static HashMap<String, int[]> movableCardsPowers = new HashMap<>();
-    private static HashMap<String , Integer> costs = new HashMap<>();
-    private static HashMap<String , Integer> cardNumbers = new HashMap<>();
+    private static HashMap<String, Integer> costs = new HashMap<>();
+    private static HashMap<String, Integer> cardNumbers = new HashMap<>();
+    private static HashMap<String, Integer> cardCollectionNumbers = new HashMap<>();
+    private static long acccountMoney;
 
     private static Text page = new Text();
     private static boolean isInShop = true;
@@ -57,7 +62,14 @@ public class ShopMenuFX {
     private static HashMap<Integer, Label> cardPrices = new HashMap<>();
     private static HashMap<Integer, StackPane> cardPanes = new HashMap<>();
     private static HashMap<Integer, ImageView> cardImages = new HashMap<>();
-    private static HashSet<String > costumeCards = new HashSet<>();
+    private static HashSet<String> costumeCards = new HashSet<>();
+    private static TradeResponse tradeResponse;
+
+    static {
+        tradeResponseTaken();
+    }
+
+
     static int pageNumber = 1;
     private static int selectedIndex = 0;
     private static Account account;
@@ -69,8 +81,12 @@ public class ShopMenuFX {
         ShopMenuFX.account = account;
     }
 
+    public static void setResponse(TradeResponse message) {
+        tradeResponse = message;
+    }
+
     public Pane start(Stage primaryStage) throws FileNotFoundException {
-        synchronized (Client.getInstance().getShopLock()){
+        synchronized (Client.getInstance().getShopLock()) {
 
         }
         root = new Pane();
@@ -142,7 +158,7 @@ public class ShopMenuFX {
                         selectedIndex = finalI;
                         String str = isInShop ? "BUY" : "SELL";
                         if (str.equals("BUY")) {
-                            if (!ShopMenuProcess.isDrakeEnough(Integer.parseInt(money.getText()), cardLabels.get(finalI).getText().trim())) {
+                            if (!ShopMenuProcess.isDrakeEnough((costs.get(cardLabels.get(finalI).getText().trim())), acccountMoney)) {
                                 GraphicalCommonUsages.drakePopUp("not enough drake", scene, root, 2);
                             } else {
                                 yesCancelPopUp("Are you sure to " + str.toLowerCase() + " " + cardLabels.get(finalI).getText() + " ?", scene, root, str);
@@ -160,8 +176,6 @@ public class ShopMenuFX {
 
             stackPane.getChildren().addAll(imageView, cardName, card_AP_HP, price);
             gridPane.add(stackPane, i % 5, i / 5 > 0 ? 1 : 0);
-//            stackPanes[i].relocate((i % 5 + 2.6) * (scene.getWidth() / 9) + (25 * (i % 5))
-//                    , i / 5 > 0 ? (scene.getHeight() * 10 / 16) : (scene.getHeight() * 4.5 / 16));
         }
     }
 
@@ -404,7 +418,7 @@ public class ShopMenuFX {
     private void drawDrake(Pane root, Scene scene, Font font) throws FileNotFoundException {
         ImageView imageView = new ImageView(new Image(new FileInputStream("src/view/sources/shopMenu/drake_verySmall.png"))); // for now
         imageView.relocate(scene.getWidth() * 0.92, scene.getHeight() / 64);
-        money = new Label(account.getMoney() + "");
+        money = new Label(acccountMoney + "");
         money.relocate(scene.getWidth() * 0.88, scene.getHeight() / 64 + 20);
         money.setFont(font);
         money.setTextFill(Color.WHITE);
@@ -496,29 +510,35 @@ public class ShopMenuFX {
 
     private static int getCardType(int index) {
         int cardType = 5;
-        if(items.contains(cardsToShow.get(index)))
+        if (items.contains(cardsToShow.get(index)))
             cardType = 3;
-        if(spells.contains(cardsToShow.get(index)))
+        if (spells.contains(cardsToShow.get(index)))
             cardType = 2;
-        if(minions.contains(cardsToShow.get(index)))
+        if (minions.contains(cardsToShow.get(index)))
             cardType = 1;
-        if(heroes.contains(cardsToShow.get(index)))
+        if (heroes.contains(cardsToShow.get(index)))
             cardType = 0;
         return cardType;
     }
 
     static void updatePowers() {
         removePowers();
-        if(items.contains(cardsToShow.get(0)) || spells.contains(cardsToShow.get(0)))
+        if(cardsToShow.size() == 0)
+            return;
+        if (items.contains(cardsToShow.get(0)) || spells.contains(cardsToShow.get(0)))
             return;
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 int index = i + (10 * (pageNumber - 1));
-                if(!movableCardsPowers.containsKey(cardsToShow.get(index)))
+                if (!movableCardsPowers.containsKey(cardsToShow.get(index)))
                     System.out.println(cardsToShow.get(index));
                 int damage = movableCardsPowers.get(cardsToShow.get(index))[0];
                 int health = movableCardsPowers.get(cardsToShow.get(index))[1];
-                cardPowers.get(i).setText("\n" + damage + "\t\t\t" + health);
+                cardPowers.get(i).setText("\n" + damage + "\t\t\t" + health+"\n");
+                if(isInShop)
+                    cardPowers.get(i).setText(cardPowers.get(i).getText()+cardNumbers.get(cardsToShow.get(index)));
+                if(isInCollection)
+                    cardPowers.get(i).setText(cardPowers.get(i).getText()+cardCollectionNumbers.get(cardsToShow.get(index)));
             }
         }
     }
@@ -528,7 +548,7 @@ public class ShopMenuFX {
         for (int i = 0; i < 10; i++) {
             if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
                 int index = i + (10 * (pageNumber - 1));
-                cardPrices.get(i).setText(costs.get(cardsToShow.get(index))+"");
+                cardPrices.get(i).setText(costs.get(cardsToShow.get(index)) + "");
             }
         }
     }
@@ -592,23 +612,88 @@ public class ShopMenuFX {
         otherChangeableArea.setImage(otherFirstImage);
     }
 
-    static void buyProcess() throws FileNotFoundException {
-        handleErrors(Shop.buy(account, cardLabels.get(selectedIndex).getText()));
-//        GraphicalCommonUsages.drakePopUp("purchase was successful",);
+    private static void tradeProcess(boolean buy) throws FileNotFoundException {
+        Client.getInstance().sendData(new TradeRequest(Client.getInstance().getAuthCode(), buy, cardLabels.get(selectedIndex).getText()));
+        synchronized (Client.getInstance().getShopLock()) {
+            if (tradeResponse.getAuthCode().equals("")) {
+                try {
+                    Client.getInstance().getShopLock().wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        handleTrad();
         updateMoney();
     }
 
-    static void updateMoney() {
-        money.setText(account.getMoney() + "");
+
+    static void buyProcess() throws FileNotFoundException {
+        tradeProcess(true);
     }
 
     static void sellProcess() throws FileNotFoundException {
-        handleErrors(Shop.sell(account, cardLabels.get(selectedIndex).getText()));
-//        GraphicalCommonUsages.drakePopUp("purchase was successful",);
-        updateMoney();
+        tradeProcess(false);
+    }
+
+    private static void handleTrad() throws FileNotFoundException {
+        if (!tradeResponse.isSuccessFullTrade()) {
+            handleErrors(tradeResponse.getAlertMessage());
+            tradeResponseTaken();
+            return;
+        }
+        String name = tradeResponse.getObjectName();
+        if (tradeResponse.isBuy()) {
+            acccountMoney -= tradeResponse.getCost();
+            cardNumbers.replace(name, cardNumbers.get(name) - 1);
+            if (cardCollectionNumbers.containsKey(name)) {
+                cardCollectionNumbers.replace(name, cardCollectionNumbers.get(name) + 1);
+            }
+            else {
+                newCardActions(name);
+            }
+        } else {
+            acccountMoney += tradeResponse.getCost();
+            cardNumbers.replace(name, cardNumbers.get(name) + 1);
+            cardCollectionNumbers.replace(name, cardCollectionNumbers.get(name) - 1);
+            if(cardCollectionNumbers.get(name) == 0){
+                collectionItems.remove(name);
+                collectionHeroes.remove(name);
+                collectionSpells.remove(name);
+                collectionMinions.remove(name);
+            }
+        }
+        tradeResponseTaken();
+    }
+
+    private static void newCardActions(String name) {
+        cardCollectionNumbers.put(name, 1);
+        if(heroes.contains(name))
+            collectionHeroes.add(name);
+        if(minions.contains(name))
+            collectionMinions.add(name);
+        if(spells.contains(name))
+            collectionSpells.add(name);
+        if(items.contains(name))
+            collectionItems.add(name);
+    }
+
+    static void updateMoney() {
+        //todo send a request to server
+        money.setText(acccountMoney + "");
+    }
+
+
+    private static void tradeResponseTaken() {
+        tradeResponse = new TradeResponse("", true, "", false, 0, 0);
     }
 
     //setters
+
+
+    public static void setAcccountMoney(long acccountMoney) {
+        ShopMenuFX.acccountMoney = acccountMoney;
+    }
 
     public static void setHeroes(ArrayList<String> heroes) {
         ShopMenuFX.heroes = heroes;
@@ -656,6 +741,10 @@ public class ShopMenuFX {
 
     public static void setCostumeCards(HashSet<String> costumeCards) {
         ShopMenuFX.costumeCards = costumeCards;
+    }
+
+    public static void setCardCollectionNumbers(HashMap<String, Integer> cardCollectionNumbers) {
+        ShopMenuFX.cardCollectionNumbers = cardCollectionNumbers;
     }
 
     //setters

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import model.Card;
 import model.Message.ShopCommand.ShopCommand;
+import org.omg.CORBA.INTERNAL;
 
 import javax.swing.text.Style;
 import java.lang.reflect.Type;
@@ -20,11 +21,14 @@ public class UpdateWholeShop extends ShopCommand {
     private String movableCardsPowers;
     private String costs;
     private String cardNumbers;
+    private String cardCollectionNumbers;
     private String costumeCards;
+    private long money;
 
 
-    public UpdateWholeShop(HashSet<String > costumeCards,ArrayList<ArrayList<String >> cards, ArrayList<ArrayList<String >> collectionCards, HashMap<String , int[]> movableCardsPowers, HashMap<String , Integer> costs, HashMap<String ,Integer> cardsNumbers) {
+    public UpdateWholeShop(HashMap<String , Integer> collctionCardNumbers,long money,HashSet<String > costumeCards,ArrayList<ArrayList<String >> cards, ArrayList<ArrayList<String >> collectionCards, HashMap<String , int[]> movableCardsPowers, HashMap<String , Integer> costs, HashMap<String ,Integer> cardsNumbers) {
         super("");
+        this.money = money;
         Gson gson = new GsonBuilder().create();
         this.cards = gson.toJson(cards);
         this.collectionCards = gson.toJson(collectionCards);
@@ -32,6 +36,7 @@ public class UpdateWholeShop extends ShopCommand {
         this.costs = gson.toJson(costs);
         this.cardNumbers = gson.toJson(cardsNumbers);
         this.costumeCards = gson.toJson(costumeCards);
+        this.cardCollectionNumbers = gson.toJson(collctionCardNumbers);
     }
 
     private ArrayList<String > getSomeCard(boolean collection, int index){
@@ -55,6 +60,12 @@ public class UpdateWholeShop extends ShopCommand {
         Gson gson = new Gson();
         Type type = new TypeToken<HashMap<String ,Integer>>(){}.getType();
         return gson.fromJson(cardNumbers,type);
+    }
+
+    public HashMap<String , Integer> getCollectionNumbers(){
+        Gson gson = new Gson();
+        Type type = new TypeToken<HashMap<String , Integer>>(){}.getType();
+        return gson.fromJson(cardCollectionNumbers,type);
     }
 
     public HashMap<String , int[]> getPowers(){
@@ -93,5 +104,9 @@ public class UpdateWholeShop extends ShopCommand {
         Gson gson = new Gson();
         Type type = new TypeToken<HashSet<String >>(){}.getType();
         return gson.fromJson(costumeCards,type);
+    }
+
+    public long getMoney() {
+        return money;
     }
 }

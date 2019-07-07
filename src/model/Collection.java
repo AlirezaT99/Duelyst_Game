@@ -193,5 +193,22 @@ public class Collection {
     public HashMap<String, Spell> getSpellHashMap() {
         return spellHashMap;
     }
+
+    public HashMap<String, Integer> getCardNumbers() {
+        HashMap<String , Integer> objects = new HashMap<>();
+        for (Hero hero : heroes) {
+            objects.put(hero.name,hero.getCollectionNumber());
+        }
+        for (Minion minion : minions) {
+            objects.put(minion.name,minion.getCollectionNumber());
+        }
+        for (Spell spell : spells) {
+            objects.put(spell.name,spell.getCollectionNumber());
+        }
+        for (UsableItem item : items) {
+            objects.put(item.name,item.getCollectionNumber());
+        }
+        return objects;
+    }
     //getters
 }

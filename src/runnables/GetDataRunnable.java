@@ -3,6 +3,7 @@ package runnables;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
+import model.Message.ShopCommand.Trade.TradeResponse;
 import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Shop;
 import model.client.Client;
@@ -48,8 +49,14 @@ public class GetDataRunnable implements Runnable {
                         Client.getInstance().getLock().notifyAll();
                     }
                 }
-                if(message instanceof UpdateWholeShop)
+                if (message instanceof UpdateWholeShop)
                     updateShop((UpdateWholeShop) message);
+                if (message instanceof TradeResponse) {
+                    synchronized (Client.getInstance().getShopLock()) {
+                        ShopMenuFX.setResponse((TradeResponse) message);
+                        Client.getInstance().getShopLock().notify();
+                    }
+                }
 
             }
         } catch (Exception e) {
@@ -58,7 +65,7 @@ public class GetDataRunnable implements Runnable {
     }
 
     private void updateShop(UpdateWholeShop message) {
-        synchronized (Client.getInstance().getShopLock()){
+        synchronized (Client.getInstance().getShopLock()) {
             ShopMenuFX.setHeroes(message.getHeroes());
             ShopMenuFX.setMinions(message.getMinions());
             ShopMenuFX.setSpells(message.getSpells());
@@ -71,6 +78,8 @@ public class GetDataRunnable implements Runnable {
             ShopMenuFX.setCosts(message.getCosts());
             ShopMenuFX.setCardNumbers(message.getNumbers());
             ShopMenuFX.setCostumeCards(message.getCostumes());
+            ShopMenuFX.setAcccountMoney(message.getMoney());
+            ShopMenuFX.setCardCollectionNumbers(message.getCollectionNumbers());
             Client.getInstance().getShopLock().notify();
         }
     }

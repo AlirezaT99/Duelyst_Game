@@ -290,5 +290,25 @@ public class Shop {
         }
         return costumeCards;
     }
+
+    public static int getCost(String objectName) {
+        for (Hero shopHero : shopHeroes) {
+            if(shopHero.getName().equals(objectName))
+                return shopHero.cost;
+        }
+        for (Minion shopMinion : shopMinions) {
+            if(shopMinion.getName().equals(objectName))
+                return shopMinion.getCost();
+        }
+        for (Spell shopSpell : shopSpells) {
+            if(shopSpell.getName().equals(objectName))
+                return shopSpell.cost;
+        }
+        for (UsableItem shopItem : shopItems) {
+            if(shopItem.name.equals(objectName))
+                return shopItem.getCost();
+        }
+        return 0;
+    }
     //setters
 }

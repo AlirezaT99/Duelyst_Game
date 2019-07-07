@@ -82,7 +82,6 @@ public class ShopMenu {
 
     public static void showMessage(String message) throws FileNotFoundException {
         GraphicalCommonUsages.okPopUp(message, Main.getCurrentScene(), ShopMenuFX.getRoot());
-        System.out.println(message);
     }
 
     public void setIsInShopMenu(boolean isInLoginMenu) {
