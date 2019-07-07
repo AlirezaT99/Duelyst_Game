@@ -15,7 +15,6 @@ import java.util.HashSet;
 
 public class UpdateWholeShop extends ShopCommand {
 
-
     private String cards;
     private String collectionCards;
     private String movableCardsPowers;
@@ -24,7 +23,6 @@ public class UpdateWholeShop extends ShopCommand {
     private String cardCollectionNumbers;
     private String costumeCards;
     private long money;
-
 
     public UpdateWholeShop(HashMap<String , Integer> collctionCardNumbers,long money,HashSet<String > costumeCards,ArrayList<ArrayList<String >> cards, ArrayList<ArrayList<String >> collectionCards, HashMap<String , int[]> movableCardsPowers, HashMap<String , Integer> costs, HashMap<String ,Integer> cardsNumbers) {
         super("");

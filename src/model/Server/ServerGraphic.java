@@ -75,7 +75,7 @@ public class ServerGraphic extends Application {
 //        thread.start();
         final LongProperty lastUpdate = new SimpleLongProperty();
 
-        final long minUpdateInterval = 1;
+        final long minUpdateInterval = 100;
         AnimationTimer timer = new AnimationTimer() {
 
             @Override
