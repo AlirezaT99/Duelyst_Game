@@ -17,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Account;
+import model.Message.Utils;
+import model.client.Client;
 import presenter.LoginMenuProcess;
 
 import java.io.File;
@@ -62,10 +64,16 @@ public class MainMenuFX {
         setText(font, saveText);
         HBox save = new HBox();
         save.getChildren().addAll(getArrowView(mainMenuScene, arrow), saveText);
+
+        Text scoreBoardText = new Text("SCORE BOARD");
+        setText(font, scoreBoardText);
+        HBox scoreBoard = new HBox();
+        scoreBoard.getChildren().addAll(getArrowView(mainMenuScene, arrow), scoreBoardText);
+
         VBox textQueries = new VBox();
         textQueries.setSpacing(mainMenuScene.getHeight() / 100);
         textQueries.setPadding(new Insets(mainMenuScene.getHeight() / 3, mainMenuScene.getWidth() * 2 / 3, mainMenuScene.getWidth() / 5, mainMenuScene.getWidth() / 6));
-        textQueries.getChildren().addAll(play, collection, shop, watch, save);
+        textQueries.getChildren().addAll(play, collection, shop, watch, scoreBoard, save);
         root.getChildren().addAll(textQueries);
         Image brandImage = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/brand_duelyst.png"));
         ImageView brandView = new ImageView(brandImage);
@@ -93,19 +101,17 @@ public class MainMenuFX {
         textGlowEffect(collection, mainMenuScene, root);
         textGlowEffect(shop, mainMenuScene, root);
         textGlowEffect(watch, mainMenuScene, root);
+        textGlowEffect(scoreBoard, mainMenuScene, root);
         textGlowEffect(save, mainMenuScene, root);
         return root;
     }
 
     private void addCardHandle(VBox addCard) {
-        addCard.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                try {
-                    Main.setAddCardFX(currentAccount);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+        addCard.setOnMouseClicked(event -> {
+            try {
+                Main.setAddCardFX(currentAccount);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -157,6 +163,8 @@ public class MainMenuFX {
         backButtonAdjustment(root, mainMenuScene, backToLoginView);
         backToLoginView.setOnMouseClicked(event -> {
             try {
+                Utils util = new Utils(Client.getInstance().getAuthCode(), true);
+                Client.getInstance().sendData(util);
                 Main.setLoginMenu();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -219,13 +227,20 @@ public class MainMenuFX {
                         e.printStackTrace();
                     }
                     break;
-                case "SAVE":
+                case "SCORE BOARD":
                     try{
-                        LoginMenuProcess.save(currentAccount);
-                        GraphicalCommonUsages.okPopUp("all changes saved",scene,root);
-                    } catch(Exception e){
+                        Main.setScoreBoardFX(currentAccount);
+                    } catch(FileNotFoundException e){
                         e.printStackTrace();
                     }
+                case "SAVE":
+                    try {
+                        LoginMenuProcess.save(currentAccount);
+                        GraphicalCommonUsages.okPopUp("all changes saved", scene, root);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
             }
         });
     }

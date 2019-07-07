@@ -7,6 +7,7 @@ public class UsableItem extends InfluentialItem {
     private int cost;
     private Deck deck;
     private Match match;
+    private int number = 10;
 
     @Override
     public UsableItem copy(){
@@ -62,6 +63,14 @@ public class UsableItem extends InfluentialItem {
             if (usableItems.get(i).getName().equals(name))
                 return ((UsableItem) usableItems.get(i)).copy();
         return null;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public static void addToUsableItems(UsableItem usableItem) {

@@ -1,6 +1,5 @@
 package view;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Import;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -9,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Glow;
@@ -53,7 +51,7 @@ public class CollectionMenuFX {
     private static ArrayList<String> cardsToAddToDeck = new ArrayList<>();
     private static Deck deckToBe = new Deck("new deck");
     private static Timeline timeline5;
-    static Scene scene;
+     static Scene scene;
 
     CollectionMenuFX(Account account) {
         CollectionMenuFX.account = account;
@@ -482,7 +480,7 @@ public class CollectionMenuFX {
                 cardsToShow.add(item.getName());
         }
         updateLabels();
-        updatePowers(account);
+        updatePowers();
         gridPane.setVisible(true);
         root.getChildren().get(2).setVisible(true); // left arrow
         root.getChildren().get(3).setVisible(true); // right arrow
@@ -508,7 +506,7 @@ public class CollectionMenuFX {
                 pageNumber++;
             else {
                 updateLabels();
-                updatePowers(account);
+                updatePowers();
             }
             pageSetText();
         });
@@ -519,7 +517,7 @@ public class CollectionMenuFX {
             else {
                 updateLabels();
                 try {
-                    updatePowers(account);
+                    updatePowers();
                 } catch (ClassCastException ex) {
 //                    System.out.println("ClassCastException at shopMenuFx->addEventHandlerOnArrows->setOnMouseClicked ...");
                 }

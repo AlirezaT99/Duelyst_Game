@@ -11,6 +11,7 @@ public abstract class Card {
     protected String collectionID = "";
     protected String description = "";
     protected boolean isCostume = false;
+    private int numbers = 10;
 
     void setCardFieldsForCopy(Card card) {
         card.cost = cost;
@@ -74,9 +75,17 @@ public abstract class Card {
         return isCostume;
     }
 
+    public int getNumbers() {
+        return numbers;
+    }
+
     //getters
 
     //setters
+
+    public void setNumbers(int numbers) {
+        this.numbers = numbers;
+    }
 
     public void setCardCollectionID(String cardID) {
         this.collectionID = cardID;

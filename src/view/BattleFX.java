@@ -121,7 +121,7 @@ public class BattleFX {
     private static void setItemGif(Item item, int x, int y, Scene scene) {
         Animation animation;
         if (item instanceof Flag) {
-            animation = GraphicalCommonUsages.getGif("Flag", "idle");
+            animation = GraphicalCommonUsages.getGif("Flag", "idle", 0,false);
             animation.getView().setFitWidth(scene.getWidth() / 18.8);
             // animation.getView().setFitHeight(scene.getHeight()/10);
             animation.getView().setPreserveRatio(true);
@@ -142,7 +142,8 @@ public class BattleFX {
     private static void setGif(Card card, int x, int y, Scene scene, Match match, String type) throws FileNotFoundException {
         Animation animation;
         if (card != null) {
-            animation = GraphicalCommonUsages.getGif(card.getName(), type);
+            int cardType = getCardType(card);
+            animation = GraphicalCommonUsages.getGif(card.getName(), type,cardType,card.isCostume());
             animation.getView().setFitWidth(scene.getWidth() / 18.8);
             animation.getView().setPreserveRatio(true);
             // animation.getView().setFitHeight(scene.getHeight()/10);
@@ -193,6 +194,17 @@ public class BattleFX {
         } else if (gameMap[x][y].getChildren().size() > 1) {
             gameMap[x][y].getChildren().subList(1, gameMap[x][y].getChildren().size()).clear();
         }
+    }
+
+    private static int getCardType(Card card) {
+        int cardType =5;
+        if(card instanceof Hero)
+            cardType = 0;
+        if(card instanceof Minion)
+            cardType = 1;
+        if(card instanceof Spell)
+            cardType = 2;
+        return cardType;
     }
 
     private static void rotateImageView(ImageView imageView) {
@@ -544,7 +556,8 @@ public class BattleFX {
             Animation animation = null;
             System.gc();
             if (player.getHand().getCards().get(i) != null) {
-                animation = GraphicalCommonUsages.getGif(player.getHand().getCards().get(i).getName(), "idle");
+                Card card =player.getHand().getCards().get(i);
+                animation = GraphicalCommonUsages.getGif(card.getName(), "idle",getCardType(card),card.isCostume());
                 animation.getView().setFitWidth(scene.getWidth() / 20);
                 animation.getView().setFitHeight(scene.getHeight() / 10);
                 animation.setCycleCount(Integer.MAX_VALUE);
@@ -789,7 +802,7 @@ public class BattleFX {
                             ((Spell) player.getHand().getCards().get(objectInHandIndex)).copy().castCard(match.getTable().getCellByCoordination(finalI, finalJ));
                             BattleMenuProcess.buryTheDead();
                             deleteFromHand = true;
-                            Animation spellAnimation = GraphicalCommonUsages.getGif(selectedCardFromHand.getName(), "impact");
+                            Animation spellAnimation = GraphicalCommonUsages.getGif(selectedCardFromHand.getName(), "impact",2,selectedCardFromHand.isCostume());
                             ImageView impactView = spellAnimation.getView();
                             gameMap[finalI][finalJ].getChildren().add(impactView);
                             impactView.setFitWidth((scene.getWidth() / 18.8) * 4);
@@ -853,7 +866,8 @@ public class BattleFX {
 
 
     public static void deathProcess(Coordination coordination, Match match, Scene scene) {
-        Animation deathAnimation = GraphicalCommonUsages.getGif(match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard().getName(), "death");
+        MovableCard movableCard = match.getTable().getCellByCoordination(coordination.getX(), coordination.getY()).getMovableCard();
+        Animation deathAnimation = GraphicalCommonUsages.getGif(movableCard.getName(), "death",getCardType(movableCard),movableCard.isCostume());
         gameMap[coordination.getX()][coordination.getY()].getChildren().remove(1);
         ImageView deathView = deathAnimation.getView();
         deathView.setPreserveRatio(true);
@@ -878,7 +892,8 @@ public class BattleFX {
 
         int result = match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().attack(match.getTable().getCell(finalI, finalJ).getMovableCard());
         if (result == 0) {
-            Animation attackAnimation = GraphicalCommonUsages.getGif(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(), "attack");
+            Card card = Shop.findCardByName(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText());
+            Animation attackAnimation = GraphicalCommonUsages.getGif(card.getName(), "attack",getCardType(card),card.isCostume());
             ImageView imageView = attackAnimation.getView();
             ((Pane) draggedFromNode).getChildren().remove(1);
             ((Pane) draggedFromNode).getChildren().add(1, imageView);
@@ -892,7 +907,8 @@ public class BattleFX {
             attackAnimation.setOnFinished(event -> {
                 try {
                     if (isCounterAttackValid) {
-                        Animation counterAttackAnimation = GraphicalCommonUsages.getGif(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText(), "attack");
+                        Card card1 = Shop.findCardByName(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText());
+                        Animation counterAttackAnimation = GraphicalCommonUsages.getGif(card.getName(), "attack",getCardType(card),card.isCostume());
                         ImageView imageView1 = counterAttackAnimation.getView();
                         gameMap[finalI][finalJ].getChildren().remove(1);
                         gameMap[finalI][finalJ].getChildren().add(1, imageView1);
@@ -991,8 +1007,8 @@ public class BattleFX {
             double margin = width / 20;
             double height = (scene.getHeight() / 2 - width / 5) / 5;
             if (match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().isMoveValid(match.getTable().getCell(finalI, finalJ)) == 0) {
-
-                Animation runAnimation = GraphicalCommonUsages.getGif(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(), "run");
+                Card card = Shop.findCardByName(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText());
+                Animation runAnimation = GraphicalCommonUsages.getGif(card.getName(), "run",getCardType(card),card.isCostume());
                 ImageView movableCard = runAnimation.getView();
                 movableCard.setFitWidth(scene.getWidth() / 18.8);
                 movableCard.setPreserveRatio(true);

@@ -1,8 +1,11 @@
 package model;
 
+import presenter.LoginMenuProcess;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Account {
+public class Account{
     private ArrayList<MatchHistory> matchHistories = new ArrayList<>();
     private static ArrayList<Account> accounts;
     private String userName;
@@ -25,6 +28,14 @@ public class Account {
 
     static {
         accounts = new ArrayList<>();
+    }
+
+    public static Account getAccountByUserName(String userName) {
+        for (Account account : accounts) {
+            if(account.getUserName().equals(userName))
+                return account;
+        }
+        return null;
     }
 
     public void buy(int cost, UsableItem item, Card card) throws NullPointerException {
@@ -149,6 +160,12 @@ public class Account {
         if(importedDecks == null)
             importedDecks = new ArrayList<>();
         return importedDecks;
+    }
+
+    public static void addToAccounts(Account account){
+        accounts.add(account);
+        LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
+        loginMenuProcess.getUsers().add(account);
     }
 
     //setters

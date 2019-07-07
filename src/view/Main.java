@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.Account;
+import model.Message.Utils;
+import model.client.Client;
 import model.Match;
 import presenter.BattleMenuProcess;
 
@@ -26,6 +28,7 @@ public class Main extends Application {
     private static CustomGameMenuFX customGameMenuFX;
     private static StoryMenuFX storyMenuFX;
     private static BattleFX battleFx;
+    private static ScoreBoardFX scoreBoardFX;
     private static Stage primaryStage;
     private static Scene currentScene;
     private static AddCardFX addCardFX;
@@ -33,7 +36,7 @@ public class Main extends Application {
     private static AudioClip audioClip;
 
     public static void main(String[] args) throws IOException {
-        presenter.MainProcess.readFiles();
+        Client.getInstance().start();
         launch(args);
         loginMenu.run();
     }
@@ -44,15 +47,16 @@ public class Main extends Application {
         primaryScreenBounds = GraphicalCommonUsages.initPrimaryStage(primaryStage);
         primaryStage.setTitle("Duelyst");
         primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> primaryStage.setFullScreen(true));
-        // primaryStage.setFullScreen(true);
         login = new Login();
         currentScene = new Scene(login.start(primaryStage), primaryStage.getWidth(), primaryStage.getHeight());
         javafx.scene.image.Image cursor = new Image(new FileInputStream("src/view/sources/common/cursors/auto.png"));
         currentScene.setCursor(new ImageCursor(cursor));
-//        currentScene = login.start(primaryStage);
         primaryStage.setScene(currentScene);
-        primaryStage.setOnCloseRequest(event -> System.exit(0));
-        //backgroundMusicNotBattlePlay();
+        primaryStage.setOnCloseRequest(event -> {
+            Utils util = new Utils(Client.getInstance().getAuthCode(),true);
+            Client.getInstance().sendData(util);
+            System.exit(0);
+        });
         primaryStage.show();
     }
 
@@ -76,7 +80,6 @@ public class Main extends Application {
             Main.login = new Login();
         currentScene.setRoot(login.start(primaryStage));
         primaryStage.setScene(currentScene);
-        //   primaryStage.setFullScreen(true);
     }
 
     public static void setShopMenuFX(Account account) throws FileNotFoundException {
@@ -122,6 +125,12 @@ public class Main extends Application {
         primaryStage.setScene(currentScene);
     }
 
+    public static void setScoreBoardFX(Account account) throws FileNotFoundException {
+        scoreBoardFX = new ScoreBoardFX();
+        currentScene.setRoot(scoreBoardFX.start(primaryStage, Client.getInstance().getAuthCode(), account));
+        primaryStage.setScene(currentScene);
+    }
+
     public static void setBattleFX(Account firstPlayer, Match match, boolean storyMode) throws FileNotFoundException {
         battleFx = new BattleFX();
         BattleMenuProcess.setMatch(match);
@@ -142,12 +151,12 @@ public class Main extends Application {
         }
     }
 
-    public static Scene getScene(){
+    public static Scene getScene() {
         return currentScene;
     }
 
     private static void backgroundMusicNotBattlePlay() {
-        if (audioClip!=null && audioClip.isPlaying())
+        if (audioClip != null && audioClip.isPlaying())
             audioClip.stop();
         audioClip = new javafx.scene.media.AudioClip(Main.class.getResource("sources/loginMenu/music/mainmenu_v2c_looping.m4a").toString());
         audioClip.setCycleCount(Integer.MAX_VALUE);

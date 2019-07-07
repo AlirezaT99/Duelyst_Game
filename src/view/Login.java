@@ -17,7 +17,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import presenter.LoginMenuProcess;
+import model.Account;
+import model.Message.LoginBasedCommand;
+import model.client.Client;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,7 +93,7 @@ public class Login {
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(login, loginButton, onLoginButtonImage, loginButtonImage);
         handleLoginSubmission(usernameField, passwordField, login, loginScene, root);
         GraphicalCommonUsages.addOnMouseEnterAndExitHandler(signUp, signUpButton, onSignUpButtonImage, signUpButtonImage);
-        handleSignUpSubmission(onLoginCircle, onSignUpCircle, usernameField, passwordField, login, signUp,loginScene,root);
+        handleSignUpSubmission(usernameField, passwordField, signUp, loginScene, root);
         manageCreateAccountAndLoginBars(onLogin, onSignUp, onLoginCircle, onSignUpCircle, login, signUp);
         root.getChildren().addAll(login, signUp, onLogin, onSignUp, exitView);
         //  letterbox(loginScene, root);
@@ -147,21 +149,29 @@ public class Login {
         }
     }
 
-    private void handleSignUpSubmission(Circle onLoginCircle, Circle onSignUpCircle, TextField textField, PasswordField passwordField, StackPane login, StackPane signUp, Scene scene, Pane root) {
+    private void handleSignUpSubmission(TextField textField, PasswordField passwordField, StackPane signUp, Scene scene, Pane root) {
         signUp.setOnMouseClicked(event -> {
             if (signUp.isVisible()) {
                 try {
                     if (textField.getText().length() == 0 || passwordField.getText().length() == 0)
                         GraphicalCommonUsages.okPopUp("username and password should not be empty", scene, root);
                     else {
-                        int result = LoginMenuProcess.createAccount(textField.getText(), passwordField.getText());
-                        if (result == 1)
-                            GraphicalCommonUsages.okPopUp("a user with this username already exists", scene, root);
-                        if (result == 0) {
-                            System.out.println("account created");
-                            if (!isInLogin) {
-                                loginAndCreateAccountBarManager(login, signUp, onSignUpCircle, onLoginCircle, true);
+                        LoginBasedCommand loginBasedCommand = new LoginBasedCommand(textField.getText(), passwordField.getText(), false);
+                        Client.getInstance().sendData(loginBasedCommand);
+                        synchronized (Client.getInstance().getLock()) {
+                            if (Client.getInstance().getLoginBasedCommand().getUserName().equalsIgnoreCase("")) {
+                                try {
+                                    Client.getInstance().getLock().wait();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                            LoginBasedCommand answer = Client.getInstance().getLoginBasedCommand();
+                            Client.getInstance().setLoginBasedCommand(new LoginBasedCommand("", "", false));
+                            if (!answer.wasRequestSuccessFull())
+                                GraphicalCommonUsages.okPopUp("a user with this username already exists", scene, root);
+                            else
+                                createAccount(answer.getUserName(),answer.getPassword());
                         }
                     }
                 } catch (IOException e) {
@@ -174,21 +184,48 @@ public class Login {
     private void handleLoginSubmission(TextField textField, PasswordField passwordField, StackPane login, Scene scene, Pane root) {
         login.setOnMouseClicked(event -> {
             if (login.isVisible()) {
-                LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
                 try {
-                    int loginCheck = loginMenuProcess.login(textField.getText(), passwordField.getText());
-                    if (loginCheck == 0) {
-                        System.out.println("logged in");
-                        Main.setMainMenuFX(loginMenuProcess.getCurrentAccount());
+                    LoginBasedCommand loginBasedCommand = new LoginBasedCommand(textField.getText(), passwordField.getText(), true);
+                    textField.setText("");
+                    passwordField.setText("");
+                    Client.getInstance().sendData(loginBasedCommand);
+                    synchronized (Client.getInstance().getLock()) {
+                        if (Client.getInstance().getLoginBasedCommand().getUserName().equalsIgnoreCase(""))
+                            Client.getInstance().getLock().wait();
+                        LoginBasedCommand answer = Client.getInstance().getLoginBasedCommand();
+                        Client.getInstance().setLoginBasedCommand(new LoginBasedCommand("", "", false));
+                        if (answer.wasRequestSuccessFull()) {
+                            enter(answer.getAuthCode(), answer.getAccount());
+                        } else
+                            showUnsuccessfullEntry(scene, root);
                     }
-                    if (loginCheck == 2 || loginCheck == 3) {
-                        GraphicalCommonUsages.okPopUp("incorrect username or password", scene, root);
-                    }
-                } catch (IOException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void createAccount(String userName, String password) {
+        System.out.println(userName+" "+password+ " is created");
+        //todo
+    }
+
+    private void enter(String authCode, Account account) {
+        Client.getInstance().setAuthCode(authCode);
+        try {
+            Main.setMainMenuFX(account);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showUnsuccessfullEntry(Scene scene, Pane root) {
+        try {
+            GraphicalCommonUsages.okPopUp("incorrect username or password", scene, root);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

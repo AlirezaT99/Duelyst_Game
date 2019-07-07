@@ -80,7 +80,6 @@ public class Hero extends MovableCard {
     }
 
     public static Hero getHeroByName(String name) {
-        System.out.println(name);
         for (Hero hero : heroes) {
             if (equal(hero.getName().toLowerCase(), name.toLowerCase()))
                 return hero.copy();
