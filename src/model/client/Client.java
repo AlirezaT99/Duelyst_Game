@@ -1,5 +1,6 @@
 package model.client;
 
+import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
@@ -21,7 +22,6 @@ public class Client implements runnables.MessageListener {
 
     private final  Lock loginLock = new Lock();
     private final Lock shopLock = new Lock();
-    private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("", false, false, false);
     private GlobalChatMessage globalChatMessage = new GlobalChatMessage("", "");
     private final Lock lock = new Lock();
 

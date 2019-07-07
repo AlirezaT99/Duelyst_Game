@@ -4,6 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -34,6 +36,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static javafx.scene.text.TextAlignment.CENTER;
@@ -43,6 +46,7 @@ public class MainMenuFX {
     private Pane chatRoom = new Pane();
     private boolean isInGlobalChat = false;
     private AnimationTimer globalChatTimer;
+
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
         currentAccount = account;
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-light-webfont.ttf")), 30);
@@ -108,7 +112,7 @@ public class MainMenuFX {
         Image friendsImage = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/friends.png"));
         ImageView friendsView = new ImageView(friendsImage);
 
-        friendsSetting(friends, friendsView, friendsText, mainMenuScene,root);
+        friendsSetting(friends, friendsView, friendsText, mainMenuScene, root);
         VBox addCard = new VBox();
         Text addCardText = new Text("ADD CARD");
         Image addCardImage = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/quests.png"));
@@ -160,9 +164,9 @@ public class MainMenuFX {
         sendView.setFitHeight(chatRoom.getPrefHeight() / 20);
         sendView.setPreserveRatio(true);
         ImageView close = new ImageView(new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_close@2x.png")));
-        close.setFitHeight(scene.getHeight()/20);
+        close.setFitHeight(scene.getHeight() / 20);
         close.setPreserveRatio(true);
-        close.relocate(chatRoom.getPrefWidth()*0.92,0);
+        close.relocate(chatRoom.getPrefWidth() * 0.92, 0);
         close.setOnMouseEntered(event -> {
             close.setEffect(new Glow(0.6));
         });
@@ -170,7 +174,8 @@ public class MainMenuFX {
             close.setEffect(new Glow(0));
         });
         close.setOnMouseClicked(event -> {
-            if(isInGlobalChat){
+            if (isInGlobalChat) {
+                globalChatTimer.stop();
                 isInGlobalChat = false;
                 KeyValue keyValue = new KeyValue(chatRoom.layoutXProperty(), scene.getWidth());
                 KeyFrame keyFrame = new KeyFrame(Duration.millis(500), keyValue);
@@ -185,28 +190,60 @@ public class MainMenuFX {
             sendView.setEffect(new Glow(0));
         });
         sendView.setOnMouseClicked(event -> {
-            if(!chatField.getText().equals("")){
-                GlobalChatMessage globalChatMessage = new GlobalChatMessage(chatField.getText(),Client.getInstance().getAuthCode());
+            if (!chatField.getText().equals("")) {
+                GlobalChatMessage globalChatMessage = new GlobalChatMessage(chatField.getText(), Client.getInstance().getAuthCode());
                 Client.getInstance().sendData(globalChatMessage);
-//                synchronized (Client.getInstance().getLock()) {
-//                    if (Client.getInstance().getGlobalChatMessage().getAuthCode().equals("")) {
-//                        System.out.println("global Chat waiting");
-//                        try {
-//                            Client.getInstance().getLock().wait();
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    GlobalChatMessage answer = Client.getInstance().getGlobalChatMessage();
-//                    Client.getInstance().setGlobalChatMessage(new GlobalChatMessage("",""));
-//                    String message = answer.getMessage();
-//                }
             }
         });
 
+        final LongProperty lastUpdate = new SimpleLongProperty();
+
+        final long minUpdateInterval = 10000;
+
+        globalChatTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (now - lastUpdate.get() > minUpdateInterval) {
+                    updateChat(chatRoomBox);
+                    lastUpdate.set(now);
+                }
+            }
+        };
+
         sendView.relocate(0, -1 * (chatField.getPrefHeight() / 3));
-        chatRoom.getChildren().addAll(bottomRow,close);
+        chatRoom.getChildren().addAll(bottomRow, close);
         bottomRow.relocate(chatRoomBox.getLayoutX(), chatRoom.getPrefHeight() * 0.9);
+    }
+
+    private void updateChat(Pane chatRoomBox) {
+        GlobalChatMessage globalChatMessage = new GlobalChatMessage(true,Client.getInstance().getAuthCode());
+        Client.getInstance().sendData(globalChatMessage);
+        synchronized (Client.getInstance().getLock()) {
+            if (Client.getInstance().getGlobalChatMessage().getAuthCode().equals("")) {
+                try {
+                    Client.getInstance().getLock().wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            GlobalChatMessage answer = Client.getInstance().getGlobalChatMessage();
+            Client.getInstance().setGlobalChatMessage(new GlobalChatMessage("", ""));
+            ArrayList<String> messages = answer.getChatMessages();
+            chatRoomBox.getChildren().clear();
+            VBox messageVBox = new VBox();
+            chatRoomBox.getChildren().addAll(messageVBox);
+            messageVBox.relocate(0,chatRoomBox.getPrefHeight()/10);
+            for (String message : messages) {
+                Text messagetext = new Text(" "+message);
+                messagetext.setFill(Color.WHITE);
+                Label label = new Label();
+                //label.setBackground(new Background());
+                messagetext.setFont(Font.font(15));
+                messageVBox.getChildren().addAll(messagetext);
+            }
+            messageVBox.setSpacing(chatRoomBox.getPrefHeight()/20);
+        }
     }
 
     private void addCardHandle(VBox addCard) {
@@ -272,6 +309,7 @@ public class MainMenuFX {
             KeyFrame keyFrame = new KeyFrame(Duration.millis(500), keyValue);
             Timeline timeline = new Timeline(keyFrame);
             timeline.play();
+            globalChatTimer.start();
         });
 
     }

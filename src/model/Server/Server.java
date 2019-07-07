@@ -158,15 +158,19 @@ public class Server {
     }
 
     public ArrayList<String> getChatMessages() {
-        return chatMessages;
+        synchronized (chatMessages) {
+            return chatMessages;
+        }
     }
 
     public void addToChatMessages(String message, String authCode){
-        String finalMessage = onlineAccounts.get(authCode).getUserName()+" "+message;
-        chatMessages.add(finalMessage);
-        System.out.println(finalMessage);
-        if(chatMessages.size()>10)
-            chatMessages.remove(0);
+        synchronized (chatMessages) {
+            String finalMessage = onlineAccounts.get(authCode).getUserName() + " : " + message;
+            chatMessages.add(finalMessage);
+            System.out.println(finalMessage);
+            if (chatMessages.size() > 10)
+                chatMessages.remove(0);
+        }
     }
 
     //getters & setters

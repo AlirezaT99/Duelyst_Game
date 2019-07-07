@@ -66,7 +66,6 @@ public class ClientManager extends Thread {
                     handleScoreBoardCommands(objectOutputStream, (ScoreBoardCommand) message);
                 }
                 if (message instanceof GlobalChatMessage) {
-                    System.out.println("----globalChat----");
                     handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
                 }
             }
@@ -80,10 +79,10 @@ public class ClientManager extends Thread {
 
     private void handleGlobalChatMessage(ObjectOutputStream objectOutputStream, GlobalChatMessage globalChatMessage) {
         try {
-            if (globalChatMessage.getChatMessages().size() == 0)
+            if (!globalChatMessage.isUpdate())
                 server.addToChatMessages(globalChatMessage.getMessage(), globalChatMessage.getAuthCode());
-            else
-                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), "1"));
+            else{
+                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), authCode));}
         } catch (IOException e) {
             e.printStackTrace();
         }
