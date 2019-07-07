@@ -98,7 +98,6 @@ public class ServerGraphic extends Application {
         timer.start();
 
         onlineAccountPane.setOnMouseClicked(event1 -> {
-                    // thread.stop();
                     root.getChildren().remove(onlineAccountPane);
                 }
         );

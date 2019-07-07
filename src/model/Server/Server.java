@@ -1,6 +1,7 @@
 package model.Server;
 
 import model.Account;
+import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.MyConstants;
 import model.client.Client;
 import presenter.LoginMenuProcess;
@@ -18,9 +19,9 @@ import java.util.Random;
 
 public class Server {
     private static ServerSocket serverSocket;
-    private static HashSet<String > authcodes = new HashSet<>();
+    private static HashSet<String> authcodes = new HashSet<>();
     private static HashMap<String, ClientManager> clients = new HashMap<>();
-    private static HashMap<String , Account> onlineAccounts = new HashMap<>();
+    private static HashMap<String, Account> onlineAccounts = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
@@ -34,14 +35,72 @@ public class Server {
     }
 
 
-
-    public boolean isAccountAvailabale(String userName){
+    public boolean isAccountAvailabale(String userName) {
         for (Account account : Account.getAccounts()) {
-            if(account.getUserName().equals(userName))
+            if (account.getUserName().equals(userName))
                 return true;
         }
         return false;
     }
+
+    public boolean isAccountOnline(String userName) {
+        for (String s : onlineAccounts.keySet()) {
+            if (onlineAccounts.get(s).getUserName().equals(userName))
+                return true;
+        }
+        return false;
+    }
+
+    public ArrayList<String> getAccountNames() {
+        ArrayList<Account> accounts = sortedAccounts();
+
+        ArrayList<String> sortedAccountsUsernameArrayList = new ArrayList<>();
+        for (Account account : accounts) {
+            sortedAccountsUsernameArrayList.add(account.getUserName());
+        }
+        return sortedAccountsUsernameArrayList;
+    }
+
+    public ArrayList<Boolean> getUsersOnlineStatus() {
+        ArrayList<Account> accounts = sortedAccounts();
+        ArrayList<Boolean> onlineStatus = new ArrayList<>();
+        ArrayList<Account> onlineClients = new ArrayList<>();
+
+        for (String s : onlineAccounts.keySet()) {
+            onlineClients.add(onlineAccounts.get(s));
+        }
+
+        for (Account account : accounts) {
+            if (isAccountOnline(account.getUserName()))
+                onlineStatus.add(new Boolean(true));
+            else
+                onlineStatus.add(new Boolean(false));
+        }
+        return onlineStatus;
+    }
+
+    public ArrayList<Integer> getNumberOfWins() {
+        ArrayList<Account> accounts = sortedAccounts();
+        ArrayList<Integer> numberOfWins = new ArrayList<>();
+        for (Account account : accounts) {
+            numberOfWins.add(account.getNumberOfWins());
+        }
+        return numberOfWins;
+    }
+
+    private ArrayList<Account> sortedAccounts() {
+        ArrayList<Account> accounts = new ArrayList<>();
+        try {
+            LoginMenuProcess.readUsers();
+            LoginMenuProcess.sortUsers();
+            accounts = LoginMenuProcess.getUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return accounts;
+    }
+
+
 
     //getters & setters
 
@@ -49,9 +108,7 @@ public class Server {
         return clients;
     }
 
-
-
-    public void setClients (HashMap<String, ClientManager> clients) {
+    public void setClients(HashMap<String, ClientManager> clients) {
         this.clients = clients;
     }
 
@@ -69,7 +126,7 @@ public class Server {
 
     public int getLoginErrorNumber(String userName, String password) {
         try {
-            return   new LoginMenuProcess().login(userName,password);
+            return new LoginMenuProcess().login(userName, password);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,20 +139,20 @@ public class Server {
 
     public String generateAuthCode(String userName, ClientManager clientManager) {
         Random r = new Random();
-        String tempAuthCode = (r.nextInt()%10000) + "";
+        String tempAuthCode = (r.nextInt() % 10000) + "";
         while (authcodes.contains(tempAuthCode))
-            tempAuthCode = (r.nextInt()%10000) + "";
+            tempAuthCode = (r.nextInt() % 10000) + "";
         authcodes.add(tempAuthCode);
-        clients.put(tempAuthCode,clientManager);
-        onlineAccounts.put(tempAuthCode,Account.getAccountByUserName(userName));
+        clients.put(tempAuthCode, clientManager);
+        onlineAccounts.put(tempAuthCode, Account.getAccountByUserName(userName));
         showOnlineClients();
         return tempAuthCode;
     }
 
-    public void showOnlineClients(){
+    public void showOnlineClients() {
         System.out.println("Online clients : ");
         for (String s : onlineAccounts.keySet()) {
-            System.out.println("\n"+onlineAccounts.get(s).getUserName()+"\n");
+            System.out.println("\n" + onlineAccounts.get(s).getUserName() + "\n");
         }
     }
 
@@ -117,7 +174,7 @@ class ServerListener extends Thread {
         while (true) {
             try {
                 Socket addedClient = server.getServerSocket().accept();
-                ClientManager clientManager = new ClientManager(server,addedClient);
+                ClientManager clientManager = new ClientManager(server, addedClient);
                 clientManager.start();
                 System.out.println("client " + addedClient.getPort() + " added");
             } catch (IOException e) {

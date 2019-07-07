@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import model.*;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Message.Utils;
+import model.Reader;
+import model.client.Client;
 import presenter.LoginMenuProcess;
 import sun.security.krb5.internal.TGSRep;
 
@@ -54,6 +57,10 @@ public class ClientManager extends Thread {
                     System.out.println("---- util ----");
                     handleUtilsBasedCommand(objectOutputStream, (Utils) message);
                 }
+                if (message instanceof ScoreBoardCommand) {
+                    System.out.println("----scorebaord-----");
+                    handleScoreBoardCommands(objectOutputStream, (ScoreBoardCommand) message);
+                }
             }
 
         } catch (IOException e) {
@@ -63,6 +70,16 @@ public class ClientManager extends Thread {
         }
     }
 
+
+    private void handleScoreBoardCommands(ObjectOutputStream objectOutputStream, ScoreBoardCommand scoreBoardCommand) {
+        try {
+
+            objectOutputStream.writeObject(new ScoreBoardCommand("1",server.getAccountNames(),server.getUsersOnlineStatus(),server.getNumberOfWins()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     //login based
 
