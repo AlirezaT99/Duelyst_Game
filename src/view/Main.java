@@ -29,6 +29,7 @@ public class Main extends Application {
     private static CustomGameMenuFX customGameMenuFX;
     private static StoryMenuFX storyMenuFX;
     private static BattleFX battleFx;
+    private static ScoreBoardFX scoreBoardFX;
     private static Stage primaryStage;
     private static Scene currentScene;
     private static AddCardFX addCardFX;
@@ -122,6 +123,12 @@ public class Main extends Application {
     public static void setAddCardFX(Account account) throws FileNotFoundException {
         addCardFX = new AddCardFX();
         currentScene.setRoot(addCardFX.start(primaryStage, account));
+        primaryStage.setScene(currentScene);
+    }
+
+    public static void setScoreBoardFX(Account account) throws FileNotFoundException {
+        scoreBoardFX = new ScoreBoardFX();
+        currentScene.setRoot(scoreBoardFX.start(primaryStage, Client.getInstance().getAuthCode(), account));
         primaryStage.setScene(currentScene);
     }
 

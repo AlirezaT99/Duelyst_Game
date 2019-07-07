@@ -2,6 +2,7 @@ package runnables;
 
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.client.Client;
 import view.Login;
 
@@ -35,6 +36,13 @@ public class GetDataRunnable implements Runnable {
                 if (message instanceof LoginBasedCommand) {
                     synchronized (Client.getInstance().getLock()) {
                         Client.getInstance().setLoginBasedCommand((LoginBasedCommand) message);
+                        Client.getInstance().getLock().notifyAll();
+                    }
+                }
+
+                if (message instanceof ScoreBoardCommand) {
+                    synchronized (Client.getInstance().getLock()) {
+                        Client.getInstance().setScoreBoardCommand((ScoreBoardCommand) message);
                         Client.getInstance().getLock().notifyAll();
                     }
                 }

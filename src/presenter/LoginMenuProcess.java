@@ -81,7 +81,7 @@ public class LoginMenuProcess {
         return -1;
     }
 
-    private static void readUsers() throws IOException {
+    public static void readUsers() throws IOException {
         users.clear();
         MainProcess.readAccounts();
         users.addAll(Account.getAccounts());
@@ -136,7 +136,7 @@ public class LoginMenuProcess {
         return 0;
     }
 
-    private static void sortUsers() {
+    public static void sortUsers() {
         users.sort(Comparator.comparing(Account::getNumberOfWins).reversed()); // reversed ??
     }
 
@@ -165,12 +165,14 @@ public class LoginMenuProcess {
 
     //getters
 
-    public ArrayList<Account> getUsers() {
+    public static ArrayList<Account> getUsers() {
         return users;
     }
 
     public Account getCurrentAccount() {
         return currentAccount;
     }
+
+
     //getters
 }

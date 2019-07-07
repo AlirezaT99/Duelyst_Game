@@ -3,6 +3,7 @@ package model.client;
 import com.google.gson.Gson;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.MyConstants;
 import model.Reader;
 import model.Server.Lock;
@@ -20,6 +21,7 @@ public class Client implements runnables.MessageListener {
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private LoginBasedCommand loginBasedCommand = new LoginBasedCommand("", "", true);
+    private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("",false,false,false);
 
 
     private final  Lock lock = new Lock();
@@ -79,6 +81,15 @@ public class Client implements runnables.MessageListener {
     public void setLoginBasedCommand(LoginBasedCommand loginBasedCommand) {
         this.loginBasedCommand = loginBasedCommand;
     }
+    public void setScoreBoardCommand(ScoreBoardCommand scoreBoardCommand){
+        this.scoreBoardCommand = scoreBoardCommand;
+    }
+
+    public ScoreBoardCommand getScoreBoardCommand() {
+        return scoreBoardCommand;
+    }
+
+
 
     public String getAuthCode() {
         return authCode;

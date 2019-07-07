@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import model.Account;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.Utils;
 import model.Reader;
+import model.client.Client;
 import presenter.LoginMenuProcess;
 import sun.security.krb5.internal.TGSRep;
 
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClientManager extends Thread {
@@ -47,9 +50,13 @@ public class ClientManager extends Thread {
                     System.out.println("--------------");
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
                 }
-                if(message instanceof Utils){
+                if (message instanceof Utils) {
                     System.out.println("---- util ----");
-                    handleUtilsBasedCommand(objectOutputStream,(Utils)message);
+                    handleUtilsBasedCommand(objectOutputStream, (Utils) message);
+                }
+                if (message instanceof ScoreBoardCommand) {
+                    System.out.println("----scorebaord-----");
+                    handleScoreBoardCommands(objectOutputStream, (ScoreBoardCommand) message);
                 }
             }
 
@@ -61,10 +68,20 @@ public class ClientManager extends Thread {
     }
 
 
+    private void handleScoreBoardCommands(ObjectOutputStream objectOutputStream, ScoreBoardCommand scoreBoardCommand) {
+        try {
+
+            objectOutputStream.writeObject(new ScoreBoardCommand("1",server.getAccountNames(),server.getUsersOnlineStatus(),server.getNumberOfWins()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     //login based
 
-    private void handleUtilsBasedCommand(ObjectOutputStream objectOutputStream, Utils utils){
-        if(utils.isLogout()){
+    private void handleUtilsBasedCommand(ObjectOutputStream objectOutputStream, Utils utils) {
+        if (utils.isLogout()) {
             server.getOnlineAccounts().remove(utils.getAuthCode());
             server.getClients().remove(utils.getAuthCode());
             server.getAuthcodes().remove(utils.getAuthCode());
@@ -77,7 +94,7 @@ public class ClientManager extends Thread {
         String userName = loginBasedCommand.getUserName();
         String password = loginBasedCommand.getPassword();
         if (loginBasedCommand.isCreateAccount())
-            createAccountServerSide(objectOutputStream, userName,password);
+            createAccountServerSide(objectOutputStream, userName, password);
         else {
             loginOnServerSide(objectOutputStream, userName, password);
         }
@@ -93,11 +110,11 @@ public class ClientManager extends Thread {
         }
     }
 
-    private void createAccountServerSide(ObjectOutputStream objectOutputStream, String userName, String password ) throws IOException {
+    private void createAccountServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
         if (server.isAccountAvailabale(userName))
             objectOutputStream.writeObject(new LoginBasedCommand("", "", false, "", false, 0, null));
         else {
-            LoginMenuProcess.createAccount(userName,password);
+            LoginMenuProcess.createAccount(userName, password);
             objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, "", false, 0, Account.getAccountByUserName(userName)));
         }
     }

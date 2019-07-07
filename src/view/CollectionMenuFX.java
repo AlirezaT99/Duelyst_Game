@@ -53,7 +53,7 @@ public class CollectionMenuFX {
     private static ArrayList<String> cardsToAddToDeck = new ArrayList<>();
     private static Deck deckToBe = new Deck("new deck");
     private static Timeline timeline5;
-    static Scene scene;
+     static Scene scene;
 
     CollectionMenuFX(Account account) {
         CollectionMenuFX.account = account;
