@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import jdk.nashorn.internal.objects.Global;
 import model.*;
+import model.Message.AddCardCommand.AddCardCommand;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
@@ -35,7 +36,7 @@ import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
-    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0,new int[2],"","",0,false,-1),-1);
+    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0, new int[2], "", "", 0, false, -1), -1);
     private ArrayList<UpdateCards> updateCards = new ArrayList<>();
 
     public ClientManager(Server server, Socket socketOnServerSide) {
@@ -62,7 +63,7 @@ public class ClientManager extends Thread {
             long lastUpdate = System.currentTimeMillis();
             while (!interrupted()) {
                 Server.getLatestUpdates(-1);
-                if (System.currentTimeMillis() - lastUpdate >1000) {
+                if (System.currentTimeMillis() - lastUpdate > 1000) {
                     updateShop(objectOutputStream);
                     lastUpdate = System.currentTimeMillis();
                 }
@@ -84,9 +85,13 @@ public class ClientManager extends Thread {
                 if (message instanceof GlobalChatMessage) {
                     handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
                 }
-                if(message instanceof SaveCommand){
+                if (message instanceof SaveCommand) {
                     System.out.println("----save----");
                     handleSaveCommand(objectOutputStream, (SaveCommand) message);
+                }
+                if (message instanceof AddCardCommand) {
+                    System.out.println("-----addCard-----");
+                    handleAddCardCommand(objectInputStream, (AddCardCommand) message);
                 }
             }
 
@@ -97,14 +102,28 @@ public class ClientManager extends Thread {
         }
     }
 
+    private void handleAddCardCommand(ObjectInputStream objectInputStream, AddCardCommand message) {
+        if (message.isSpell())
+            server.addSpell(message);
+
+        if (message.isHero())
+            server.addHero(message);
+
+        if(message.isMinion())
+            server.addMinion(message);
+
+
+    }
+
     private void handleSaveCommand(ObjectOutputStream objectOutputStream, SaveCommand message) {
-        if(message.isDeckSave()) {
+        if (message.isDeckSave()) {
             Gson gson = new Gson();
-            Type deckArrayListType = new TypeToken<ArrayList<Deck>>(){}.getType();
-            ArrayList<Deck> decks = gson.fromJson(message.getDecks(),deckArrayListType);
-            Deck selectedDeck = gson.fromJson(message.getSelectedDeck(),Deck.class);
-            server.setDecks(decks,authCode);
-            server.setSelectedDeck(selectedDeck,authCode);
+            Type deckArrayListType = new TypeToken<ArrayList<Deck>>() {
+            }.getType();
+            ArrayList<Deck> decks = gson.fromJson(message.getDecks(), deckArrayListType);
+            Deck selectedDeck = gson.fromJson(message.getSelectedDeck(), Deck.class);
+            server.setDecks(decks, authCode);
+            server.setSelectedDeck(selectedDeck, authCode);
             server.saveAccount(authCode);
         }
     }
@@ -113,12 +132,14 @@ public class ClientManager extends Thread {
         try {
             if (!globalChatMessage.isUpdate())
                 server.addToChatMessages(globalChatMessage.getMessage(), globalChatMessage.getAuthCode());
-            else{
-                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), authCode));}
+            else {
+                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), authCode));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     private void handleTradeProcess(ObjectOutputStream objectOutputStream, Message message) throws IOException {
         TradeRequest tradeRequest = (TradeRequest) message;
         Account account = Server.getOnlineAccounts().get(message.getAuthCode()); //todo nulls are not handled
@@ -132,7 +153,7 @@ public class ClientManager extends Thread {
             if (result != -1) {
                 Server.addUpdateOfShop(tradeRequest);
                 account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name,-1);
+                Shop.changeNumbers(name, -1);
             }
         } else if (tradeRequest.isSell()) {
             int result = Shop.sell(account, tradeRequest.getObjectName());
@@ -142,7 +163,7 @@ public class ClientManager extends Thread {
             if (result != -1) {
                 Server.addUpdateOfShop(tradeRequest);
                 account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name,+1);
+                Shop.changeNumbers(name, +1);
             }
         }
     }

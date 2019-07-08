@@ -1,17 +1,16 @@
 package model.Server;
 
 import com.google.gson.Gson;
-import model.Account;
-import model.Deck;
+import model.*;
+import model.Message.AddCardCommand.AddCardCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
-import model.MyConstants;
-import model.Shop;
 import model.client.Client;
 import presenter.LoginMenuProcess;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -45,15 +44,15 @@ public class Server {
     }
 
     static void addUpdateOfShop(TradeRequest tradeRequest) {
-        synchronized (shopUpdates){
+        synchronized (shopUpdates) {
             String name = tradeRequest.getObjectName();
             int cost = Shop.findCost(name);
             int[] powers = Shop.findPowers(name);
             int counter = Shop.findCount(name);
-            if(tradeRequest.isBuy())
-                shopUpdates.add(new UpdateCards(cost,powers,name,"",counter-1,false, Shop.getType(name)));
+            if (tradeRequest.isBuy())
+                shopUpdates.add(new UpdateCards(cost, powers, name, "", counter - 1, false, Shop.getType(name)));
             else
-                shopUpdates.add(new UpdateCards(cost,powers,name,"",counter+1,false,Shop.getType(name)));
+                shopUpdates.add(new UpdateCards(cost, powers, name, "", counter + 1, false, Shop.getType(name)));
         }
     }
 
@@ -126,7 +125,6 @@ public class Server {
         }
         return accounts;
     }
-
 
 
     //getters & setters
@@ -202,7 +200,7 @@ public class Server {
         }
     }
 
-    public void addToChatMessages(String message, String authCode){
+    public void addToChatMessages(String message, String authCode) {
         synchronized (chatMessages) {
             String finalMessage = onlineAccounts.get(authCode).getUserName() + " : " + message;
             chatMessages.add(finalMessage);
@@ -212,29 +210,79 @@ public class Server {
         }
     }
 
-    public void setDecks(ArrayList<Deck> decks, String authCode){
+    public void setDecks(ArrayList<Deck> decks, String authCode) {
         HashMap<String, Deck> deckHashMap = new HashMap<>();
         for (Deck deck : decks) {
-            deckHashMap.put(deck.getName(),deck);
+            deckHashMap.put(deck.getName(), deck);
         }
         onlineAccounts.get(authCode).getCollection().setDecks(decks);
         onlineAccounts.get(authCode).getCollection().setDeckHashMap(deckHashMap);
     }
 
-    public void setSelectedDeck(Deck deck, String authCode){
+    public void setSelectedDeck(Deck deck, String authCode) {
         onlineAccounts.get(authCode).getCollection().setSelectedDeck(deck);
     }
 
-    public void saveAccount(String authCode){
+    public void saveAccount(String authCode) {
         try {
-            System.out.println("fucking saving for : "+onlineAccounts.get(authCode).getUserName());
+            System.out.println("fucking saving for : " + onlineAccounts.get(authCode).getUserName());
             LoginMenuProcess.save(onlineAccounts.get(authCode));
         } catch (IOException e) {
             e.printStackTrace(); //
         }
     }
 
+    public static void addSpell(AddCardCommand addCardCommand) {
+        String[] impact1 = addCardCommand.getImpact1().split("[ ]");
+        String[] impact2 = addCardCommand.getImpact2().split("[ ]");
 
+        Impact primaryImpact = new Impact(impact1[0], impact1[1], impact1[2], impact1[3]);
+        Impact secondaryImpact = new Impact(impact2[0], impact2[1], impact2[2], impact2[3]);
+        Spell spell = new Spell(primaryImpact, secondaryImpact);
+        spell.setName(addCardCommand.getName());
+        spell.setCost(addCardCommand.getCost());
+        spell.isCostume(true);
+        Shop.getShopSpells().add(spell);
+        Spell.addToSpells(spell);
+        try {
+            Main.addCardToFiles(spell);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addHero(AddCardCommand addCardCommand) {
+
+        Spell spell = Spell.getSpellByName(addCardCommand.getHeroSpecialPower());
+        Hero hero = new Hero(addCardCommand.getName(), addCardCommand.getHealth(), addCardCommand.getDamage()
+                , spell, addCardCommand.getCoolDown());
+        hero.isCostume(true);
+
+        switch (addCardCommand.getAttackType()) {
+            case "Melee":
+                hero.setMelee(true);
+                break;
+            case "Ranged":
+                hero.setRanged(true);
+                break;
+            case "Hybrid":
+                hero.setHybrid(true);
+                break;
+        }
+        hero.setCost(addCardCommand.getCost());
+        hero.setMaxAttackRange(addCardCommand.getRange());
+        Shop.getShopHeroes().add(hero);
+        Hero.addToHeroes(hero);
+        try {
+            Main.addCardToFiles(hero);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addMinion(AddCardCommand addCardCommand) {
+
+    }
 
 
     //getters & setters

@@ -31,7 +31,6 @@ public class Main extends Application {
     private static ScoreBoardFX scoreBoardFX;
     private static Stage primaryStage;
     private static Scene currentScene;
-    private static AddCardFX addCardFX;
     private static Rectangle2D primaryScreenBounds;
     private static AudioClip audioClip;
 
@@ -116,12 +115,6 @@ public class Main extends Application {
         if (customGameMenuFX == null)
             Main.customGameMenuFX = new CustomGameMenuFX();
         currentScene.setRoot(customGameMenuFX.start(primaryStage, account));
-        primaryStage.setScene(currentScene);
-    }
-
-    public static void setAddCardFX(Account account) throws FileNotFoundException {
-        addCardFX = new AddCardFX();
-        currentScene.setRoot(addCardFX.start(primaryStage, account));
         primaryStage.setScene(currentScene);
     }
 
