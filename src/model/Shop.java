@@ -255,6 +255,14 @@ public class Shop {
         return finalCardNum;
     }
 
+
+    public static void resetAllNumbers(){
+        shopHeroes.forEach(hero -> hero.setNumbers(10));
+        shopMinions.forEach(minion -> minion.setNumbers(10));
+        shopSpells.forEach(spell -> spell.setNumbers(10));
+        shopItems.forEach(usableItem -> usableItem.setNumber(10));
+    }
+
     //getters
     public static ArrayList<Hero> getShopHeroes() {
         return shopHeroes;

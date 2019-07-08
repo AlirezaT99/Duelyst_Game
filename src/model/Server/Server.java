@@ -32,8 +32,10 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
+//        Shop.resetAllNumbers();
         Server server = new Server();
-        serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
+        server.saveCards();
+            serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
         new ServerListener(server).start();
     }
 
@@ -166,7 +168,7 @@ public class Server {
         ArrayList<UpdateCards> updateCards = new ArrayList<>();
         synchronized (shopUpdates) {
             if (shopUpdates.size() > lastIndexOfUpdates + 1)
-                updateCards = new ArrayList<>(shopUpdates.subList(lastIndexOfUpdates + 1, shopUpdates.size() ));
+                updateCards = new ArrayList<>(shopUpdates.subList(lastIndexOfUpdates + 1, shopUpdates.size()));
         }
         return updateCards;
     }
@@ -232,6 +234,22 @@ public class Server {
         }
     }
 
+    public static void saveCards() {
+        try {
+            for (Hero shopHero : Shop.getShopHeroes()) {
+                Main.addCardToFiles(shopHero);
+            }
+            for (Spell shopSpell : Shop.getShopSpells()) {
+                Main.addCardToFiles(shopSpell);
+            }
+            for (Minion shopMinion : Shop.getShopMinions()) {
+                Main.addCardToFiles(shopMinion);
+            }
+        } catch (IOException e) {
+
+        }
+    }
+
     public static void addSpell(AddCardCommand addCardCommand) {
         String[] impact1 = addCardCommand.getImpact1().split("[ ]");
         String[] impact2 = addCardCommand.getImpact2().split("[ ]");
@@ -278,10 +296,6 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void addMinion(AddCardCommand addCardCommand) {
-
     }
 
 

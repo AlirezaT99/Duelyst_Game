@@ -90,6 +90,7 @@ public class ClientManager extends Thread {
                 }
                 if (message instanceof TradeRequest) {
                     handleTradeProcess(objectOutputStream, message);
+                    server.saveCards();
                 }
                 if (message instanceof GlobalChatMessage) {
                     handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
