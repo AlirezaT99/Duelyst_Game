@@ -29,9 +29,7 @@ public class GetDataRunnable implements Runnable {
 
     @Override
     public void run() {
-
         try {
-
             while (true) {
                 Message message = (Message) inputStream.readObject();
                 if (message instanceof LoginBasedCommand) {
@@ -71,20 +69,16 @@ public class GetDataRunnable implements Runnable {
                         Client.getInstance().getLock().notifyAll();
                     }
                 }
-
                 if (message instanceof GlobalChatMessage) {
                     synchronized (Client.getInstance().getLock()) {
                         Client.getInstance().setGlobalChatMessage((GlobalChatMessage) message);
                         Client.getInstance().getLock().notifyAll();
                     }
                 }
-
                 if (message instanceof UpdateWholeShop)
                     updateShop((UpdateWholeShop) message);
                 if (message instanceof TradeResponse)
                     tradeResponseHandler((TradeResponse) message);
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();

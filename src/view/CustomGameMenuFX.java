@@ -30,8 +30,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class CustomGameMenuFX {
+    Stage stage;
+
     public Pane start(Stage primaryStage, Account account) throws FileNotFoundException {
         Pane root = new Pane();
+        stage = primaryStage;
         Scene customGameMenu = new Scene(new Pane(), primaryStage.getWidth(), primaryStage.getHeight());
         root.setPrefWidth(customGameMenu.getWidth());
         root.setPrefHeight(customGameMenu.getHeight());
@@ -94,11 +97,11 @@ public class CustomGameMenuFX {
         VBox opponentBox = new VBox(view, description, new Text());
         opponentBox.setSpacing(battleInitScene.getHeight() / 20);
         opponentBox.setAlignment(Pos.CENTER);
-        mouseMovementHandling(view, description, opponentBox, account, motherset,battleInitScene, root);
+        mouseMovementHandling(view, description, opponentBox, account, motherset, battleInitScene, root);
         return opponentBox;
     }
 
-    private void mouseMovementHandling(StackPane view, Text text, VBox vBox, Account account, VBox motherSet, Scene scene,Pane root) {
+    private void mouseMovementHandling(StackPane view, Text text, VBox vBox, Account account, VBox motherSet, Scene scene, Pane root) {
         vBox.setOnMouseEntered(event -> {
             view.setOpacity(1);
             ScaleTransition st = new ScaleTransition(Duration.millis(100), vBox);
@@ -121,16 +124,16 @@ public class CustomGameMenuFX {
             text.setEffect(new Glow(0.5));
         });
         vBox.setOnMouseClicked(event -> {
-            new GraphicalCommonUsages().mouseClickAudioPlay();
+            GraphicalCommonUsages.mouseClickAudioPlay();
             try {
-                chooseDeck(account, text.getText(), motherSet, scene,root);
+                chooseDeck(account, text.getText(), motherSet, scene, root, false);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private void chooseDeck(Account account, String heroName, VBox motherSet,Scene scene,Pane root) throws FileNotFoundException {
+    public void chooseDeck(Account account, String heroName, VBox motherSet, Scene scene, Pane root, Boolean accessFromMulti) throws FileNotFoundException {
         for (Node child : motherSet.getChildren()) {
             if (!(child instanceof Text)) {
                 FadeTransition ft = new FadeTransition(Duration.millis(300), child);
@@ -163,29 +166,26 @@ public class CustomGameMenuFX {
                 decks.getChildren().add(text);
             }
         }
-        decks.setSpacing(motherSet.getSpacing() / 3);
+        decks.setSpacing(100 / 3);
         for (Node child : decks.getChildren()) {
             child.setOnMouseEntered(event -> child.setEffect(new Glow(0.5)));
             child.setOnMouseExited(event -> child.setEffect(new Glow(0)));
-            child.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    try {
-                        selectMode(account, heroName, ((Text) child).getText(), replacingVBox,scene,root);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+            child.setOnMouseClicked(event -> {
+                try {
+                    selectMode(account, heroName, ((Text) child).getText(), replacingVBox, scene, root, accessFromMulti);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
             });
             //todo : setOnMouseClicked -> make a match
         }
         decks.setAlignment(Pos.CENTER);
-        replacingVBox.setSpacing(motherSet.getSpacing());
+        replacingVBox.setSpacing(10);
         replacingVBox.getChildren().addAll(choose_your_deck, decks);
         root.getChildren().addAll(replacingVBox);
     }
 
-    private void selectMode(Account account, String heroName, String deckName, VBox motherSet, Scene scene, Pane root) throws FileNotFoundException {
+    private void selectMode(Account account, String heroName, String deckName, VBox motherSet, Scene scene, Pane root, Boolean accessFromMultiPlayer) throws FileNotFoundException {
         for (Node child : motherSet.getChildren()) {
             FadeTransition ft = new FadeTransition(Duration.millis(250), child);
             ft.setFromValue(1);
@@ -218,79 +218,77 @@ public class CustomGameMenuFX {
         Label mode_3_text = new Label("MODE  3");
         mode_3_text.setFont(modeFont);
         mode_3_text.setTextFill(Color.WHITE);
-        javafx.scene.control.TextField mode_3_flags = new TextField("number of flags");
+        TextField mode_3_flags = new TextField("number of flags");
         mode_3_flags.setStyle("-fx-background-color:rgba(175, 175, 175, 0.5) ; -fx-font-size:  20px; ");
         mode_3_flags.setPrefWidth(mode_3_text.getWidth());
         mode_3.getChildren().addAll(mode_3_text, mode_3_flags);
         modes.getChildren().addAll(mode_1, mode_2, mode_3);
 
         for (Node child : modes.getChildren()) {
-            child.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (child instanceof Label)
-                        child.setEffect(new Glow(0.8));
-                    else {
-                        ((VBox) child).getChildren().get(0).setEffect(new Glow(0.8));
-                    }
-                }
+            child.setOnMouseEntered(event -> {
+                if (child instanceof Label)
+                    child.setEffect(new Glow(0.8));
+                else
+                    ((VBox) child).getChildren().get(0).setEffect(new Glow(0.8));
             });
 
-            child.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (child instanceof Label)
-                        child.setEffect(new Glow(0));
-                    else {
-                        ((VBox) child).getChildren().get(0).setEffect(new Glow(0));
-                    }
+            child.setOnMouseExited(event -> {
+                if (child instanceof Label)
+                    child.setEffect(new Glow(0));
+                else {
+                    ((VBox) child).getChildren().get(0).setEffect(new Glow(0));
                 }
             });
+            if (!accessFromMultiPlayer)
+                child.setOnMouseClicked(event -> {
+                int mode;
+                int numberOfFlags = 0;
 
-            child.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    int mode;
-                    int numberOfFlags = 0;
-
-                    if (child instanceof Label) {
-                        if (((Label) child).getText().equals("MODE  1")) {
-                            mode = 1;
-                            try {
-                                System.out.println(heroName);
-                                Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), numberOfFlags);
-                                Main.setBattleFX(account,match,false);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                        if (((Label) child).getText().equals("MODE  2")) {
-                            mode = 2;
-                            try {
-                                Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), 1);
-                                Main.setBattleFX(account,match,false);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    if (child instanceof VBox) {
-                        mode = 3;
+                if (child instanceof Label) {
+                    if (((Label) child).getText().equals("MODE  1")) {
+                        mode = 1;
                         try {
-                            if (validateNumberOfFlags(mode_3_flags, scene, root))
-                                numberOfFlags = Integer.parseInt(mode_3_flags.getText());
+                            System.out.println(heroName);
                             Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), numberOfFlags);
-                            Main.setBattleFX(account,match,false);
+                            Main.setBattleFX(account, match, false);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    if (((Label) child).getText().equals("MODE  2")) {
+                        mode = 2;
+                        try {
+                            Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), 1);
+                            Main.setBattleFX(account, match, false);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 }
+                if (child instanceof VBox) {
+                    mode = 3;
+                    try {
+                        if (validateNumberOfFlags(mode_3_flags, scene, root))
+                            numberOfFlags = Integer.parseInt(mode_3_flags.getText());
+                        Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), numberOfFlags);
+                        Main.setBattleFX(account, match, false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             });
+            else
+                child.setOnMouseClicked(event -> {
+                    try {
+                        new BattleInitFX().waitForPlayer(root);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                });
         }
-        modes.setSpacing(motherSet.getSpacing());
-        replacingVBox.setSpacing(motherSet.getSpacing());
+        modes.setSpacing(10);
+        replacingVBox.setSpacing(10);
         replacingVBox.getChildren().addAll(choose_your_mode, modes);
         root.getChildren().addAll(replacingVBox);
     }
