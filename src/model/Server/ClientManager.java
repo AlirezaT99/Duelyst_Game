@@ -1,7 +1,10 @@
 package model.Server;
 
 import javafx.util.Pair;
+import com.google.gson.Gson;
+import jdk.nashorn.internal.objects.Global;
 import model.*;
+import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
@@ -68,6 +71,10 @@ public class ClientManager extends Thread {
                 if (message instanceof TradeRequest) {
                     handleTradeProcess(objectOutputStream, message);
                 }
+                if (message instanceof GlobalChatMessage) {
+                    handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
+                }
+
             }
 
         } catch (IOException e) {
@@ -77,6 +84,16 @@ public class ClientManager extends Thread {
         }
     }
 
+    private void handleGlobalChatMessage(ObjectOutputStream objectOutputStream, GlobalChatMessage globalChatMessage) {
+        try {
+            if (!globalChatMessage.isUpdate())
+                server.addToChatMessages(globalChatMessage.getMessage(), globalChatMessage.getAuthCode());
+            else{
+                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), authCode));}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void handleTradeProcess(ObjectOutputStream objectOutputStream, Message message) throws IOException {
         TradeRequest tradeRequest = (TradeRequest) message;
         Account account = Server.getOnlineAccounts().get(message.getAuthCode()); //todo nulls are not handled
@@ -108,7 +125,6 @@ public class ClientManager extends Thread {
 
     private void handleScoreBoardCommands(ObjectOutputStream objectOutputStream, ScoreBoardCommand scoreBoardCommand) {
         try {
-
             objectOutputStream.writeObject(new ScoreBoardCommand("1", server.getAccountNames(), server.getUsersOnlineStatus(), server.getNumberOfWins()));
         } catch (IOException e) {
             e.printStackTrace();

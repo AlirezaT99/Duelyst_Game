@@ -24,7 +24,6 @@ public class UsableItem extends InfluentialItem {
         item.deck = deck == null ?null : deck.copy();
         item.match = match;
         item.collectionID = this.collectionID;
-        item.collectionNumber = this.collectionNumber;
         return item;
     }
 
@@ -61,9 +60,9 @@ public class UsableItem extends InfluentialItem {
     }
 
     public static UsableItem getUsableItemByName(String name) {
-        for (int i = 0; i < usableItems.size(); i++)
-            if (usableItems.get(i).getName().equals(name))
-                return ((UsableItem) usableItems.get(i)).copy();
+        for (UsableItem usableItem : usableItems)
+            if (usableItem.getName().equals(name))
+                return usableItem.copy();
         return null;
     }
 

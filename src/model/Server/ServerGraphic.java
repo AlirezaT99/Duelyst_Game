@@ -10,10 +10,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Account;
 import model.Card;
 import model.MyConstants;
+import model.Shop;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,16 +45,73 @@ public class ServerGraphic extends Application {
         pane.getChildren().addAll(settingMenu);
         settingMenu.setAlignment(Pos.CENTER);
         settingMenu.relocate(0, scene.getHeight() / 10);
+        settingMenu.setSpacing(scene.getHeight() / 20);
         settingMenu.layoutXProperty().bind(pane.widthProperty().subtract(settingMenu.widthProperty()).divide(2));
         Label onlineClients = new Label("Online Clients");
         onlineClients.setOnMouseEntered(event -> onlineClients.setUnderline(true));
         onlineClients.setOnMouseExited(event -> onlineClients.setUnderline(false));
         onlineClients.setOnMouseClicked(event -> showOnlineClients(scene, pane));
-        settingMenu.getChildren().addAll(onlineClients);
+
+        Label shop = new Label("Shop");
+        shop.setOnMouseEntered(event -> shop.setUnderline(true));
+        shop.setOnMouseExited(event -> shop.setUnderline(false));
+        shop.setOnMouseClicked(event -> showShop(scene, pane));
+
+
+        settingMenu.getChildren().addAll(onlineClients, shop);
+    }
+
+    private void showShop(Scene scene, Pane root) {
+        Pane shopPane = new Pane();
+        shopPane.setPrefWidth(scene.getWidth());
+        shopPane.setPrefHeight(scene.getHeight());
+        BackgroundFill background_fill = new BackgroundFill(Color.rgb(50, 100, 150),
+                new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0));
+        shopPane.setBackground(new Background(background_fill));
+        root.getChildren().addAll(shopPane);
+
+
+        final LongProperty lastUpdate = new SimpleLongProperty();
+
+        final long minUpdateInterval = 200;
+        AnimationTimer timer = new AnimationTimer() {
+
+            @Override
+            public void handle(long now) {
+                if (now - lastUpdate.get() > minUpdateInterval) {
+                    shopPane.getChildren().clear();
+                    HashMap<String, Integer> numberOfCards = Shop.getNumbers();
+                    int count = 0;
+                    for (String s : numberOfCards.keySet()) {
+                        count++;
+                        double x =scene.getWidth()/4;
+                        double y = 0;
+                        if(count <= 45)
+                            y =( scene.getHeight()/50)*count;
+                        else
+                        {
+                            x = scene.getWidth()*2.5/4;
+                            y =( scene.getHeight()/50)*(count - 45);
+                        }
+                        Text cardStats = new Text(count+". "+s+" : "+numberOfCards.get(s).intValue());
+                        cardStats.relocate(x,y);
+                        shopPane.getChildren().addAll(cardStats);
+                    }
+                    lastUpdate.set(now);
+                }
+            }
+        };
+        timer.start();
+
+        shopPane.setOnMouseClicked(event1 -> {
+                    timer.stop();
+                    root.getChildren().remove(shopPane);
+                }
+        );
+
     }
 
     public void showOnlineClients(Scene scene, Pane root) {
-        HashMap<String, Account> onlineClients = Server.getOnlineAccounts();
         Pane onlineAccountPane = new Pane();
         onlineAccountPane.setPrefWidth(scene.getWidth());
         onlineAccountPane.setPrefHeight(scene.getHeight());
@@ -67,20 +126,16 @@ public class ServerGraphic extends Application {
         accountsVBox.setSpacing(scene.getHeight() / 25);
         accountsVBox.layoutXProperty().bind(root.widthProperty().subtract(accountsVBox.widthProperty()).divide(2));
         accountsVBox.layoutYProperty().bind(root.heightProperty().subtract(accountsVBox.heightProperty()).divide(2));
-//        Thread thread = new Thread(() -> {
-//            while (true) {
-//
-//            }
-//        });
-//        thread.start();
+
         final LongProperty lastUpdate = new SimpleLongProperty();
 
-        final long minUpdateInterval = 1;
+        final long minUpdateInterval = 100;
         AnimationTimer timer = new AnimationTimer() {
 
             @Override
             public void handle(long now) {
                 if (now - lastUpdate.get() > minUpdateInterval) {
+                    HashMap<String, Account> onlineClients = Server.getOnlineAccounts();
                     accountsVBox.getChildren().clear();
                     for (String s : onlineClients.keySet()) {
 
@@ -89,6 +144,7 @@ public class ServerGraphic extends Application {
                         label1.setTextFill(Color.WHITE);
                         accountsVBox.getChildren().add(label1);
                         label1.setAlignment(Pos.CENTER);
+
                     }
                     lastUpdate.set(now);
                 }
@@ -98,6 +154,7 @@ public class ServerGraphic extends Application {
         timer.start();
 
         onlineAccountPane.setOnMouseClicked(event1 -> {
+                    timer.stop();
                     root.getChildren().remove(onlineAccountPane);
                 }
         );

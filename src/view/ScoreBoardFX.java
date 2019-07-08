@@ -8,13 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.ImageViewBuilder;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Account;
-import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.client.Client;
 
@@ -60,7 +58,7 @@ public class ScoreBoardFX {
         final LongProperty lastUpdate = new SimpleLongProperty();
         VBox scoreBoard = new VBox();
         root.getChildren().addAll(scoreBoard);
-        final long minUpdateInterval = 1000;
+        final long minUpdateInterval = 100;
         AnimationTimer timer = new AnimationTimer() {
 
             @Override
@@ -81,7 +79,7 @@ public class ScoreBoardFX {
                         ScoreBoardCommand answer = Client.getInstance().getScoreBoardCommand();
                         Client.getInstance().setScoreBoardCommand(new ScoreBoardCommand("", false, false, false));
                         names = answer.getSortedUsers();
-                        onlineStatus = answer.getOnlineStusOfUsers();
+                        onlineStatus = answer.getOnlineStatusOfUsers();
                         numOfWins = answer.getNumberOfWinsOfUsers();
                     }
 
