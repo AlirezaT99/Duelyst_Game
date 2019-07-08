@@ -8,48 +8,48 @@ import model.Message.ShopCommand.ShopCommand;
 import java.util.ArrayList;
 
 public class UpdateCards extends ShopCommand {
-    private Card card = null;
-    private Item item = null;
-    private boolean inShop = true;
-    private boolean inCollection = false;
+    private String objectName;
     private int counter;
-    ArrayList<Image> images = new ArrayList<>();
-    public UpdateCards(String message, String authCode, Card card, int counter,boolean isInShop) {
+    private boolean getImage;
+    private int cost;
+    private int[] powers;
+    private ArrayList<Image> images = new ArrayList<>();
+    private int cardType;
+    public UpdateCards(int cost , int[] powers,String objectName, String authCode,int counter, boolean getImage,int cardType) {
         super(authCode);
+        this.objectName = objectName;
         this.counter = counter;
-        this.card = card;
-        this.inShop = isInShop;
-        this.inCollection = !isInShop;
+        this.getImage = getImage;
+        this.cardType = cardType;
+        this.cost = cost;
+        this.powers = powers;
     }
 
-    public UpdateCards(String message, String authCode, Item item, int counter,boolean isInShop) {
-        super(authCode);
-        this.item = item;
-        this.counter = counter;
-        this.inShop = isInShop;
-        this.inCollection = !isInShop;
+    public String getObjectName() {
+        return objectName;
     }
 
-    public UpdateCards(String message, String authCode, ArrayList<Image> images) {
-        super(authCode);
-        this.images = images;
-    }
-
-    public Card getCard() {
-        return card;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public int getCounter() {
+    public int getCount() {
         return counter;
+    }
+
+    public boolean isGetImage() {
+        return getImage;
     }
 
     public ArrayList<Image> getImages() {
         return images;
     }
 
+    public int getCardType() {
+        return cardType;
+    }
 
+    public int getCost() {
+        return cost;
+    }
+
+    public int[] getPowers() {
+        return powers;
+    }
 }

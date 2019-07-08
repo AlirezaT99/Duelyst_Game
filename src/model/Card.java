@@ -12,7 +12,7 @@ public abstract class Card {
     protected String description = "";
     protected boolean isCostume = false;
     private int numbers = 10;
-    private int collectionNumber = 0;
+    public int collectionNumber = 0;
 
     void setCardFieldsForCopy(Card card) {
         card.cost = cost;

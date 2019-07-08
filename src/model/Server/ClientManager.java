@@ -1,23 +1,17 @@
 package model.Server;
 
-import com.google.gson.Gson;
+import javafx.util.Pair;
 import model.*;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
-import model.Message.ShopCommand.Trade.TradeCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
 import model.Message.ShopCommand.Trade.TradeResponse;
+import model.Message.ShopCommand.UpdateShop.UpdateCards;
 import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Message.Utils;
-import model.Reader;
-import model.client.Client;
 import presenter.LoginMenuProcess;
-import presenter.ShopMenuProcess;
-import sun.security.krb5.internal.TGSRep;
-import view.ShopMenuFX;
 
-import javax.print.DocFlavor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,6 +22,8 @@ import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
+    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0,new int[2],"","",0,false,-1),-1);
+    private ArrayList<UpdateCards> updateCards = new ArrayList<>();
 
     public ClientManager(Server server, Socket socketOnServerSide) {
         this.socketOnServerSide = socketOnServerSide;
@@ -50,7 +46,13 @@ public class ClientManager extends Thread {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socketOnServerSide.getOutputStream());
             objectOutputStream.flush();
             ObjectInputStream objectInputStream = new ObjectInputStream(socketOnServerSide.getInputStream());
+            long lastUpdate = System.currentTimeMillis();
             while (!interrupted()) {
+                Server.getLatestUpdates(-1);
+                if (System.currentTimeMillis() - lastUpdate >1000) {
+                    updateShop(objectOutputStream);
+                    lastUpdate = System.currentTimeMillis();
+                }
                 Message message = (Message) objectInputStream.readObject();
                 if (message instanceof LoginBasedCommand) {
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
@@ -66,7 +68,6 @@ public class ClientManager extends Thread {
                 if (message instanceof TradeRequest) {
                     handleTradeProcess(objectOutputStream, message);
                 }
-
             }
 
         } catch (IOException e) {
@@ -80,16 +81,27 @@ public class ClientManager extends Thread {
         TradeRequest tradeRequest = (TradeRequest) message;
         Account account = Server.getOnlineAccounts().get(message.getAuthCode()); //todo nulls are not handled
         int cost = Shop.getCost(tradeRequest.getObjectName());
+        String name = tradeRequest.getObjectName();
         if (tradeRequest.isBuy()) {
             int result = Shop.buy(account, tradeRequest.getObjectName());
             if (cost == 0)
                 result = -1;
             objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
-        }else if(tradeRequest.isSell()){
-            int result = Shop.sell(account,tradeRequest.getObjectName());
-            if(cost == 0)
+            if (result != -1) {
+                Server.addUpdateOfShop(tradeRequest);
+                account.getCollection().updateCollection(tradeRequest);
+                Shop.changeNumbers(name,-1);
+            }
+        } else if (tradeRequest.isSell()) {
+            int result = Shop.sell(account, tradeRequest.getObjectName());
+            if (cost == 0)
                 result = 2;
-            objectOutputStream.writeObject(new TradeResponse(authCode,false,tradeRequest.getObjectName(),result == 0, result, cost));
+            objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
+            if (result != -1) {
+                Server.addUpdateOfShop(tradeRequest);
+                account.getCollection().updateCollection(tradeRequest);
+                Shop.changeNumbers(name,+1);
+            }
         }
     }
 
@@ -126,7 +138,6 @@ public class ClientManager extends Thread {
         }
     }
 
-
     private void loginOnServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
         int loginErrorNumber = server.getLoginErrorNumber(userName, password);
         if (server.isLoginValid(userName, password)) {
@@ -147,12 +158,24 @@ public class ClientManager extends Thread {
     }
 
     private void createAccountServerSide(ObjectOutputStream objectOutputStream, String userName, String password) throws IOException {
-        if (server.isAccountAvailabale(userName))
+        if (server.isAccountAvailable(userName))
             objectOutputStream.writeObject(new LoginBasedCommand("", "", false, "", false, 0, null));
         else {
             LoginMenuProcess.createAccount(userName, password);
             objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, "", false, 0, Account.getAccountByUserName(userName)));
         }
+    }
+
+    private void updateShop(ObjectOutputStream objectOutputStream) throws IOException {
+        System.out.println("fuck1");
+        updateCards = new ArrayList<>(Server.getLatestUpdates(lastUpdate.getValue()));
+        if (updateCards.size() == 0)
+            return;
+        for (UpdateCards updateCard : updateCards) {
+            objectOutputStream.writeObject(updateCard);
+        }
+        UpdateCards updateCards1 = updateCards.get(updateCards.size() - 1);
+        lastUpdate = new Pair<>(updateCards1, Server.getIndexOfUpdate(updateCards1));
     }
 
     //login based

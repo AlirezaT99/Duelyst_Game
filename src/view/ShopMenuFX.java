@@ -617,7 +617,9 @@ public class ShopMenuFX {
         synchronized (Client.getInstance().getShopLock()) {
             if (tradeResponse.getAuthCode().equals("")) {
                 try {
+                    System.out.println("jooon1");
                     Client.getInstance().getShopLock().wait();
+                    System.out.println("jooon2");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -749,6 +751,54 @@ public class ShopMenuFX {
 
     //setters
 
+
+    public static ArrayList<String> getHeroes() {
+        return heroes;
+    }
+
+    public static ArrayList<String> getMinions() {
+        return minions;
+    }
+
+    public static ArrayList<String> getSpells() {
+        return spells;
+    }
+
+    public static ArrayList<String> getItems() {
+        return items;
+    }
+
+    public static ArrayList<String> getCollectionHeroes() {
+        return collectionHeroes;
+    }
+
+    public static ArrayList<String> getCollectionMinions() {
+        return collectionMinions;
+    }
+
+    public static ArrayList<String> getCollectionSpells() {
+        return collectionSpells;
+    }
+
+    public static ArrayList<String> getCollectionItems() {
+        return collectionItems;
+    }
+
+    public static HashMap<String, int[]> getMovableCardsPowers() {
+        return movableCardsPowers;
+    }
+
+    public static HashMap<String, Integer> getCosts() {
+        return costs;
+    }
+
+    public static HashMap<String, Integer> getCardNumbers() {
+        return cardNumbers;
+    }
+
+    public static HashMap<String, Integer> getCardCollectionNumbers() {
+        return cardCollectionNumbers;
+    }
 
     static Pane getRoot() {
         return root;

@@ -4,6 +4,7 @@ import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeResponse;
+import model.Message.ShopCommand.UpdateShop.UpdateCards;
 import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Shop;
 import model.client.Client;
@@ -31,10 +32,6 @@ public class GetDataRunnable implements Runnable {
         try {
 
             while (true) {
-                if (inputStream == null) {
-                    System.out.println("duck");
-                    continue;
-                }
                 Message message = (Message) inputStream.readObject();
                 if (message instanceof LoginBasedCommand) {
                     synchronized (Client.getInstance().getLock()) {
@@ -42,6 +39,30 @@ public class GetDataRunnable implements Runnable {
                         Client.getInstance().getLock().notifyAll();
                     }
                 }
+
+//                if(message instanceof UpdateCards){
+//                    synchronized (Client.getInstance().getShopLock()){
+//                        UpdateCards updateCards = (UpdateCards) message;
+//                       String name =  updateCards.getObjectName();
+//                       int counter = updateCards.getCount();
+//                       if(ShopMenuFX.getCardNumbers().containsKey(name))
+//                           ShopMenuFX.getCardNumbers().replace(name,counter);
+//                       else {
+//                           ShopMenuFX.getCardNumbers().put(name, counter);
+//                           ShopMenuFX.getCosts().put(name, updateCards.getCost());
+//                           if(updateCards.getCardType() == 0){
+//                               ShopMenuFX.getHeroes().add(name);
+//                           }if(updateCards.getCardType() == 1)
+//                               ShopMenuFX.getMinions().add(name);
+//                           if(updateCards.getCardType() == 2)
+//                               ShopMenuFX.getSpells().add(name);
+//                           if(updateCards.getCardType() == 3)
+//                               ShopMenuFX.getItems().add(name);
+//                           if(updateCards.getCardType()==0 || updateCards.getCardType() == 1)
+//                               Shop.getMovableCardsPowers().put(name,updateCards.getPowers());
+//                       }
+//                    }
+//                }
 
                 if (message instanceof ScoreBoardCommand) {
                     synchronized (Client.getInstance().getLock()) {
@@ -51,16 +72,20 @@ public class GetDataRunnable implements Runnable {
                 }
                 if (message instanceof UpdateWholeShop)
                     updateShop((UpdateWholeShop) message);
-                if (message instanceof TradeResponse) {
-                    synchronized (Client.getInstance().getShopLock()) {
-                        ShopMenuFX.setResponse((TradeResponse) message);
-                        Client.getInstance().getShopLock().notify();
-                    }
-                }
+                if (message instanceof TradeResponse)
+                    tradeResponseHandler((TradeResponse) message);
+
 
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void tradeResponseHandler(TradeResponse message) {
+        synchronized (Client.getInstance().getShopLock()) {
+            ShopMenuFX.setResponse(message);
+            Client.getInstance().getShopLock().notify();
         }
     }
 

@@ -8,7 +8,7 @@ public class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
     private int number = 10;
-    private  int collectionNumber = 0;
+    int collectionNumber = 0;
 
     @Override
     public UsableItem copy(){
@@ -24,6 +24,7 @@ public class UsableItem extends InfluentialItem {
         item.deck = deck == null ?null : deck.copy();
         item.match = match;
         item.collectionID = this.collectionID;
+        item.collectionNumber = this.collectionNumber;
         return item;
     }
 

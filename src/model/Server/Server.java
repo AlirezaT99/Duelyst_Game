@@ -1,8 +1,12 @@
 package model.Server;
 
 import model.Account;
+import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
+import model.Message.ShopCommand.Trade.TradeRequest;
+import model.Message.ShopCommand.UpdateShop.UpdateCards;
 import model.MyConstants;
+import model.Shop;
 import model.client.Client;
 import presenter.LoginMenuProcess;
 
@@ -22,6 +26,7 @@ public class Server {
     private static HashSet<String> authcodes = new HashSet<>();
     private static HashMap<String, ClientManager> clients = new HashMap<>();
     private static HashMap<String, Account> onlineAccounts = new HashMap<>();
+    private static ArrayList<UpdateCards> shopUpdates = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
@@ -30,12 +35,31 @@ public class Server {
         new ServerListener(server).start();
     }
 
+    static int getIndexOfUpdate(UpdateCards updateCards1) {
+        if (shopUpdates.contains(updateCards1))
+            return shopUpdates.indexOf(updateCards1);
+        return shopUpdates.size() - 1;
+    }
+
+    static void addUpdateOfShop(TradeRequest tradeRequest) {
+        synchronized (shopUpdates){
+            String name = tradeRequest.getObjectName();
+            int cost = Shop.findCost(name);
+            int[] powers = Shop.findPowers(name);
+            int counter = Shop.findCount(name);
+            if(tradeRequest.isBuy())
+                shopUpdates.add(new UpdateCards(cost,powers,name,"",counter-1,false, Shop.getType(name)));
+            else
+                shopUpdates.add(new UpdateCards(cost,powers,name,"",counter+1,false,Shop.getType(name)));
+        }
+    }
+
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
 
 
-    public boolean isAccountAvailabale(String userName) {
+    public boolean isAccountAvailable(String userName) {
         for (Account account : Account.getAccounts()) {
             if (account.getUserName().equals(userName))
                 return true;
@@ -101,7 +125,6 @@ public class Server {
     }
 
 
-
     //getters & setters
 
     public HashMap<String, ClientManager> getClients() {
@@ -137,6 +160,18 @@ public class Server {
         return getLoginErrorNumber(userName, password) == 0;
     }
 
+    static ArrayList<UpdateCards> getLatestUpdates(int lastIndexOfUpdates) {
+        ArrayList<UpdateCards> updateCards = new ArrayList<>();
+        synchronized (shopUpdates) {
+            if (shopUpdates.size() > lastIndexOfUpdates + 1)
+                updateCards = new ArrayList<>(shopUpdates.subList(lastIndexOfUpdates + 1, shopUpdates.size() - 1));
+        }
+        return updateCards;
+    }
+
+
+    //getters & setters
+
     public String generateAuthCode(String userName, ClientManager clientManager) {
         Random r = new Random();
         String tempAuthCode = (r.nextInt() % 10000) + "";
@@ -149,15 +184,13 @@ public class Server {
         return tempAuthCode;
     }
 
+
     public void showOnlineClients() {
         System.out.println("Online clients : ");
         for (String s : onlineAccounts.keySet()) {
             System.out.println("\n" + onlineAccounts.get(s).getUserName() + "\n");
         }
     }
-
-
-    //getters & setters
 }
 
 class ServerListener extends Thread {
