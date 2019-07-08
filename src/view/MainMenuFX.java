@@ -235,10 +235,10 @@ public class MainMenuFX {
             chatRoomBox.getChildren().addAll(messageVBox);
             messageVBox.relocate(0,chatRoomBox.getPrefHeight()/10);
             for (String message : messages) {
-                Text messagetext = new Text(" "+message);
+                Text messagetext = new Text("   "+message);
                 messagetext.setFill(Color.WHITE);
                 Label label = new Label();
-                //label.setBackground(new Background());
+
                 messagetext.setFont(Font.font(15));
                 messageVBox.getChildren().addAll(messagetext);
             }

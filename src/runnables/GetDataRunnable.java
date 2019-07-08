@@ -53,8 +53,6 @@ public class GetDataRunnable implements Runnable {
 
                 if (message instanceof GlobalChatMessage) {
                     synchronized (Client.getInstance().getLock()) {
-                        if (((GlobalChatMessage) message).getChatMessages().size() != 0)
-                            System.out.println(((GlobalChatMessage) message).getChatMessages().get(0) + " wooow");
                         Client.getInstance().setGlobalChatMessage((GlobalChatMessage) message);
                         Client.getInstance().getLock().notifyAll();
                     }

@@ -55,7 +55,6 @@ public class Client implements runnables.MessageListener {
     }
 
     public void sendData(Message text) {
-       // Message message = new Message(text);
         try {
             outputStream.writeObject(text);
         } catch (IOException e) {
