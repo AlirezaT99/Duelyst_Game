@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.Account;
+import model.Message.ShopCommand.UpdateAccount;
 import model.Message.Utils;
 import model.client.Client;
 import model.Match;
@@ -88,6 +89,10 @@ public class Main extends Application {
     }
 
     public static void setCollectionMenuFX(Account account) throws FileNotFoundException {
+        Client.getInstance().sendData(new UpdateAccount("",account,false));
+        synchronized (Client.getInstance().getLock()){
+//            if()
+        }
         Main.collectionMenuFX = new CollectionMenuFX(account);
         currentScene.setRoot(collectionMenuFX.start(primaryStage));
     }

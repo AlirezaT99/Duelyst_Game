@@ -66,6 +66,8 @@ public class Collection {
     }
 
     public boolean validateDeck(Deck deck) {
+        System.out.println("deck size:"+deck.getMinions().size() );
+        System.out.println("deck hero:"+deck.getHero().name);
         if (deck == null || (deck.getMinions().size() + deck.getSpells().size()) != 20)
             return false;
         return deck.getHero() != null;

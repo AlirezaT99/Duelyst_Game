@@ -11,6 +11,7 @@ public class Minion extends MovableCard {
 
     public Minion copy() {
         Minion minion = new Minion();
+        minion.isCostume = this.isCostume;
         minion.setHealth(this.getHealth());
         minion.isAlive = (this.isAlive);
         minion.cardCell = cardCell;

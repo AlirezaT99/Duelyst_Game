@@ -1,5 +1,6 @@
 package view;
 
+import com.google.gson.Gson;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -21,6 +22,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Message.ShopCommand.UpdateAccount;
+import model.Message.Utils;
+import model.client.Client;
 import presenter.CollectionMenuProcess;
 import presenter.LoginMenuProcess;
 
@@ -31,8 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static view.GraphicalCommonUsages.okPopUp;
-import static view.GraphicalCommonUsages.yesCancelPopUp;
+import static view.GraphicalCommonUsages.*;
 import static view.ShopMenuFX.*;
 
 public class CollectionMenuFX {
@@ -58,6 +61,8 @@ public class CollectionMenuFX {
     }
 
     public Pane start(Stage primaryStage) throws FileNotFoundException {
+
+
         root = new Pane();
         final Font trump_med = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Medium-webfont.ttf"), 36);
         final Font trump_reg = Font.loadFont(new FileInputStream("src/view/sources/shopMenu/TrumpGothicPro-Regular-webfont.ttf"), 36);
@@ -358,6 +363,9 @@ public class CollectionMenuFX {
             } else {
                 deck = new Deck(deckNameField.getText());
                 account.getCollection().addDeck(deck);
+                for (String s : cardsToAddToDeck) {
+                    System.out.println(s);
+                }
                 addCardsToDeck(deck);
                 timeline5.play();
                 creatingDeck = false;
@@ -379,6 +387,10 @@ public class CollectionMenuFX {
     private void addCardsToDeck(Deck deck) {
         for (String cardName : cardsToAddToDeck)
             new CollectionMenuProcess().addToDeck(account, cardName, deck.getName());
+        for (Minion minion : deck.getMinions()) {
+            System.out.println(minion.getName());
+            System.out.println(deck.getHero().getName());
+        }
     }
 
     private static void drawDecks(VBox decksVBox, Scene scene) throws FileNotFoundException {
@@ -470,13 +482,13 @@ public class CollectionMenuFX {
             for (Item item : deck.getItems())
                 cardsToShow.add(item.getName());
         } else {
-            for (Hero hero : account.getCollection().getHeroHashMap().values())
+            for (Hero hero : account.getCollection().getHeroes())
                 cardsToShow.add(hero.getName());
-            for (Minion minion : account.getCollection().getMinionHashMap().values())
+            for (Minion minion : account.getCollection().getMinions())
                 cardsToShow.add(minion.getName());
-            for (Spell spell : account.getCollection().getSpellHashMap().values())
+            for (Spell spell : account.getCollection().getSpells())
                 cardsToShow.add(spell.getName());
-            for (UsableItem item : account.getCollection().getItemsHashMap().values())
+            for (UsableItem item : account.getCollection().getItems())
                 cardsToShow.add(item.getName());
         }
         updateLabels();

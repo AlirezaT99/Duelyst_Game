@@ -63,30 +63,32 @@ public class Impact {
     int impactQuantity;
 
     private void setImpactTypeIdVariables() {
-        isPositiveImpact = impactTypeId.charAt(0) == '1';
-        buff = impactTypeId.charAt(1) != '0';
-        holyBuff = impactTypeId.charAt(1) == '1';
-        powerBuff = impactTypeId.charAt(1) == '2';
-        poisonBuff = impactTypeId.charAt(1) == '3';
-        weaknessBuff = impactTypeId.charAt(1) == '4';
-        stunBuff = impactTypeId.charAt(1) == '5';
-        disarmBuff = impactTypeId.charAt(1) == '6';
-        manaChange = impactTypeId.charAt(2) == '1';
-        healthChange = impactTypeId.charAt(2) == '2';
-        damageChange = impactTypeId.charAt(2) == '3';
-        passive = impactTypeId.charAt(6) == '1';
-        permanent = impactTypeId.charAt(6) == '2';
-        continues = impactTypeId.charAt(6) == '3';
-        turnsToBeActivated = Integer.parseInt(impactTypeId.substring(7, 8));
-        turnsActive = Integer.parseInt(impactTypeId.substring(8, 10));
-        cellImpact = impactTypeId.charAt(11) != '0';
-        poisonCell = impactTypeId.charAt(11) == '1';
-        fireCell = impactTypeId.charAt(11) == '2';
-        holyCell = impactTypeId.charAt(11) == '3';
-        dispel = impactTypeId.charAt(10) != '0';
-        isBuffDispel = impactTypeId.charAt(10) == '1';
-        isAllPositiveDispel = impactTypeId.charAt(10) == '2';
-        impactQuantity = getImpactQuantityWithSign();
+        try {
+            isPositiveImpact = impactTypeId.charAt(0) == '1';
+            buff = impactTypeId.charAt(1) != '0';
+            holyBuff = impactTypeId.charAt(1) == '1';
+            powerBuff = impactTypeId.charAt(1) == '2';
+            poisonBuff = impactTypeId.charAt(1) == '3';
+            weaknessBuff = impactTypeId.charAt(1) == '4';
+            stunBuff = impactTypeId.charAt(1) == '5';
+            disarmBuff = impactTypeId.charAt(1) == '6';
+            manaChange = impactTypeId.charAt(2) == '1';
+            healthChange = impactTypeId.charAt(2) == '2';
+            damageChange = impactTypeId.charAt(2) == '3';
+            passive = impactTypeId.charAt(6) == '1';
+            permanent = impactTypeId.charAt(6) == '2';
+            continues = impactTypeId.charAt(6) == '3';
+            turnsToBeActivated = Integer.parseInt(impactTypeId.substring(7, 8));
+            turnsActive = Integer.parseInt(impactTypeId.substring(8, 10));
+            cellImpact = impactTypeId.charAt(11) != '0';
+            poisonCell = impactTypeId.charAt(11) == '1';
+            fireCell = impactTypeId.charAt(11) == '2';
+            holyCell = impactTypeId.charAt(11) == '3';
+            dispel = impactTypeId.charAt(10) != '0';
+            isBuffDispel = impactTypeId.charAt(10) == '1';
+            isAllPositiveDispel = impactTypeId.charAt(10) == '2';
+            impactQuantity = getImpactQuantityWithSign();
+        }catch (Exception e){}
     }
     //impactTypeVariables
 

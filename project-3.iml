@@ -10,5 +10,7 @@
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" name="gson-2.2.2.jar" level="project" />
     <orderEntry type="library" name="gson-2.8.21" level="project" />
+    <orderEntry type="library" name="jar_files" level="application" />
+    <orderEntry type="library" name="commons-codec-1.6" level="project" />
   </component>
 </module>

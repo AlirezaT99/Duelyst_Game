@@ -58,6 +58,13 @@ public class Server {
         }
     }
 
+   public static void addUpdateOfShop(Card card){
+        synchronized (shopUpdates){
+            shopUpdates.add(UpdateCards.getUpdateCaard(card));
+        }
+    }
+
+
 
 
     public ServerSocket getServerSocket() {
@@ -301,7 +308,9 @@ public class Server {
         }
     }
 
-
+    public Account getAccountByAuthCode(String authCode){
+        return onlineAccounts.get(authCode);
+    }
     //getters & setters
 }
 
