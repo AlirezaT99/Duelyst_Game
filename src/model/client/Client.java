@@ -44,7 +44,12 @@ public class Client implements runnables.MessageListener {
 
     private void connect2Server() throws IOException {
         System.out.println("connecting to server...");
-        clientSocket = new Socket(MyConstants.SERVER_ADDRESS, MyConstants.SERVER_PORT);
+        BufferedReader bf = new BufferedReader(new FileReader("src\\model\\Server\\config.txt"));
+        String serverAddress = bf.readLine();
+        int serverPort = Integer.parseInt(bf.readLine());
+        bf.close();
+        clientSocket = new Socket(serverAddress, serverPort);
+        System.out.println(serverAddress + "/" + serverPort);
         System.out.println("client connected ...");
     }
 

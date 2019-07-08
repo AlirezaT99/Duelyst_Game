@@ -35,7 +35,7 @@ public class Server {
 //        Shop.resetAllNumbers();
         Server server = new Server();
         server.saveCards();
-            serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
+        serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
         new ServerListener(server).start();
     }
 
@@ -58,13 +58,11 @@ public class Server {
         }
     }
 
-   public static void addUpdateOfShop(Card card){
-        synchronized (shopUpdates){
+    public static void addUpdateOfShop(Card card) {
+        synchronized (shopUpdates) {
             shopUpdates.add(UpdateCards.getUpdateCaard(card));
         }
     }
-
-
 
 
     public ServerSocket getServerSocket() {
@@ -308,7 +306,7 @@ public class Server {
         }
     }
 
-    public Account getAccountByAuthCode(String authCode){
+    public Account getAccountByAuthCode(String authCode) {
         return onlineAccounts.get(authCode);
     }
     //getters & setters
