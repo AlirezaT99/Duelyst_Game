@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -16,7 +18,11 @@ import model.Account;
 import model.Card;
 import model.MyConstants;
 import model.Shop;
+import view.AddCardFX;
+import view.Main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +40,12 @@ public class ServerGraphic extends Application {
 
     public void start(Stage primaryStage) {
         Scene scene = new Scene(new Pane(), MyConstants.SERVER_WINDOW_WIDTH, MyConstants.SERVER_WINDOW_HEIGHT);
-        setPane(scene);
+        setPane(scene,primaryStage);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public void setPane(Scene scene) {
+    public void setPane(Scene scene, Stage primaryStage) {
         Pane pane = (Pane) scene.getRoot();
         VBox settingMenu = new VBox();
         pane.getChildren().addAll(settingMenu);
@@ -57,9 +63,47 @@ public class ServerGraphic extends Application {
         shop.setOnMouseExited(event -> shop.setUnderline(false));
         shop.setOnMouseClicked(event -> showShop(scene, pane));
 
+        Label addCard = new Label("Add Card");
+        addCard.setOnMouseEntered(event -> addCard.setUnderline(true));
+        addCard.setOnMouseExited(event -> addCard.setUnderline(false));
+        addCard.setOnMouseClicked(event -> {
+            try {
+                showAddCard(scene, pane,primaryStage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
 
-        settingMenu.getChildren().addAll(onlineClients, shop);
+        settingMenu.getChildren().addAll(onlineClients, shop, addCard);
     }
+
+    private void showAddCard(Scene scene, Pane root, Stage primaryStage) throws FileNotFoundException {
+        Pane addCardPane = new AddCardFX().start(primaryStage,new Account("server","1234"));
+
+        backSetting(scene,addCardPane,root);
+        scene.setRoot(addCardPane);
+    }
+
+    private void backSetting(Scene scene, Pane root, Pane mainRoot){
+        Image back = null;
+        try {
+            back = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/button_back_corner.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ImageView backView = new ImageView(back);
+        backView.setFitWidth(scene.getWidth() / 15);
+        backView.setPreserveRatio(true);
+        root.getChildren().addAll(backView);
+        backView.setOpacity(0.5);
+        backView.setOnMouseEntered(event -> backView.setOpacity(0.9));
+        backView.setOnMouseExited(event -> backView.setOpacity(0.5));
+        backView.setOnMouseClicked(event -> {
+            scene.setRoot(mainRoot);
+        });
+    }
+
+
 
     private void showShop(Scene scene, Pane root) {
         Pane shopPane = new Pane();

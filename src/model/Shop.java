@@ -233,16 +233,6 @@ public class Shop {
         return tempCosts;
     }
 
-    private static HashMap<String, Integer> getCardNumber(ArrayList<Object> objects, HashMap<String, Integer> tempCosts) {
-        for (Object object : objects) {
-            if (object instanceof Card)
-                tempCosts.put(((Card) object).getName(), ((Card) object).getNumbers());
-            if (object instanceof UsableItem)
-                tempCosts.put(((UsableItem) object).name, ((UsableItem) object).getNumber());
-        }
-        return tempCosts;
-    }
-
 
     public static HashMap<String, Integer> getCosts() {
         HashMap<String, Integer> cardCosts = new HashMap<>();

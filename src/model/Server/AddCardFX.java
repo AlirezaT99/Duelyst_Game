@@ -19,6 +19,9 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.*;
 import model.Main;
+import model.Message.AddCardCommand.AddCardCommand;
+import model.Server.Server;
+import model.client.Client;
 
 
 import java.io.*;
@@ -299,9 +302,11 @@ public class AddCardFX {
                             minion.setSummonImpact(impact);
                             break;
                     }
+                    minion.setName(nameTextField.getText());
                     minion.setCost(Integer.parseInt(costMovableCard.getText()));
                     GraphicalCommonUsages.drakePopUp("minion created", createCardScene, root, 1);
                     buffs.clear();
+                    minion.setCost(Integer.parseInt(costMovableCard.getText()));
                     minion.isCostume(true);
                     Shop.getShopMinions().add(minion);
                     Minion.addToMinions(minion);
@@ -326,12 +331,12 @@ public class AddCardFX {
                     damage = Integer.parseInt(apTextField.getText());
                     range = Integer.parseInt(rangeTextField.getText());
                     coolDown = Integer.parseInt(specialPowerSetting.getText());
-                    Spell spell = Spell.getSpellByName(specialPower.getText());
-                    Hero hero = new Hero(name, health, damage, spell, coolDown);
-                    hero.isCostume(true);
-                    Shop.getShopHeroes().add(hero);
-                    Hero.addToHeroes(hero);
-                    Main.addCardToFiles(hero);
+                    String attackTypeString = attackTypeCombo.getValue();
+
+                    AddCardCommand addCardCommand = new AddCardCommand(true, Integer.parseInt(costMovableCard.getText()),
+                            health, damage, range, coolDown, specialPower.getText(), name, attackTypeString);
+
+                    Server.addHero(addCardCommand);
                     GraphicalCommonUsages.drakePopUp("hero added", createCardScene, root, 1);
                 } catch (Exception e) {
                     try {
@@ -401,7 +406,10 @@ public class AddCardFX {
                 Shop.getShopSpells().add(spell);
                 Spell.addToSpells(spell);
                 Main.addCardToFiles(spell);
-                addCardGif(spell);
+
+                AddCardCommand addCardCommand = new AddCardCommand(true, "000000000", "000", targetTypeID, primaryImpactTypeID, "000000000", "000",
+                        targetTypeID, secondaryImpactTypeID, nameTextField.getText(), Integer.parseInt(costSpell.getText()));
+                Server.addSpell(addCardCommand);
                 GraphicalCommonUsages.drakePopUp("spell added", createCardScene, root, 1);
                 //todo : add spell to everywhere
             } catch (Exception e) {
@@ -469,11 +477,5 @@ public class AddCardFX {
         typeBox.setPrefWidth(createCardScene.getWidth() / 6);
     }
 
-    private boolean addCardGif(Card card){
-        File stockDir = null;
-        if (card instanceof Spell)
-         stockDir = new File("src/view/sources/gifs/spells/bitch");
-         return stockDir.mkdir();
-    }
 
 }

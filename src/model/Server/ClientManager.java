@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import jdk.nashorn.internal.objects.Global;
 import model.*;
+import model.Message.AddCardCommand.AddCardCommand;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
@@ -35,7 +36,7 @@ import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
-    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0, new int[2], "", "", 0, false, -1), -1);
+    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0,new int[2],"","",0,false,-1),-1);
     private ArrayList<UpdateCards> updateCards = new ArrayList<>();
 
     public ClientManager(Server server, Socket socketOnServerSide) {
@@ -80,9 +81,11 @@ public class ClientManager extends Thread {
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
                 }
                 if (message instanceof Utils) {
+                    System.out.println("---- util ----");
                     handleUtilsBasedCommand(objectOutputStream, (Utils) message);
                 }
                 if (message instanceof ScoreBoardCommand) {
+                    System.out.println("----scorebaord-----");
                     handleScoreBoardCommands(objectOutputStream, (ScoreBoardCommand) message);
                 }
                 if (message instanceof TradeRequest) {
@@ -97,19 +100,22 @@ public class ClientManager extends Thread {
                 }
             }
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     private void handleSaveCommand(ObjectOutputStream objectOutputStream, SaveCommand message) {
-        if(message.isDeckSave()) {
+        if (message.isDeckSave()) {
             Gson gson = new Gson();
-            Type deckArrayListType = new TypeToken<ArrayList<Deck>>(){}.getType();
-            ArrayList<Deck> decks = gson.fromJson(message.getDecks(),deckArrayListType);
-            Deck selectedDeck = gson.fromJson(message.getSelectedDeck(),Deck.class);
-            server.setDecks(decks,authCode);
-            server.setSelectedDeck(selectedDeck,authCode);
+            Type deckArrayListType = new TypeToken<ArrayList<Deck>>() {
+            }.getType();
+            ArrayList<Deck> decks = gson.fromJson(message.getDecks(), deckArrayListType);
+            Deck selectedDeck = gson.fromJson(message.getSelectedDeck(), Deck.class);
+            server.setDecks(decks, authCode);
+            server.setSelectedDeck(selectedDeck, authCode);
             server.saveAccount(authCode);
         }
     }
@@ -132,25 +138,33 @@ public class ClientManager extends Thread {
         int cost = Shop.getCost(tradeRequest.getObjectName());
         String name = tradeRequest.getObjectName();
         if (tradeRequest.isBuy()) {
-            int result = Shop.buy(account, tradeRequest.getObjectName());
-            if (cost == 0)
-                result = 8;
-            objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result == 0) {
-                Server.addUpdateOfShop(tradeRequest);
-                account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name, -1);
-            }
+            buyProcess(objectOutputStream, tradeRequest, account, cost, name);
         } else if (tradeRequest.isSell()) {
-            int result = Shop.sell(account, tradeRequest.getObjectName());
-            if (cost == 0)
-                result = 8;
-            objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result == 0) {
-                Server.addUpdateOfShop(tradeRequest);
-                account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name, +1);
-            }
+            sellProcess(objectOutputStream, tradeRequest, account, cost, name);
+        }
+    }
+
+    private void sellProcess(ObjectOutputStream objectOutputStream, TradeRequest tradeRequest, Account account, int cost, String name) throws IOException {
+        int result = Shop.sell(account, tradeRequest.getObjectName());
+        if (cost == 0)
+            result = 8;
+        objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
+        if (result == 0) {
+            Server.addUpdateOfShop(tradeRequest);
+//            account.getCollection().updateCollection(tradeRequest);
+            Shop.changeNumbers(name, +1);
+        }
+    }
+
+    private void buyProcess(ObjectOutputStream objectOutputStream, TradeRequest tradeRequest, Account account, int cost, String name) throws IOException {
+        int result = Shop.buy(account, tradeRequest.getObjectName());
+        if (cost == 0)
+            result = 8;
+        objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
+        if (result == 0) {
+            Server.addUpdateOfShop(tradeRequest);
+//            account.getCollection().updateCollection(tradeRequest);
+            Shop.changeNumbers(name, -1);
         }
     }
 
@@ -168,6 +182,7 @@ public class ClientManager extends Thread {
 
     private void handleUtilsBasedCommand(ObjectOutputStream objectOutputStream, Utils utils) {
         if (utils.isLogout()) {
+            server.saveAccount(utils.getAuthCode());
             server.getOnlineAccounts().remove(utils.getAuthCode());
             server.getClients().remove(utils.getAuthCode());
             server.getAuthcodes().remove(utils.getAuthCode());

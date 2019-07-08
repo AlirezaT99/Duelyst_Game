@@ -1,11 +1,12 @@
 package model;
 
+import org.apache.http.conn.routing.HttpRoute;
 import presenter.LoginMenuProcess;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Account{
+public class Account {
     private ArrayList<MatchHistory> matchHistories = new ArrayList<>();
     private static ArrayList<Account> accounts;
     private String userName;
@@ -32,7 +33,7 @@ public class Account{
 
     public static Account getAccountByUserName(String userName) {
         for (Account account : accounts) {
-            if(account.getUserName().equals(userName))
+            if (account.getUserName().equals(userName))
                 return account;
         }
         return null;
@@ -41,32 +42,28 @@ public class Account{
     public void buy(int cost, UsableItem item, Card card) throws NullPointerException {
         money -= cost;
         if (item != null) {
-            item.collectionNumber++;
             UsableItem item1 = item.copy();
             item1.setCollectionID(createCollectionID());
-            collection.getItems().add(item1);
-            collection.getItemsHashMap().put(item1.getCollectionID(), item1);
+
+            changeItem(item, +1);
         }
         if (card != null) {
-            card.collectionNumber++;
-           // card.setCardCollectionID(createCollectionID());
+            System.out.println(card.getName() + " " + card.collectionNumber);
+            // card.setCardCollectionID(createCollectionID());
             if (card instanceof Hero) {
                 Hero hero = ((Hero) card).copy();
                 hero.setCardCollectionID(createCollectionID());
-                collection.getHeroes().add(hero);
-                collection.getHeroHashMap().put(hero.getCollectionID(), hero);
+                changeHero((Hero) card, +1);
             }
             if (card instanceof Minion) {
                 Minion minion = ((Minion) card).copy();
                 minion.setCardCollectionID(createCollectionID());
-                collection.getMinions().add(minion);
-                collection.getMinionHashMap().put(minion.getCollectionID(), minion);
+                changeMinion((Minion) card, +1);
             }
             if (card instanceof Spell) {
-                Spell spell =  ((Spell) card).copy();
+                Spell spell = ((Spell) card).copy();
                 spell.setCardCollectionID(createCollectionID());
-                collection.getSpells().add(spell);
-                collection.getSpellHashMap().put(spell.getCollectionID(), spell);
+                changeSpell((Spell) card, +1);
             }
         }
     }
@@ -81,34 +78,96 @@ public class Account{
     public void sell(int cost, UsableItem item, Card card) {
         money += cost;
         if (item != null) {
-            collection.getItems().remove(item);
-            item.collectionNumber--;
+            changeItem(item, -1);
         }
         if (card != null) {
-            card.collectionNumber--;
+            System.out.println(card.getName() + " " + card.collectionNumber);
             if (card instanceof Hero) {
-                for (int i = 0; i < collection.getHeroes().size(); i++)
-                    if (collection.getHeroes().get(i).getName().equals(card.getName()) &&
-                            collection.getHeroes().get(i).collectionID.equals(card.collectionID))
-                        collection.getHeroes().remove(collection.getHeroes().get(i));
-                collection.getHeroHashMap().remove(collection.getHeroHashMap().get(card.getCollectionID()));
+                changeHero((Hero) card, -1);
             }
             if (card instanceof Minion) {
                 for (int i = 0; i < collection.getMinions().size(); i++)
-                    if (collection.getMinions().get(i).getName().equals(card.getName()) &&
-                            collection.getMinions().get(i).collectionID.equals(card.collectionID))
-                        collection.getMinions().remove(collection.getMinions().get(i));
-                collection.getMinionHashMap().remove(collection.getMinionHashMap().get(card.getCollectionID()));
+                    changeMinion((Minion) card, -1);
             }
             if (card instanceof Spell) {
-                for (int i = 0; i < collection.getSpells().size(); i++)
-                    if (collection.getSpells().get(i).getName().equals(card.getName()) &&
-                            collection.getSpells().get(i).collectionID.equals(card.collectionID))
-                        collection.getSpells().remove(collection.getSpells().get(i));
-                collection.getSpellHashMap().remove(collection.getSpellHashMap().get(card.getCollectionID()));
+                changeSpell((Spell) card, -1);
             }
         }
     }
+
+    private void changeItem(UsableItem item, int act) {
+        boolean found = false;
+        for (int i = 0; i < collection.getItems().size(); i++) {
+            if (collection.getItems().get(i).name.equalsIgnoreCase(item.name)) {
+                found = true;
+                collection.getItems().get(i).collectionNumber += (act);
+                if (act == -1 && collection.getItems().get(i).collectionNumber <= 0) {
+                    collection.getItems().remove(i);
+                    return;
+                }
+            }
+        }
+        if (!found && act == 1) {
+            collection.getItems().add(item);
+            collection.getItemsHashMap().put(item.getCollectionID(), item);
+        }
+    }
+
+    private void changeHero(Hero hero, int act) {
+        boolean found = false;
+        for (int i = 0; i < collection.getHeroes().size(); i++) {
+            if (collection.getHeroes().get(i).name.equalsIgnoreCase(hero.name)) {
+                found = true;
+                collection.getHeroes().get(i).collectionNumber += act;
+                if (act == -1 && collection.getHeroes().get(i).collectionNumber <= 0) {
+                    collection.getHeroes().remove(i);
+                    return;
+                }
+            }
+        }
+        if (!found && act == 1) {
+            collection.getHeroes().add(hero);
+            collection.getHeroHashMap().put(hero.collectionID, hero);
+        }
+    }
+
+    private void changeMinion(Minion minion, int act) {
+        boolean found = false;
+        for (int i = 0; i < collection.getMinions().size(); i++) {
+            if (collection.getMinions().get(i).name.equalsIgnoreCase(minion.name)) {
+                found = true;
+                collection.getMinions().get(i).collectionNumber += (act);
+                if (act == -1 && collection.getMinions().get(i).collectionNumber <= 0) {
+                    collection.getMinions().remove(i);
+                    return;
+                }
+            }
+        }
+        if (act == 1 && !found) {
+            collection.getMinions().add(minion);
+            collection.getMinionHashMap().put(minion.collectionID, minion);
+        }
+    }
+
+    private void changeSpell(Spell spell, int act) {
+        boolean found = false;
+        for (int i = 0; i < collection.getSpells().size(); i++) {
+            if (collection.getSpells().get(i).name.equalsIgnoreCase(spell.name)) {
+                found = true;
+                collection.getSpells().get(i).collectionNumber += act;
+                if (act == -1 && collection.getSpells().get(i).collectionNumber <= 0) {
+                    collection.getSpells().remove(i);
+                    return;
+                }
+            }
+        }
+        if (!found && act == 1) {
+            collection.getSpells().add(spell);
+            collection.getSpellHashMap().put(spell.collectionID, spell);
+        }
+
+    }
+
 
     public static void addAccount(Account account) {
         accounts.add(account);
@@ -153,21 +212,21 @@ public class Account{
         this.money = money;
     }
 
-    public void setCollection(Collection collection){
+    public void setCollection(Collection collection) {
         this.collection = collection;
     }
 
-    public void increaseNumberOfWins(){
+    public void increaseNumberOfWins() {
         numberOfWins++;
     }
 
     public ArrayList<ImportBasedDeck> getImportedDecks() {
-        if(importedDecks == null)
+        if (importedDecks == null)
             importedDecks = new ArrayList<>();
         return importedDecks;
     }
 
-    public static void addToAccounts(Account account){
+    public static void addToAccounts(Account account) {
         accounts.add(account);
         LoginMenuProcess loginMenuProcess = new LoginMenuProcess();
         loginMenuProcess.getUsers().add(account);
