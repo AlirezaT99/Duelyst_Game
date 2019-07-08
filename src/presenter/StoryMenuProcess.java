@@ -65,7 +65,7 @@ public class StoryMenuProcess {
         deck.addMinionToDeck(Minion.getMinionByName("The Ice Queen"));
         deck.addMinionToDeck(Minion.getMinionByName("Siavash"));
         deck.addMinionToDeck(Minion.getMinionByName("Arzhang Div"));
-        deck.addItemToDeck(UsableItem.getUsableItemByName("The Crown of Knowledge"));
+        deck.addItemToDeck(UsableItem.getUsableItemByName("Baptism")); // The Crown of Knowledge
         deck.setHero(Hero.getHeroByName("Div e Sefid"));
         deck.getItems().get(0).setItemID("computer_TheCrownOfKnowledge_1");
         setDeckCardIDs("computer", deck);

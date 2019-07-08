@@ -62,7 +62,7 @@ public class Deck {
     }
 
     public void addItemToDeck(UsableItem item) { // only used for computer Decks
-        itemsHashMap.put(item.getItemID(), item);
+//        itemsHashMap.put(item.getItemID(), item);
         items.add(item);
     }
 
