@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import static view.BattleFX.TIMEOUT;
+
 public class BattleMenuProcess {
     private static ArrayList<Pattern> commandPatterns = new ArrayList<>();
     private static BattleMenu battleMenu;
@@ -200,7 +202,7 @@ public class BattleMenuProcess {
     }
 
     private void resetTimeout() {
-        BattleFX.timeout = 15;
+        BattleFX.timeout = TIMEOUT;
     }
 
 

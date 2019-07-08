@@ -13,38 +13,13 @@ import java.nio.file.Path;
 public class MainProcess {
 
     public static void readFiles() throws IOException {
-        // reading accounts
         Gson gson = new Gson();
         readAccounts();
-        File folder;
-        File[] listOfFiles;
-
-//         reading accounts
-
-        //reading Cards
-        //reading Heroes
         readHeroes(gson);
-        //reading Heroes
-
-        //reading Minions
         readMinions(gson);
-        //reading Minions
-
-        //reading Spells
         readSpells(gson);
-        //reading Spells
-
-        //reading Items
-
-        //reading UsableItems
         readUsableItems(gson);
-        //reading UsableItems
-
-        //reading CollectibleItems
-
         readCollectibleItems(gson);
-        //reading CollectibleItems
-        //reading Items
     }
 
     private static void readCollectibleItems(Gson gson) throws IOException {
@@ -68,11 +43,14 @@ public class MainProcess {
         File[] listOfFiles;
         folder = new File("src/model/items/usableitems");
         listOfFiles = folder.listFiles();
+        System.out.println("***");
         for (File file : listOfFiles) {
             if (file.isFile()) {
                 Path path = new File(file.getPath()).toPath();
                 Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
-                UsableItem usableItem= gson.fromJson(reader, UsableItem.class);
+                UsableItem usableItem = gson.fromJson(reader, UsableItem.class);
+                System.out.println("***" + usableItem.getName());
+                System.out.flush();
                 UsableItem.addToUsableItems(usableItem);
                 Shop.addToItems(usableItem);
                 reader.close();

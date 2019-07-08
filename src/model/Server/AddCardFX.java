@@ -312,6 +312,8 @@ public class AddCardFX {
                     Minion.addToMinions(minion);
                     Main.addCardToFiles(minion);
                     GraphicalCommonUsages.drakePopUp("minion added", createCardScene, root, 1);
+                    minion.setNumbers(10);
+                    Server.saveCards();
                     //todo : add minion to everywhere :/
                 } catch (Exception e) {
                     try {
