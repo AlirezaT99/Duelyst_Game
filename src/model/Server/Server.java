@@ -56,6 +56,8 @@ public class Server {
         }
     }
 
+
+
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
@@ -244,6 +246,7 @@ public class Server {
         spell.isCostume(true);
         Shop.getShopSpells().add(spell);
         Spell.addToSpells(spell);
+
         try {
             Main.addCardToFiles(spell);
         } catch (IOException e) {
