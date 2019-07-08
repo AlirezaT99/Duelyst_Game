@@ -314,6 +314,7 @@ public class AddCardFX {
                     GraphicalCommonUsages.drakePopUp("minion added", createCardScene, root, 1);
                     minion.setNumbers(10);
                     Server.saveCards();
+                    Server.addUpdateOfShop(minion);
                     //todo : add minion to everywhere :/
                 } catch (Exception e) {
                     try {

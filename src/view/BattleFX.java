@@ -894,8 +894,13 @@ public class BattleFX {
 
         int result = match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().attack(match.getTable().getCell(finalI, finalJ).getMovableCard());
         if (result == 0) {
+            MovableCard movableCard = match.getTable().getCell(finalI, finalJ).getMovableCard();
+            if(movableCard == null)
+                return;
+
             Card card = Shop.findCardByName(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText());
             Animation attackAnimation = GraphicalCommonUsages.getGif(card.getName(), "attack", getCardType(card), card.isCostume());
+            card = movableCard;
             ImageView imageView = attackAnimation.getView();
             ((Pane) draggedFromNode).getChildren().remove(1);
             ((Pane) draggedFromNode).getChildren().add(1, imageView);
@@ -906,11 +911,12 @@ public class BattleFX {
             attackAnimation.setCycleCount(1);
             attackAnimation.play();
             movableCardAttackSFX(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText(), true);
+            Card finalCard = card;
             attackAnimation.setOnFinished(event -> {
                 try {
                     if (isCounterAttackValid) {
                         Card card1 = Shop.findCardByName(((Label) gameMap[finalI][finalJ].getChildren().get(gameMap[finalI][finalJ].getChildren().size() - 1)).getText());
-                        Animation counterAttackAnimation = GraphicalCommonUsages.getGif(card.getName(), "attack", getCardType(card), card.isCostume());
+                        Animation counterAttackAnimation = GraphicalCommonUsages.getGif(card1.getName(), "attack", getCardType(finalCard), finalCard.isCostume());
                         ImageView imageView1 = counterAttackAnimation.getView();
                         gameMap[finalI][finalJ].getChildren().remove(1);
                         gameMap[finalI][finalJ].getChildren().add(1, imageView1);

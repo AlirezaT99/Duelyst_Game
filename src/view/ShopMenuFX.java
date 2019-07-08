@@ -525,21 +525,25 @@ public class ShopMenuFX {
         removePowers();
         if(cardsToShow.size() == 0)
             return;
-        if (items.contains(cardsToShow.get(0)) || spells.contains(cardsToShow.get(0)))
-            return;
+
         for (int i = 0; i < 10; i++) {
-            if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
-                int index = i + (10 * (pageNumber - 1));
-                if (!movableCardsPowers.containsKey(cardsToShow.get(index)))
-                    System.out.println(cardsToShow.get(index));
-                int damage = movableCardsPowers.get(cardsToShow.get(index))[0];
-                int health = movableCardsPowers.get(cardsToShow.get(index))[1];
-                cardPowers.get(i).setText("\n" + damage + "\t\t\t" + health+"\n");
-                if(isInShop)
-                    cardPowers.get(i).setText(cardPowers.get(i).getText()+cardNumbers.get(cardsToShow.get(index)));
-                if(isInCollection)
-                    cardPowers.get(i).setText(cardPowers.get(i).getText()+cardCollectionNumbers.get(cardsToShow.get(index)));
-            }
+            try {
+                if (items.contains(cardsToShow.get(i)) || spells.contains(cardsToShow.get(i)))
+                    continue;
+                if (i + (10 * (pageNumber - 1)) < cardsToShow.size()) {
+                    int index = i + (10 * (pageNumber - 1));
+                    if (!movableCardsPowers.containsKey(cardsToShow.get(index)))
+                        System.out.println(cardsToShow.get(index));
+                    int damage = movableCardsPowers.get(cardsToShow.get(index))[0];
+                    int health = movableCardsPowers.get(cardsToShow.get(index))[1];
+                    cardPowers.get(i).setText("\n" + damage + "\t\t\t" + health + "\n");
+                    if (isInShop)
+                        cardPowers.get(i).setText(cardPowers.get(i).getText() + cardNumbers.get(cardsToShow.get(index)));
+                    if (isInCollection)
+                        cardPowers.get(i).setText(cardPowers.get(i).getText() + cardCollectionNumbers.get(cardsToShow.get(index)));
+
+                }
+            }catch (Exception e){}
         }
     }
 

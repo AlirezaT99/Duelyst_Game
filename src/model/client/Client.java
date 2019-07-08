@@ -1,11 +1,14 @@
 package model.client;
 
+import model.Account;
 import model.Message.BattleCommand.BattleRequest;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
+import model.Message.ShopCommand.UpdateAccount;
+import model.Message.Utils;
 import model.MyConstants;
 import model.Server.Lock;
 
@@ -22,9 +25,11 @@ public class Client implements runnables.MessageListener {
     private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("",false,false,false);
     private SaveCommand saveCommand = new SaveCommand(false,"","","");
     private BattleRequest battleRequest = new BattleRequest("",0,0);
+    private Utils utils = new Utils("",false);
     private final  Lock loginLock = new Lock();
     private final Lock shopLock = new Lock();
     private GlobalChatMessage globalChatMessage = new GlobalChatMessage("", "");
+    private UpdateAccount updateAccount = new UpdateAccount("",new Account("",""),false);
     private final Lock lock = new Lock();
 
     public void start() {
@@ -120,6 +125,22 @@ public class Client implements runnables.MessageListener {
 
     public void setSaveCommand(SaveCommand saveCommand) {
         this.saveCommand = saveCommand;
+    }
+
+    public Utils getUtils() {
+        return utils;
+    }
+
+    public void setUtils(Utils utils) {
+        this.utils = utils;
+    }
+
+    public UpdateAccount getUpdateAccount() {
+        return updateAccount;
+    }
+
+    public void setUpdateAccount(UpdateAccount updateAccount) {
+        this.updateAccount = updateAccount;
     }
 
     //getter & setter

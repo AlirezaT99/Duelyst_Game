@@ -21,6 +21,7 @@ public class Hero extends MovableCard {
     public Hero copy() {
         Hero hero = new Hero(this.name, this.getHealth(), this.getDamage(), this.heroSpell == null ? null : this.heroSpell.copy(), this.spellCoolDown);
         hero.setCardCollectionID(this.collectionID);
+        hero.isCostume = this.isCostume;
         hero.manaCost = manaCost;
         hero.name = name;
         hero.cell = cell;

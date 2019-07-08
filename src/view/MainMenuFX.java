@@ -32,6 +32,7 @@ import model.Deck;
 import model.Message.GlobalChatMessage;
 import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
+import model.Message.ShopCommand.UpdateAccount;
 import model.Message.Utils;
 import model.client.Client;
 import presenter.LoginMenuProcess;
@@ -373,6 +374,7 @@ public class MainMenuFX {
                         break;
                     case "COLLECTION":
                         try {
+
                             Main.setCollectionMenuFX(currentAccount);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
@@ -399,6 +401,14 @@ public class MainMenuFX {
                 }
             }
         });
+    }
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
+    public void setCurrentAccount(Account currentAccount) {
+        this.currentAccount = currentAccount;
     }
 
     private void setText(Font font, Text playText) {

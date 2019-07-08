@@ -3,7 +3,6 @@ package model.Server;
 import javafx.util.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import jdk.nashorn.internal.objects.Global;
 import model.*;
 import model.Message.AddCardCommand.AddCardCommand;
 import model.Message.BattleCommand.BattleCommand;
@@ -13,20 +12,14 @@ import model.Message.LoginBasedCommand;
 import model.Message.Message;
 import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
-import model.Message.ShopCommand.Trade.TradeCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
 import model.Message.ShopCommand.Trade.TradeResponse;
+import model.Message.ShopCommand.UpdateAccount;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
 import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Message.Utils;
-import model.Reader;
-import model.client.Client;
 import presenter.LoginMenuProcess;
-import presenter.ShopMenuProcess;
-import sun.security.krb5.internal.TGSRep;
-import view.ShopMenuFX;
 
-import javax.print.DocFlavor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -38,7 +31,8 @@ import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
-    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0,new int[2],"","",0,false,-1),-1);
+    private String userName = "";
+    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0, new int[2], "", "", 0, false, -1), -1);
     private ArrayList<UpdateCards> updateCards = new ArrayList<>();
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
@@ -99,9 +93,9 @@ public class ClientManager extends Thread {
                 if (message instanceof GlobalChatMessage) {
                     handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
                 }
-                if(message instanceof SaveCommand){
+                if (message instanceof SaveCommand) {
                     System.out.println("----save----");
-                    handleSaveCommand(objectOutputStream, (SaveCommand) message);
+                    handleSaveCommand((SaveCommand) message);
                 }
                 if(message instanceof BattleCommand){
                     System.out.println("-----battleCommand-----");
@@ -168,7 +162,6 @@ public class ClientManager extends Thread {
         objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
         if (result == 0) {
             Server.addUpdateOfShop(tradeRequest);
-//            account.getCollection().updateCollection(tradeRequest);
             Shop.changeNumbers(name, +1);
         }
     }
@@ -180,7 +173,6 @@ public class ClientManager extends Thread {
         objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
         if (result == 0) {
             Server.addUpdateOfShop(tradeRequest);
-//            account.getCollection().updateCollection(tradeRequest);
             Shop.changeNumbers(name, -1);
         }
     }
@@ -232,6 +224,7 @@ public class ClientManager extends Thread {
         int loginErrorNumber = server.getLoginErrorNumber(userName, password);
         if (server.isLoginValid(userName, password)) {
             authCode = server.generateAuthCode(userName, this);
+            this.userName = userName;
             objectOutputStream.writeObject(new LoginBasedCommand(userName, password, true, authCode, true, loginErrorNumber, Account.getAccountByUserName(userName)));
             Account account = Server.getOnlineAccounts().get(authCode);
             ArrayList<ArrayList<String>> cards = Shop.getCards();

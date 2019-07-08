@@ -62,6 +62,15 @@ public class Server {
         }
     }
 
+   public static void addUpdateOfShop(Card card){
+        synchronized (shopUpdates){
+            shopUpdates.add(UpdateCards.getUpdateCaard(card));
+        }
+    }
+
+
+
+
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
@@ -266,6 +275,7 @@ public class Server {
         spell.isCostume(true);
         Shop.getShopSpells().add(spell);
         Spell.addToSpells(spell);
+
         try {
             Main.addCardToFiles(spell);
         } catch (IOException e) {
@@ -302,6 +312,9 @@ public class Server {
         }
     }
 
+    public Account getAccountByAuthCode(String authCode){
+        return onlineAccounts.get(authCode);
+    }
     public String setMatch(String authCode, int mode, int numberOfFlags){
         Match match = new Match(false, mode,numberOfFlags);
         match.setup(onlineAccounts.get(authCode),battleRequestPending.get(0),numberOfFlags);
