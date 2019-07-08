@@ -21,13 +21,13 @@ public class Client implements runnables.MessageListener {
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private LoginBasedCommand loginBasedCommand = new LoginBasedCommand("", "", true);
-    private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("",false,false,false);
-    private SaveCommand saveCommand = new SaveCommand(false,"","","");
-    private Utils utils = new Utils("",false);
-    private final  Lock loginLock = new Lock();
+    private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("", false, false, false);
+    private SaveCommand saveCommand = new SaveCommand(false, "", "", "");
+    private Utils utils = new Utils("", false);
+    private final Lock loginLock = new Lock();
     private final Lock shopLock = new Lock();
     private GlobalChatMessage globalChatMessage = new GlobalChatMessage("", "");
-    private UpdateAccount updateAccount = new UpdateAccount("",new Account("",""),false);
+    private UpdateAccount updateAccount = new UpdateAccount("", new Account("", ""), false);
     private final Lock lock = new Lock();
 
     public void start() {

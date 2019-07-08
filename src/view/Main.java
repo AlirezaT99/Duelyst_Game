@@ -54,7 +54,7 @@ public class Main extends Application {
         currentScene.setCursor(new ImageCursor(cursor));
         primaryStage.setScene(currentScene);
         primaryStage.setOnCloseRequest(event -> {
-            Utils util = new Utils(Client.getInstance().getAuthCode(),true);
+            Utils util = new Utils(Client.getInstance().getAuthCode(), true);
             Client.getInstance().sendData(util);
             System.exit(0);
         });
@@ -89,8 +89,8 @@ public class Main extends Application {
     }
 
     public static void setCollectionMenuFX(Account account) throws FileNotFoundException {
-        Client.getInstance().sendData(new UpdateAccount("",account,false));
-        synchronized (Client.getInstance().getLock()){
+        Client.getInstance().sendData(new UpdateAccount("", account, false));
+        synchronized (Client.getInstance().getLock()) {
 //            if()
         }
         Main.collectionMenuFX = new CollectionMenuFX(account);

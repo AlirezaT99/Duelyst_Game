@@ -895,7 +895,7 @@ public class BattleFX {
         int result = match.getTable().getCell(coordination.getX(), coordination.getY()).getMovableCard().attack(match.getTable().getCell(finalI, finalJ).getMovableCard());
         if (result == 0) {
             MovableCard movableCard = match.getTable().getCell(finalI, finalJ).getMovableCard();
-            if(movableCard == null)
+            if (movableCard == null)
                 return;
 
             Card card = Shop.findCardByName(((Label) ((Pane) draggedFromNode).getChildren().get(((Pane) draggedFromNode).getChildren().size() - 1)).getText());

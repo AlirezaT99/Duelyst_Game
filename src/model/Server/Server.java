@@ -1,20 +1,12 @@
 package model.Server;
 
-import com.google.gson.Gson;
 import model.*;
 import model.Message.AddCardCommand.AddCardCommand;
-import model.Message.Message;
-import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
-import model.client.Client;
 import presenter.LoginMenuProcess;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -34,7 +26,7 @@ public class Server {
         presenter.MainProcess.readFiles();
 //        Shop.resetAllNumbers();
         Server server = new Server();
-        server.saveCards();
+        Server.saveCards();
         serverSocket = new ServerSocket(MyConstants.SERVER_PORT);
         new ServerListener(server).start();
     }
