@@ -617,9 +617,7 @@ public class ShopMenuFX {
         synchronized (Client.getInstance().getShopLock()) {
             if (tradeResponse.getAuthCode().equals("")) {
                 try {
-                    System.out.println("jooon1");
                     Client.getInstance().getShopLock().wait();
-                    System.out.println("jooon2");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -41,12 +41,14 @@ public class Account{
     public void buy(int cost, UsableItem item, Card card) throws NullPointerException {
         money -= cost;
         if (item != null) {
+            item.collectionNumber++;
             UsableItem item1 = item.copy();
             item1.setCollectionID(createCollectionID());
             collection.getItems().add(item1);
             collection.getItemsHashMap().put(item1.getCollectionID(), item1);
         }
         if (card != null) {
+            card.collectionNumber++;
            // card.setCardCollectionID(createCollectionID());
             if (card instanceof Hero) {
                 Hero hero = ((Hero) card).copy();
@@ -78,9 +80,12 @@ public class Account{
 
     public void sell(int cost, UsableItem item, Card card) {
         money += cost;
-        if (item != null)
+        if (item != null) {
             collection.getItems().remove(item);
+            item.collectionNumber--;
+        }
         if (card != null) {
+            card.collectionNumber--;
             if (card instanceof Hero) {
                 for (int i = 0; i < collection.getHeroes().size(); i++)
                     if (collection.getHeroes().get(i).getName().equals(card.getName()) &&

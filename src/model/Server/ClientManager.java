@@ -25,7 +25,7 @@ import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
-    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0,new int[2],"","",0,false,-1),-1);
+    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0, new int[2], "", "", 0, false, -1), -1);
     private ArrayList<UpdateCards> updateCards = new ArrayList<>();
 
     public ClientManager(Server server, Socket socketOnServerSide) {
@@ -49,23 +49,30 @@ public class ClientManager extends Thread {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socketOnServerSide.getOutputStream());
             objectOutputStream.flush();
             ObjectInputStream objectInputStream = new ObjectInputStream(socketOnServerSide.getInputStream());
-            long lastUpdate = System.currentTimeMillis();
-            while (!interrupted()) {
-                Server.getLatestUpdates(-1);
-                if (System.currentTimeMillis() - lastUpdate >1000) {
-                    updateShop(objectOutputStream);
-                    lastUpdate = System.currentTimeMillis();
+            new Thread(() -> {
+                long lastUpdate = System.currentTimeMillis();
+                while (!interrupted()) {
+                    Server.getLatestUpdates(-1);
+                    if (System.currentTimeMillis() - lastUpdate > 1000) {
+                        try {
+                            updateShop(objectOutputStream);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        lastUpdate = System.currentTimeMillis();
+                    }
                 }
+            }).start();
+            while (!interrupted()) {
+
                 Message message = (Message) objectInputStream.readObject();
                 if (message instanceof LoginBasedCommand) {
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
                 }
                 if (message instanceof Utils) {
-                    System.out.println("---- util ----");
                     handleUtilsBasedCommand(objectOutputStream, (Utils) message);
                 }
                 if (message instanceof ScoreBoardCommand) {
-                    System.out.println("----scorebaord-----");
                     handleScoreBoardCommands(objectOutputStream, (ScoreBoardCommand) message);
                 }
                 if (message instanceof TradeRequest) {
@@ -77,9 +84,7 @@ public class ClientManager extends Thread {
 
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -88,12 +93,14 @@ public class ClientManager extends Thread {
         try {
             if (!globalChatMessage.isUpdate())
                 server.addToChatMessages(globalChatMessage.getMessage(), globalChatMessage.getAuthCode());
-            else{
-                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), authCode));}
+            else {
+                objectOutputStream.writeObject(new GlobalChatMessage(server.getChatMessages(), authCode));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     private void handleTradeProcess(ObjectOutputStream objectOutputStream, Message message) throws IOException {
         TradeRequest tradeRequest = (TradeRequest) message;
         Account account = Server.getOnlineAccounts().get(message.getAuthCode()); //todo nulls are not handled
@@ -102,22 +109,22 @@ public class ClientManager extends Thread {
         if (tradeRequest.isBuy()) {
             int result = Shop.buy(account, tradeRequest.getObjectName());
             if (cost == 0)
-                result = -1;
+                result = 8;
             objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result != -1) {
+            if (result == 0) {
                 Server.addUpdateOfShop(tradeRequest);
                 account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name,-1);
+                Shop.changeNumbers(name, -1);
             }
         } else if (tradeRequest.isSell()) {
             int result = Shop.sell(account, tradeRequest.getObjectName());
             if (cost == 0)
-                result = 2;
+                result = 8;
             objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result != -1) {
+            if (result == 0) {
                 Server.addUpdateOfShop(tradeRequest);
                 account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name,+1);
+                Shop.changeNumbers(name, +1);
             }
         }
     }
@@ -182,13 +189,13 @@ public class ClientManager extends Thread {
         }
     }
 
-    private void updateShop(ObjectOutputStream objectOutputStream) throws IOException {
-        System.out.println("fuck1");
+    public void updateShop(ObjectOutputStream objectOutputStream) throws IOException {
         updateCards = new ArrayList<>(Server.getLatestUpdates(lastUpdate.getValue()));
         if (updateCards.size() == 0)
             return;
         for (UpdateCards updateCard : updateCards) {
             objectOutputStream.writeObject(updateCard);
+
         }
         UpdateCards updateCards1 = updateCards.get(updateCards.size() - 1);
         lastUpdate = new Pair<>(updateCards1, Server.getIndexOfUpdate(updateCards1));

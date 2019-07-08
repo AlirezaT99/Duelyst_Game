@@ -28,11 +28,6 @@ public abstract class Card {
         return playerMana >= manaCost;
     }
 
-    public boolean isCastingCoordinationValid(Cell cell) {
-        //todo
-        return true;
-    }
-
     public void castCard(Cell cell) {
     }
 
@@ -77,6 +72,7 @@ public abstract class Card {
     }
 
     public int getNumbers() {
+//        numbers = 10;
         return numbers;
     }
 
