@@ -3,6 +3,7 @@ package runnables;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeResponse;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
@@ -84,6 +85,15 @@ public class GetDataRunnable implements Runnable {
                     updateShop((UpdateWholeShop) message);
                 if (message instanceof TradeResponse)
                     tradeResponseHandler((TradeResponse) message);
+
+
+                if(message instanceof SaveCommand){
+                    synchronized (Client.getInstance().getLock()) {
+                        Client.getInstance().setSaveCommand((SaveCommand) message);
+                        Client.getInstance().getLock().notify();
+                    }
+                }
+
 
 
             }

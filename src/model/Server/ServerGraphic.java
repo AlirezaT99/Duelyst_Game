@@ -159,6 +159,4 @@ public class ServerGraphic extends Application {
                 }
         );
     }
-
-
 }

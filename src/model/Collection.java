@@ -18,6 +18,7 @@ public class Collection {
     private HashMap<String, Deck> deckHashMap;
     private Deck selectedDeck = null;
 
+
     {
         itemsHashMap = new HashMap<>();
         minionHashMap = new HashMap<>();
@@ -149,6 +150,14 @@ public class Collection {
 
 
     //search
+
+    public void setDecks(ArrayList<Deck> decks) {
+        this.decks = decks;
+    }
+
+    public void setDeckHashMap(HashMap<String, Deck> deckHashMap) {
+        this.deckHashMap = deckHashMap;
+    }
 
     //getters
     public HashMap<String, UsableItem> getItemsHashMap() {
