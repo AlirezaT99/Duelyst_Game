@@ -36,7 +36,7 @@ import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
-    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0, new int[2], "", "", 0, false, -1), -1);
+    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0,new int[2],"","",0,false,-1),-1);
     private ArrayList<UpdateCards> updateCards = new ArrayList<>();
 
     public ClientManager(Server server, Socket socketOnServerSide) {
@@ -60,13 +60,22 @@ public class ClientManager extends Thread {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socketOnServerSide.getOutputStream());
             objectOutputStream.flush();
             ObjectInputStream objectInputStream = new ObjectInputStream(socketOnServerSide.getInputStream());
-            long lastUpdate = System.currentTimeMillis();
-            while (!interrupted()) {
-                Server.getLatestUpdates(-1);
-                if (System.currentTimeMillis() - lastUpdate > 1000) {
-                    updateShop(objectOutputStream);
-                    lastUpdate = System.currentTimeMillis();
+            new Thread(() -> {
+                long lastUpdate = System.currentTimeMillis();
+                while (!interrupted()) {
+                    Server.getLatestUpdates(-1);
+                    if (System.currentTimeMillis() - lastUpdate > 1000) {
+                        try {
+                            updateShop(objectOutputStream);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        lastUpdate = System.currentTimeMillis();
+                    }
                 }
+            }).start();
+            while (!interrupted()) {
+
                 Message message = (Message) objectInputStream.readObject();
                 if (message instanceof LoginBasedCommand) {
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
@@ -85,13 +94,9 @@ public class ClientManager extends Thread {
                 if (message instanceof GlobalChatMessage) {
                     handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
                 }
-                if (message instanceof SaveCommand) {
+                if(message instanceof SaveCommand){
                     System.out.println("----save----");
                     handleSaveCommand(objectOutputStream, (SaveCommand) message);
-                }
-                if (message instanceof AddCardCommand) {
-                    System.out.println("-----addCard-----");
-                    handleAddCardCommand(objectInputStream, (AddCardCommand) message);
                 }
             }
 
@@ -100,19 +105,6 @@ public class ClientManager extends Thread {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    private void handleAddCardCommand(ObjectInputStream objectInputStream, AddCardCommand message) {
-        if (message.isSpell())
-            server.addSpell(message);
-
-        if (message.isHero())
-            server.addHero(message);
-
-        if(message.isMinion())
-            server.addMinion(message);
-
-
     }
 
     private void handleSaveCommand(ObjectOutputStream objectOutputStream, SaveCommand message) {
@@ -148,9 +140,9 @@ public class ClientManager extends Thread {
         if (tradeRequest.isBuy()) {
             int result = Shop.buy(account, tradeRequest.getObjectName());
             if (cost == 0)
-                result = -1;
+                result = 8;
             objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result != -1) {
+            if (result == 0) {
                 Server.addUpdateOfShop(tradeRequest);
                 account.getCollection().updateCollection(tradeRequest);
                 Shop.changeNumbers(name, -1);
@@ -158,9 +150,9 @@ public class ClientManager extends Thread {
         } else if (tradeRequest.isSell()) {
             int result = Shop.sell(account, tradeRequest.getObjectName());
             if (cost == 0)
-                result = 2;
+                result = 8;
             objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result != -1) {
+            if (result == 0) {
                 Server.addUpdateOfShop(tradeRequest);
                 account.getCollection().updateCollection(tradeRequest);
                 Shop.changeNumbers(name, +1);
@@ -228,13 +220,13 @@ public class ClientManager extends Thread {
         }
     }
 
-    private void updateShop(ObjectOutputStream objectOutputStream) throws IOException {
-        System.out.println("fuck1");
+    public void updateShop(ObjectOutputStream objectOutputStream) throws IOException {
         updateCards = new ArrayList<>(Server.getLatestUpdates(lastUpdate.getValue()));
         if (updateCards.size() == 0)
             return;
         for (UpdateCards updateCard : updateCards) {
             objectOutputStream.writeObject(updateCard);
+
         }
         UpdateCards updateCards1 = updateCards.get(updateCards.size() - 1);
         lastUpdate = new Pair<>(updateCards1, Server.getIndexOfUpdate(updateCards1));

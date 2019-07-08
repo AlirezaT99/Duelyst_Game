@@ -42,29 +42,30 @@ public class GetDataRunnable implements Runnable {
                     }
                 }
 
-//                if(message instanceof UpdateCards){
-//                    synchronized (Client.getInstance().getShopLock()){
-//                        UpdateCards updateCards = (UpdateCards) message;
-//                       String name =  updateCards.getObjectName();
-//                       int counter = updateCards.getCount();
-//                       if(ShopMenuFX.getCardNumbers().containsKey(name))
-//                           ShopMenuFX.getCardNumbers().replace(name,counter);
-//                       else {
-//                           ShopMenuFX.getCardNumbers().put(name, counter);
-//                           ShopMenuFX.getCosts().put(name, updateCards.getCost());
-//                           if(updateCards.getCardType() == 0){
-//                               ShopMenuFX.getHeroes().add(name);
-//                           }if(updateCards.getCardType() == 1)
-//                               ShopMenuFX.getMinions().add(name);
-//                           if(updateCards.getCardType() == 2)
-//                               ShopMenuFX.getSpells().add(name);
-//                           if(updateCards.getCardType() == 3)
-//                               ShopMenuFX.getItems().add(name);
-//                           if(updateCards.getCardType()==0 || updateCards.getCardType() == 1)
-//                               Shop.getMovableCardsPowers().put(name,updateCards.getPowers());
-//                       }
-//                    }
-//                }
+                if(message instanceof UpdateCards){
+                    System.out.println(message.toString());
+                    synchronized (Client.getInstance().getShopLock()){
+                        UpdateCards updateCards = (UpdateCards) message;
+                       String name =  updateCards.getObjectName();
+                       int counter = updateCards.getCount();
+                       if(ShopMenuFX.getCardNumbers().containsKey(name))
+                           ShopMenuFX.getCardNumbers().replace(name,counter);
+                       else {
+                           ShopMenuFX.getCardNumbers().put(name, counter);
+                           ShopMenuFX.getCosts().put(name, updateCards.getCost());
+                           if(updateCards.getCardType() == 0){
+                               ShopMenuFX.getHeroes().add(name);
+                           }if(updateCards.getCardType() == 1)
+                               ShopMenuFX.getMinions().add(name);
+                           if(updateCards.getCardType() == 2)
+                               ShopMenuFX.getSpells().add(name);
+                           if(updateCards.getCardType() == 3)
+                               ShopMenuFX.getItems().add(name);
+                           if(updateCards.getCardType()==0 || updateCards.getCardType() == 1)
+                               Shop.getMovableCardsPowers().put(name,updateCards.getPowers());
+                       }
+                    }
+                }
 
                 if (message instanceof ScoreBoardCommand) {
                     synchronized (Client.getInstance().getLock()) {

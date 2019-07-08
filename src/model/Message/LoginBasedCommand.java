@@ -11,7 +11,6 @@ public class LoginBasedCommand extends Message {
     private int errorNumber = 0;
     String account = "";
 
-
     //request constructor
     public LoginBasedCommand(String userName, String password, boolean login) {
         super("");
@@ -21,7 +20,7 @@ public class LoginBasedCommand extends Message {
     }
 
     //answer constructor
-    public LoginBasedCommand(String userName, String password, boolean success, String authCode,boolean login,int errorNumber, Account account){
+    public LoginBasedCommand(String userName, String password, boolean success, String authCode, boolean login, int errorNumber, Account account) {
         super(authCode);
         this.login = login;
         this.userName = userName;
@@ -30,33 +29,34 @@ public class LoginBasedCommand extends Message {
         this.authCode = authCode;
         this.errorNumber = errorNumber;
         Gson gson = new Gson();
-        this.account = gson.toJson(account,Account.class);
+        this.account = gson.toJson(account, Account.class);
     }
 
     public String getPassword() {
         return password;
     }
 
-    public String getUserName(){
+    public String getUserName() {
         return this.userName;
     }
 
-    public boolean isLogin(){
+    public boolean isLogin() {
         return login;
     }
-    public boolean isCreateAccount(){
+
+    public boolean isCreateAccount() {
         return !isLogin();
     }
 
-    public boolean wasRequestSuccessFull(){
+    public boolean wasRequestSuccessFull() {
         return success;
     }
 
-    public String getAuthCode(){
+    public String getAuthCode() {
         return authCode;
     }
 
     public Account getAccount() {
-        return new Gson().fromJson(account,Account.class);
+        return new Gson().fromJson(account, Account.class);
     }
 }

@@ -166,7 +166,7 @@ public class Server {
         ArrayList<UpdateCards> updateCards = new ArrayList<>();
         synchronized (shopUpdates) {
             if (shopUpdates.size() > lastIndexOfUpdates + 1)
-                updateCards = new ArrayList<>(shopUpdates.subList(lastIndexOfUpdates + 1, shopUpdates.size() - 1));
+                updateCards = new ArrayList<>(shopUpdates.subList(lastIndexOfUpdates + 1, shopUpdates.size() ));
         }
         return updateCards;
     }

@@ -52,7 +52,6 @@ public class Client implements runnables.MessageListener {
 
     private void startThreads() {
         new Thread(new runnables.GetDataRunnable(inputStream)).start();
-
     }
 
     public void sendData(Message text) {
@@ -124,16 +123,3 @@ public class Client implements runnables.MessageListener {
 
     //getter & setter
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
