@@ -138,25 +138,33 @@ public class ClientManager extends Thread {
         int cost = Shop.getCost(tradeRequest.getObjectName());
         String name = tradeRequest.getObjectName();
         if (tradeRequest.isBuy()) {
-            int result = Shop.buy(account, tradeRequest.getObjectName());
-            if (cost == 0)
-                result = 8;
-            objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result == 0) {
-                Server.addUpdateOfShop(tradeRequest);
-                account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name, -1);
-            }
+            buyProcess(objectOutputStream, tradeRequest, account, cost, name);
         } else if (tradeRequest.isSell()) {
-            int result = Shop.sell(account, tradeRequest.getObjectName());
-            if (cost == 0)
-                result = 8;
-            objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
-            if (result == 0) {
-                Server.addUpdateOfShop(tradeRequest);
-                account.getCollection().updateCollection(tradeRequest);
-                Shop.changeNumbers(name, +1);
-            }
+            sellProcess(objectOutputStream, tradeRequest, account, cost, name);
+        }
+    }
+
+    private void sellProcess(ObjectOutputStream objectOutputStream, TradeRequest tradeRequest, Account account, int cost, String name) throws IOException {
+        int result = Shop.sell(account, tradeRequest.getObjectName());
+        if (cost == 0)
+            result = 8;
+        objectOutputStream.writeObject(new TradeResponse(authCode, false, tradeRequest.getObjectName(), result == 0, result, cost));
+        if (result == 0) {
+            Server.addUpdateOfShop(tradeRequest);
+//            account.getCollection().updateCollection(tradeRequest);
+            Shop.changeNumbers(name, +1);
+        }
+    }
+
+    private void buyProcess(ObjectOutputStream objectOutputStream, TradeRequest tradeRequest, Account account, int cost, String name) throws IOException {
+        int result = Shop.buy(account, tradeRequest.getObjectName());
+        if (cost == 0)
+            result = 8;
+        objectOutputStream.writeObject(new TradeResponse(authCode, true, tradeRequest.getObjectName(), result == 0, result, cost));
+        if (result == 0) {
+            Server.addUpdateOfShop(tradeRequest);
+//            account.getCollection().updateCollection(tradeRequest);
+            Shop.changeNumbers(name, -1);
         }
     }
 
@@ -174,6 +182,7 @@ public class ClientManager extends Thread {
 
     private void handleUtilsBasedCommand(ObjectOutputStream objectOutputStream, Utils utils) {
         if (utils.isLogout()) {
+            server.saveAccount(utils.getAuthCode());
             server.getOnlineAccounts().remove(utils.getAuthCode());
             server.getClients().remove(utils.getAuthCode());
             server.getAuthcodes().remove(utils.getAuthCode());
