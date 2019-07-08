@@ -3,6 +3,7 @@ package model.client;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.MyConstants;
 import model.Server.Lock;
@@ -18,7 +19,7 @@ public class Client implements runnables.MessageListener {
     private ObjectInputStream inputStream;
     private LoginBasedCommand loginBasedCommand = new LoginBasedCommand("", "", true);
     private ScoreBoardCommand scoreBoardCommand = new ScoreBoardCommand("",false,false,false);
-
+    private SaveCommand saveCommand = new SaveCommand(false,"","","");
 
     private final  Lock loginLock = new Lock();
     private final Lock shopLock = new Lock();
@@ -110,6 +111,14 @@ public class Client implements runnables.MessageListener {
 
     public Lock getShopLock() {
         return shopLock;
+    }
+
+    public SaveCommand getSaveCommand() {
+        return saveCommand;
+    }
+
+    public void setSaveCommand(SaveCommand saveCommand) {
+        this.saveCommand = saveCommand;
     }
 
     //getter & setter

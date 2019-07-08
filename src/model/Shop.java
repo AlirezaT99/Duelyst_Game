@@ -81,17 +81,16 @@ public class Shop {
 
     private static int isBuyValid(Account account, UsableItem item, Card card) {
         if (item == null && card == null) {
-            // printMessage("Card/Item is out of stock");
             return 3;
         }
         if ((item != null && item.getCost() > account.getMoney()) || (card != null && card.getCost() > account.getMoney())) {
-            // printMessage("Not enough drake");
             return 4;
         }
         if (item != null && account.getCollection().getItems().size() == 3) {
-            //printMessage("Maximum items are in the Collection");
             return 5;
         }
+        if((item != null && item.getNumber() == 0 ) || (card != null && card.getNumbers() == 0) )
+            return 7;
         return 0;
     }
     //buy
@@ -105,11 +104,16 @@ public class Shop {
             return 6;
         }
         if (item != null) {
+            if(item.collectionNumber == 0)
+                return 7;
             cost = item.getCost();
 
         } else {
+            if(card.collectionNumber == 0)
+                return 7;
             cost = card.getCost();
         }
+
         account.sell(cost, item, card);
         return 0;
     }
@@ -251,11 +255,14 @@ public class Shop {
 
     public static HashMap<String, Integer> getNumbers() {
         HashMap<String, Integer> cardNum = new HashMap<>();
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopHeroes), cardNum));
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopMinions), cardNum));
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopSpells), cardNum));
-        cardNum = new HashMap<>(getCardNumber(new ArrayList<>(shopItems), cardNum));
-        return cardNum;
+        HashMap<String, Integer> finalCardNum = cardNum;
+        shopHeroes.forEach(hero ->{
+            finalCardNum.put(hero.name,hero.getNumbers());
+        });
+        shopMinions.forEach(minion -> finalCardNum.put(minion.name,minion.getNumbers()));
+        shopSpells.forEach(spell -> finalCardNum.put(spell.name,spell.getNumbers()));
+        shopItems.forEach(usableItem -> finalCardNum.put(usableItem.name,usableItem.getNumber()));
+        return finalCardNum;
     }
 
     //getters

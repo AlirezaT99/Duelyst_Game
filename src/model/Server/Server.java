@@ -1,6 +1,8 @@
 package model.Server;
 
+import com.google.gson.Gson;
 import model.Account;
+import model.Deck;
 import model.Message.Message;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
@@ -126,6 +128,7 @@ public class Server {
     }
 
 
+
     //getters & setters
 
     public HashMap<String, ClientManager> getClients() {
@@ -165,7 +168,7 @@ public class Server {
         ArrayList<UpdateCards> updateCards = new ArrayList<>();
         synchronized (shopUpdates) {
             if (shopUpdates.size() > lastIndexOfUpdates + 1)
-                updateCards = new ArrayList<>(shopUpdates.subList(lastIndexOfUpdates + 1, shopUpdates.size() - 1));
+                updateCards = new ArrayList<>(shopUpdates.subList(lastIndexOfUpdates + 1, shopUpdates.size() ));
         }
         return updateCards;
     }
@@ -208,6 +211,31 @@ public class Server {
                 chatMessages.remove(0);
         }
     }
+
+    public void setDecks(ArrayList<Deck> decks, String authCode){
+        HashMap<String, Deck> deckHashMap = new HashMap<>();
+        for (Deck deck : decks) {
+            deckHashMap.put(deck.getName(),deck);
+        }
+        onlineAccounts.get(authCode).getCollection().setDecks(decks);
+        onlineAccounts.get(authCode).getCollection().setDeckHashMap(deckHashMap);
+    }
+
+    public void setSelectedDeck(Deck deck, String authCode){
+        onlineAccounts.get(authCode).getCollection().setSelectedDeck(deck);
+    }
+
+    public void saveAccount(String authCode){
+        try {
+            System.out.println("fucking saving for : "+onlineAccounts.get(authCode).getUserName());
+            LoginMenuProcess.save(onlineAccounts.get(authCode));
+        } catch (IOException e) {
+            e.printStackTrace(); //
+        }
+    }
+
+
+
 
     //getters & setters
 }

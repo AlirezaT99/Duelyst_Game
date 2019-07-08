@@ -476,14 +476,4 @@ public class AddCardFX {
          return stockDir.mkdir();
     }
 
-//    private String suitableFileName(String name){
-//        String[] nameEditing = name.split("[ ]");
-//        String suitableName = "";
-//        for (String s : nameEditing) {
-//            suitableName+=s.toLowerCase();
-//        }
-//        return suitableName;
-//    }
-
-
 }

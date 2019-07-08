@@ -3,6 +3,7 @@ package runnables;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeResponse;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
@@ -29,7 +30,9 @@ public class GetDataRunnable implements Runnable {
 
     @Override
     public void run() {
+
         try {
+
             while (true) {
                 Message message = (Message) inputStream.readObject();
                 if (message instanceof LoginBasedCommand) {
@@ -39,29 +42,30 @@ public class GetDataRunnable implements Runnable {
                     }
                 }
 
-//                if(message instanceof UpdateCards){
-//                    synchronized (Client.getInstance().getShopLock()){
-//                        UpdateCards updateCards = (UpdateCards) message;
-//                       String name =  updateCards.getObjectName();
-//                       int counter = updateCards.getCount();
-//                       if(ShopMenuFX.getCardNumbers().containsKey(name))
-//                           ShopMenuFX.getCardNumbers().replace(name,counter);
-//                       else {
-//                           ShopMenuFX.getCardNumbers().put(name, counter);
-//                           ShopMenuFX.getCosts().put(name, updateCards.getCost());
-//                           if(updateCards.getCardType() == 0){
-//                               ShopMenuFX.getHeroes().add(name);
-//                           }if(updateCards.getCardType() == 1)
-//                               ShopMenuFX.getMinions().add(name);
-//                           if(updateCards.getCardType() == 2)
-//                               ShopMenuFX.getSpells().add(name);
-//                           if(updateCards.getCardType() == 3)
-//                               ShopMenuFX.getItems().add(name);
-//                           if(updateCards.getCardType()==0 || updateCards.getCardType() == 1)
-//                               Shop.getMovableCardsPowers().put(name,updateCards.getPowers());
-//                       }
-//                    }
-//                }
+                if(message instanceof UpdateCards){
+                    System.out.println(message.toString());
+                    synchronized (Client.getInstance().getShopLock()){
+                        UpdateCards updateCards = (UpdateCards) message;
+                       String name =  updateCards.getObjectName();
+                       int counter = updateCards.getCount();
+                       if(ShopMenuFX.getCardNumbers().containsKey(name))
+                           ShopMenuFX.getCardNumbers().replace(name,counter);
+                       else {
+                           ShopMenuFX.getCardNumbers().put(name, counter);
+                           ShopMenuFX.getCosts().put(name, updateCards.getCost());
+                           if(updateCards.getCardType() == 0){
+                               ShopMenuFX.getHeroes().add(name);
+                           }if(updateCards.getCardType() == 1)
+                               ShopMenuFX.getMinions().add(name);
+                           if(updateCards.getCardType() == 2)
+                               ShopMenuFX.getSpells().add(name);
+                           if(updateCards.getCardType() == 3)
+                               ShopMenuFX.getItems().add(name);
+                           if(updateCards.getCardType()==0 || updateCards.getCardType() == 1)
+                               Shop.getMovableCardsPowers().put(name,updateCards.getPowers());
+                       }
+                    }
+                }
 
                 if (message instanceof ScoreBoardCommand) {
                     synchronized (Client.getInstance().getLock()) {
@@ -69,16 +73,29 @@ public class GetDataRunnable implements Runnable {
                         Client.getInstance().getLock().notifyAll();
                     }
                 }
+
                 if (message instanceof GlobalChatMessage) {
                     synchronized (Client.getInstance().getLock()) {
                         Client.getInstance().setGlobalChatMessage((GlobalChatMessage) message);
                         Client.getInstance().getLock().notifyAll();
                     }
                 }
+
                 if (message instanceof UpdateWholeShop)
                     updateShop((UpdateWholeShop) message);
                 if (message instanceof TradeResponse)
                     tradeResponseHandler((TradeResponse) message);
+
+
+                if(message instanceof SaveCommand){
+                    synchronized (Client.getInstance().getLock()) {
+                        Client.getInstance().setSaveCommand((SaveCommand) message);
+                        Client.getInstance().getLock().notify();
+                    }
+                }
+
+
+
             }
         } catch (Exception e) {
             e.printStackTrace();
