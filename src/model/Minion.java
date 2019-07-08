@@ -37,6 +37,7 @@ public class Minion extends MovableCard {
         minion.name = name;
         minion.cell = cell;
         minion.cost = cost;
+        minion.collectionNumber = this.collectionNumber;
         minion.match = match;
         minion.player = player;
         minion.cardID = cardID;

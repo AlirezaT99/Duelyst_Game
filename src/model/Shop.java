@@ -102,17 +102,36 @@ public class Shop {
         Card card = account.getCollection().findCardByName(name.trim());
         int cost;
         if (item == null && card == null) {
-            //printMessage("Item/Card not found");
             return 6;
         }
-        // printMessage("Sell was successful");
         if (item != null) {
             cost = item.getCost();
+
         } else {
             cost = card.getCost();
         }
         account.sell(cost, item, card);
         return 0;
+    }
+
+    public static void changeNumbers(String name,int act) {
+        long max = Math.max(Math.max(shopHeroes.size(),shopMinions.size()),Math.max(shopSpells.size(),shopItems.size()));
+        for (int i = 0; i < max; i++) {
+            try{
+                if(shopHeroes.get(i).name.equalsIgnoreCase(name))
+                    shopHeroes.get(i).setNumbers(shopHeroes.get(i).getNumbers()+act);
+            }catch (Exception ignored){}
+            try{
+                if(shopMinions.get(i).name.equalsIgnoreCase(name))
+                    shopMinions.get(i).setNumbers(shopMinions.get(i).getNumbers()+act);
+            }catch (Exception ignored){}try{
+                if(shopSpells.get(i).name.equalsIgnoreCase(name))
+                    shopSpells.get(i).setNumbers(shopSpells.get(i).getNumbers()+act);
+            }catch (Exception ignored){}try{
+                if(shopItems.get(i).name.equalsIgnoreCase(name))
+                    shopItems.get(i).setNumber(shopItems.get(i).getNumber()+act);
+            }catch (Exception ignored){}
+        }
     }
     // sell
 
@@ -172,8 +191,8 @@ public class Shop {
         return -1;
     }
 
-    public static ArrayList<ArrayList<String >> getCards() {
-        ArrayList<ArrayList<String >> cards = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> getCards() {
+        ArrayList<ArrayList<String>> cards = new ArrayList<>();
         for (int i = 0; i < 4; i++)
             cards.add(new ArrayList<>());
         for (Hero shopHero : shopHeroes)
@@ -275,17 +294,17 @@ public class Shop {
     }
 
     public static HashSet<String> getCostumeCards() {
-        HashSet<String > costumeCards = new HashSet<>();
+        HashSet<String> costumeCards = new HashSet<>();
         for (Hero shopHero : shopHeroes) {
-            if(shopHero.isCostume)
+            if (shopHero.isCostume)
                 costumeCards.add(shopHero.getName());
         }
         for (Minion shopMinion : shopMinions) {
-            if(shopMinion.isCostume)
+            if (shopMinion.isCostume)
                 costumeCards.add(shopMinion.name);
         }
         for (Spell shopSpell : shopSpells) {
-            if(shopSpell.isCostume)
+            if (shopSpell.isCostume)
                 costumeCards.add(shopSpell.getName());
         }
         return costumeCards;
@@ -293,20 +312,72 @@ public class Shop {
 
     public static int getCost(String objectName) {
         for (Hero shopHero : shopHeroes) {
-            if(shopHero.getName().equals(objectName))
+            if (shopHero.getName().equals(objectName))
                 return shopHero.cost;
         }
         for (Minion shopMinion : shopMinions) {
-            if(shopMinion.getName().equals(objectName))
+            if (shopMinion.getName().equals(objectName))
                 return shopMinion.getCost();
         }
         for (Spell shopSpell : shopSpells) {
-            if(shopSpell.getName().equals(objectName))
+            if (shopSpell.getName().equals(objectName))
                 return shopSpell.cost;
         }
         for (UsableItem shopItem : shopItems) {
-            if(shopItem.name.equals(objectName))
+            if (shopItem.name.equals(objectName))
                 return shopItem.getCost();
+        }
+        return 0;
+    }
+
+    public static int getType(String name) {
+        Card card = Shop.findCardByName(name);
+        if (card instanceof Hero)
+            return 0;
+        if (card instanceof Minion)
+            return 1;
+        if (card instanceof Spell)
+            return 2;
+        Item item = Shop.findItemByName(name);
+        if (item != null)
+            return 3;
+        return 5;
+
+
+    }
+
+    public static int findCost(String name) {
+        Card card = findCardByName(name);
+        if (card != null)
+            return card.cost;
+        try {
+            UsableItem item = findItemByName(name);
+            if (item != null)
+                return item.getCost();
+        } catch (Exception ignored) {
+        }
+        return -1;
+    }
+
+    public static int[] findPowers(String name) {
+        Card card = findCardByName(name);
+        int[] powers = new int[2];
+        if (card instanceof MovableCard) {
+            powers[0] = ((MovableCard) card).getDamage();
+            powers[1] = ((MovableCard) card).getHealth();
+        }
+        return powers;
+    }
+
+    public static int findCount(String name) {
+        Card card = findCardByName(name);
+        if (card != null)
+            return card.getNumbers();
+        try {
+            UsableItem item = findItemByName(name);
+            if (item != null)
+                return item.getNumber();
+        } catch (Exception ignored) {
         }
         return 0;
     }

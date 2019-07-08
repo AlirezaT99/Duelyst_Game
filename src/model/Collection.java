@@ -1,5 +1,7 @@
 package model;
 
+import model.Message.ShopCommand.Trade.TradeRequest;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -146,6 +148,7 @@ public class Collection {
     }
 
 
+
     //search
 
     public void setDecks(ArrayList<Deck> decks) {
@@ -219,5 +222,75 @@ public class Collection {
         return objects;
     }
 
+
+    public void updateCollection(TradeRequest tradeRequest) {
+        int max = Math.max(Math.max(heroes.size(),minions.size()),Math.max(spells.size(),items.size()));
+        String name = tradeRequest.getObjectName();
+        boolean found = false;
+        for (int i = 0; i < max; i++) {
+            try{
+                if(heroes.get(i).name.equalsIgnoreCase(name)){
+                    found = true;
+                    System.out.println("fuck");
+                    if(tradeRequest.isBuy()){
+                        heroes.get(i).collectionNumber++;
+                    }else {
+                        heroes.get(i).collectionNumber--;
+                    }
+                }
+            }catch (Exception ignored){}
+            try{
+                if(minions.get(i).name.equalsIgnoreCase(name)){
+                    found = true;
+                    if(tradeRequest.isBuy()){
+                System.out.println("fuuuuuuuuuuck");
+                        minions.get(i).collectionNumber++;
+                    }else {
+                        minions.get(i).collectionNumber--;
+                    }
+                }
+            }catch (Exception ignored){}
+            try{
+                if(spells.get(i).name.equalsIgnoreCase(name)){
+                    found = true;
+                    if(tradeRequest.isBuy()){
+                        spells.get(i).collectionNumber++;
+                    }else {
+                        spells.get(i).collectionNumber--;
+                    }
+                }
+            }catch (Exception ignored){}
+            try{
+                if(items.get(i).name.equalsIgnoreCase(name)){
+                    found = true;
+                    if(tradeRequest.isBuy()){
+                        System.out.println("the fuuuuuuuuuuck");
+                        items.get(i).collectionNumber++;
+                    }else {
+                        items.get(i).collectionNumber--;
+                    }
+                }
+            }catch (Exception ignored){}
+        }
+        if(!found){
+            Hero hero = (Hero) Shop.findCardByName(name);
+            Minion minion = (Minion) Shop.findCardByName(name);
+            Spell spell = (Spell) Shop.findCardByName(name);
+            UsableItem item = Shop.findItemByName(name);
+            if(hero != null) {
+                hero.collectionNumber = 1;
+                heroes.add(hero.copy());
+            }else if(minion != null){
+                minion.collectionNumber = 1;
+                minions.add(minion.copy());
+            }else if(spell != null){
+                spell.collectionNumber = 1;
+                spells.add(spell.copy());
+            }else if(item != null){
+                item.collectionNumber = 1;
+                items.add(item.copy());
+            }
+        }
+    }
     //getters
 }

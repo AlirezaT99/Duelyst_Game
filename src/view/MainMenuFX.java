@@ -150,7 +150,7 @@ public class MainMenuFX {
         chatRoom.setPrefWidth(scene.getWidth() / 3);
 
         Pane chatRoomBox = new Pane();
-        BackgroundFill background_fill_box = new BackgroundFill(Color.grayRgb(190, 0.95),
+        BackgroundFill background_fill_box = new BackgroundFill(Color.rgb(100,100,200,0.9),
                 new CornerRadii(15), new javafx.geometry.Insets(0, 0, 0, 0));
         chatRoomBox.setBackground(new Background(background_fill_box));
         chatRoom.getChildren().add(chatRoomBox);

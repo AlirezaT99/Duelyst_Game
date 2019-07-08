@@ -8,7 +8,7 @@ public class UsableItem extends InfluentialItem {
     private Deck deck;
     private Match match;
     private int number = 10;
-    private int collectionNumber = 0;
+    int collectionNumber = 0;
 
     @Override
     public UsableItem copy(){

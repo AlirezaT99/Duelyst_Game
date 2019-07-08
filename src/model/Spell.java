@@ -46,14 +46,15 @@ public class Spell extends Card {
         spell.cell = cell;
         setCardFieldsForCopy(spell);
         spell.collectionID = this.collectionID;
-        spell.manaCost = manaCost;
-        spell.name = name;
-        spell.cell = cell;
-        spell.cost = cost;
-        spell.match = match;
-        spell.player = player;
-        spell.cardID = cardID;
-        spell.description = description;
+        spell.manaCost = this.manaCost;
+        spell.name = this.name;
+        spell.cell = this.cell;
+        spell.cost = this.cost;
+        spell.match = this.match;
+        spell.player = this.player;
+        spell.cardID = this.cardID;
+        spell.description = this.description;
+        spell.collectionNumber = this.collectionNumber;
         return spell;
     }
 
