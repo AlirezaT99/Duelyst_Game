@@ -1,5 +1,7 @@
 package view;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -26,7 +28,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import jdk.nashorn.internal.objects.Global;
 import model.Account;
+import model.Deck;
 import model.Message.GlobalChatMessage;
+import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.Utils;
 import model.client.Client;
@@ -36,6 +40,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -393,7 +398,11 @@ public class MainMenuFX {
                         }
                     case "SAVE":
                         try {
-                            LoginMenuProcess.save(currentAccount);
+                            Type deckArrayListType = new TypeToken<ArrayList<Deck>>(){}.getType();
+                            String decks = new Gson().toJson(currentAccount.getCollection().getDecks(),deckArrayListType);
+                            String selectedDeck = new Gson().toJson(currentAccount.getCollection().getSelectedDeck(),Deck.class);
+                            SaveCommand saveCommand = new SaveCommand(true,decks,selectedDeck,Client.getInstance().getAuthCode());
+                            Client.getInstance().sendData(saveCommand);
                             GraphicalCommonUsages.okPopUp("all changes saved", scene, root);
                         } catch (Exception e) {
                             e.printStackTrace();

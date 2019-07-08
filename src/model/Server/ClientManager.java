@@ -1,11 +1,13 @@
 package model.Server;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import jdk.nashorn.internal.objects.Global;
 import model.*;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
+import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
@@ -23,6 +25,7 @@ import javax.print.DocFlavor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,12 +71,28 @@ public class ClientManager extends Thread {
                 if (message instanceof GlobalChatMessage) {
                     handleGlobalChatMessage(objectOutputStream, (GlobalChatMessage) message);
                 }
+                if(message instanceof SaveCommand){
+                    System.out.println("----save----");
+                    handleSaveCommand(objectOutputStream, (SaveCommand) message);
+                }
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void handleSaveCommand(ObjectOutputStream objectOutputStream, SaveCommand message) {
+        if(message.isDeckSave()) {
+            Gson gson = new Gson();
+            Type deckArrayListType = new TypeToken<ArrayList<Deck>>(){}.getType();
+            ArrayList<Deck> decks = gson.fromJson(message.getDecks(),deckArrayListType);
+            Deck selectedDeck = gson.fromJson(message.getSelectedDeck(),Deck.class);
+            server.setDecks(decks,authCode);
+            server.setSelectedDeck(selectedDeck,authCode);
+            server.saveAccount(authCode);
         }
     }
 

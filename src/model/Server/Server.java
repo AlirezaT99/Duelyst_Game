@@ -1,15 +1,12 @@
 package model.Server;
 
+import com.google.gson.Gson;
 import model.Account;
-import model.Message.ScoreBoardCommand.ScoreBoardCommand;
+import model.Deck;
 import model.MyConstants;
-import model.client.Client;
 import presenter.LoginMenuProcess;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -172,6 +169,30 @@ public class Server {
                 chatMessages.remove(0);
         }
     }
+
+    public void setDecks(ArrayList<Deck> decks, String authCode){
+        HashMap<String, Deck> deckHashMap = new HashMap<>();
+        for (Deck deck : decks) {
+            deckHashMap.put(deck.getName(),deck);
+        }
+        onlineAccounts.get(authCode).getCollection().setDecks(decks);
+        onlineAccounts.get(authCode).getCollection().setDeckHashMap(deckHashMap);
+    }
+
+    public void setSelectedDeck(Deck deck, String authCode){
+        onlineAccounts.get(authCode).getCollection().setSelectedDeck(deck);
+    }
+
+    public void saveAccount(String authCode){
+        try {
+            LoginMenuProcess.save(onlineAccounts.get(authCode));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     //getters & setters
 }
