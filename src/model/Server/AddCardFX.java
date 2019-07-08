@@ -324,6 +324,7 @@ public class AddCardFX {
                     }
                 }
             }
+            
             if (typeBox.getValue().equals("Hero")) {
                 try {
                     String name;

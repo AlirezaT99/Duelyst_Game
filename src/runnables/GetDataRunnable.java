@@ -1,5 +1,9 @@
 package runnables;
 
+import com.google.gson.Gson;
+import model.Match;
+import model.Message.BattleCommand.BattleCommand;
+import model.Message.BattleCommand.BattleRequest;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
@@ -11,9 +15,11 @@ import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Shop;
 import model.client.Client;
 import view.Login;
+import view.Main;
 import view.ShopMenu;
 import view.ShopMenuFX;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
@@ -94,11 +100,27 @@ public class GetDataRunnable implements Runnable {
                     }
                 }
 
+                if(message instanceof BattleRequest){
+                    handleBattleRequest((BattleRequest)message);
+                }
+
 
 
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void handleBattleRequest(BattleRequest message){
+        if(message.isMatch()){
+            Match match = new Gson().fromJson(message.getMatch(),Match.class);
+            try {
+                Main.setBattleFX(match.getPlayer1().getAccount(), match, false);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
