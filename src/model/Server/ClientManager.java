@@ -4,7 +4,6 @@ import javafx.util.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.*;
-import model.Message.AddCardCommand.AddCardCommand;
 import model.Message.BattleCommand.BattleCommand;
 import model.Message.BattleCommand.BattleRequest;
 import model.Message.GlobalChatMessage;
@@ -14,7 +13,6 @@ import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
 import model.Message.ShopCommand.Trade.TradeResponse;
-import model.Message.ShopCommand.UpdateAccount;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
 import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Message.Utils;
@@ -118,7 +116,7 @@ public class ClientManager extends Thread {
         }
     }
 
-    private void handleSaveCommand(ObjectOutputStream objectOutputStream, SaveCommand message) {
+    private void handleSaveCommand(SaveCommand message) {
         if (message.isDeckSave()) {
             Gson gson = new Gson();
             Type deckArrayListType = new TypeToken<ArrayList<Deck>>() {
