@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class GlobalChatMessage extends Message {
     private String message;
-    private String chatMessagesJson ;
+    private String chatMessagesJson;
     private boolean isUpdate;
 
     public GlobalChatMessage(String message, String authCode) {
@@ -30,8 +30,9 @@ public class GlobalChatMessage extends Message {
     }
 
     public ArrayList<String> getChatMessages() {
-        Type type = new TypeToken<ArrayList<String >>(){}.getType();
-        return new Gson().fromJson(chatMessagesJson,type);
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        return new Gson().fromJson(chatMessagesJson, type);
     }
 
     public boolean isUpdate() {

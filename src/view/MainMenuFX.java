@@ -118,18 +118,14 @@ public class MainMenuFX {
         ImageView friendsView = new ImageView(friendsImage);
 
         friendsSetting(friends, friendsView, friendsText, mainMenuScene, root);
-        VBox addCard = new VBox();
-        Text addCardText = new Text("ADD CARD");
-        Image addCardImage = new Image(new FileInputStream("src/view/sources/mainMenu/utility_menu/quests.png"));
-        settingAddNewCard(fontSmall, mainMenuScene, addCard, addCardText, addCardImage);
 
-        bottom_right.getChildren().addAll(addCard, friends);
-        addCard.setAlignment(Pos.CENTER);
-        bottom_right.relocate(mainMenuScene.getWidth() * 5 / 6, mainMenuScene.getHeight() * 3 / 4);
+        bottom_right.getChildren().addAll(friends);
+
+        bottom_right.relocate(mainMenuScene.getWidth() * 7 / 8, mainMenuScene.getHeight() * 3 / 4);
         bottom_right.setAlignment(Pos.BOTTOM_CENTER);
         root.getChildren().addAll(bottom_right, chatRoom);
 
-        addCardHandle(addCard);
+
         root.getChildren().addAll(brandView);
         textGlowEffect(play, mainMenuScene, root);
         textGlowEffect(collection, mainMenuScene, root);
@@ -251,15 +247,7 @@ public class MainMenuFX {
         }
     }
 
-    private void addCardHandle(VBox addCard) {
-        addCard.setOnMouseClicked(event -> {
-            try {
-                Main.setAddCardFX(currentAccount);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
-    }
+
 
     private void settingAddNewCard(Font fontSmall, Scene mainMenuScene, VBox addCard, Text addCardText, Image addCardImage) {
         ImageView addCardView = new ImageView(addCardImage);

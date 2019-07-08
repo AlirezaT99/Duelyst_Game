@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import jdk.nashorn.internal.objects.Global;
 import model.*;
+import model.Message.AddCardCommand.AddCardCommand;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
@@ -35,7 +36,7 @@ import java.util.HashSet;
 
 public class ClientManager extends Thread {
     private String authCode = "";
-    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0, new int[2], "", "", 0, false, -1), -1);
+    private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0,new int[2],"","",0,false,-1),-1);
     private ArrayList<UpdateCards> updateCards = new ArrayList<>();
 
     public ClientManager(Server server, Socket socketOnServerSide) {
@@ -80,9 +81,11 @@ public class ClientManager extends Thread {
                     handleLoginBasedCommands(objectOutputStream, (LoginBasedCommand) message);
                 }
                 if (message instanceof Utils) {
+                    System.out.println("---- util ----");
                     handleUtilsBasedCommand(objectOutputStream, (Utils) message);
                 }
                 if (message instanceof ScoreBoardCommand) {
+                    System.out.println("----scorebaord-----");
                     handleScoreBoardCommands(objectOutputStream, (ScoreBoardCommand) message);
                 }
                 if (message instanceof TradeRequest) {
@@ -97,19 +100,22 @@ public class ClientManager extends Thread {
                 }
             }
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     private void handleSaveCommand(ObjectOutputStream objectOutputStream, SaveCommand message) {
-        if(message.isDeckSave()) {
+        if (message.isDeckSave()) {
             Gson gson = new Gson();
-            Type deckArrayListType = new TypeToken<ArrayList<Deck>>(){}.getType();
-            ArrayList<Deck> decks = gson.fromJson(message.getDecks(),deckArrayListType);
-            Deck selectedDeck = gson.fromJson(message.getSelectedDeck(),Deck.class);
-            server.setDecks(decks,authCode);
-            server.setSelectedDeck(selectedDeck,authCode);
+            Type deckArrayListType = new TypeToken<ArrayList<Deck>>() {
+            }.getType();
+            ArrayList<Deck> decks = gson.fromJson(message.getDecks(), deckArrayListType);
+            Deck selectedDeck = gson.fromJson(message.getSelectedDeck(), Deck.class);
+            server.setDecks(decks, authCode);
+            server.setSelectedDeck(selectedDeck, authCode);
             server.saveAccount(authCode);
         }
     }
