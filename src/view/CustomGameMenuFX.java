@@ -20,6 +20,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Message.BattleCommand.BattleRequest;
+import model.client.Client;
 import org.omg.CORBA.CODESET_INCOMPATIBLE;
 import presenter.SinglePlayerMenuProcess;
 
@@ -241,54 +243,88 @@ public class CustomGameMenuFX {
             });
             if (!accessFromMultiPlayer)
                 child.setOnMouseClicked(event -> {
-                int mode;
-                int numberOfFlags = 0;
+                    int mode;
+                    int numberOfFlags = 0;
 
-                if (child instanceof Label) {
-                    if (((Label) child).getText().equals("MODE  1")) {
-                        mode = 1;
+                    if (child instanceof Label) {
+                        if (((Label) child).getText().equals("MODE  1")) {
+                            mode = 1;
+                            try {
+                                System.out.println(heroName);
+                                Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), numberOfFlags);
+                                Main.setBattleFX(account, match, false);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        if (((Label) child).getText().equals("MODE  2")) {
+                            mode = 2;
+                            try {
+                                Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), 1);
+                                Main.setBattleFX(account, match, false);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    if (child instanceof VBox) {
+                        mode = 3;
                         try {
-                            System.out.println(heroName);
+                            if (validateNumberOfFlags(mode_3_flags, scene, root))
+                                numberOfFlags = Integer.parseInt(mode_3_flags.getText());
                             Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), numberOfFlags);
                             Main.setBattleFX(account, match, false);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
                     }
-                    if (((Label) child).getText().equals("MODE  2")) {
-                        mode = 2;
-                        try {
-                            Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), 1);
-                            Main.setBattleFX(account, match, false);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                if (child instanceof VBox) {
-                    mode = 3;
-                    try {
-                        if (validateNumberOfFlags(mode_3_flags, scene, root))
-                            numberOfFlags = Integer.parseInt(mode_3_flags.getText());
-                        Match match = SinglePlayerMenuProcess.customGame(account, mode, deckName, Hero.getHeroByName(heroName), numberOfFlags);
-                        Main.setBattleFX(account, match, false);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+                });
             else
                 child.setOnMouseClicked(event -> {
                     try {
-                        new BattleInitFX().waitForPlayer(root);
-                    } catch (FileNotFoundException e) {
+                        FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000), modes);
+                        fadeTransition.setFromValue(1);
+                        fadeTransition.setToValue(0);
+                        fadeTransition.play();
+
+                        FadeTransition fadeTransition1 = new FadeTransition(Duration.millis(1000), choose_your_mode);
+                        fadeTransition1.setFromValue(1);
+                        fadeTransition1.setToValue(0);
+                        fadeTransition1.play();
+
+                        fadeTransition.setOnFinished(event1 -> {
+                            try {
+                                int mode = 0, numberOfFlags = 0;
+                                switch ((((Label) child).getText())) {
+                                    case "MODE 1":
+                                        mode = 1;
+                                        break;
+                                    case "MODE 2":
+                                        mode = 2;
+                                        break;
+                                    case "MODE 3":
+                                        mode = 3;
+                                        break;
+                                }
+                                if (mode == 2)
+                                    numberOfFlags = 1;
+                                if (mode == 3)
+                                    numberOfFlags = 7;
+                                BattleRequest battleRequest = new BattleRequest(Client.getInstance().getAuthCode(), mode, numberOfFlags);
+                                Client.getInstance().sendData(battleRequest);
+                                new BattleInitFX().waitForPlayer(root, scene);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
         }
-        modes.setSpacing(10);
-        replacingVBox.setSpacing(10);
+        modes.setSpacing(scene.getWidth() / 20);
+        replacingVBox.setSpacing(scene.getHeight() / 20);
         replacingVBox.getChildren().addAll(choose_your_mode, modes);
         root.getChildren().addAll(replacingVBox);
     }

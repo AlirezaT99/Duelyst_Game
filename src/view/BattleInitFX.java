@@ -55,7 +55,7 @@ public class BattleInitFX {
                 new CornerRadii(0), new javafx.geometry.Insets(0, 0, 0, 0));
         battleInitPrimary.setBackground(new Background(background_fill));
 
-        waiting = drawWaiting();
+        waiting = drawWaiting(battleInitScene);
         waiting.relocate(battleInitScene.getWidth() * 0.25, battleInitScene.getHeight() * 0.15);
         waiting.setVisible(false);
         root.getChildren().add(waiting);
@@ -64,7 +64,7 @@ public class BattleInitFX {
         return root;
     }
 
-    private StackPane drawWaiting() throws FileNotFoundException {
+    private StackPane drawWaiting(Scene scene) throws FileNotFoundException {
         final Font font = Font.loadFont(new FileInputStream(new File("src/view/sources/common/fonts/averta-regular-webfont.ttf")), 40);
         StackPane pane = new StackPane();
         VBox vBox = new VBox();
@@ -72,11 +72,11 @@ public class BattleInitFX {
         vBox.setAlignment(Pos.BOTTOM_CENTER);
         //
         ImageView waitingView = new ImageView(new Image(new FileInputStream("src/view/sources/battleInit/pictures/general_f1.png")));
-        waitingView.setFitWidth(1920 / 2);
+        waitingView.setFitWidth(scene.getHeight()/1.5);
         waitingView.setPreserveRatio(true);
 
         AtomicReference<String> dots = new AtomicReference<>("");
-        Label waiting = new Label("Waiting for player response" + dots);
+        Label waiting = new Label("Waiting for game request" + dots);
         //
         AtomicInteger i = new AtomicInteger(1);
         Timeline waitingDot = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
@@ -204,9 +204,9 @@ public class BattleInitFX {
         });
     }
 
-    public void waitForPlayer(Pane root) throws FileNotFoundException {
-        waiting = drawWaiting();
-        waiting.relocate(1920 * 0.25, 1080 * 0.15);
+    public void waitForPlayer(Pane root, Scene scene) throws FileNotFoundException {
+        waiting = drawWaiting(scene);
+        waiting.relocate(scene.getWidth()/4, scene.getHeight()/4);
         root.getChildren().add(waiting);
         battleInitPrimary.setVisible(false);
 

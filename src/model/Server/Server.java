@@ -2,9 +2,13 @@ package model.Server;
 
 import model.*;
 import model.Message.AddCardCommand.AddCardCommand;
+import model.Message.BattleCommand.BattleRequest;
+import model.Message.Message;
+import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
 import presenter.LoginMenuProcess;
+import sun.java2d.pipe.AATextRenderer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,6 +25,8 @@ public class Server {
     private static HashMap<String, Account> onlineAccounts = new HashMap<>();
     private static ArrayList<String> chatMessages = new ArrayList<>();
     private static ArrayList<UpdateCards> shopUpdates = new ArrayList<>();
+    private static ArrayList<Account> battleRequestPending = new ArrayList<>();
+
 
     public static void main(String[] args) throws IOException {
         presenter.MainProcess.readFiles();
@@ -301,6 +307,32 @@ public class Server {
     public Account getAccountByAuthCode(String authCode) {
         return onlineAccounts.get(authCode);
     }
+    public String setMatch(String authCode, int mode, int numberOfFlags){
+        Match match = new Match(false, mode,numberOfFlags);
+        match.setup(onlineAccounts.get(authCode),battleRequestPending.get(0),numberOfFlags);
+        String matchString = new Gson().toJson(match,Match.class);
+        BattleRequest battleRequest = new BattleRequest("",matchString);
+        clients.get(authCode).sendToClient(battleRequest);
+        getClientManager(battleRequestPending.get(0)).sendToClient(battleRequest);
+        return matchString;
+    }
+
+    public ClientManager getClientManager(Account account){
+        for (String s : clients.keySet()) {
+            if(onlineAccounts.get(s).getUserName().equals(account.getUserName()))
+                return clients.get(s);
+        }
+        return null;
+    }
+
+    public static ArrayList<Account> getBattleRequestPending() {
+        return battleRequestPending;
+    }
+
+    public static void setBattleRequestPending(ArrayList<Account> battleRequestPending) {
+        Server.battleRequestPending = battleRequestPending;
+    }
+
     //getters & setters
 }
 

@@ -4,6 +4,8 @@ import javafx.util.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.*;
+import model.Message.BattleCommand.BattleCommand;
+import model.Message.BattleCommand.BattleRequest;
 import model.Message.GlobalChatMessage;
 import model.Message.LoginBasedCommand;
 import model.Message.Message;
@@ -11,7 +13,6 @@ import model.Message.SaveCommand.SaveCommand;
 import model.Message.ScoreBoardCommand.ScoreBoardCommand;
 import model.Message.ShopCommand.Trade.TradeRequest;
 import model.Message.ShopCommand.Trade.TradeResponse;
-import model.Message.ShopCommand.UpdateAccount;
 import model.Message.ShopCommand.UpdateShop.UpdateCards;
 import model.Message.ShopCommand.UpdateShop.UpdateWholeShop;
 import model.Message.Utils;
@@ -31,6 +32,8 @@ public class ClientManager extends Thread {
     private String userName = "";
     private Pair<UpdateCards, Integer> lastUpdate = new Pair<>(new UpdateCards(0, new int[2], "", "", 0, false, -1), -1);
     private ArrayList<UpdateCards> updateCards = new ArrayList<>();
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
 
     public ClientManager(Server server, Socket socketOnServerSide) {
         this.socketOnServerSide = socketOnServerSide;
@@ -50,9 +53,9 @@ public class ClientManager extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(socketOnServerSide.getOutputStream());
+            objectOutputStream = new ObjectOutputStream(socketOnServerSide.getOutputStream());
             objectOutputStream.flush();
-            ObjectInputStream objectInputStream = new ObjectInputStream(socketOnServerSide.getInputStream());
+            objectInputStream = new ObjectInputStream(socketOnServerSide.getInputStream());
             new Thread(() -> {
                 long lastUpdate = System.currentTimeMillis();
                 while (!interrupted()) {
@@ -92,7 +95,10 @@ public class ClientManager extends Thread {
                     System.out.println("----save----");
                     handleSaveCommand((SaveCommand) message);
                 }
-
+                if(message instanceof BattleCommand){
+                    System.out.println("-----battleCommand-----");
+                    handleBattleCommand(objectOutputStream,(BattleCommand)message);
+                }
             }
 
         } catch (IOException e) {
@@ -102,7 +108,13 @@ public class ClientManager extends Thread {
         }
     }
 
-
+    private void handleBattleCommand(ObjectOutputStream objectOutputStream, BattleCommand message) {
+        if(message instanceof BattleRequest){
+           if(server.getBattleRequestPending().size()>0){
+                String match = server.setMatch(authCode,((BattleRequest) message).getMode(), ((BattleRequest) message).getNumberOfFlags());
+           }
+        }
+    }
 
     private void handleSaveCommand(SaveCommand message) {
         if (message.isDeckSave()) {
@@ -162,6 +174,16 @@ public class ClientManager extends Thread {
             Shop.changeNumbers(name, -1);
         }
     }
+
+    public void sendToClient(Message message) {
+        try {
+            objectOutputStream.writeObject(message);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     private void handleScoreBoardCommands(ObjectOutputStream objectOutputStream, ScoreBoardCommand scoreBoardCommand) {
