@@ -1,5 +1,9 @@
-# project-3
-project-3 created by GitHub Classroom
-1. سپهر امینی افشار git:sepehrAmini 97105771
-2. سید علی مرعشیان سرائی  git:AliMarashian  97102441
-3. علیرضا تاجمیرریاحی git:AlirezaT99 97101372
+# Duelyst
+A CCG game implemented using Java and JavaFX, Advanced Programming course project, Spring 2019
+
+## Developers
+1. [Sepehr Amini Afshar](https://github.com/SepehrAminiAfshar)
+2. [Ali Marashian](https://github.com/alimrsn79)
+3. [Alireza Tajmirriahi](https://github.com/AlirezaT99)
+
+> Project created by GitHub Classroom
