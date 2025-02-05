@@ -1,6 +1,0 @@
-
-usquid:S3776B"RRefactor this method to reduce its Cognitive Complexity from 32 to the 15 allowed.(„õšËûÿÿÿÿ8—îŸÆ¨-
-squid:S1319|"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¶…É÷8æ°Á§-
-squid:S1319l"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ßş ù8æ°Á§-
-¦%squid:RedundantThrowsDeclarationCheck"iRemove the declaration of thrown exception 'java.lang.NullPointerException' which is a runtime exception.(´¿Ãşÿÿÿÿ8ïæ¯û¦-
-”squid:S1319€"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(óäÄªûÿÿÿÿ8æ°Á§-

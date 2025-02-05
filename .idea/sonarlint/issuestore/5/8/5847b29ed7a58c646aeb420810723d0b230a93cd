@@ -1,6 +1,0 @@
-
-]squid:S1161f":Add the "@Override" annotation above this method signature(…ÌÌÿÿÿÿÿ8€Áäè¥-
-Xsquid:S1161b":Add the "@Override" annotation above this method signature(Ò’Š¯8€Áäè¥-
-Gsquid:S1068"*Remove this unused "impact" private field.(·£‚8îØ§Ë¨-
-psquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(‰†™Æ8îØ§Ë¨-
-“squid:S1319J"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Óªß¨ûÿÿÿÿ8ìµ©â¨-

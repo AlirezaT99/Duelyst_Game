@@ -1,6 +1,0 @@
-
-squid:S1319,"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(Íß²¤8˜Õªç¨-
-|squid:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ8ÓÈåè¥-
-Zsquid:UselessImportCheck"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ8«èÔò§-
-”squid:S1319"vThe type of the "cellImpacts" object should be an interface such as "List" rather than the implementation "ArrayList".(¸œÜ«8ğÌúğ¨-
-Œ"squid:ClassVariableVisibilityCheck"WMake cellImpacts a static final constant or non-public and provide accessors if needed.(¸œÜ«8ğÌúğ¨-

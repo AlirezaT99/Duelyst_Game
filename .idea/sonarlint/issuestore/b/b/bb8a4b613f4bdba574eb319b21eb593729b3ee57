@@ -1,17 +1,0 @@
-
-†squid:S1157N"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(¥Ü÷½ûÿÿÿÿ8øµ—¼§-
-†squid:S1157Q"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(…ÖµÎşÿÿÿÿ8øµ—¼§-
-usquid:UselessImportCheck"ERemove this unused import 'java.nio.charset.MalformedInputException'.(ÖßÉ’øÿÿÿÿ8øµ—¼§-
-"squid:ClassVariableVisibilityCheck&"VMake DoCommands a static final constant or non-public and provide accessors if needed.(Ê°Í´üÿÿÿÿ8øµ—¼§-
-asquid:S3398}">Move this method into the anonymous class declared at line 45.(â˜ùÃùÿÿÿÿ8øµ—¼§-
-Vsquid:UselessImportCheck"+Remove this unused import 'java.io.Reader'.(µû¨é8øµ—¼§-
-Fsquid:S1604?"(Make this anonymous inner class a lambda(¾‹¹ı8øµ—¼§-
-\squid:S3398`">Move this method into the anonymous class declared at line 39.(¸ôË©8øµ—¼§-
-bsquid:S3398‘">Move this method into the anonymous class declared at line 51.(à«¡úıÿÿÿÿ8øµ—¼§-
-Fsquid:S1604E"(Make this anonymous inner class a lambda(¾‹¹ı8øµ—¼§-
-Zsquid:UselessImportCheck"/Remove this unused import 'java.nio.file.Path'.(×²êÂ8øµ—¼§-
-[squid:UselessImportCheck"0Remove this unused import 'java.nio.file.Files'.(‚ƒü8øµ—¼§-
-squid:S1157O"cReplace these toUpperCase()/toLowerCase() and equals() calls with a single equalsIgnoreCase() call.(Ö‹°û8øµ—¼§-
-bsquid:S3398©">Move this method into the anonymous class declared at line 63.(à¶Öòúÿÿÿÿ8Î˜’•¦-
-"squid:ClassVariableVisibilityCheck"XMake commandParts a static final constant or non-public and provide accessors if needed.(ÜÕï8øµ—¼§-
-ysquid:S00116&"URename this field "DoCommands" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê°Í´üÿÿÿÿ8øµ—¼§-

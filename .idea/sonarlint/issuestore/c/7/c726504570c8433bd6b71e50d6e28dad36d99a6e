@@ -1,3 +1,0 @@
-
-@squid:S1643Â"Use a StringBuilder instead.(³üÇ°üÿÿÿÿ8´ÆÃœ¨-
-µ%squid:RedundantThrowsDeclarationCheckN"xRemove the declaration of thrown exception 'java.io.FileNotFoundException' which is a subclass of 'java.io.IOException'.(¼×øáýÿÿÿÿ8Âö —¦-

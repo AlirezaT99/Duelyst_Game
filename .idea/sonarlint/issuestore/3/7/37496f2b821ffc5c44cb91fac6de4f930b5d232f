@@ -1,10 +1,0 @@
-
-vsquid:S1450"SRemove the "item" field and declare it as a local variable in the relevant methods.(êôëèúÿÿÿÿ8œ×úğ¨-
-”squid:S1319¤"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(ÂÜŠûÿÿÿÿ8œ×úğ¨-
-^squid:S1161„":Add the "@Override" annotation above this method signature(ú›Šøøÿÿÿÿ8œ×úğ¨-
-Ksquid:S1068"(Remove this unused "item" private field.(êôëèúÿÿÿÿ8œ×úğ¨-
-œ"squid:ClassVariableVisibilityCheck"bMake dispelableHealthChange a static final constant or non-public and provide accessors if needed.(èËÿÿÿÿÿ8œ×úğ¨-
-Ssquid:S1066Í"/Merge this if statement with the enclosing one.(é–ÖÓùÿÿÿÿ8œ×úğ¨-
-Usquid:S1135Y"2Complete the task associated to this TODO comment.(›ÿÅ£ıÿÿÿÿ8œ×úğ¨-
-“squid:S1319…"tThe type of the "attackers" object should be an interface such as "List" rather than the implementation "ArrayList".(ËòÓ¸8œ×úğ¨-
-œ"squid:ClassVariableVisibilityCheck"bMake dispelableDamageChange a static final constant or non-public and provide accessors if needed.(ş¸ùõıÿÿÿÿ8œ×úğ¨-
